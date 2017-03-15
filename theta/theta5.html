@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
+	</head>
+	<body>
+
+<canvas width="1174" height="868"></canvas>
+
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 pos;
+attribute vec2 texture;
+
+uniform mat4 MMatrix;
+uniform mat4 VMatrix;
+uniform mat4 PMatrix;
+
+varying vec2 varyingTexture;
+    
+void main(void) {
+	gl_Position = PMatrix * VMatrix * MMatrix * vec4(pos, 1.0);
+    varyingTexture = texture;
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec2 varyingTexture;
+uniform sampler2D sampler;	
+    
+void main(void) {
+	gl_FragColor = vec4(1, 0.5, 0.4, 1); 
+	gl_FragColor = texture2D(sampler, varyingTexture);
+	
+}
+</script>
+
+
+		<script>
+
+var rotation = 0.00;
+var down = 0.00;
+var up = 0.00;
+
+var gl = document.querySelector("canvas").getContext("experimental-webgl");
+				var video = document.createElement( 'video' );
+				video.width = 60;
+				video.height = 40;
+				video.loop = true;
+				video.muted = true;
+				video.src = getParamByKey('video') ? getParamByKey('video') : "data/theta2.mp4";
+				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+				//video.play();
+
+    var latitudeBands = 36;
+    var longitudeBands = 30;
+    var radius = 7.5;
+    var vertexPositionData = [];
+    var normalData = [];
+    var textureCoordData = [];
+    for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+      var theta = latNumber * Math.PI / latitudeBands;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
+
+      for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+        var phi = longNumber * 2 * Math.PI / longitudeBands;
+        var sinPhi = Math.sin(phi);
+        var cosPhi = Math.cos(phi);
+
+        var x = cosPhi * sinTheta;
+        var y = cosTheta;
+        var z = sinPhi * sinTheta;
+        var u = 1 - (longNumber / longitudeBands);
+        var v = 1 - (latNumber / latitudeBands);
+
+        normalData.push(x);
+        normalData.push(y);
+        normalData.push(z);
+        textureCoordData.push(u);
+        textureCoordData.push(v);
+        vertexPositionData.push(radius * x);
+        vertexPositionData.push(radius * y);
+        vertexPositionData.push(radius * z);
+      }
+    }
+    var indexData = [];
+    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+        var first = (latNumber * (longitudeBands + 1)) + longNumber;
+        var second = first + longitudeBands + 1;
+        indexData.push(first);
+        indexData.push(second);
+        indexData.push(first + 1);
+
+        indexData.push(second);
+        indexData.push(second + 1);
+        indexData.push(first + 1);
+      }
+    }
+
+var str = document.querySelector("#vs").textContent;
+var vs = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vs, str);
+gl.compileShader(vs);
+	
+var str = document.querySelector("#fs").textContent;
+var fs = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fs, str);
+gl.compileShader(fs);
+
+var program = gl.createProgram();
+gl.attachShader(program, vs);
+gl.attachShader(program, fs);
+gl.linkProgram(program);
+gl.useProgram(program);
+
+var mmatrix = mat4.create();
+mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
+var mmLoc = gl.getUniformLocation(program, "MMatrix");
+
+var vmatrix = mat4.create();
+mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+var vmLoc = gl.getUniformLocation(program, "VMatrix");
+gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+
+var pmatrix = mat4.create();
+mat4.perspective(pmatrix, Math.PI/3, 2, 0.1, 100);
+var pmLoc = gl.getUniformLocation(program, "PMatrix");
+gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+
+var samplerLoc = gl.getUniformLocation(program, "sampler");
+gl.uniform1i(samplerLoc, 0);
+
+gl.enable(gl.DEPTH_TEST);
+gl.clearColor(1, 1, 1, 1);
+
+var texture = null;
+var image = document.createElement("img");
+image.crossOrigin = "anonymous";
+image.src = "data/p7.jpg";
+image.onload = function() {
+    texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.generateMipmap(gl.TEXTURE_2D);
+}
+
+// ROTACE KOELM OSY Z
+mat4.rotateZ(mmatrix, mmatrix,  Math.PI   );
+gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
+				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+
+var render = function() {
+	gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    mat4.rotateY(mmatrix, mmatrix, rotation);
+    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+    /// ROTACNI MATICE
+	    mat4.rotateY(mmatrix, mmatrix, down);
+	    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+	    mat4.rotateY(mmatrix, mmatrix, up);
+	    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+    requestAnimationFrame(render);
+}
+
+window.requestAnimationFrame = window.requestAnimationFrame 
+	|| window.mozRequestAnimationFrame
+	|| window.webkitRequestAnimationFrame
+	|| function(cb) { setTimeout(cb, 1000/60); };
+
+	function onDocumentMouseMove( event ) {
+
+		console.log( event.clientY/200000);
+		rotation = event.clientY/200000
+
+	}
+ 	function onDocumentMouseDown( event ) {
+ 		down = -event.clientY/20000;
+	}
+ 	function onDocumentMouseUp( event ) {
+ 		up = event.clientY/20000;
+	}
+
+var data = {};
+var xhr = new XMLHttpRequest();
+xhr.open("get", "http://bespin.cz/~ondras/webgl/teapot.json", true);
+xhr.send();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState != 4 || xhr.status != 200) { return; }
+    data = JSON.parse(xhr.responseText);
+
+    var posLoc = gl.getAttribLocation(program, "pos");
+    gl.enableVertexAttribArray(posLoc);
+
+    var textureLoc = gl.getAttribLocation(program, "texture");
+    gl.enableVertexAttribArray(textureLoc);
+
+    var vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionData), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+    
+    var textureBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordData), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
+
+    var indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), gl.STATIC_DRAW);
+
+    render();
+}
+
+			function getParamByKey(get_key) {
+			  var address = window.location.href ;
+			  var pair = [];
+			  address = address.substring(address.indexOf("?")+1).split("&");
+			  for (var i =0; i < address.length; i++) 
+			  {
+			  	pair = address[i].split("=");
+			  	if (get_key == pair[0]) 
+			  	{
+			  		return pair[1];
+			  	}
+			  }
+			  return false;
+			 }
+
+
+		</script>
+	</body>
+</html>

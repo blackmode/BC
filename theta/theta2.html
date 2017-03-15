@@ -33,6 +33,9 @@
 	</head>
 	<body>
 <script src="build/three.js"></script>
+<script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
+
+
 		<canvas id="container"></canvas>
 
 
@@ -54,7 +57,8 @@
 			var canvas; // GL canvas
 			var video; // GL video
 			var texture; // GL video
-       
+
+
 	      // Function called by onload handler
 	      function initWebgl()
 	      {
@@ -87,7 +91,7 @@
 
 	          // Creates fragment shader (returns white color for any position) -------------------------------------
 	          var fshader = gl.createShader(gl.FRAGMENT_SHADER);
-	          var fragmentProgram = fragProgram();
+	          var fragmentProgram = fragmentSharderProgram2();
 	          gl.shaderSource(fshader, fragmentProgram);
 	          gl.compileShader(fshader);
 	          if (!gl.getShaderParameter(fshader, gl.COMPILE_STATUS)) 
@@ -99,7 +103,7 @@
 
 	          // Creates vertex shader (converts 2D point position to coordinates) -------------------------------------
 	          var vshader = gl.createShader(gl.VERTEX_SHADER);
-	          var vertexProgram = vertProgram();
+	          var vertexProgram = vertexSharderProgram2();
 	          gl.shaderSource(vshader, vertexProgram);
 	          gl.compileShader(vshader);
 	          if (!gl.getShaderParameter(vshader, gl.COMPILE_STATUS)) 
@@ -174,8 +178,18 @@
             // Create texture
             texture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, texture);
+            texture.image = new Image();
+            texture.image.src = "data/p7.jpg";
+ 				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, texture.image);
+  	            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+ 	        	gl.generateMipmap(gl.TEXTURE_2D);
+	        gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+	var samplerLoc = gl.getUniformLocation(program, "u_image");
+	gl.uniform1i(samplerLoc, 0); // nula odpovídá gl.TEXTURE0
 
-
+ /*
 				video = document.createElement( 'video' );
 				video.width = 1920;
 				video.height = 1080;
@@ -183,16 +197,16 @@
 				video.muted = true;
 				video.src = getParamByKey('video') ? getParamByKey('video') : "data/R0010014_20161217101030_er.mp4";
 				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
-				video.play();
+				//video.play();
 
+				var img = "data/p7.jpg";
 
-
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
+*/
 
 
 
@@ -216,6 +230,34 @@
 	       }
 
 
+		    function vertexSharderProgram2() 
+		    {
+		        // Main: 2 steps: nastaveni pozice a predani dat do fragment shaderu
+		        return "\
+		            attribute vec3 a_vertCoord;\
+		            attribute vec2 a_texCoord;\
+		            uniform mat4 u_cubeMatrix;\
+		            uniform mat4 u_perspMatrix;\
+		            varying mediump vec2 v_texCoord;\
+		            void main() {\
+		                 gl_Position = u_perspMatrix * u_cubeMatrix * vec4(a_vertCoord, 1.0);\
+		                 v_texCoord = a_texCoord;\
+		            }\
+		        ";
+		    }
+
+		    
+		    function fragmentSharderProgram2() 
+		    {
+		        // Main: najit barvy z textury
+		        return "\
+		            varying mediump vec2 v_texCoord;\
+		            uniform sampler2D u_sampler;\
+		            void main() {\
+		                 gl_FragColor = texture2D(u_sampler, v_texCoord);\
+		            }\
+		        ";
+		    }
 
 			function init() {
 /*
@@ -387,8 +429,8 @@
  
  
 	                // Update texture if video
- 	                    gl.bindTexture(gl.TEXTURE_2D, texture);
-	                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+ 	                   // gl.bindTexture(gl.TEXTURE_2D, texture);
+	                    //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
  	        
 	            
 	            // Draw using current buffer
@@ -396,6 +438,10 @@
 			}
 
 
+		    function degToRad(degrees) {
+		    	var rad = Math.PI / 180;
+		        return degrees * rad;
+		    }
 
 			function parseSearch(search) {
 			  // Fails if a key exists twice (e.g., ?a=foo&a=bar would return {a:"bar"}
@@ -473,7 +519,7 @@
 			'}'
 			].join('');
 			return vertexEquirectangular;
-		}
+			}
 
 			 
 
@@ -535,7 +581,6 @@
 
 
 
-
 		    function vertexSharderProgram() 
 		    {
 		        // Main: 2 steps: nastaveni pozice a predani dat do fragment shaderu
@@ -564,6 +609,42 @@
 		            }\
 		        ";
 		    }
+
+		    function getShader(gl, id) {
+		        var shaderScript = document.getElementById(id);
+		        if (!shaderScript) {
+		            return null;
+		        }
+
+		        var str = "";
+		        var k = shaderScript.firstChild;
+		        while (k) {
+		            if (k.nodeType == 3) {
+		                str += k.textContent;
+		            }
+		            k = k.nextSibling;
+		        }
+
+		        var shader;
+		        if (shaderScript.type == "x-shader/x-fragment") {
+		            shader = gl.createShader(gl.FRAGMENT_SHADER);
+		        } else if (shaderScript.type == "x-shader/x-vertex") {
+		            shader = gl.createShader(gl.VERTEX_SHADER);
+		        } else {
+		            return null;
+		        }
+
+		        gl.shaderSource(shader, str);
+		        gl.compileShader(shader);
+
+		        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+		            alert(gl.getShaderInfoLog(shader));
+		            return null;
+		        }
+
+		        return shader;
+		    }
+
 
 
 		</script>

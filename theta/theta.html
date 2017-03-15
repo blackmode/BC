@@ -67,7 +67,7 @@
 				console.log(normals);
 				console.log(uvs);
 
-				// prepocitavani bodu
+				// prepocitavani
 				if (getParamByKey('fish')=='true') 
 				{
 					for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
@@ -85,7 +85,7 @@
 						} else {
 
 							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-							uvs[ i * 2 + 0 ] = - x * ( 404 / 1920 ) * correction + ( 1460 / 1920 );
+							uvs[ i * 2 + 0 ] = - x * ( 404 / 1920 ) * correction + ( 1470 / 1920 );
 							uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
 
 						}

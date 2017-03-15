@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+	<body>
+		<script>
+            function Sphere (latitudeBands, longitudeBands, radius) {
+              var vertices = [];
+              var textures = [];
+              var normals = [];
+              var indices = [];
+
+              var latitudeBands = latitudeBands;
+              var longitudeBands = longitudeBands;
+              var radius = radius;
+
+              for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
+                var theta = latNumber * Math.PI / latitudeBands;
+                var sinTheta = Math.sin(theta);
+                var cosTheta = Math.cos(theta);
+
+                for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
+                  var phi = longNumber * 2 * Math.PI / longitudeBands;
+                  var sinPhi = Math.sin(phi);
+                  var cosPhi = Math.cos(phi);
+
+                  var x = cosPhi * sinTheta;
+                  var y = cosTheta;
+                  var z = sinPhi * sinTheta;
+                  var u = 1 - longNumber / longitudeBands;
+                  var v = 1 - latNumber / latitudeBands;
+
+                  normals.push(x, y, z);
+                  textures.push(u, v);
+                  vertices.push(radius * x, radius * y, radius * z);
+                }
+              }
+
+              for (latNumber = 0; latNumber < latitudeBands; ++latNumber) {
+                for (longNumber = 0; longNumber < longitudeBands; ++ longNumber) {
+                  var first = latNumber * (longitudeBands + 1) + longNumber;
+                  var second = first + longitudeBands + 1;
+                  indices.push(second, first, first + 1, second + 1, second, first + 1);
+                }
+              }
+
+              return {
+                vertices: vertices,
+                textures: textures,
+                normals: normals,
+                indices: indices,
+              };
+            };
+            console.log(Sphere (100,100,3).indices);
+		</script>
+	</body>
+</html>

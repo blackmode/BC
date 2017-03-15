@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+	<body>
+		<script>
+ 
+ 
+ 
+
+	var radius = radius || 50;
+
+	var widthSegments = Math.max( 3, Math.floor( widthSegments ) || 8 );
+	var heightSegments = Math.max( 2, Math.floor( heightSegments ) || 6 );
+
+	var phiStart = phiStart !== undefined ? phiStart : 0;
+	var phiLength = phiLength !== undefined ? phiLength : Math.PI * 2;
+
+	var thetaStart = thetaStart !== undefined ? thetaStart : 0;
+	var thetaLength = thetaLength !== undefined ? thetaLength : Math.PI;
+
+	var thetaEnd = thetaStart + thetaLength;
+
+	var ix, iy;
+
+	var index = 0;
+	var grid = [];
+
+	var vertex_x;
+	var vertex_y;
+	var vertex_z;
+	var normal;
+
+	// buffers
+
+	var indices = [];
+	var vertices = [];
+	var normals = [];
+	var uvs = [];
+
+	// generate vertices, normals and uvs
+
+	for ( iy = 0; iy <= heightSegments; iy ++ ) {
+
+		var verticesRow = [];
+
+		var v = iy / heightSegments;
+
+		for ( ix = 0; ix <= widthSegments; ix ++ ) {
+
+			var u = ix / widthSegments;
+
+			// vertex
+
+			vertex_x = - radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
+			vertex_y = radius * Math.cos( thetaStart + v * thetaLength );
+			vertex_z = radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
+
+			vertices.push( vertex_x, vertex_y, vertex_z );
+
+			// normal
+
+			//normal.set( vertex_x, vertex_y, vertex_z ).normalize();
+			//normals.push( normal.x, normal.y, normal.z );
+
+			// uv
+
+			uvs.push( u, 1 - v );
+
+			verticesRow.push( index ++ );
+
+		}
+
+		grid.push( verticesRow );
+
+	}
+
+	// indices
+
+	for ( iy = 0; iy < heightSegments; iy ++ ) {
+
+		for ( ix = 0; ix < widthSegments; ix ++ ) {
+
+			var a = grid[ iy ][ ix + 1 ];
+			var b = grid[ iy ][ ix ];
+			var c = grid[ iy + 1 ][ ix ];
+			var d = grid[ iy + 1 ][ ix + 1 ];
+
+			if ( iy !== 0 || thetaStart > 0 ) indices.push( a, b, d );
+			if ( iy !== heightSegments - 1 || thetaEnd < Math.PI ) indices.push( b, c, d );
+
+		}
+
+	}
+console.log(vertices);
+console.log(normals);
+console.log(uvs);
+	// build geometry
+
+	 new Float32BufferAttribute( vertices, 3 );
+	 new Float32BufferAttribute( normals, 3  );
+	 new Float32BufferAttribute( uvs, 2 ) ;
+
+		</script>
+	</body>
+</html>
