@@ -5,6 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
+         <script type="text/javascript" src="../src/lib.js"></script>
+
 	</head>
 	<body>
 
@@ -55,73 +57,14 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 				video.src = getParamByKey('video') ? getParamByKey('video') : "data/theta2.mp4";
 				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
 				//video.play();
-    var sin = function (angle) {
-        return Math.sin(angle);  
-    }
-
-    var cos = function (angle) {
-        return Math.cos(angle);  
-    }
-
-    var latitudeBands = 36;
-    var longitudeBands = 30;
-    var radius = 7.5;
-    var vertexPositionData = [];
-    var normalData = [];
-    var textureCoordData = [];
-    var indexData = [];
-    for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
-      var theta = latNumber * Math.PI / latitudeBands;
-      var sinTheta = Math.sin(theta);
-      var cosTheta = Math.cos(theta);
-
-      for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
-        var phi = longNumber * 2 * Math.PI / longitudeBands;
-        var sinPhi = Math.sin(phi);
-        var cosPhi = Math.cos(phi);
 
 
+var GEOMETRY = createSphereGeometry(36,30,7.5);
+var vertexPositionData = GEOMETRY.vertices;
+var normalData = GEOMETRY.normals;
+var textureCoordData =GEOMETRY.textures;
+var indexData = GEOMETRY.indices;
 
-
-        //var x = sin(theta) * cos(phi);//* Math.sin(phi+ Math.PI/2); // ( sin(theta-phi) + sin(theta+phi))/2;
-       // var y = cosTheta;
-       // var z = sinPhi * sinTheta;
-
-        var x = sin(theta) * cos(phi);
-        var y = sin(theta) * sin(phi);
-        var z = cos(theta)  ;
-
-        var u =        (longNumber / longitudeBands);
-        var v =       -(latNumber / latitudeBands);
-
-        normalData.push(x);
-        normalData.push(y);
-        normalData.push(z);
-        textureCoordData.push(u);
-        textureCoordData.push(v);
-        vertexPositionData.push(radius * x);
-        vertexPositionData.push(radius * y);
-        vertexPositionData.push(radius * z);
-
-        // zde zpracovavam index data
-        if (latNumber  < latitudeBands && longNumber <  longitudeBands) 
-        {
-            var first = (latNumber * (longitudeBands + 1)) + longNumber;
-            var second = first + longitudeBands + 1;
-            indexData.push(first);
-            indexData.push(second);
-            indexData.push(first + 1);
-
-            indexData.push(second);
-            indexData.push(second + 1);
-            indexData.push(first + 1);
-        }
-
-
-
-      }
-    }
-    
  
 
 var str = document.querySelector("#vs").textContent;
