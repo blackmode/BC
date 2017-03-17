@@ -7,54 +7,86 @@
 	</head>
 	<body>
 		<script>
-            function Sphere (latitudeBands, longitudeBands, radius) {
+            function createSphereGeometry (latitudeBands, longitudeBands, radius, textureCoordU, textureCoordV) {
               var vertices = [];
               var textures = [];
               var normals = [];
               var indices = [];
 
-              var latitudeBands = latitudeBands;
-              var longitudeBands = longitudeBands;
-              var radius = radius;
+              var rad = 180/Math.PI;
 
-              for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
-                var theta = latNumber * Math.PI / latitudeBands;
-                var sinTheta = Math.sin(theta);
-                var cosTheta = Math.cos(theta);
-
-                for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
-                  var phi = longNumber * 2 * Math.PI / longitudeBands;
-                  var sinPhi = Math.sin(phi);
-                  var cosPhi = Math.cos(phi);
-
-                  var x = cosPhi * sinTheta;
-                  var y = cosTheta;
-                  var z = sinPhi * sinTheta;
-                  var u = 1 - longNumber / longitudeBands;
-                  var v = 1 - latNumber / latitudeBands;
-
-                  normals.push(x, y, z);
-                  textures.push(u, v);
-                  vertices.push(radius * x, radius * y, radius * z);
-                }
+              function sin(angle) {
+                return Math.sin(angle);  
               }
 
-              for (latNumber = 0; latNumber < latitudeBands; ++latNumber) {
-                for (longNumber = 0; longNumber < longitudeBands; ++ longNumber) {
-                  var first = latNumber * (longitudeBands + 1) + longNumber;
-                  var second = first + longitudeBands + 1;
-                  indices.push(second, first, first + 1, second + 1, second, first + 1);
+              function cos(angle) {
+                return Math.cos(angle);  
+              }
+
+              var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
+              var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
+
+              for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
+                var theta = latNumber * latitudeAngle;
+
+                for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
+
+                  var phi = longNumber * longitudeAngle;
+
+                  // vrcholy
+                  var x = sin(theta) * cos(phi) * radius;
+                  var y = sin(phi) * sin(theta) * radius;
+                  var z = cos(theta) * radius;
+
+                  // normaly
+                  var normals_x = x/radius;
+                  var normals_y = y/radius;
+                  var normals_z = z/radius;
+
+                  // textury
+                  var u =       textureCoordU + (longNumber / longitudeBands);
+                  var v =       textureCoordV + (latNumber / latitudeBands);
+
+                  // pridame vrcholy
+                  vertices.push(x);
+                  vertices.push(y);
+                  vertices.push(z);
+
+                  // pridame normaly (vektory)
+                  normals.push(normals_x);
+                  normals.push(normals_y);
+                  normals.push(normals_z);
+
+                  // koordiunace textury
+                  textures.push(u);
+                  textures.push(v);
+
+                  // zde zpracovavam index data
+                  if (latNumber  < latitudeBands && longNumber <  longitudeBands) 
+                  {
+                    var first = (latNumber * (longitudeBands + 1)) + longNumber;
+                    var second = first + longitudeBands + 1;
+                    indices.push(first);
+                    indices.push(second);
+                    indices.push(first + 1);
+
+                    indices.push(second);
+                    indices.push(second + 1);
+                    indices.push(first + 1);
+                  }
+
                 }
+
               }
 
               return {
-                vertices: vertices,
-                textures: textures,
-                normals: normals,
-                indices: indices,
+                vertices: new Float32Array(vertices),
+                textures: new Float32Array(textures),
+                normals: new Float32Array(normals),
+                indices: new Uint16Array(indices),
               };
             };
-            console.log(Sphere (100,100,3).indices);
+            console.log(createSphereGeometry (40, 40, 7.5, 0, 1 ).indices);
 		</script>
 	</body>
 </html>

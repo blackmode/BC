@@ -55,6 +55,13 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 				video.src = getParamByKey('video') ? getParamByKey('video') : "data/theta2.mp4";
 				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
 				//video.play();
+    var sin = function (angle) {
+        return Math.sin(angle);  
+    }
+
+    var cos = function (angle) {
+        return Math.cos(angle);  
+    }
 
     var latitudeBands = 36;
     var longitudeBands = 30;
@@ -62,6 +69,7 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
     var vertexPositionData = [];
     var normalData = [];
     var textureCoordData = [];
+    var indexData = [];
     for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
       var theta = latNumber * Math.PI / latitudeBands;
       var sinTheta = Math.sin(theta);
@@ -72,11 +80,19 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
         var sinPhi = Math.sin(phi);
         var cosPhi = Math.cos(phi);
 
-        var x = cosPhi * sinTheta;
-        var y = cosTheta;
-        var z = sinPhi * sinTheta;
-        var u = 1 - (longNumber / longitudeBands);
-        var v = 1 - (latNumber / latitudeBands);
+
+
+
+        //var x = sin(theta) * cos(phi);//* Math.sin(phi+ Math.PI/2); // ( sin(theta-phi) + sin(theta+phi))/2;
+       // var y = cosTheta;
+       // var z = sinPhi * sinTheta;
+
+        var x = sin(theta) * cos(phi);
+        var y = sin(theta) * sin(phi);
+        var z = cos(theta)  ;
+
+        var u =        (longNumber / longitudeBands);
+        var v =       -(latNumber / latitudeBands);
 
         normalData.push(x);
         normalData.push(y);
@@ -86,22 +102,27 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
         vertexPositionData.push(radius * x);
         vertexPositionData.push(radius * y);
         vertexPositionData.push(radius * z);
-      }
-    }
-    var indexData = [];
-    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
-      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
-        var first = (latNumber * (longitudeBands + 1)) + longNumber;
-        var second = first + longitudeBands + 1;
-        indexData.push(first);
-        indexData.push(second);
-        indexData.push(first + 1);
 
-        indexData.push(second);
-        indexData.push(second + 1);
-        indexData.push(first + 1);
+        // zde zpracovavam index data
+        if (latNumber  < latitudeBands && longNumber <  longitudeBands) 
+        {
+            var first = (latNumber * (longitudeBands + 1)) + longNumber;
+            var second = first + longitudeBands + 1;
+            indexData.push(first);
+            indexData.push(second);
+            indexData.push(first + 1);
+
+            indexData.push(second);
+            indexData.push(second + 1);
+            indexData.push(first + 1);
+        }
+
+
+
       }
     }
+    
+ 
 
 var str = document.querySelector("#vs").textContent;
 var vs = gl.createShader(gl.VERTEX_SHADER);
@@ -129,7 +150,7 @@ var vmLoc = gl.getUniformLocation(program, "VMatrix");
 gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
 var pmatrix = mat4.create();
-mat4.perspective(pmatrix, Math.PI/3, 2, 0.1, 100);
+mat4.perspective(pmatrix, Math.PI/2.5, 1.75, 0.1, 100);
 var pmLoc = gl.getUniformLocation(program, "PMatrix");
 gl.uniformMatrix4fv(pmLoc, false, pmatrix);
 
@@ -153,8 +174,13 @@ image.onload = function() {
 }
 
 // ROTACE KOELM OSY Z
-mat4.rotateZ(mmatrix, mmatrix,  Math.PI   );
-gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+//mat4.rotateZ(mmatrix, mmatrix,  Math.PI   );
+//gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+   mat4.rotateX(mmatrix, mmatrix,  Math.PI/2);
+   gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 
@@ -165,8 +191,8 @@ var render = function() {
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    mat4.rotateY(mmatrix, mmatrix, rotation);
-    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+      mat4.rotateZ(mmatrix, mmatrix, rotation);
+     gl.uniformMatrix4fv(mmLoc, false, mmatrix);
     /// ROTACNI MATICE
 	    mat4.rotateY(mmatrix, mmatrix, down);
 	    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
@@ -243,7 +269,7 @@ xhr.onreadystatechange = function() {
 			  return false;
 			 }
 
-
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();stats.domElement.style.cssText='position:fixed;left:0;top:0;z-index:10000';document.body.appendChild(stats.domElement);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
 		</script>
 	</body>
 </html>
