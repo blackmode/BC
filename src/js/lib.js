@@ -37,7 +37,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 
 			// textury
 			var u =    (longNumber / longitudeBands);
-			var v =    - (latNumber / latitudeBands);
+			var v =      -(latNumber / latitudeBands);
 
 			// pridame vrcholy
 			vertices.push(x);
