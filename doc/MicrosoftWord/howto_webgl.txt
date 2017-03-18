@@ -1,0 +1,208 @@
+======== VERTEX ========================================================================================================
+
+- hlavním úkolem vertex shaderu je naplnit pro každý vstupní bod vestavěnou proměnnou 
+	gl_Position, která odpovídá výslednému umístění bodu
+- vertex shader je vykonáván pro každý vrchol zadané geometrie
+- gl_Position je čtyřrozměrné pole [x,y,z,1.0 = homogenni souradnice]
+- gl_PointSize = zvetsi bod na vice nez jeden pixel napr. 5.0 ho zvetsi 5x apod.
+
+- promenná: 'varying': automaticky interpolovaná hodnota, do které přiřazujeme ve vertex shaderu a ze které čteme ve fragment shaderu, vyuziva toho, ze se vertex a fragment dela pro kazdej pozicni pixel/barvu pixelu
+
+- proměnná: 'attribute' = jejichž hodnota se mění pro každý vrchol geometrie
+- proměnná: 'uniform' =   označujeme takto data, jejichž hodnoty se během jednoho vykreslení scény nemění (např: trans.matice)
+
+	attribute vec2 pos;
+	attribute vec3 color;
+	varying vec3 varyingColor;
+
+	void main(void) {
+	    gl_Position = vec4(pos, 0.0, 1.0);
+	    gl_PointSize = 5.0;
+	}
+
+======== FRAGMENT ========================================================================================================
+
+- fragment shader bude spuštěn pro každý vyrenderovaný pixel
+- do proměnné gl_FragColor přiřadí RGB barvu bodu. Barvy se zapisují též jako čtyřrozměrné vektory; čtvrtá složka je průhlednost (1 = žádná průhlednost). Všechny složky jsou hodnoty mezi nulou a jedničkou
+
+	precision mediump float;  // s jakou přesností mají být výpočty (interpolace) prováděny
+
+	varying vec3 varyingColor;
+
+	void main(void) {
+	    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	}
+
+======== PROGRAM ========================================================================================================
+
+- po vytvoření shaderu se musi vytvorit program a aktivovat + nastavit atributy
+
+	var program = gl.createProgram();
+	gl.attachShader(program, vertexShader);
+	gl.attachShader(program, fragmentShader);
+	gl.linkProgram(program);
+	gl.useProgram(program);
+
+
+- takto si „sáhneme“ na vstupní hodnotu vertex shaderu (pos) a řekneme, že 
+její hodnotu budeme definovat pomocí JS pole (gl.enableVertexAttribArray)
+
+- takto predame typ promenne 'atribut' do programu, tj.vertex/fragment shaderu:
+
+	var posLoc = gl.getAttribLocation(program, "pos");
+	gl.enableVertexAttribArray(posLoc);
+
+- takto predame typ promenne 'uniform' do programu, tj.vertex/fragment shaderu:
+
+	var mmLoc = gl.getUniformLocation(program, "MMatrix");
+	gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+
+======== BUFFERY ========================================================================================================
+
+- Veškerá data, předávaná do GPU, jsou uložena  bufferech – kusech paměti, rychle přístupných z grafické karty. Práce s buffery může vypadat podivně, protože připomíná stavový automat: nejprve nastavíme buffer jako aktivní (bindBuffer) a tím říkáme, že všechny následné operace budou prováděny právě nad ním. Žádné předávání bufferů jako parametrů.
+
+	var posBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.5, 0.5]), gl.STATIC_DRAW);
+
+- gl.ARRAY_BUFFER = Konstanta, kterou  specifikujeme, že chceme pracovat s obecným polem
+- gl.ELEMENT_ARRAY_BUFFER = = Konstanta, kterou  specifikujeme 
+- gl.STATIC_DRAW = treti parametr nám říká, jak máme v plánu tato data využívat a měnit: v našem případě říkáme, že je nechceme měnit vůbec
+
+- new Uint8Array[] : pole integeru, celych cisel v bufferech
+- new Float32Array: pole desetinnych cisel, necekane
+
+Tímto voláním provážeme právě aktivní buffer (ten, kde jsou souřadnice našeho bodu) s vstupem vertex shaderu.
+
+- gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+Parametry vertexAttribPointer():
+	- 1.) posLoc = provážeme právě aktivní buffers vstupem vertex shaderu
+	- 2.) 2 = z bufferu bude číst po dvou hodnotách
+	- 3.) gl.FLOAT = že to jsou destinná čísla
+	- 4.) false = že je nechceme normalizovat
+	- 5.) 0 = že nechceme žádné hodnoty přeskakovat
+	- 6.) 0 = že budeme číst od začátku bufferu
+
+
+- gl.clearColor(0.0, 0.0, 0.0, 1.0) : nastavujeme barvu, kterou se má canvas vymazat (černou). 
+- gl.clear(gl.COLOR_BUFFER_BIT) : Voláním clear plátno vymažeme
+- gl.drawArrays(gl.POINTS, 0, 1): vposled dáme pokyn k vykreslení. Naši geometrii chceme vykreslovat jako prosté body (gl.POINTS), začneme na prvním a vykreslíme jeden
+
+- gl.drawArrays() : opakovaně volá vertex shader pro všechny nachystané hodnoty vstupních atributů
+- gl.drawElements() : vstupem je tzv. ELEMENT_ARRAY_BUFFER -  pole obsahující indexy do bufferu s definicí vrcholů, 
+	Tím lze snadno vyřešit potíž s opakováním vrcholů: každý vrchol definujeme jen jednou, ale v bufferu s indexy jej zmíníme několikrát
+- gl.drawElements(gl.LINES, 6, gl.UNSIGNED_BYTE, 0):
+	- Druhý parametr je počet hodnot v index bufferu, které chceme zpracovat
+	-  třetí parametr popisuje velikost jednoho indexu;
+	- poslední parametr je offset (kreslíme od prvního prvku)
+- gl.lineWidth(3) : nastavujeme šířku renderované čáry
+- gl.enable(gl.DEPTH_TEST) : testování hloubky - bufferu (depth buffer) si ukládá hloubku (souřadnici Z) jednotlivých bodů; porovnáním s již vykreslenými pixely pak rozhodne o zahození těch, které by měly zůstat neviditelné „vzadu“, proto musí být tato možnost zapnuta
+
+- gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT) : pri renderovani je taky potreba premazat scenu
+
+======== DODATEK K GEOMETRII ============================================================================================ 
+
+- Naše geometrie a její vrcholy jsou zadávány v obecných prostorových souřadnicích, na které 
+není kladeno žádné omezení. Jedná se o desetinná čísla, kladná i záporná.
+
+- Tato obecná geometrie je ve vertex shaderu transformována do souřadnic v tzv. clipspace, prostoru 
+omezeném hodnotami 1 a -1 na všech osách. Tento prostor již koresponduje s plochou canvasu: osa X roste 
+doprava, osa Y nahoru, osa Z směrem z obrazovky k uživateli. Hodnoty, které po výstupu z vertex shaderu 
+přetečou rozpětí -1 až 1 jsou zahozeny a nebudou vykresleny.
+
+- Poslední krok před vykreslením je převod do NDC (Normalized Device Coordinates): hodnoty X a Y v clipspace 
+se vydělí čtvrtou složkou vektoru a vynásobí polovinou pixelové velikosti canvasu. Tím získáváme body na obrazovce monitoru
+
+
+======== TRANSFORMACE ============================================================================================
+
+- Tradičně pro tento účel používáme tři matice se standardním označením. Model matrix je transformace, kterou držíme pro každý vykreslovaný objekt a ten s její pomocí transformujeme. Např.: Náš čtyřstěn tak může být definován jako v první ukázce (jedničkové rozměry, umístěný kolem počátku souřadné soustavy) a následně jej podle potřeby díky model matrix natočíme, zmenšíme či posuneme tam, kde jej potřebujeme.
+
+- View matrix je druhá transformace, kterou na renderované prvky aplikujeme. V OpenGL neexistuje žádný koncept „kamery“; vzájemný vztah scény a jejího pozorovatele realizujeme právě násobením touto maticí. Pokud máme tedy rozmístěno mnoho objektů a chceme je všechny od pozorovatele oddálit, násobíme jejich vrcholy view matrix, která koresponduje s posunem ve směru osy Z.
+
+- Poslední tradiční maticí je Projection matrix; transformace, která provádí nějakou formu perspektivního zkreslení. Požadované zkreslení definovat jako třetí matici.
+
+
+- Pokud si některou ze tří uvedených transformací nepřejeme provádět, použijeme jednotkovou matici – ta odpovídá násobení jedničkou, tj. no-op.
+
+
+
+
+======== TEXTURA ============================================================================================
+
+- Nejprve se však pojďme podívat, jak je realizováno mapování textury na jednotlivé trojúhelníky modelu: pro každý vrchol potřebujeme dvojici souřadnic, které popisují jeden bod textury. Každému trojúhelníku tělesa tak odpovídá trojúhelník na obrázku s texturou. WebGL pak automaticky provede interpolaci hodnot textury na všechny pixely. Pro nás to znamená nutnost dodat tyto texturové souřadnice;
+
+- Tyto souřadnice jsou vždy dvojice desetinných čísel mezi nulou a jedničkou (textura má tedy v těchto souřadnicích velikost 1×1). Předáme je do vertex shaderu:
+
+	attribute vec2 texture;
+	varying vec2 varyingTexture;
+
+- vektor 'texture' pak normalne pridame jako atribut do webgl programu, viz nize:
+
+	var textureLoc = gl.getAttribLocation(program, "texture");
+	gl.enableVertexAttribArray(textureLoc);
+
+	var textureCoordsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(________DATA MAPOVANI TEXTURY________), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
+
+- Do fragment shaderu pak texturu předáme jako speciální datový typ 'sampler2D', který předáme do texturovací funkce texture2D:
+
+	varying vec2 varyingTexture;
+	uniform sampler2D sampler;	
+
+	void main(void) {
+	    gl_FragColor = texture2D(sampler, varyingTexture);
+	}
+
+- WEBGL kod obrazku - příklad:
+
+	var image = document.createElement("img");
+	image.crossOrigin = "anonymous";
+	image.src = "http://bespin.cz/~ondras/webgl/metal.jpg";
+	image.onload = function() {
+	    texture = gl.createTexture();
+	    gl.bindTexture(gl.TEXTURE_2D, texture);
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+	    gl.generateMipmap(gl.TEXTURE_2D);
+	}
+
+	- Popis funkci a parametru:
+		- gl.createTexture() : pro vytvoření WebGL textury;
+		- gl.bindTexture() : pro označení této textury jako aktivní (stejně jako u bufferů);
+		- gl.texImage2D() : pro nahrání obrazových dat z obrázku do textury. 
+			-- Druhý parametr (nula) říká, že chceme plnou velikost. 
+			-- Další dvě konstanty určují zdrojový a cílový formát obrazových dat; 
+			-- gl.UNSIGNED_BYTE říká, že obrazová data mají jeden bajt na barevný kanál.
+		- gl.texParameteri() : používáme k nastavení toho, jak se budou texturová data při interpolaci zvětšovat  (TEXTURE_MAG_FILTER) či zmenšovat (TEXTURE_MIN_FILTER).
+		- gl.generateMipmap() : celkem přímočaře nakonec vygeneruje sadu mipmap.
+
+
+- FINAL: Naposled musíme ještě texturu předat do fragment shaderu. To pro nás znamená jen spárování uniform hodnoty 'sampler' s texturovací jednotkou (těch je k dispozici celá řada, my použijeme jen tu první – gl.TEXTURE0):
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+
+	var samplerLoc = gl.getUniformLocation(program, "sampler");
+	gl.uniform1i(samplerLoc, 0); // nula odpovídá gl.TEXTURE0
+
+======== POSTUP ============================================================================================
+
+- zeměpisná šířka = poledníky = latitude
+- zeměpisná delka = rovnoběžky = longtitude
+
+ALE V TOM NASEM RESENI TO JE:
+
+- poledníky = longtitude
+- rovnoběžky = latitude 
+
+
+Je potreba mit v bufferu:
+	1.) Pole souradnic vrcholu
+	2.) pole indexu vrcholů pro dany souradnice vrcholů
+
