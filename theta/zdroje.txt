@@ -1,0 +1,9 @@
+ZDROJE:
+
+HTML5
+https://dev.w3.org/html5/spec-author-view/video.html
+https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+
+OPENGL
+https://www.opengl.org/sdk/docs/tutorials/ClockworkCoders/attributes.php
+https://www.khronos.org/registry/OpenGL-Refpages/es3/
