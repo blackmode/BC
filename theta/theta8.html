@@ -55,9 +55,10 @@
 
     <body onload="main()">
  
-        <canvas id="glcanvas" width="512" height="256"></canvas>
-      <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 512px; height: 256px " controls muted>
-        <source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">
+        <canvas id="glcanvas" width="480" height="320"></canvas>
+      <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 480px; height: 320px " controls muted>
+        <!--<source src="data/firefox.ogv" type="video/mp4">-->
+        <source src="data/theta3.mp4" type="video/mp4">
       </video>
 
     </body>
@@ -178,8 +179,7 @@ video.oncanplaythrough = function() {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
 
-            gl.enable(gl.DEPTH_TEST);
-            gl.clearColor(1, 1, 1, 1);
+ 
 
             // otoceni kamery do pocatecni pozice
           // mat4.rotateX(mmatrix, mmatrix,  Math.PI/2);
@@ -191,9 +191,9 @@ texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-gl.bindTexture(gl.TEXTURE_2D, null);
+//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+//gl.bindTexture(gl.TEXTURE_2D, null);
 
 
     }
@@ -226,11 +226,10 @@ function updateTexture() {
             ctx.drawImage(image, 0, 0, video.width, video.height);
             video = canvas;
         }
-
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
-
+       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
       gl.bindTexture(gl.TEXTURE_2D, null);
-  }
+
+   }
 
 }
 

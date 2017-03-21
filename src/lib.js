@@ -79,6 +79,139 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 	};
 };
 
+function createCubeGeometry () 
+{
+	var vertices = [];
+	var textures = [];
+	var normals = [];
+	var indices = [];
+
+		// x,y,z
+        var vertices = [
+        // Front face
+        -1,  1,  1,  //	
+         1,  1,  1,  
+         1, -1,  1, 
+        -1, -1,  1,
+
+         // Back face
+        -1,  1,  -1,  
+         1,  1,  -1,  
+         1, -1,  -1, 
+        -1, -1,  -1,
+
+         // Up face
+         1,  1,  1,  
+         1,  1,  -1,  
+         -1,  1, -1, 
+         -1,  1, 1, 
+
+         // Down face
+         1,  -1,  1,  
+         1,  -1,  -1,  
+         -1,  -1, -1, 
+         -1,  -1, 1, 
+
+          // Left face
+          -1,  1,  1, 
+          -1,  1, -1, 
+          -1,  -1, -1,
+          -1,  -1, 1,
+
+          // Right face
+          1,  1,  1, 
+          1,  1, -1, 
+          1,  -1, -1,
+          1,  -1, 1
+        ];
+
+		var textures = [
+			// Front
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Back
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Top
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Bottom
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Left
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// right
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1
+		];
+
+		// x,y,z
+        var normals = [
+		    // Front
+		     0,  0,  1,
+		     0,  0,  1,
+		     0,  0,  1,
+		     0,  0,  1,
+
+		    // Back
+		     0,  0, -1,
+		     0,  0, -1,
+		     0,  0, -1,
+		     0,  0, -1,
+
+		    // Top
+		     0,  1,  0,
+		     0,  1,  0,
+		     0,  1,  0,
+		     0,  1,  0,
+
+		    // Bottom
+		     0, -1,  0,
+		     0, -1,  0,
+		     0, -1,  0,
+		     0, -1,  0,
+
+		    // Left
+		    -1,  0,  0,
+		    -1,  0,  0,
+		    -1,  0,  0,
+		    -1,  0,  0,
+
+		    // Right
+		     1,  0,  0,
+		     1,  0,  0,
+		     1,  0,  0,
+		     1,  0,  0
+        ];
+
+var indices = [
+
+
+
+];
+
+
+
+	return {
+		vertices: new Float32Array(vertices),
+		textures: new Float32Array(textures),
+		normals: new Float32Array(normals),
+		indices: new Uint16Array(indices),
+	};
+}
 
 // vrat hodnotu parametru v adrese, napr: index.html?get_key=value
 // vraci 'value'

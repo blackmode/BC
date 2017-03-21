@@ -53,3 +53,49 @@ function nextHighestPowerOfTwo(x) {
        break;
    }
  }
+
+ // the NPOT fix is taken from : 
+// http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences
+
+function makeSuitableForTexture(srcElement) {
+   srcElement.crossOrigin = '';
+
+   // it probs should be image.width not image.videoWidth or clientWidth but doesn't work with <video>
+   // TODO fixme
+   if (srcElement.tagName === 'IMG') {
+      var width = srcElement.width;
+      var height = srcElement.height;
+   } else {
+      var width = srcElement.videoWidth;
+      var height = srcElement.videoHeight;
+   }
+
+   if (!isPowerOfTwo(width) || !isPowerOfTwo(height)) {
+      // Scale up the texture to the next highest power of two dimensions.
+      var canvas = document.createElement("canvas");
+      canvas.width = nextHighestPowerOfTwo(width);
+      canvas.height = nextHighestPowerOfTwo(height);
+
+      // colour the bg in almost black
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // draw image in the middle
+      var centerX = canvas.width / 2 - width / 2;
+      var centerY = canvas.height / 2 - height / 2;
+      ctx.drawImage(image, centerX, centerY, width, height);
+
+     srcElement = canvas;
+   }
+
+   return srcElement;
+}
+
+function nextHighestPowerOfTwo(x) {
+   --x;
+   for (var i = 1; i < 32; i <<= 1) {
+      x = x | x >> i;
+   }
+   return x + 1;
+}

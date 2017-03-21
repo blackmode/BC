@@ -97,7 +97,6 @@
 
 				//
 
-
 				var video = document.createElement( 'video' );
 				video.width = 1920;
 				video.height = 1080;
@@ -110,6 +109,11 @@
 
 
 				var texture = new THREE.VideoTexture( video );
+
+console.log(texture);
+
+
+				
 				texture.minFilter = THREE.LinearFilter;
 				texture.format = THREE.RGBFormat;
 
