@@ -7,3 +7,15 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
 OPENGL
 https://www.opengl.org/sdk/docs/tutorials/ClockworkCoders/attributes.php
 https://www.khronos.org/registry/OpenGL-Refpages/es3/
+
+
+CONVERTING  dual fish-eye  to panorama images on realtime.
+https://github.com/yasuhirohoshino/oF-thetaEquirectangular
+https://github.com/theta360developers/defisheye
+http://theta360.guide/blog/video/2017/01/25/convert-dual-fisheye-to-equirectangular.html
+
+http://paulbourke.net/dome/fish2/
+https://www.simplicity.be/article/vr-photo-sphere-webgl/
+https://developers.theta360.com/en/forums/viewtopic.php?f=4&t=36
+http://lists.theta360.guide/t/camtwist-effect-plugin-to-convert-theta-s-live-streaming-video-from-fisheye-to-equirectangular-via-quartz/165
+http://paulbourke.net/dome/dualfish2sphere/

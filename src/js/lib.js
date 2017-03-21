@@ -21,6 +21,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 	for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
 		var theta = latNumber * latitudeAngle;
 
+
+
 		for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
 
 			var phi = longNumber * longitudeAngle;
@@ -37,7 +39,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 
 			// textury
 			var u =    (longNumber / longitudeBands);
-			var v =      -(latNumber / latitudeBands);
+			var v =        (latNumber / latitudeBands) ;
 
 			// pridame vrcholy
 			vertices.push(x);
@@ -54,7 +56,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 			textures.push(v);
 
 			// zde zpracovavam index data
-			if (latNumber  < latitudeBands && longNumber <  longitudeBands) 
+			/*if (latNumber  < latitudeBands || longNumber <  longitudeBands) 
 			{
 				var first = (latNumber * (longitudeBands + 1)) + longNumber;
 				var second = first + longitudeBands + 1;
@@ -65,11 +67,25 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 				indices.push(second);
 				indices.push(second + 1);
 				indices.push(first + 1);
-			}
+			}*/
 
 		}
 
 	}
+
+    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+        var first = (latNumber * (longitudeBands + 1)) + longNumber;
+        var second = first + longitudeBands + 1;
+        indices.push(first);
+        indices.push(second);
+        indices.push(first + 1);
+
+        indices.push(second);
+        indices.push(second + 1);
+        indices.push(first + 1);
+      }
+    }
 
 	return {
 		vertices: new Float32Array(vertices),
@@ -79,6 +95,181 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 	};
 };
 
+function createCubeGeometry () 
+{
+	var vertices = [];
+	var textures = [];
+	var normals = [];
+	var indices = [];
+
+		// x,y,z
+        var vertices = [
+        // Front face
+        -1,  1,  1,  //	
+         1,  1,  1,  
+         1, -1,  1, 
+        -1, -1,  1,
+
+         // Back face
+        -1,  1,  -1,  
+         1,  1,  -1,  
+         1, -1,  -1, 
+        -1, -1,  -1,
+
+         // Up face
+         1,  1,  1,  
+         1,  1,  -1,  
+         -1,  1, -1, 
+         -1,  1, 1, 
+
+         // Down face
+         1,  -1,  1,  
+         1,  -1,  -1,  
+         -1,  -1, -1, 
+         -1,  -1, 1, 
+
+          // Left face
+          -1,  1,  1, 
+          -1,  1, -1, 
+          -1,  -1, -1,
+          -1,  -1, 1,
+
+          // Right face
+          1,  1,  1, 
+          1,  1, -1, 
+          1,  -1, -1,
+          1,  -1, 1
+        ];
+
+		var textures = [
+			// Front
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Back
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Top
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Bottom
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// Left
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+			// right
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1
+		];
+
+		// x,y,z
+        var normals = [
+		    // Front
+		     0,  0,  1,
+		     0,  0,  1,
+		     0,  0,  1,
+		     0,  0,  1,
+
+		    // Back
+		     0,  0, -1,
+		     0,  0, -1,
+		     0,  0, -1,
+		     0,  0, -1,
+
+		    // Top
+		     0,  1,  0,
+		     0,  1,  0,
+		     0,  1,  0,
+		     0,  1,  0,
+
+		    // Bottom
+		     0, -1,  0,
+		     0, -1,  0,
+		     0, -1,  0,
+		     0, -1,  0,
+
+		    // Left
+		    -1,  0,  0,
+		    -1,  0,  0,
+		    -1,  0,  0,
+		    -1,  0,  0,
+
+		    // Right
+		     1,  0,  0,
+		     1,  0,  0,
+		     1,  0,  0,
+		     1,  0,  0
+        ];
+
+var indices = [
+
+
+
+];
+
+
+
+	return {
+		vertices: new Float32Array(vertices),
+		textures: new Float32Array(textures),
+		normals: new Float32Array(normals),
+		indices: new Uint16Array(indices),
+	};
+}
+
+
+function create2DGeometry () 
+{
+	var vertices = [];
+	var textures = [];
+	var normals = [];
+	var indices = [];
+
+		// x,y,z
+        var vertices = [
+		  -1.0, -1.0,
+		  1.0, -1.0,
+		  1.0,  1.0,
+		  -1.0,  1.0
+        ];
+
+		var textures = [
+		    0.0,  0.0,
+		    1.0,  0.0,
+		    1.0,  1.0,
+		    0.0,  1.0
+		];
+
+		// x,y,z
+        var normals = [
+
+        ];
+
+		var indices = [
+		  0,  1,  2,      0,  2,  3
+		];
+
+
+
+	return {
+		vertices: new Float32Array(vertices),
+		textures: new Float32Array(textures),
+		normals: new Float32Array(normals),
+		indices: new Uint16Array(indices),
+	};
+}
 
 // vrat hodnotu parametru v adrese, napr: index.html?get_key=value
 // vraci 'value'
@@ -120,6 +311,25 @@ function checkIfFileExists(url)
     else {
         return false;
     }
+}
+/*
+
+HAVE_NOTHING		0	No information is available about the media resource.
+HAVE_METADATA		1	Enough of the media resource has been retrieved that the metadata attributes are initialized. Seeking will no longer raise an exception.
+HAVE_CURRENT_DATA	2	Data is available for the current playback position, but not enough to actually play more than one frame.
+HAVE_FUTURE_DATA	3	Data for the current playback position as well as for at least a little bit of time into the future is available (in other words, at least two frames of video, for example).
+HAVE_ENOUGH_DATA	4	Enough data is available—and the download rate is high enough—that the media can be played through to the end without interruption.
+
+
+
+*/
+
+function videoReady(video) {
+	if ( video.readyState >= video.HAVE_CURRENT_DATA ) 
+	{
+		return true;
+	}
+	return false;
 }
 
 function createIdentityMatrix3()

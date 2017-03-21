@@ -34,13 +34,39 @@ void main(void) {
 </script>
 
    <canvas id="glcanvas" style="width: 500px; height: 350px;"></canvas>
+   <canvas id="glcanvas2" style="width: 500px; height: 350px;"></canvas>
+   <IMG src="data/p7.jpg" id="imgrect" style="display: none"/>
   <video muted preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 300px; height: 200px " controls style="width: 500px; height: 350px;">
-     <source src="data/firefox.ogv" type="video/mp4"> 
-    <!--<source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">-->
+    <!-- <source src="data/firefox.ogv" type="video/mp4"> -->
+    <source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">
   </video>
  
 
 <script type="text/javascript">
+
+
+// look up the text canvas.
+var textCanvas = document.getElementById("glcanvas2");
+ 
+// make a 2D context for it
+var ctx = textCanvas.getContext("2d");
+
+      var canvas = document.getElementById("glcanvas2");
+      canvas.width =  500;
+      canvas.height = 350;
+
+      // colour the bg in almost black
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // draw image in the middle
+      var centerX = canvas.width / 2 - 200 / 2;
+      var centerY = canvas.height / 2 - 100 / 2;
+      ctx.drawImage(document.getElementById("video"), 0, 0, 300, 200);
+
+console.log(document.getElementById("video"));
+
 // get DOM elements
 videoContainer = document.getElementById('video-container');
 video = document.getElementById('video');
@@ -239,6 +265,7 @@ updateTexture = function() {
 
 // draw stuff in the canvas
 drawScene = function() {
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   updateTexture();
   gl.useProgram(program);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);

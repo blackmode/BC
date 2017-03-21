@@ -45,8 +45,7 @@
         uniform sampler2D sampler;  
             
         void main(void) {
-            gl_FragColor = vec4(1, 0.5, 0.4, 1); 
-            gl_FragColor = texture2D(sampler, varyingTexture);
+             gl_FragColor = texture2D(sampler, varyingTexture);
             
         }
     </script>
@@ -56,8 +55,9 @@
     <body onload="main()">
  
         <canvas id="glcanvas" width="800" height="600"></canvas>
-      <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 300px; height: 200px " controls muted>
-        <source src="data/firefox.ogv" type="video/mp4">
+      <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted>
+        <!--<source src="data/firefox.ogv" type="video/mp4">-->
+        <source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">
       </video>
 
     </body>
@@ -65,6 +65,8 @@
 
 
     <script>
+ 
+
 
         var rotation = 0.00;
         var down = 0.00;
@@ -76,15 +78,20 @@ var mmLoc;
 var texture;
  var canvas = document.querySelector("canvas");
  
+
  
-var GEOMETRY = createSphereGeometry(36,30,7.0);
+var GEOMETRY = createSphereGeometry(30,30,7.0);
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
+console.log('INDEXY: ');
+console.log(GEOMETRY);
+var indexBuffer;
+var program ;
+var samplerLoc ;
 
-
-        var gl = canvas.getContext("experimental-webgl");
+        var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
         /*
                         var video = document.createElement( 'video' );
                         video.width = 60;
@@ -101,8 +108,8 @@ var video = document.getElementById('video');
 // load the video, and play on ready
 video.load();
 video.oncanplaythrough = function() {
-    if (this.readyState >= video.HAVE_CURRENT_DATA )
-            this.play();
+
+             this.play();
   console.log('OnCANPLAYthrough');
   render();
 };
@@ -130,7 +137,7 @@ video.oncanplaythrough = function() {
             gl.shaderSource(fs, str);
             gl.compileShader(fs);
 
-            var program = gl.createProgram();
+            program = gl.createProgram();
             gl.attachShader(program, vs);
             gl.attachShader(program, fs);
             gl.linkProgram(program);
@@ -142,16 +149,16 @@ video.oncanplaythrough = function() {
             mmLoc = gl.getUniformLocation(program, "MMatrix");
 
             
-            mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+            mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -1.5));
             var vmLoc = gl.getUniformLocation(program, "VMatrix");
             gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
             
-            mat4.perspective(pmatrix, Math.PI/2.5, 1.75, 0.1, 100);
+            mat4.perspective(pmatrix, Math.PI/2.5, 1.3, 0.1, 100);
             var pmLoc = gl.getUniformLocation(program, "PMatrix");
             gl.uniformMatrix4fv(pmLoc, false, pmatrix);
 
-            var samplerLoc = gl.getUniformLocation(program, "sampler");
+            samplerLoc = gl.getUniformLocation(program, "sampler");
             gl.uniform1i(samplerLoc, 0);
 
 
@@ -169,12 +176,13 @@ video.oncanplaythrough = function() {
             gl.bufferData(gl.ARRAY_BUFFER, (vertexPositionData), gl.STATIC_DRAW);
             gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
             
+
             var textureBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData), gl.STATIC_DRAW);
             gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
 
-            var indexBuffer = gl.createBuffer();
+            indexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
 
@@ -189,25 +197,41 @@ video.oncanplaythrough = function() {
 
 texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+
+ 
+
 gl.bindTexture(gl.TEXTURE_2D, null);
 
+           mat4.rotateX(mmatrix, mmatrix,  - Math.PI/2 );
+           gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
+           mat4.rotateZ(mmatrix, mmatrix,    -Math.PI/2 );
+           gl.uniformMatrix4fv(mmLoc, false, mmatrix);
     }
 
-
+ 
 function updateTexture() {
 
   if (video.readyState >= video.HAVE_CURRENT_DATA ) {
-      gl.activeTexture(gl.TEXTURE0);
+       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture);
       //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
       // the next line fails in Safari if the video is coming from another domain or subdomain
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
       gl.bindTexture(gl.TEXTURE_2D, null);
+ 
+ 
+
+ 
+ 
+
+
+
   }
 
 }
@@ -217,19 +241,23 @@ function updateTexture() {
 
         function render() {
              updateTexture();
+             
+              //mat4.rotateX(mmatrix, mmatrix, rotation);
+             //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+            /// ROTACNI MATICE
+                mat4.rotateZ(mmatrix, mmatrix, down);
+                gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+                mat4.rotateZ(mmatrix, mmatrix, up);
+                gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
-
-              mat4.rotateZ(mmatrix, mmatrix, rotation);
-             gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-            /// ROTACNI MATICE
-                mat4.rotateY(mmatrix, mmatrix, down);
-                gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-
-                mat4.rotateY(mmatrix, mmatrix, up);
-                gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+            gl.uniform1i(samplerLoc, 0);
 
             //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
             gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
             requestAnimationFrame(render);
         }
