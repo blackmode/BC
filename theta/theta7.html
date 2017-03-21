@@ -5,6 +5,7 @@
 
 <!-- Vertex shader program -->
 <script id="shader-vs" type="x-shader/x-vertex">
+ attribute vec2 texture;
  attribute vec2 aVertexPosition;
 varying vec2 vDirection;
   
@@ -12,7 +13,7 @@ varying vec2 vDirection;
 
 void main(void) {
   gl_Position =  vec4(aVertexPosition, 1.0 , 1.0);
-  vDirection = aVertexPosition;
+  vDirection = texture;
 }
 </script>
 
@@ -25,7 +26,8 @@ varying vec2 vDirection;
 uniform sampler2D uSampler;
 
 void main(void) {
-  gl_FragColor = texture2D(uSampler,  vec2(vDirection.x*0.5+0.5, vDirection.y*0.5+0.5));
+  //gl_FragColor = texture2D(uSampler,  vec2(vDirection.x*0.5+0.5, vDirection.y*0.5+0.5));
+  gl_FragColor = texture2D(uSampler,   vDirection );
 }
 </script>
 
@@ -118,10 +120,13 @@ attachShader({
   uniforms: ['uSampler'],
 });
 
+
 // some webGL initialization
 gl.clearColor(0.0, 0.0, 0.0, 0.0);
 gl.clearDepth(1.0);
 gl.disable(gl.DEPTH_TEST);
+
+
 
 positionsBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
@@ -131,15 +136,34 @@ var positions = [
   1.0,  1.0,
   -1.0,  1.0,
 ];
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  verticesIndexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
-  var vertexIndices = [
+
+
+verticesIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
+var vertexIndices = [
   0,  1,  2,      0,  2,  3,
 ];
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-              new Uint16Array(vertexIndices), gl.STATIC_DRAW);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW);
+
+
+
+var textureCoordAttribute = gl.getAttribLocation(program, "texture");
+gl.enableVertexAttribArray(textureCoordAttribute);
+var textureBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, textureBuf);
+var textureBufpositions = [
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+];
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureBufpositions), gl.STATIC_DRAW);
+gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+
+
 
 texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
