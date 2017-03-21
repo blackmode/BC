@@ -213,6 +213,48 @@ var indices = [
 	};
 }
 
+
+function create2DGeometry () 
+{
+	var vertices = [];
+	var textures = [];
+	var normals = [];
+	var indices = [];
+
+		// x,y,z
+        var vertices = [
+		  -1.0, -1.0,
+		  1.0, -1.0,
+		  1.0,  1.0,
+		  -1.0,  1.0
+        ];
+
+		var textures = [
+		    0.0,  0.0,
+		    1.0,  0.0,
+		    1.0,  1.0,
+		    0.0,  1.0
+		];
+
+		// x,y,z
+        var normals = [
+
+        ];
+
+		var indices = [
+		  0,  1,  2,      0,  2,  3
+		];
+
+
+
+	return {
+		vertices: new Float32Array(vertices),
+		textures: new Float32Array(textures),
+		normals: new Float32Array(normals),
+		indices: new Uint16Array(indices),
+	};
+}
+
 // vrat hodnotu parametru v adrese, napr: index.html?get_key=value
 // vraci 'value'
 function getParamByKey(get_key) {

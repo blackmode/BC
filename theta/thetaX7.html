@@ -5,14 +5,17 @@
 
 <!-- Vertex shader program -->
 <script id="shader-vs" type="x-shader/x-vertex">
+ attribute vec2 texture;
  attribute vec2 aVertexPosition;
 varying vec2 vDirection;
   
-
+        uniform mat4 MMatrix;
+        uniform mat4 VMatrix;
+        uniform mat4 PMatrix;
 
 void main(void) {
-  gl_Position =  vec4(aVertexPosition, 1.0 , 1.0);
-  vDirection = aVertexPosition;
+  gl_Position =   vec4(aVertexPosition, 1.0 ,1.0 );
+  vDirection = texture;
 }
 </script>
 
@@ -25,13 +28,15 @@ varying vec2 vDirection;
 uniform sampler2D uSampler;
 
 void main(void) {
-  gl_FragColor = texture2D(uSampler,  vec2(vDirection.x*0.5+0.5, vDirection.y*0.5+0.5));
+  //gl_FragColor = texture2D(uSampler,  vec2(vDirection.x*0.5+0.5, vDirection.y*0.5+0.5));
+  gl_FragColor = texture2D(uSampler,   vDirection );
 }
 </script>
 
    <canvas id="glcanvas" style="width: 500px; height: 350px;"></canvas>
   <video muted preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 300px; height: 200px " controls style="width: 500px; height: 350px;">
-    <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+     <source src="data/firefox.ogv" type="video/mp4"> 
+    <!--<source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">-->
   </video>
  
 
@@ -42,6 +47,56 @@ video = document.getElementById('video');
 canvas = document.getElementById('glcanvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+var mmatrix = mat4.create();
+var vmatrix = mat4.create();
+var pmatrix = mat4.create();
+function create2DGeometry () 
+{
+  var vertices = [];
+  var textures = [];
+  var normals = [];
+  var indices = [];
+
+    // x,y,z
+        var vertices = [
+      -1.0, -1.0,
+      1.0, -1.0,
+      1.0,  1.0,
+      -1.0,  1.0
+        ];
+
+    var textures = [
+        0.0,  0.0,
+        1.0,  0.0,
+        1.0,  1.0,
+        0.0,  1.0
+    ];
+
+    // x,y,z
+        var normals = [
+
+        ];
+
+    var indices = [
+      0,  1,  2,      0,  2,  3
+    ];
+
+
+
+  return {
+    vertices: new Float32Array(vertices),
+    textures: new Float32Array(textures),
+    normals: new Float32Array(normals),
+    indices: new Uint16Array(indices),
+  };
+}
+
+var GEOMETRY = create2DGeometry( );
+console.log(GEOMETRY);
+var vertexPositionData = GEOMETRY.vertices;
+var normalData = GEOMETRY.normals;
+var textureCoordData =GEOMETRY.textures;
+var indexData = GEOMETRY.indices;
 
 // load the video, and play on ready
 video.load();
@@ -118,28 +173,51 @@ attachShader({
   uniforms: ['uSampler'],
 });
 
+
 // some webGL initialization
 gl.clearColor(0.0, 0.0, 0.0, 0.0);
 gl.clearDepth(1.0);
 gl.disable(gl.DEPTH_TEST);
 
-positionsBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
-var positions = [
-  -1.0, -1.0,
-  1.0, -1.0,
-  1.0,  1.0,
-  -1.0,  1.0,
-];
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  verticesIndexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
-  var vertexIndices = [
-  0,  1,  2,      0,  2,  3,
-];
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-              new Uint16Array(vertexIndices), gl.STATIC_DRAW);
+
+ 
+
+var positionsBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+var positions = vertexPositionData;
+gl.bufferData(gl.ARRAY_BUFFER, (positions), gl.STATIC_DRAW);
+
+
+
+var verticesIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
+var vertexIndices = indexData;
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (vertexIndices), gl.STATIC_DRAW);
+
+
+
+var textureCoordAttribute = gl.getAttribLocation(program, "texture");
+gl.enableVertexAttribArray(textureCoordAttribute);
+var textureBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, textureBuf);
+var textureBufpositions = textureCoordData;
+gl.bufferData(gl.ARRAY_BUFFER, (textureBufpositions), gl.STATIC_DRAW);
+gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+
+          mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
+          var mmLoc = gl.getUniformLocation(program, "MMatrix");
+
+          
+          mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+          var vmLoc = gl.getUniformLocation(program, "VMatrix");
+          gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+
+          
+          mat4.perspective(pmatrix, Math.PI/2.5, 1.75, 0.1, 100);
+          var pmLoc = gl.getUniformLocation(program, "PMatrix");
+          gl.uniformMatrix4fv(pmLoc, false, pmatrix);
 
 texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -173,8 +251,9 @@ drawScene = function() {
 
   // Draw
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
-  gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+  gl.drawElements(gl.TRIANGLES, vertexIndices.length, gl.UNSIGNED_SHORT, 0);
   // keep looping
+ 
   requestAnimationFrame(drawScene);
 };
 
