@@ -37,3 +37,4 @@ NEJAKY VECI JESTE OHLEDNE VIDEA
 http://dontglobalmebro.ruhoh.com/webgl/displaying-youtube-video-in-webgl/
 http://bjartr.blogspot.cz/2010/01/long-delayed-webglu-update-some-360.html
 https://open.gl/textures
+http://www.cs.uregina.ca/Links/class-info/390AN/WebGL/Lab6/index.html
