@@ -36,22 +36,29 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 		var sirka_poledniku = longNumber*longitude_width;
 		var sirka_rovnobezky = latNumber*latitude_width;
 		if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   {
+
 			if (((sirka_rovnobezky>=fisheye_1_y_begin && sirka_rovnobezky<=fisheye_1_y_end)|| (sirka_rovnobezky>=fisheye_2_y_begin && sirka_rovnobezky<=fisheye_2_y_end)))   {
  				return {
 					u: longNumber/longitudeBands,
 					v: latNumber/latitudeBands,
 				}; 
 			}
+
+			// pokud jsem pod krivkou
+			if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
+				console.log('Jsem zde pripad 2');
+					return {
+					u: longNumber/longitudeBands,
+					v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
+				}; 
+			}
+
+
+
+
 		}
 		else {
-			if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   {
-				if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
- 					return {
-						u: longNumber/longitudeBands,
-						v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
-					}; 
-				}
-			}
+
 		}
 console.log('sirka_poledniku: '+sirka_poledniku);
 console.log(sirka_rovnobezky);
