@@ -57,7 +57,7 @@
         <canvas id="glcanvas" width="800" height="600"></canvas>
       <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted>
         <!--<source src="data/firefox.ogv" type="video/mp4">-->
-        <source src="data/R0010014_20161217101030_er.mp4" type="video/mp4">
+        <source src="data/theta2.mp4" type="video/mp4">
       </video>
 
     </body>
@@ -80,7 +80,7 @@ var texture;
  
 
  
-var GEOMETRY = createSphereGeometry(30,30,7.0);
+var GEOMETRY = createSphereGeometry(240,270,7.0);
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -197,8 +197,8 @@ video.oncanplaythrough = function() {
 
 texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -268,7 +268,7 @@ function updateTexture() {
             || function(cb) { setTimeout(cb, 1000/60); };
 
         function onDocumentMouseMove( event ) {
-            console.log( event.clientY/200000);
+           // console.log( event.clientY/200000);
             rotation = event.clientY/200000
         }
 

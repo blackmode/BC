@@ -15,15 +15,62 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 		return Math.cos(angle);  
 	}
 
+
+	var resolution_width = 1920;
+	var resolution_height = 1080;
+
+	var fisheye_1_x_begin = 17;
+	var fisheye_1_x_end = 921;
+	var fisheye_1_y_begin = 134;
+	var fisheye_1_y_end = 1053;
+
+	var fisheye_2_x_begin = 960;
+	var fisheye_2_x_end = 1861;
+	var fisheye_2_y_begin = 133;
+	var fisheye_2_y_end = 1063;
+
+	var latitude_width = resolution_height/latitudeBands ;
+	var longitude_width = resolution_width/longitudeBands;
+
+	var checkCursor = function (latNumber,longNumber) {
+		var sirka_poledniku = longNumber*longitude_width;
+		var sirka_rovnobezky = latNumber*latitude_width;
+		if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   {
+			if (((sirka_rovnobezky>=fisheye_1_y_begin && sirka_rovnobezky<=fisheye_1_y_end)|| (sirka_rovnobezky>=fisheye_2_y_begin && sirka_rovnobezky<=fisheye_2_y_end)))   {
+ 				return {
+					u: longNumber/longitudeBands,
+					v: latNumber/latitudeBands,
+				}; 
+			}
+		}
+		else {
+			if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   {
+				if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
+ 					return {
+						u: longNumber/longitudeBands,
+						v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
+					}; 
+				}
+			}
+		}
+console.log('sirka_poledniku: '+sirka_poledniku);
+console.log(sirka_rovnobezky);
+				return {
+					u: longNumber/longitudeBands,
+					v: latNumber/latitudeBands,
+				}; 
+
+	}
+
 	var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
 	var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
 
-	for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
+	for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {	// zde ukazuje na ktere jsme rovnobezce
 		var theta = latNumber * latitudeAngle;
 
 
 
-		for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
+		for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {// zde ukazuje na kterym jsme poledniku
 
 			var phi = longNumber * longitudeAngle;
 
@@ -38,8 +85,9 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 			var normals_z = z/radius;
 
 			// textury
-			var u =    (longNumber / longitudeBands);
-			var v =        (latNumber / latitudeBands) ;
+			var CUR = checkCursor  (latNumber , longNumber);
+			var u =  CUR.u;
+			var v =     CUR.v;
 
 			// pridame vrcholy
 			vertices.push(x);
@@ -54,6 +102,9 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 			// koordiunace textury
 			textures.push(u);
 			textures.push(v);
+
+
+
 
 			// zde zpracovavam index data
 			/*if (latNumber  < latitudeBands || longNumber <  longitudeBands) 
@@ -72,6 +123,9 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 		}
 
 	}
+
+ 
+
 
     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
       for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
