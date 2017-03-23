@@ -411,3 +411,28 @@ function createIdentityMatrix4()
 		0,0,0,1
 	];
 }
+
+
+
+
+function logger(msg) {
+
+	var div = document.getElementById("logger");
+	if (!div) {
+		var div = document.createElement('div');
+		div.setAttribute('id', 'logger');
+		div.style.width = '300px';
+		div.style.height = '500px';
+		div.style.position = 'absolute';
+		div.style.overflow = 'scroll';
+		div.style.top = '0px';
+		var body = document.getElementById("body");
+		if (!body) {
+			console.warn('Neexistuje TAG <BODY> s ID body, nutne pro logger!');
+		}
+		else {
+			body.append(div);
+		}
+	}
+	div.innerHTML +=   '<span style="color: #2f0; font-size:12px"><span style="color: white">LOG:</span> '+(msg)+'</span><br />'  ;
+}
