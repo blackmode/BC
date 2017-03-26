@@ -82,6 +82,23 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 		var fisheye_2_y_begin = 133;
 		var fisheye_2_y_end = 1063;
 
+// koresponduje v teto funkci s osou X
+function BasicCorrection(u,v) {
+	var min_u = fisheye_1_x_begin/resolution_width;
+	var max_u = fisheye_2_x_end/resolution_width;
+	var d_u = max_u-min_u;
+
+	var min_v = (resolution_height-fisheye_2_y_end)/resolution_height;
+	var max_v = (resolution_height-fisheye_1_y_begin) /resolution_height;
+	var d_v = max_v-min_v;
+
+
+	return {
+		u: d_u*u+min_u,
+		u: d_v*v+min_v,
+	}
+
+}
 
 	var checkCursor = function (latNumber,longNumber) {
 
@@ -118,7 +135,7 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
 			// pokud jsem pod krivkou
 			if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
-				console.log('Jsem zde pripad 2');
+				//console.log('Jsem zde pripad 2');
 					return {
 					u: longNumber/longitudeBands,
 					v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
@@ -128,7 +145,7 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
 			// pokud jsem nad krivkou
 			if (((sirka_rovnobezky>=fisheye_1_y_end && sirka_rovnobezky<=resolution_height)|| (sirka_rovnobezky>=fisheye_2_y_end && sirka_rovnobezky<=resolution_height)))   {
-				console.log('Jsem zde pripad 3');
+				//console.log('Jsem zde pripad 3');
 					return {
 					u: longNumber/longitudeBands,
 					v: (fisheye_1_y_end/sirka_rovnobezky)/latitudeBands,
@@ -143,16 +160,16 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
 				var tmp_u;
 				if (sirka_poledniku >= 0 && sirka_poledniku<=fisheye_1_x_begin) {
-					console.log('Jsem zde pripad 4');
+					//console.log('Jsem zde pripad 4');
 					tmp_u = fisheye_1_x_begin/sirka_poledniku;
 				}
 				else if (sirka_poledniku>=fisheye_1_x_end && sirka_poledniku<=fisheye_2_x_begin) {
-										console.log('Jsem zde pripad 5');
+										//console.log('Jsem zde pripad 5');
 
 					tmp_u = fisheye_2_x_begin/sirka_poledniku;
 				}
 				else {
-					console.log('Jsem zde pripad 6');
+					//console.log('Jsem zde pripad 6');
 
 					tmp_u = fisheye_2_x_end/sirka_poledniku;
 				}
@@ -173,8 +190,8 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
 	}
 
-    var latitudeBands = 30;
-    var longitudeBands = 30;
+    var latitudeBands = 10;
+    var longitudeBands = 10;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -208,24 +225,39 @@ var u = (longNumber / longitudeBands);
  var v =   (latNumber / latitudeBands);
 
 // korekce
-if (v <=  0.01574074074074074074074074074074) v =v + 0.01574074074074074074074074074074;
+if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
 else {
 	aktualni_rovnobezka = latNumber;
 }
-if (u <= 0.00885416666666666666666666666667) u = u + 0.00885416666666666666666666666667; // jeste upravit
+if (u <= 0.00885416666666666666666666666667) u =   0.00885416666666666666666666666667; // jeste upravit
 
 var r = 452/1920;
 var dopocet = 0;
 
-if (longNumber <= longitudeBands / 2) {
+if (longNumber <= longitudeBands / 4) {
 	if (aktualni_rovnobezka>0) {
 
-
-		u = u+ (prumer - (Math.sin(theta)*r));
+		var diff = (prumer - (Math.sin(theta)*r));
+		var d = (Math.sin(theta)*r)*2;
+		u = u+ diff;
+		console.log(diff )
 	}
 }
 
 
+if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
+	if (aktualni_rovnobezka>0) {
+
+		var diff = (prumer - (Math.sin(theta)*r));
+		var d = (Math.sin(theta)*r)*2;
+		u = u+ diff+d ;
+	}
+}
+ 
+
+
+
+ 
 /*
 if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
 
@@ -263,8 +295,8 @@ if (v >=  0.87592592592592592592592592592593) v = 0.8759259259259259259259259259
         normalData.push(x);
         normalData.push(y);
         normalData.push(z);
-        textureCoordData.push(u);
-        textureCoordData.push(v);
+        //textureCoordData.push(u);
+        //textureCoordData.push(v);
         vertexPositionData.push(radius * x);
         vertexPositionData.push(radius * y);
         vertexPositionData.push(radius * z);
@@ -272,7 +304,8 @@ if (v >=  0.87592592592592592592592592592593) v = 0.8759259259259259259259259259
     }
 
  
- 
+ console.log(textureCoordData );
+ console.log(textureCoordData.length);
 function ellipticalDiscToSquare( u,  v)
 {
     var u2 = u * u;
@@ -324,6 +357,73 @@ function ellipticalDiscToSquare( u,  v)
 	}
  
 
+ for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
+      var theta = latNumber * Math.PI / latitudeBands;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
+
+      for (var longNumber = 0; longNumber <= longitudeBands / 2 ; longNumber++) {//u
+        var phi = longNumber * 2 * Math.PI / longitudeBands  * 2;
+        var sinPhi = Math.sin(phi);
+        var cosPhi = Math.cos(phi);
+
+        var x = cosPhi * sinTheta;
+        var z = cosTheta;
+        var y = sinPhi * sinTheta;
+
+
+
+ 
+
+ 
+ 
+ 
+	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/5;
+	v = v/3;
+	u = u + 0.2;
+	v = v+ 0.5 ; 
+ 
+          textureCoordData.push(u);
+        textureCoordData.push(v);
+
+      }
+    }
+
+for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
+      var theta = latNumber * Math.PI / latitudeBands;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
+
+      for (var longNumber = longitudeBands / 2 +1; longNumber <= longitudeBands  ; longNumber++) {//u
+        var phi = longNumber * 2 * Math.PI / longitudeBands  * 2;
+        var sinPhi = Math.sin(phi);
+        var cosPhi = Math.cos(phi);
+
+        var x = cosPhi * sinTheta;
+        var z = cosTheta;
+        var y = sinPhi * sinTheta;
+
+
+
+ 
+
+ 
+ 
+ 
+	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/5;
+	v = v/3;
+	u = u + 0.65;
+	v = v+ 0.5 ;
+ 
+          textureCoordData.push(u);
+        textureCoordData.push(v);
+
+      }
+    }
  
 
 

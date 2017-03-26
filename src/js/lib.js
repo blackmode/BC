@@ -455,6 +455,7 @@ function fishEye(x_postion_of_middle, y_postion_of_middle, x_postion_of_fisheye_
 	}
 
 	var d = 2*r; // prumer kruznice
+ 
 
 	return {
 		r: r,
