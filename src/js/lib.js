@@ -436,3 +436,31 @@ function logger(msg) {
 	}
 	div.innerHTML +=   '<span style="color: #2f0; font-size:12px"><span style="color: white">LOG:</span> '+(msg)+'</span><br />'  ;
 }
+
+
+// vsechny hodnoty josu zadavyn v pixelech
+function fishEye(x_postion_of_middle, y_postion_of_middle, x_postion_of_fisheye_begin, img_width, img_height) {
+	var horizontal_pixel = 1/img_width;
+	var vertical_pixel = 1/img_height;
+
+	// zde zjistuju, z kterej strany kruhu tu hdontou beru a vracim prumer kriuznice jako: r
+	if (x_postion_of_middle > x_postion_of_fisheye_begin) {
+		var r = (x_postion_of_middle - x_postion_of_fisheye_begin) * horizontal_pixel; 
+	}
+	else if (x_postion_of_middle < x_postion_of_fisheye_begin){
+		var r = (x_postion_of_fisheye_begin - x_postion_of_middle) * horizontal_pixel;
+	}
+	else {
+		console.warn('Hodnoty se nemohou rovnat');
+	}
+
+	var d = 2*r; // prumer kruznice
+
+	return {
+		r: r,
+		d: d,
+		o: 2*Math.PI*r,
+		s: Math.PI*r*r,
+	};	
+
+}

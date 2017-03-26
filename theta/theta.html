@@ -62,10 +62,10 @@
 
 				// Remap UVs
 
-				var normals = geometry.attributes;
+				var normals = geometry.attributes.normal.array;
 				var uvs = geometry.attributes.uv.array;
-				//console.log(normals);
-				 console.log(scene);
+				console.log(normals);
+				console.log(uvs);
 
 				// prepocitavani
 				if (getParamByKey('fish')=='true') 
@@ -109,11 +109,6 @@
 
 
 				var texture = new THREE.VideoTexture( video );
-
-console.log(texture);
-
-
-
 				texture.minFilter = THREE.LinearFilter;
 				texture.format = THREE.RGBFormat;
 
