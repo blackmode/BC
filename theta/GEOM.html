@@ -1,3 +1,4 @@
+<body style="padding: 0px; margin: 0px"><canvas width="1920" height="1080" ></canvas></body>
 <script>
 var canvas = document.querySelector("canvas");
 var gl = document.querySelector("canvas").getContext("experimental-webgl");
@@ -95,6 +96,8 @@ else
 {*/
 	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
 	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/10;
+	v = v/6;
 	u = u + 0.2;
 	v = v+ 0.5 ;
 /*}*/
@@ -154,6 +157,10 @@ for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
  
 	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
 	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/4.5;
+	v = v/2.60;
+	u = u + 0.259;
+	v = v+ 0.65 ; 
  
           textureCoordData.push(u);
         textureCoordData.push(v);
@@ -184,6 +191,9 @@ for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
  
 	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
 	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/10;
+	v = v/6;
+	u = u + 0.7;
 	v = v+ 0.5 ;80
  
           textureCoordData.push(u);
