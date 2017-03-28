@@ -96,6 +96,9 @@ console.log(sirka_rovnobezky);
 			var u =  CUR.u;
 			var v =     CUR.v;
 
+u= longNumber/longitudeBands;
+v= latNumber/latitudeBands;
+
 			// pridame vrcholy
 			vertices.push(x);
 			vertices.push(y);
@@ -131,7 +134,29 @@ console.log(sirka_rovnobezky);
 
 	}
 
- 
+ /*
+           for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+
+            var x = normals[ i * 3 + 0 ];
+            var y = normals[ i * 3 + 1 ];
+            var z = normals[ i * 3 + 2 ];
+
+            if ( i < l / 2 ) {
+
+              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( z ) / Math.sqrt( x * x + y * y ) )  * ( 2 / Math.PI );
+              textures[ i * 2 + 0 ] = x * ( 450 / 1920 ) * correction + (0.245) ;
+              textures[ i * 2 + 1 ] = y * ( 450 / 1080 ) * correction + (0.5600 );
+
+            } else {
+
+              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( - z ) / Math.sqrt( x * x + y * y ) ) * ( 2 / Math.PI );
+              textures[ i * 2 + 0 ] = - x * ( 450 / 1920 ) * correction + ( 1470 / 1920 );
+              textures[ i * 2 + 1 ] = y * ( 450 / 1080 ) * correction +  (0.5600 );
+
+            }
+
+          }
+*/
 
 
     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
@@ -455,7 +480,7 @@ function fishEye(x_postion_of_middle, y_postion_of_middle, x_postion_of_fisheye_
 	}
 
 	var d = 2*r; // prumer kruznice
- 
+
 
 	return {
 		r: r,

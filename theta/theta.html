@@ -57,19 +57,20 @@
 
 				scene = new THREE.Scene();
 
-				var geometry = new THREE.SphereBufferGeometry( 500, 60, 40 ).toNonIndexed();
-				geometry.scale( - 1, 1, 1 );
+				var geometry = new THREE.SphereBufferGeometry( 300, 21, 21 );
+				var geometry2 = new THREE.SphereBufferGeometry( 300, 21, 21 ).toNonIndexed();
+				 geometry.scale( - 1, 1, 1 );
 
 				// Remap UVs
 
 				var normals = geometry.attributes.normal.array;
 				var uvs = geometry.attributes.uv.array;
-				console.log(normals);
-				console.log(uvs);
+				var position = geometry.attributes.position.array;
+
+ 
 
 				// prepocitavani
-				if (getParamByKey('fish')=='true') 
-				{
+		 
 					for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
 
 						var x = normals[ i * 3 + 0 ];
@@ -91,7 +92,7 @@
 						}
 
 					}
-				}
+				 
 
 				geometry.rotateZ( - Math.PI / 2 );
 
@@ -112,7 +113,7 @@
 				texture.minFilter = THREE.LinearFilter;
 				texture.format = THREE.RGBFormat;
 
-				///var texture = new THREE.TextureLoader().load( 'data/ricoh_theta_s.jpg' );
+				//var texture = new THREE.TextureLoader().load( 'data/model.jpg' );
 				//texture.format = THREE.RGBFormat;
 
 				var material   = new THREE.MeshBasicMaterial( { 

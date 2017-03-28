@@ -1,4 +1,5 @@
 <body style="padding: 0px; margin: 0px"><canvas width="1920" height="1080" ></canvas></body>
+    <script src="build/three.js"></script>
 
 
 
@@ -19,8 +20,8 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 		var fisheye_2_y_end = 1063;
 
 
-    var latitudeBands = 21;
-    var longitudeBands = 21;
+    var latitudeBands = 20;
+    var longitudeBands = 20;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -213,10 +214,46 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        var geometry = new THREE.SphereBufferGeometry( 300, 30, 30 ).toNonIndexed();
+        geometry.scale( - 1, 1, 1 );
+
+        // Remap UVs
+
+        var normals = geometry.attributes.normal.array;
+        var uvs = geometry.attributes.uv.array;
+        var position = geometry.attributes.position.array;
  
+
+        // prepocitavani
+     
+          for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+
+            var x = normals[ i * 3 + 0 ];
+            var y = normals[ i * 3 + 1 ];
+            var z = normals[ i * 3 + 2 ];
+
+            if ( i < l / 2 ) {
+
+              var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+              textureCoordData[ i * 2 + 0 ] = x * ( 404 / 1920 ) * correction + ( 447 / 1920 );
+              textureCoordData[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+
+            } else {
+
+              var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+              textureCoordData[ i * 2 + 0 ] = - x * ( 404 / 1920 ) * correction + ( 1470 / 1920 );
+              textureCoordData[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+
+            }
+
+          }
+
+ 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /*
            for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
 
             var x = normalData[ i * 3 + 0 ];
@@ -246,7 +283,7 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
             }
 
           }
-  
+  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

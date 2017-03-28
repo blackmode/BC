@@ -36,7 +36,7 @@
          <script type="text/javascript" src="../src/js/lib.js"></script>
          <script type="text/javascript" src="../src/js/Externallib.js"></script>
 
-<canvas width="900" height="600"></canvas>
+<canvas width="1200" height="800"></canvas>
  
 <script id="vs" type="x-shader/x-vertex">
 attribute vec3 pos;
@@ -190,8 +190,8 @@ function BasicCorrection(u,v) {
 
 	}
 
-    var latitudeBands = 10;
-    var longitudeBands = 10;
+    var latitudeBands = 20;
+    var longitudeBands = 20;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -224,6 +224,8 @@ function BasicCorrection(u,v) {
 var u = (longNumber / longitudeBands);
  var v =   (latNumber / latitudeBands);
 
+
+/*
 // korekce
 if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
 else {
@@ -240,8 +242,7 @@ if (longNumber <= longitudeBands / 4) {
 		var diff = (prumer - (Math.sin(theta)*r));
 		var d = (Math.sin(theta)*r)*2;
 		u = u+ diff;
-		console.log(diff )
-	}
+ 	}
 }
 
 
@@ -253,6 +254,8 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
 		u = u+ diff+d ;
 	}
 }
+
+*/
  
 
 
@@ -289,14 +292,14 @@ if (v >=  0.87592592592592592592592592592593) v = 0.8759259259259259259259259259
 
 */
 
-
+ 
  
  
         normalData.push(x);
         normalData.push(y);
         normalData.push(z);
-        //textureCoordData.push(u);
-        //textureCoordData.push(v);
+        textureCoordData.push(u);
+        textureCoordData.push(v);
         vertexPositionData.push(radius * x);
         vertexPositionData.push(radius * y);
         vertexPositionData.push(radius * z);
@@ -304,6 +307,8 @@ if (v >=  0.87592592592592592592592592592593) v = 0.8759259259259259259259259259
     }
 
  
+ console.log(vertexPositionData );
+ console.log(normalData );
  console.log(textureCoordData );
  console.log(textureCoordData.length);
 function ellipticalDiscToSquare( u,  v)
@@ -356,75 +361,31 @@ function ellipticalDiscToSquare( u,  v)
  
 	}
  
-
- for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
-      var theta = latNumber * Math.PI / latitudeBands;
-      var sinTheta = Math.sin(theta);
-      var cosTheta = Math.cos(theta);
-
-      for (var longNumber = 0; longNumber <= longitudeBands / 2 ; longNumber++) {//u
-        var phi = longNumber * 2 * Math.PI / longitudeBands  * 2;
-        var sinPhi = Math.sin(phi);
-        var cosPhi = Math.cos(phi);
-
-        var x = cosPhi * sinTheta;
-        var z = cosTheta;
-        var y = sinPhi * sinTheta;
-
-
-
  
 
- 
- 
- 
-	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
-	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
-	u = u/5;
-	v = v/3;
-	u = u + 0.2;
-	v = v+ 0.5 ; 
- 
-          textureCoordData.push(u);
-        textureCoordData.push(v);
+ 		 
+					for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
 
-      }
-    }
+						var x = normalData[ i * 3 + 0 ];
+						var z = normalData[ i * 3 + 1 ];
+						var y = normalData[ i * 3 + 2 ];
 
-for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
-      var theta = latNumber * Math.PI / latitudeBands;
-      var sinTheta = Math.sin(theta);
-      var cosTheta = Math.cos(theta);
+						if ( i < l / 2 ) {
 
-      for (var longNumber = longitudeBands / 2 +1; longNumber <= longitudeBands  ; longNumber++) {//u
-        var phi = longNumber * 2 * Math.PI / longitudeBands  * 2;
-        var sinPhi = Math.sin(phi);
-        var cosPhi = Math.cos(phi);
+							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+							textureCoordData[ i * 2 + 0 ] = x * ( 404 / 1920 ) * correction + ( 447 / 1920 );
+							textureCoordData[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
 
-        var x = cosPhi * sinTheta;
-        var z = cosTheta;
-        var y = sinPhi * sinTheta;
+						} else {
 
+							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+							textureCoordData[ i * 2 + 0 ] = - x * ( 404 / 1920 ) * correction + ( 1470 / 1920 );
+							textureCoordData[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
 
+						}
 
- 
+					}
 
- 
- 
- 
-	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
-	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
-	u = u/5;
-	v = v/3;
-	u = u + 0.65;
-	v = v+ 0.5 ;
- 
-          textureCoordData.push(u);
-        textureCoordData.push(v);
-
-      }
-    }
- 
 
 
     var indexData = [];
@@ -481,7 +442,7 @@ gl.clearColor(0.3, 0.3, 0.3, 1);
 var texture = null;
 var image = document.createElement("img");
 image.crossOrigin = "anonymous";
-image.src = "data/t1111.jpg";
+image.src = "data/t111.jpg";
 image.onload = function() {
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -499,17 +460,32 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
     //mat4.rotateX(mmatrix, mmatrix,  -Math.PI/2    );
     gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+
+
+    mat4.rotateY(mmatrix, mmatrix,    Math.PI   );
+    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+ 
+
+    mat4.rotateY(mmatrix, mmatrix,    Math.PI/3);
+    gl.uniformMatrix4fv(mmLoc, false, mmatrix);;
+ 
 var render = function() {
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     
-    mat4.rotateY(mmatrix, mmatrix,  0.012 );
+     mat4.rotateZ(mmatrix, mmatrix,  0.012 );
     gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-    //mat4.rotateX(mmatrix, mmatrix,  0.012 );
-    //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+     mat4.rotateY(mmatrix, mmatrix,  0.012 );
+    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+     mat4.rotateX(mmatrix, mmatrix,  0.012 );
+    gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+    gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
     requestAnimationFrame(render);
 
 }
