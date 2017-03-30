@@ -185,8 +185,8 @@ video.oncanplaythrough = function() {
             gl.clearColor(1, 1, 1, 1);
 
             // otoceni kamery do pocatecni pozice
-          // mat4.rotateX(mmatrix, mmatrix,  Math.PI/2);
-           //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+           mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
+           gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
 
@@ -199,11 +199,8 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 gl.bindTexture(gl.TEXTURE_2D, null);
 
-           mat4.rotateX(mmatrix, mmatrix,  - Math.PI/2 );
-           gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-           mat4.rotateZ(mmatrix, mmatrix,    -Math.PI/2 );
-           gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+ 
     }
 
  
@@ -230,10 +227,10 @@ function updateTexture() {
               //mat4.rotateX(mmatrix, mmatrix, rotation);
              //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
             /// ROTACNI MATICE
-                mat4.rotateZ(mmatrix, mmatrix, down);
+                mat4.rotateX(mmatrix, mmatrix, down);
                 gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-                mat4.rotateZ(mmatrix, mmatrix, up);
+                mat4.rotateX(mmatrix, mmatrix, up);
                 gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
