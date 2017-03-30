@@ -57,9 +57,9 @@
 
 				scene = new THREE.Scene();
 
-				var geometry = new THREE.SphereBufferGeometry( 300, 21, 21 );
+				var geometry = new THREE.SphereBufferGeometry( 200, 21, 21 ) .toNonIndexed() ;
 				var geometry2 = new THREE.SphereBufferGeometry( 300, 21, 21 ).toNonIndexed();
-				 geometry.scale( - 1, 1, 1 );
+				// geometry.scale( - 1, 1, 1 );
 
 				// Remap UVs
 
@@ -121,6 +121,7 @@
 				} );
 
 				mesh = new THREE.Mesh( geometry, material );
+				console.log(scene);
 				scene.add( mesh );
 
 				renderer = new THREE.WebGLRenderer();

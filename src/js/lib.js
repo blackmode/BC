@@ -438,6 +438,28 @@ function createIdentityMatrix4()
 }
 
 
+function Mat4rotateX(mat, angle)
+{
+	var cos_angle = Math.cos(angle);
+	var sin_angle = Math.cos(angle);
+
+	var tmp = mat;
+	var out = [];
+	mat[5]  = mat[5] + mat[5]*cos_angle;
+	mat[6]  = mat[6]+mat[6]*(-sin_angle);
+	mat[9]  = mat[9]+mat[9]*sin_angle;
+	mat[10] =  mat[10]+mat[10]*cos_angle;
+
+
+	if (mat.constructor === Float32Array) {
+		return mat;
+	}
+	else {
+		return new Float32Array(mat);
+	}
+
+}
+
 
 
 function logger(msg) {
@@ -489,4 +511,13 @@ function fishEye(x_postion_of_middle, y_postion_of_middle, x_postion_of_fisheye_
 		s: Math.PI*r*r,
 	};	
 
+}
+
+
+function initArray( length) {
+	var array = [];
+	for (var i = 0; i < length; i++) {
+		array[i] = 0;
+	};
+	return array;
 }
