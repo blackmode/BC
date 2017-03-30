@@ -1,4 +1,4 @@
-function createSphereGeometry (latitudeBands, longitudeBands, radius) 
+function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices) 
 {
 	var vertices = [];
 	var textures = [];
@@ -32,43 +32,6 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius)
 	var latitude_width = resolution_height/latitudeBands ;
 	var longitude_width = resolution_width/longitudeBands;
 
-	var checkCursor = function (latNumber,longNumber) {
-		var sirka_poledniku = longNumber*longitude_width;
-		var sirka_rovnobezky = latNumber*latitude_width;
-		if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   {
-
-			if (((sirka_rovnobezky>=fisheye_1_y_begin && sirka_rovnobezky<=fisheye_1_y_end)|| (sirka_rovnobezky>=fisheye_2_y_begin && sirka_rovnobezky<=fisheye_2_y_end)))   {
- 				return {
-					u: longNumber/longitudeBands,
-					v: latNumber/latitudeBands,
-				}; 
-			}
-
-			// pokud jsem pod krivkou
-			if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
-				console.log('Jsem zde pripad 2');
-					return {
-					u: longNumber/longitudeBands,
-					v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
-				}; 
-			}
-
-
-
-
-		}
-		else {
-
-		}
-console.log('sirka_poledniku: '+sirka_poledniku);
-console.log(sirka_rovnobezky);
-				return {
-					u: longNumber/longitudeBands,
-					v: latNumber/latitudeBands,
-				}; 
-
-	}
-
 	var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
 	var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
 
@@ -92,12 +55,8 @@ console.log(sirka_rovnobezky);
 			var normals_z = z/radius;
 
 			// textury
-			var CUR = checkCursor  (latNumber , longNumber);
-			var u =  CUR.u;
-			var v =     CUR.v;
-
-u= longNumber/longitudeBands;
-v= latNumber/latitudeBands;
+			u= longNumber/longitudeBands;
+			v= latNumber/latitudeBands;
 
 			// pridame vrcholy
 			vertices.push(x);
@@ -134,30 +93,7 @@ v= latNumber/latitudeBands;
 
 	}
 
- /*
-           for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
-
-            var x = normals[ i * 3 + 0 ];
-            var y = normals[ i * 3 + 1 ];
-            var z = normals[ i * 3 + 2 ];
-
-            if ( i < l / 2 ) {
-
-              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( z ) / Math.sqrt( x * x + y * y ) )  * ( 2 / Math.PI );
-              textures[ i * 2 + 0 ] = x * ( 450 / 1920 ) * correction + (0.245) ;
-              textures[ i * 2 + 1 ] = y * ( 450 / 1080 ) * correction + (0.5600 );
-
-            } else {
-
-              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( - z ) / Math.sqrt( x * x + y * y ) ) * ( 2 / Math.PI );
-              textures[ i * 2 + 0 ] = - x * ( 450 / 1920 ) * correction + ( 1470 / 1920 );
-              textures[ i * 2 + 1 ] = y * ( 450 / 1080 ) * correction +  (0.5600 );
-
-            }
-
-          }
-*/
-
+ 
 
     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
       for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
@@ -173,11 +109,101 @@ v= latNumber/latitudeBands;
       }
     }
 
+
+	if (noIndices){
+
+				// data uravuju tak, aby to tak funkce prelouskala
+				textures.itemSize = 2;
+				normals.itemSize = 3;
+				vertices.itemSize = 3;
+
+				var data = {
+					textures : {
+						itemSize: 2,
+						array: textures
+					} ,
+					indices : {
+						array: indices
+					} ,
+					normals : {
+						itemSize: 3,
+						array: normals
+					} ,
+					position : {
+						itemSize: 3,
+						array: vertices
+					} 
+				};
+
+				var data2 = {
+
+				};
+		 
+				// TOHLE JE FUNKCE Z THREE.JS, udela to to, ze to prepocita indexy na vrcholy, k tomu to prepocita i dalsi veci jako textury apod
+				//var indices = indices;
+				var attributes = data;
+				for ( var name in attributes ) {
+
+					var attribute = attributes[ name ];
+
+	 				var array = attribute.array;
+
+					var itemSize = attribute.itemSize;
+					var array2 = initArray(  indices.length * itemSize );
+					var index = 0, index2 = 0;
+
+					for ( var i = 0, l = indices.length ; i < l; i ++ ) {
+
+						index = indices[ i ] * itemSize;
+
+	 					for ( var j = 0; j < itemSize; j ++ ) {
+
+							array2[ index2 ++ ] = array[ index ++ ];
+
+						}
+
+					}
+					data2 [name] = {array : array2, itemSize : itemSize};
+	 				//geometry2.addAttribute( name, new BufferAttribute( array2, itemSize ) );
+	 
+				}
+		 
+				textures = data2.textures.array;
+				vertices = data2.position.array;
+				normals = data2.normals.array;
+
+
+				// Zde se provadi korekce
+				for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+
+					var x = normals[ i * 3 + 0 ];
+					var z = normals[ i * 3 + 1 ];
+					var y = normals[ i * 3 + 2 ];
+
+					if ( i < l / 2 ) {
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						textures[ i * 2 + 0 ]  = x*( 404 / 1920 )*correction + ( 447 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textures[ i * 2 + 1 ] = z  * ( 404 / 1080 )*correction  + ( 520 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+
+					} else {
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						textures[ i * 2 + 0 ] =   -x * ( 404 / 1920 )*correction   + ( 1470 / 1920 ) ;
+						textures[ i * 2 + 1 ] =  z * ( 404 / 1080 )*correction   + ( 520 / 1080 ) ;
+
+
+					}
+
+				}
+	}
+
+ 
+
 	return {
 		vertices: new Float32Array(vertices),
 		textures: new Float32Array(textures),
 		normals: new Float32Array(normals),
 		indices: new Uint16Array(indices),
+		noIndices: noIndices,
 	};
 };
 

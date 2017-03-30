@@ -80,8 +80,8 @@ var texture;
  
 
  
-var GEOMETRY = createSphereGeometry(60,60,7.0,0);
-var vertexPositionData = GEOMETRY.vertices;
+var GEOMETRY = createSphereGeometry(20,20,7.0,1) ;
+ var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
@@ -117,11 +117,6 @@ video.oncanplaythrough = function() {
 
 
     function initProgram() {
-
-
-
-
-
 
             document.addEventListener( 'mousemove', onDocumentMouseMove, false );
             document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -202,9 +197,6 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-
- 
-
 gl.bindTexture(gl.TEXTURE_2D, null);
 
            mat4.rotateX(mmatrix, mmatrix,  - Math.PI/2 );
@@ -224,13 +216,6 @@ function updateTexture() {
       // the next line fails in Safari if the video is coming from another domain or subdomain
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
       gl.bindTexture(gl.TEXTURE_2D, null);
- 
- 
-
- 
- 
-
-
 
   }
 
@@ -258,7 +243,12 @@ function updateTexture() {
 
             //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-            gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+
+            // zde prepinanim renderovani
+            if (!GEOMETRY.noIndices)
+                gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+            else
+                gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
             requestAnimationFrame(render);
         }
 
