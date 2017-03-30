@@ -65,14 +65,8 @@ void main(void) {
 }
 </script>
 
-		<script>
 
-
-
-
-
-
-
+<script>
 
 var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
@@ -108,98 +102,10 @@ function BasicCorrection(u,v) {
 
 }
 
-	var checkCursor = function (latNumber,longNumber) {
-
-		var resolution_width = 1920;
-		var resolution_height = 1080;
-
-		var fisheye_1_x_begin = 17;
-		var fisheye_1_x_end = 921;
-		var fisheye_1_y_begin = 134;
-		var fisheye_1_y_end = 1053;
-
-		var fisheye_2_x_begin = 960;
-		var fisheye_2_x_end = 1861;
-		var fisheye_2_y_begin = 133;
-		var fisheye_2_y_end = 1063;
-
-		var latitude_width = resolution_height/latitudeBands ;
-		var longitude_width = resolution_width/longitudeBands;
 
 
-		var sirka_poledniku = longNumber*longitude_width;
-		var sirka_rovnobezky = latNumber*latitude_width;
-
-		// pokud jsem v rozmezi jak X
-		if (((sirka_poledniku>=fisheye_1_x_begin && sirka_poledniku<=fisheye_1_x_end)|| (sirka_poledniku>=fisheye_2_x_begin && sirka_poledniku<=fisheye_2_x_end)))   
-		{
-			// pokud jsem v rozmezi jak X tak Y
-			if (((sirka_rovnobezky>=fisheye_1_y_begin && sirka_rovnobezky<=fisheye_1_y_end)|| (sirka_rovnobezky>=fisheye_2_y_begin && sirka_rovnobezky<=fisheye_2_y_end)))   {
-  				return {
-					u: longNumber/longitudeBands,
-					v: latNumber/latitudeBands,
-				}; 
-			}
-
-			// pokud jsem pod krivkou
-			if (((sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_1_y_begin)|| (sirka_rovnobezky>=0 && sirka_rovnobezky<=fisheye_2_y_begin)))   {
-				//console.log('Jsem zde pripad 2');
-					return {
-					u: longNumber/longitudeBands,
-					v: (fisheye_1_y_begin/sirka_rovnobezky)/latitudeBands,
-				}; 
-			}
-		 
-
-			// pokud jsem nad krivkou
-			if (((sirka_rovnobezky>=fisheye_1_y_end && sirka_rovnobezky<=resolution_height)|| (sirka_rovnobezky>=fisheye_2_y_end && sirka_rovnobezky<=resolution_height)))   {
-				//console.log('Jsem zde pripad 3');
-					return {
-					u: longNumber/longitudeBands,
-					v: (fisheye_1_y_end/sirka_rovnobezky)/latitudeBands,
-				}; 
-			}
-
-		}
-		else {
-
- 			// pokud jsem v rozmezi   Y
-			if (((sirka_rovnobezky>=fisheye_1_y_begin && sirka_rovnobezky<=fisheye_1_y_end)|| (sirka_rovnobezky>=fisheye_2_y_begin && sirka_rovnobezky<=fisheye_2_y_end)))   {
-
-				var tmp_u;
-				if (sirka_poledniku >= 0 && sirka_poledniku<=fisheye_1_x_begin) {
-					//console.log('Jsem zde pripad 4');
-					tmp_u = fisheye_1_x_begin/sirka_poledniku;
-				}
-				else if (sirka_poledniku>=fisheye_1_x_end && sirka_poledniku<=fisheye_2_x_begin) {
-										//console.log('Jsem zde pripad 5');
-
-					tmp_u = fisheye_2_x_begin/sirka_poledniku;
-				}
-				else {
-					//console.log('Jsem zde pripad 6');
-
-					tmp_u = fisheye_2_x_end/sirka_poledniku;
-				}
-
-  				return {
-					u: tmp_u/longitudeBands,
-					v: latNumber/latitudeBands,
-				}; 
-			}
-
-		}
- 
-
-				return {
-					u: longNumber/longitudeBands,
-					v: latNumber/latitudeBands,
-				}; 
-
-	}
-
-    var latitudeBands = 21;
-    var longitudeBands = 21;
+    var latitudeBands = 151;
+    var longitudeBands = 151;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -221,88 +127,9 @@ function BasicCorrection(u,v) {
         var y = sinPhi * sinTheta;
 
 
+		var u = (longNumber / longitudeBands);
+		var v =   (latNumber / latitudeBands);
 
-        var CUR = checkCursor(latNumber,longNumber);
-
-        var u = CUR.u;
-        var v =   CUR.v;
-
-
- 
-var u = (longNumber / longitudeBands);
- var v =   (latNumber / latitudeBands);
-
-
-/*
-// korekce
-if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
-else {
-	aktualni_rovnobezka = latNumber;
-}
-if (u <= 0.00885416666666666666666666666667) u =   0.00885416666666666666666666666667; // jeste upravit
-
-var r = 452/1920;
-var dopocet = 0;
-
-if (longNumber <= longitudeBands / 4) {
-	if (aktualni_rovnobezka>0) {
-
-		var diff = (prumer - (Math.sin(theta)*r));
-		var d = (Math.sin(theta)*r)*2;
-		u = u+ diff;
- 	}
-}
-
-
-if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
-	if (aktualni_rovnobezka>0) {
-
-		var diff = (prumer - (Math.sin(theta)*r));
-		var d = (Math.sin(theta)*r)*2;
-		u = u+ diff+d ;
-	}
-}
-
-*/
- 
-
-
-
- 
-/*
-if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
-
-if (v >=  0.87592592592592592592592592592593) v = 0.87592592592592592592592592592593;
-
- if (u <= 0.00885416666666666666666666666667) u = 0.00885416666666666666666666666667;
- 
-  if (u >= 0.4796875 && u<= 0.5) u = 0.4796875;
-  if (u >= 0.96927083333333333333333333333333 && u<= 1) u = 0.96927083333333333333333333333333;
-*/
- 
-
- 
- 
-/*
-
-		var resolution_width = 1920;
-		var resolution_height = 1080;
-
-		var fisheye_1_x_begin = 17;
-		var fisheye_1_x_end = 921;
-		var fisheye_1_y_begin = 134;
-		var fisheye_1_y_end = 1053;
-
-		var fisheye_2_x_begin = 960;
-		var fisheye_2_x_end = 1861;
-		var fisheye_2_y_begin = 133;
-		var fisheye_2_y_end = 1063;
-
-*/
-
- 
- 
- 
         normalData.push(x);
         normalData.push(y);
         normalData.push(z);
@@ -315,69 +142,7 @@ if (v >=  0.87592592592592592592592592592593) v = 0.8759259259259259259259259259
     }
 
  
- console.log(vertexPositionData );
- console.log(normalData );
- console.log(textureCoordData );
- console.log(textureCoordData.length);
-function ellipticalDiscToSquare( u,  v)
-{
-    var u2 = u * u;
-    var v2 = v * v;
-    var twosqrt2 = 2.0 * Math.sqrt(2.0);
-    var subtermx = 2.0 + u2 - v2;
-    var subtermy = 2.0 - u2 + v2;
-    var termx1 = subtermx + u * twosqrt2;
-    var termx2 = subtermx - u * twosqrt2;
-    var termy1 = subtermy + v * twosqrt2;
-    var termy2 = subtermy - v * twosqrt2;
-    x = 0.5 * Math.sqrt(termx1) - 0.5 * Math.sqrt(termx2);
-    y = 0.5 * Math.sqrt(termy1) - 0.5 * Math.sqrt(termy2);
-
-	return {
-		x: x,
-		y: y,
-	}; 
-
-    
-}
- 
-	for ( var i = 0, l = textureCoordData.length / 2; i < l; i ++ ) {
-
- 
-
- 
-
-/*
-		var resolution_width = 1920;
-		var resolution_height = 1080;
-
-		var fisheye_1_x_begin = 17;
-		var fisheye_1_x_end = 921;
-		var fisheye_1_y_begin = 134;
-		var fisheye_1_y_end = 1053;
-
-		var fisheye_2_x_begin = 960;
-		var fisheye_2_x_end = 1861;
-		var fisheye_2_y_begin = 133;
-		var fisheye_2_y_end = 1063;
-
-*/
- 
-
-
- 
- 
-	}
- 
- 
-
-
-
-
-
-
  	var test_rotation_Z = 0;	 
-
 
 
     var indexData = [];
@@ -394,6 +159,8 @@ function ellipticalDiscToSquare( u,  v)
         indexData.push(first + 1);
       }
     }
+
+
 textureCoordData.itemSize = 2;
 normalData.itemSize = 3;
 vertexPositionData.itemSize = 3;
@@ -433,7 +200,7 @@ var data2 = {
 				var array2 = initArray(  indices.length * itemSize );
 				var index = 0, index2 = 0;
 
-				for ( var i = 0, l = indices.length; i < l; i ++ ) {
+				for ( var i = 0, l = indices.length ; i < l; i ++ ) {
 
 					index = indices[ i ] * itemSize;
 
@@ -462,14 +229,15 @@ normalData = data2.normals.array;
 
 						if ( i < l / 2 ) {
 							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-							textureCoordData[ i * 2 + 0 ] = x * ( 320 / 1920 )*correction  + ( 447 / 1920 ) ;
-							textureCoordData[ i * 2 + 1 ] = z * ( 320 / 1080 )*correction   + ( 582 / 1080 ) ;
+							textureCoordData[ i * 2 + 0 ]  = x*( 404 / 1920 )*correction + ( 447 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+							textureCoordData[ i * 2 + 1 ] = z  * ( 404 / 1080 )*correction  + ( 520 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
 
+ 
 
 						} else {
 							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-							textureCoordData[ i * 2 + 0 ] = - x * ( 320 / 1920 )*correction   + ( 1470 / 1920 );
-							textureCoordData[ i * 2 + 1 ] = z * ( 320 / 1080 )*correction   + ( 582 / 1080 );
+							textureCoordData[ i * 2 + 0 ] =   -x * ( 404 / 1920 )*correction   + ( 1470 / 1920 ) ;
+							textureCoordData[ i * 2 + 1 ] =  z * ( 404 / 1080 )*correction   + ( 520 / 1080 ) ;
  
 
 						}
@@ -501,7 +269,7 @@ mat4.scale(mmatrix, mmatrix, vec3.fromValues(-0.5, 0.5, 0.5));
 var mmLoc = gl.getUniformLocation(program, "MMatrix");
 
 var vmatrix = mat4.create();
-mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -8));
+mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -7));
 var vmLoc = gl.getUniformLocation(program, "VMatrix");
 gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
@@ -535,7 +303,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.uniformMatrix4fv(mmLoc, false, mmatrix);
    // mat4.rotateZ(mmatrix, mmatrix,  -Math.PI/2 );
     //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-     mat4.rotateX(mmatrix, mmatrix,    Math.PI/2    );
+     mat4.rotateX(mmatrix, mmatrix,      Math.PI     );
     gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
