@@ -65,7 +65,214 @@
 
 
     <script>
+function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices) 
+{
+    var vertices = [];
+    var textures = [];
+    var normals = [];
+    var indices = [];
+
+    var rad = 180/Math.PI;
+
+    var sin = function (angle) {
+        return Math.sin(angle);  
+    }
+
+    var cos = function (angle) {
+        return Math.cos(angle);  
+    }
+
+
+    var resolution_width = 1920;
+    var resolution_height = 1080;
+
+    var fisheye_1_x_begin = 17;
+    var fisheye_1_x_end = 921;
+    var fisheye_1_y_begin = 134;
+    var fisheye_1_y_end = 1053;
+
+    var fisheye_2_x_begin = 960;
+    var fisheye_2_x_end = 1861;
+    var fisheye_2_y_begin = 133;
+    var fisheye_2_y_end = 1063;
+
+    var latitude_width = resolution_height/latitudeBands ;
+    var longitude_width = resolution_width/longitudeBands;
+
+    var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
+    var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
+
+    for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {  // zde ukazuje na ktere jsme rovnobezce
+        var theta = latNumber * latitudeAngle;
+
+
+
+        for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {// zde ukazuje na kterym jsme poledniku
+
+            var phi = longNumber * longitudeAngle;
+
+            // vrcholy
+            var x = sin(theta) * cos(phi) * radius;
+            var y = sin(phi) * sin(theta) * radius;
+            var z = cos(theta) * radius;
+
+            // normaly
+            var normals_x = x/radius;
+            var normals_y = y/radius;
+            var normals_z = z/radius;
+
+            // textury
+            u= longNumber/longitudeBands;
+            v= latNumber/latitudeBands;
+
+            // pridame vrcholy
+            vertices.push(x);
+            vertices.push(y);
+            vertices.push(z);
+
+            // pridame normaly (vektory)
+            normals.push(normals_x);
+            normals.push(normals_y);
+            normals.push(normals_z);
+
+            // koordiunace textury
+            textures.push(u);
+            textures.push(v);
+
+
+
+
+            // zde zpracovavam index data
+            /*if (latNumber  < latitudeBands || longNumber <  longitudeBands) 
+            {
+                var first = (latNumber * (longitudeBands + 1)) + longNumber;
+                var second = first + longitudeBands + 1;
+                indices.push(first);
+                indices.push(second);
+                indices.push(first + 1);
+
+                indices.push(second);
+                indices.push(second + 1);
+                indices.push(first + 1);
+            }*/
+
+        }
+
+    }
+
  
+
+    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+        var first = (latNumber * (longitudeBands + 1)) + longNumber;
+        var second = first + longitudeBands + 1;
+        indices.push(first);
+        indices.push(second);
+        indices.push(first + 1);
+
+        indices.push(second);
+        indices.push(second + 1);
+        indices.push(first + 1);
+      }
+    }
+
+
+    if (noIndices){
+
+                // data uravuju tak, aby to tak funkce prelouskala
+                textures.itemSize = 2;
+                normals.itemSize = 3;
+                vertices.itemSize = 3;
+
+                var data = {
+                    textures : {
+                        itemSize: 2,
+                        array: textures
+                    } ,
+                    indices : {
+                        array: indices
+                    } ,
+                    normals : {
+                        itemSize: 3,
+                        array: normals
+                    } ,
+                    position : {
+                        itemSize: 3,
+                        array: vertices
+                    } 
+                };
+
+                var data2 = {
+
+                };
+         
+                // TOHLE JE FUNKCE Z THREE.JS, udela to to, ze to prepocita indexy na vrcholy, k tomu to prepocita i dalsi veci jako textury apod
+                //var indices = indices;
+                var attributes = data;
+                for ( var name in attributes ) {
+
+                    var attribute = attributes[ name ];
+
+                    var array = attribute.array;
+
+                    var itemSize = attribute.itemSize;
+                    var array2 = initArray(  indices.length * itemSize );
+                    var index = 0, index2 = 0;
+
+                    for ( var i = 0, l = indices.length ; i < l; i ++ ) {
+
+                        index = indices[ i ] * itemSize;
+
+                        for ( var j = 0; j < itemSize; j ++ ) {
+
+                            array2[ index2 ++ ] = array[ index ++ ];
+
+                        }
+
+                    }
+                    data2 [name] = {array : array2, itemSize : itemSize};
+                    //geometry2.addAttribute( name, new BufferAttribute( array2, itemSize ) );
+     
+                }
+         
+                textures = data2.textures.array;
+                vertices = data2.position.array;
+                normals = data2.normals.array;
+
+
+                // Zde se provadi korekce
+                for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+
+                    var x = normals[ i * 3 + 0 ];
+                    var z = normals[ i * 3 + 1 ];
+                    var y = normals[ i * 3 + 2 ];
+
+                    if ( i < l / 2 ) {
+                        var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                        textures[ i * 2 + 0 ]  = x*( 430 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+                        textures[ i * 2 + 1 ] = z  * ( 430 / 1080 )*correction  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+
+                    } else {
+                        var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                        textures[ i * 2 + 0 ] =   -x * ( 430 / 1920 )*correction      + ( 1470 / 1920 )-0.00750 ;
+                        textures[ i * 2 + 1 ] =  z * ( 430 / 1080 )*correction   + ( 520 / 1080 ) -0.038;
+
+
+                    }
+
+                }
+    }
+
+ 
+
+    return {
+        vertices: new Float32Array(vertices),
+        textures: new Float32Array(textures),
+        normals: new Float32Array(normals),
+        indices: new Uint16Array(indices),
+        noIndices: noIndices,
+    };
+};
 
 
         var rotation = 0.00;
@@ -85,8 +292,7 @@ var GEOMETRY = createSphereGeometry(20,20,7.0,1) ;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
-console.log('INDEXY: ');
-console.log(GEOMETRY);
+
 var indexBuffer;
 var program ;
 var samplerLoc ;
@@ -188,7 +394,8 @@ video.oncanplaythrough = function() {
            mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
            gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-
+                mat4.rotateX(mmatrix, mmatrix, -Math.PI/2);
+                gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
