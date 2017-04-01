@@ -19,8 +19,8 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 		var fisheye_2_y_end = 1063;
 
 
-    var latitudeBands = 31;
-    var longitudeBands = 31;
+    var latitudeBands = 91;
+    var longitudeBands = 91;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -217,36 +217,29 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
-           for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
-
-            var x = normalData[ i * 3 + 0 ];
-            var y = normalData[ i * 3 + 1 ];
-            var z = normalData[ i * 3 + 2 ];
-
-            if ( i <  l / 2  ) {
-
-              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( z ) / Math.sqrt( x * x + y * y ) )  * ( 2 / Math.PI );
-              textureCoordData[ i * 2 + 0 ] = x * ( 450 / 1920 )  + (0.245) ;
-              textureCoordData[ i * 2 + 1 ] = y * ( 450 / 1080 )  + (0.5000 );
-
-              if (textureCoordData[ i * 2 + 0 ]>1 || textureCoordData[ i * 2 + 0 ]<-1) console.warn('Pretika to');
-              if (textureCoordData[ i * 2 + 1 ]>1 || textureCoordData[ i * 2 + 1 ]<-1) console.warn('Pretika to');
-              if (textureCoordData[ i * 2 + 1 ]<0 || textureCoordData[ i * 2 + 1 ]<0) console.log('je tam min jak jedna to');
-
-
-
-         
-
-            } else {
-
-              var correction = ( x == 0 && y == 0 ) ? 1 : ( Math.acos( - z ) / Math.sqrt( x * x + y * y ) ) * ( 2 / Math.PI );
-              textureCoordData[ i * 2 + 0 ] =   x * ( 450 / 1920 ) * correction + ( 1470 / 1920 );
-              textureCoordData[ i * 2 + 1 ] = y * ( 450 / 1080 ) * correction +  (0.5600 );
  
-            }
+
+        for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
+
+          var x = normalData[ i * 3 + 0 ];
+          var z = normalData[ i * 3 + 1 ];
+          var y = normalData[ i * 3 + 2 ];
+
+          if ( i < l / 2 ) {
+            var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+            textureCoordData[ i * 2 + 0 ]  = x*( 420 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+            textureCoordData[ i * 2 + 1 ] = z  * ( 430 / 1080 )*correction  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+
+          } else {
+            var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+            textureCoordData[ i * 2 + 0 ] =   -x * ( 430 / 1920 )*correction      + ( 1470 / 1920 )-0.00750 ;
+            textureCoordData[ i * 2 + 1 ] =  z * ( 430 / 1080 )*correction   + ( 520 / 1080 ) -0.038;
+
 
           }
-  
+
+        }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

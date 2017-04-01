@@ -407,6 +407,13 @@ function d(object) {
     console.log("___________________ DEBUG ENDS ____________________");
 }
 
+// warn method
+function w(object) {
+    console.log("------------------- WARN STARTS-------------------");
+    console.warn(object);
+    console.log("___________________ WARN ENDS ____________________");
+}
+
 // checking if file exists by JS and XHR
 // OK
 function checkIfFileExists(url)
@@ -546,4 +553,19 @@ function initArray( length) {
 		array[i] = 0;
 	};
 	return array;
+}
+
+function createVideo( src ) {
+	if (!checkIfFileExists(src)) {
+		w('Zdrojove video neexistuje');
+		return false;
+	}
+    var video = document.createElement( 'video' );
+    video.loop = true;
+    video.muted = true;
+    video.autoplay = false;
+    video.src = src;
+    video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+	video.load();
+	return video;
 }
