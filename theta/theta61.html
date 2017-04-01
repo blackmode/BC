@@ -146,24 +146,6 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			// koordiunace textury
 			textures.push(u);
 			textures.push(v);
-
-
-
-
-			// zde zpracovavam index data
-			/*if (latNumber  < latitudeBands || longNumber <  longitudeBands) 
-			{
-				var first = (latNumber * (longitudeBands + 1)) + longNumber;
-				var second = first + longitudeBands + 1;
-				indices.push(first);
-				indices.push(second);
-				indices.push(first + 1);
-
-				indices.push(second);
-				indices.push(second + 1);
-				indices.push(first + 1);
-			}*/
-
 		}
 
 	}
@@ -257,8 +239,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 					if ( i < l / 2 ) {
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textures[ i * 2 + 0 ]  = x*( 440 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textures[ i * 2 + 1 ] = z  * ( 440 / 1080 )*correction  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+						textures[ i * 2 + 0 ]  = x*( 430 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textures[ i * 2 + 1 ] = z  * ( 430 / 1080 )*correction  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
 if (0) {
 textures[ i * 2 + 0 ]  =0;
 textures[ i * 2 + 1 ]  = 0;
@@ -267,8 +249,8 @@ textures[ i * 2 + 1 ]  = 0;
 
 					} else {
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textures[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*correction      + ( 1470 / 1920 )-0.00750 ;
-						textures[ i * 2 + 1 ] =  z * ( 410 / 1080 )*correction   + ( 520 / 1080 ) -0.038;
+						textures[ i * 2 + 0 ] =   -x * ( 430 / 1920 )*correction      + ( 1470 / 1920 )-0.00750 ;
+						textures[ i * 2 + 1 ] =  z * ( 430 / 1080 )*correction   + ( 506 / 1080 ) -0.038;
  
 
 					}
@@ -289,24 +271,18 @@ textures[ i * 2 + 1 ]  = 0;
 
 
  
-var mmatrix = mat4.create();
-var vmatrix = mat4.create();
-var pmatrix = mat4.create();
-var mmLoc;
-var texture;
- var canvas = document.querySelector("canvas");
- 
+var mmatrix = createIdentityMatrix4();
+var vmatrix = createIdentityMatrix4();
+var pmatrix = createIdentityMatrix4();
 
  
 var GEOMETRY = createSphereGeometry(40,40,7.0,1) ;
- var vertexPositionData = GEOMETRY.vertices;
+var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 
  
-
-
 var mouse = {
 	position : {
 		x: 0.0,
@@ -330,25 +306,28 @@ var mouse = {
 	active : false,
 };
 
+ 
+
 
 var indexBuffer;
 var program ;
 var samplerLoc ;
-var  vertexBuffer;
-		var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-		
-var video =createVideo("data/theta2.mp4");
+var vertexBuffer;
+var mmLoc;
+var texture;
+var canvas = document.querySelector("canvas");
+var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+if (!gl) {
+	w('Webgl se nepodarilo inicializovat...');
+}
+
+var video = createVideo("data/theta2.mp4");
 
  
 
 video.oncanplaythrough = function() {
-
-
 	render();
 	//video.play();
-
-		 
-
 };
  
 
@@ -357,30 +336,49 @@ video.oncanplaythrough = function() {
 			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+			document.addEventListener("keypress", onDocumentKeyPress, false);
 
+			// nacteni, zkompilovani a overeni vertext shaderu
 			var str = document.querySelector("#vs").textContent;
 			var vs = gl.createShader(gl.VERTEX_SHADER);
 			gl.shaderSource(vs, str);
 			gl.compileShader(vs);
-				
+			var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
+			if (!vertextSucces) {
+				w('nepodařilo se zkompilovat VERTEX_SHADER');
+				return false;
+			}
+			
+			// nacteni, zkompilovani a overeni fragment shaderu
 			var str = document.querySelector("#fs").textContent;
 			var fs = gl.createShader(gl.FRAGMENT_SHADER);
 			gl.shaderSource(fs, str);
 			gl.compileShader(fs);
+			var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
+			if (!fragmentSucces) {
+				w('nepodařilo se zkompilovat FRAGMENT_SHADER');
+				return false;
+			}
 
+			// vytvoreni programu, pridani vertex a fragment shaderu a overeni
 			program = gl.createProgram();
 			gl.attachShader(program, vs);
 			gl.attachShader(program, fs);
 			gl.linkProgram(program);
 			gl.useProgram(program);
-
+			var programSuccess = gl.getProgramParameter( program, gl.LINK_STATUS);
+			if ( ! programSuccess) {
+			  var info = gl.getProgramInfoLog(program);
+			  w ('nepodařilo se zkompilovat WebGL program. \n\n' + info);
+			  return false;
+			}
 			
 			// -------- ZOBRAZOVACI matice
 			mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
 			mmLoc = gl.getUniformLocation(program, "MMatrix");
 
 			
-			mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+			mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -3.9));
 			var vmLoc = gl.getUniformLocation(program, "VMatrix");
 			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
@@ -417,6 +415,7 @@ video.oncanplaythrough = function() {
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
 
+			// ---- NASTAVENI
 			//gl.disable(gl.DEPTH_TEST);
 			gl.enable(gl.DEPTH_TEST);
 			//gl.clearColor(0, 0, 0, 1);
@@ -424,50 +423,44 @@ video.oncanplaythrough = function() {
 			 //gl.enable(gl.BLEND);
 			//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-			// otoceni kamery do pocatecni pozice
-		   mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
-		   gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-				mat4.rotateX(mmatrix, mmatrix, -Math.PI/2);
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			// ---- otoceni kamery do pocatecni pozice
+			mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
- 
- 
-				mat4.rotateX(mmatrix, mmatrix,    Math.PI  /2 );
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			mat4.rotateX(mmatrix, mmatrix, -Math.PI/2);
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-				mat4.rotateX(mmatrix, mmatrix,    Math.PI/2 );
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			mat4.rotateX(mmatrix, mmatrix,    Math.PI  /2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
-texture = gl.createTexture();
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-gl.bindTexture(gl.TEXTURE_2D, null);
+			mat4.rotateX(mmatrix, mmatrix,    Math.PI/2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
- 
+			// ----- VYTVORENI TEXTURY
+			texture = gl.createTexture();
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+			gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 
  
-function updateTexture() {
+	function updateTexture() {
 
-  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
-	   gl.activeTexture(gl.TEXTURE0);
-	  gl.bindTexture(gl.TEXTURE_2D, texture);
-	  //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	  // the next line fails in Safari if the video is coming from another domain or subdomain
-	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
-	  gl.bindTexture(gl.TEXTURE_2D, null);
-
-  }
-
-}
-
-
+	  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
+		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, texture);
+		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+		  // the next line fails in Safari if the video is coming from another domain or subdomain
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+	  }
+	}
 
 
 		function render() {
@@ -503,6 +496,14 @@ function updateTexture() {
 			|| window.webkitRequestAnimationFrame
 			|| function(cb) { setTimeout(cb, 1000/60); };
 
+
+
+		function onDocumentMouseDown( event ) {
+			mouse.active = true;
+			mouse.down.x = event.clientX;
+			mouse.down.y = event.clientY;
+		}
+
 		function onDocumentMouseMove( event ) {
   
 			if (mouse.active) {
@@ -523,26 +524,23 @@ function updateTexture() {
 					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 				}
-				
-
-
-
-
-
 			}
 
-		}
-
-		function onDocumentMouseDown( event ) {
-			mouse.active = true;
-			mouse.down.x = event.clientX;
-			mouse.down.y = event.clientY;
 		}
 
 		function onDocumentMouseUp( event ) {
 			mouse.up.x = event.clientX;
 			mouse.up.y = event.clientY;
 			mouse.active = false;
+		}
+
+		function onDocumentKeyPress( event ) {
+ 			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
+				video.play();
+ 			}
+			if (event.keyCode == 119 || event.keyCode == 87  ) { // q/Q
+				video.pause();
+			}
 		}
 
 
