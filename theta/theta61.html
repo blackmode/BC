@@ -82,13 +82,13 @@
             float b =  abs(Sy - y2);
             float  c= sqrt(a*a + b*b) ;
 
-            if (c > 0.990) {
+            if (c > 0.991   ) {
  				/*
  				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
  				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
  				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
  				*/
- 				gl_FragColor.a =   0.5;
+ 				gl_FragColor.a =   0.85;
             }
 
 
@@ -317,7 +317,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(60,40,7.0,1) ;
+var GEOMETRY = createSphereGeometry(60,60,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
