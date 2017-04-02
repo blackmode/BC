@@ -31,10 +31,14 @@
 		uniform mat4 PMatrix;
 
 		varying vec2 varyingTexture;
+
+		attribute vec3 fragPos;
+		varying vec3 varyingFragPosNormal;
 			
 		void main(void) {
 			gl_Position = PMatrix * VMatrix * MMatrix * vec4(pos, 1.0);
 			varyingTexture = texture;
+			varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
  
 
 		}
@@ -43,18 +47,54 @@
 	<script id="fs" type="x-shader/x-fragment">
 		precision mediump float;
 
+		varying vec3 varyingFragPosNormal;
 		varying vec2 varyingTexture;
 		uniform sampler2D sampler;  
 			
 		void main(void) {
 			 gl_FragColor = texture2D(sampler, varyingTexture);
-			 if (varyingTexture.x <  0.5  ) {
  
 
-			   gl_FragColor.a  = 0.87;
+ /*
 
-			 }
-			
+             if (
+             	varyingTexture.x  >0.12 &&
+             	varyingTexture.x  <0.37 && 
+             	varyingTexture.y >0.30	&& 
+             	varyingTexture.y <0.57  
+             	); else if (varyingTexture.x <0.5){
+ 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
+ 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
+ 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
+             }
+*/
+
+//(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
+
+            float x2=varyingFragPosNormal.x  ;
+            float y2=varyingFragPosNormal.y  ;
+            float z2=varyingFragPosNormal.z  ;
+
+            float Sx = 0.0;
+            float Sy = 0.0;
+
+            float a = abs(Sx - x2);
+            float b =  abs(Sy - y2);
+            float  c= sqrt(a*a + b*b) ;
+
+            if (c > 0.990) {
+ 				/*
+ 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
+ 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
+ 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
+ 				*/
+ 				gl_FragColor.a =   0.5;
+            }
+
+
+
+ 				//gl_FragColor.b =  (gl_FragColor.b * 0.7) ;
+
 		}
 	</script>
 
@@ -277,7 +317,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(40,40,7.0,1) ;
+var GEOMETRY = createSphereGeometry(60,40,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -309,7 +349,7 @@ var mouse = {
 
  
 
-
+var normalBuffer;
 var indexBuffer;
 var program ;
 var samplerLoc ;
@@ -392,7 +432,7 @@ video.addEventListener("loadedmetadata",function() {
 			mmLoc = gl.getUniformLocation(program, "MMatrix");
 
 			
-			mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -3.9));
+			mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
 			var vmLoc = gl.getUniformLocation(program, "VMatrix");
 			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
@@ -407,9 +447,15 @@ video.addEventListener("loadedmetadata",function() {
 
 			// -------- atributy
 			var posLoc = gl.getAttribLocation(program, "pos");
+			if (posLoc===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
 			gl.enableVertexAttribArray(posLoc);
 
+			var fragPos = gl.getAttribLocation(program, "fragPos");
+			if (fragPos==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
+			gl.enableVertexAttribArray(fragPos);
+
 			var textureLoc = gl.getAttribLocation(program, "texture");
+			if (textureLoc==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
 			gl.enableVertexAttribArray(textureLoc);
 
 
@@ -419,6 +465,10 @@ video.addEventListener("loadedmetadata",function() {
 			gl.bufferData(gl.ARRAY_BUFFER, (vertexPositionData), gl.STATIC_DRAW);
 			gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
 			
+			normalBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, (normalData), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(fragPos, 3, gl.FLOAT, false, 0, 0);
 
 			var textureBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
@@ -493,13 +543,14 @@ video.addEventListener("loadedmetadata",function() {
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 			// zde prepinanim renderovani
 			if (!GEOMETRY.noIndices) {
 				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 				gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
 			}
 			else {
+
 				gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);// HAZI TO VIC CHYB, nevim  jeste proc
 				gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
 			}
@@ -556,6 +607,9 @@ video.addEventListener("loadedmetadata",function() {
 			if (event.keyCode == 119 || event.keyCode == 87  ) { // q/Q
 				video.pause();
 			}
+ 
+
+ 
 		}
 
 

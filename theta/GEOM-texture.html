@@ -19,8 +19,8 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 		var fisheye_2_y_end = 1063;
 
 
-    var latitudeBands = 91;
-    var longitudeBands = 91;
+    var latitudeBands = 101;
+    var longitudeBands = 101;
     var radius = 7.5;
     var vertexPositionData = [];
     var normalData = [];
@@ -227,8 +227,27 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
 
           if ( i < l / 2 ) {
             var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-            textureCoordData[ i * 2 + 0 ]  = x*( 420 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-            textureCoordData[ i * 2 + 1 ] = z  * ( 430 / 1080 )*correction  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+            var x2=textureCoordData[ i * 2 + 0 ]  = x*( 420 / 1920 )  + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+            var y2=textureCoordData[ i * 2 + 1 ] = z  * ( 430 / 1080 )  + ( 520 / 1080 )- 0.05 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+
+            var x2=x   
+            var y2=z  ;
+
+            var Sx = 0.00;
+            var Sy = 0.00;
+            var R = 0.2;
+
+            var a,b,c;
+            a= Math.abs(Sx - x2);
+            b= Math.abs(Sy - y2);
+            c = Math.sqrt(a*a + b*b);
+
+            if (c < 0.9  ) {
+              textureCoordData[ i * 2 + 0 ] = textureCoordData[ i * 2 + 1 ] = 0;
+            }
+
+             //if (textureCoordData[ i * 2 + 0 ] >0.12 &&textureCoordData[ i * 2 + 0 ] <0.37 && textureCoordData[ i * 2 + 1 ]>0.30&& textureCoordData[ i * 2 + 1 ]<0.57 ) 
+              //textureCoordData[ i * 2 + 0 ] = textureCoordData[ i * 2 + 1 ] = 0;  
 
           } else {
             var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
@@ -244,7 +263,7 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
- var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4(vec2(pos.x*(2.0)-1.0, pos.y*(2.0)-1.0), 0.0, 1.0); gl_PointSize = 6.0;}';
+ var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4(vec2(pos.x*(2.0)-1.0, pos.y*(2.0)-1.0), 0.0, 1.0); gl_PointSize = 3.0;}';
 
  //var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4( pos , 0.0, 1.0); gl_PointSize = 2.0;}';
 gl.shaderSource(vertexShader, fra);
