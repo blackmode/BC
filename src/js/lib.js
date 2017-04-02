@@ -174,7 +174,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 
 				// Zde se provadi korekce
-				for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+				/*for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
 
 					var x = normals[ i * 3 + 0 ];
 					var z = normals[ i * 3 + 1 ];
@@ -193,7 +193,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 					}
 
-				}
+				}*/
 	}
 
  
