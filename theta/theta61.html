@@ -83,6 +83,7 @@
             float a = abs(Sx - x2);
             float b = abs(Sy - y2);
             float c = sqrt(a*a + b*b) ;
+            // DEBUG===========================================
 
             if (c > 0.991  &&c==0.0) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
  				/*
@@ -119,12 +120,13 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(30,30,7.0,1) ;
+var GEOMETRY = createSphereGeometry(200,200,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 
+// DEBUG===========================================
 				// Zde se provadi korekce
 				for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
 
@@ -133,9 +135,12 @@ var indexData = GEOMETRY.indices;
 					var y = normalData[ i * 3 + 2 ];
 
 					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textureCoordData[ i * 2 + 0 ]  = x*( 410 / 1920 )*correction + ( 447 / 1920 ) + 0.0071;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 410 / 1080 )*correction  + ( 520 / 1080 )- 0.035 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+						// nasobenim / delenim se to zvetsuje/zmensuje
+						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
+						textureCoordData[ i * 2 + 0 ]  = x*( 410 / 1920 )*(0.73)*correction + ( 447 / 1920 ) + 0.015;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ] = z  * ( 410 / 1080 )*(0.73)*correction  + ( 520 / 1080 )- 0.037 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
 					
 					if (0) {
 					textureCoordData[ i * 2 + 0 ]  =0;
@@ -145,8 +150,9 @@ var indexData = GEOMETRY.indices;
 
 					} else { // PRAVA HEMISFERA angleX=0
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*correction      + ( 1470 / 1920 )-0.00775 ;
-						textureCoordData[ i * 2 + 1 ] =   z * ( 406 / 1080 )*correction   + ( 506 / 1080 )  ;
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.28)*correction      + ( 1470 / 1920 )-0.00775 ;
+						textureCoordData[ i * 2 + 1 ] =   z * ( 406 / 1080 )*(1.28)*correction  + ( 506 / 1080 )  ;
  
 
 					}
@@ -261,8 +267,15 @@ video.addEventListener("loadedmetadata",function() {
 			mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
 			mmLoc = gl.getUniformLocation(program, "MMatrix");
 
-			
-			mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+			// DEBUG===========================================
+			if (getParamByKey("camera")) {
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, getParamByKey("camera")));
+			}
+			else
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+
+
+
 			var vmLoc = gl.getUniformLocation(program, "VMatrix");
 			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
@@ -335,7 +348,10 @@ video.addEventListener("loadedmetadata",function() {
 				mat4.rotateX(mmatrix, mmatrix,    Math.PI * getParamByKey("angleX") );
 				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			}
-
+			if (getParamByKey("angleZ")) {
+				mat4.rotateZ(mmatrix, mmatrix,    Math.PI * getParamByKey("angleZ") );
+				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			}
 
 			// ----- VYTVORENI TEXTURY
 			texture = gl.createTexture();
@@ -439,21 +455,39 @@ video.addEventListener("loadedmetadata",function() {
  			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
 				video.play();
  			}
-			if (event.keyCode == 119 || event.keyCode == 87  ) { // q/Q
+			if (event.keyCode == 101 || event.keyCode == 69  ) { // q/Q
 				video.pause();
 			}
  
-			if (event.keyCode == 97    ) {  
+			if (event.keyCode == 97    ) { 
+					mouse.active = false; 
 					var tmp = mouse.lon - 0.06;
 					mat4.rotateX(mmatrix, mmatrix,    tmp );
 					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			}
 			if (event.keyCode == 100   ) {  
+				mouse.active = false;
 				var tmp = mouse.lon + 0.06;
 					mat4.rotateX(mmatrix, mmatrix,    tmp );
 					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			}
- 
+  
+			if (event.keyCode == 119    ) { 
+					mouse.active = false; 
+					var tmp = mouse.lon - 0.06;
+	 				mat4.rotateZ(mmatrix, mmatrix,    tmp);
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			}
+			if (event.keyCode == 115   ) {  
+				mouse.active = false;
+				var tmp = mouse.lon + 0.06;
+	 				mat4.rotateZ(mmatrix, mmatrix,    tmp );
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			}
+
+
 		}
 
 
