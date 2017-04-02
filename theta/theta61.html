@@ -151,8 +151,8 @@ var indexData = GEOMETRY.indices;
 					} else { // PRAVA HEMISFERA angleX=0
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.12-0.06)*correction      + ( 1470 / 1920 )-0.015 ;
-						textureCoordData[ i * 2 + 1 ] =   z * ( 406 / 1080 )*(1.12-0.06)*correction  + ( 506 / 1080 )  -0.02;
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.12-0.085)*correction      + ( 1470 / 1920 )-0.015 ;
+						textureCoordData[ i * 2 + 1 ] =   z * ( 406 / 1080 )*(1.12-0.085)*correction  + ( 506 / 1080 )  -0.02;
  
 
 					}
