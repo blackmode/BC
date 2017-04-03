@@ -127,7 +127,7 @@
 
 			// korekce barvy
 			if (varyingTexture.x< 0.5      ) {
-				gl_FragColor.a =   0.988;
+				gl_FragColor.a =   0.99;
 			}
 
 		}
@@ -190,6 +190,7 @@ var indexData = GEOMETRY.indices;
 					}
 				}
  
+ 
 var mouse = {
 	position : {
 		x: 0.0,
@@ -228,22 +229,15 @@ if (!gl) {
 	w('Webgl se nepodarilo inicializovat...');
 }
 
-var video = createVideo("data/theta2.mp4");
+var video = createImage("data/debug-model.jpg");
 
  
 
-video.oncanplaythrough = function() {
+video.onLoad = function() {
 	render();
-	//video.play();
 };
 
-/*
-video.addEventListener("timeupdate", function(){
-    if(this.currentTime >= 8){
-        this.pause();
-    }
-});
-*/
+ 
 
  
 video.addEventListener("loadedmetadata",function() { 
@@ -397,14 +391,14 @@ video.addEventListener("loadedmetadata",function() {
  
 	function updateTexture() {
 
-	  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
+	  //if (video.readyState >= video.HAVE_CURRENT_DATA ) {
 		  gl.activeTexture(gl.TEXTURE0);
 		  gl.bindTexture(gl.TEXTURE_2D, texture);
 		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
 		  // the next line fails in Safari if the video is coming from another domain or subdomain
 		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
 		  gl.bindTexture(gl.TEXTURE_2D, null);
-	  }
+	  //}
 	}
 
 

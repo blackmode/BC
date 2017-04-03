@@ -570,3 +570,12 @@ function createVideo( src ) {
 	return video;
 }
 
+function createImage( src ) {
+	if (!checkIfFileExists(src)) {
+		w('Zdrojovy obrazek neexistuje');
+		return false;
+	}
+    var image =  new Image();
+    image.src = src;
+	return image;
+}
