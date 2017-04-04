@@ -127,7 +127,7 @@
 
 			// korekce barvy
 			if (varyingTexture.x< 0.5      ) {
-				gl_FragColor.a =   0.99;
+				gl_FragColor.a =   0.988;
 			}
 
 		}
@@ -156,7 +156,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(100,100,7.0,getParamByKey("indices")=='false' ? 1 : 0) ;
+var GEOMETRY = createSphereGeometry(101,101,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -170,15 +170,12 @@ var indexData = GEOMETRY.indices;
 					var z = normalData[ i * 3 + 1 ];
 					var y = normalData[ i * 3 + 2 ];
 					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
-						// nasobenim / delenim souradnice se zvetsuje/zmensuje prumer vertikalni/horizontalni osy te koule
-						// pricitanim/odcitanim hodnoty posouvame texturu po vertikalni/horizontalni ose
+						// nasobenim / delenim se to zvetsuje/zmensuje
 						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
-						textureCoordData[ i * 2 + 0 ]  = x*( 448 / 1920 )*correction  + ( 447 / 1920 ) + 0.014   ;   
-						//  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 430.5 / 1080 )*correction   + ( 520 / 1080 )- 0.037  ; 
-						// z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+						textureCoordData[ i * 2 + 0 ]  = x*( 410 / 1920 )*(0.72-0.06)*correction + ( 447 / 1920 ) + 0.014;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ] = z  * ( 410 / 1080 )*(0.72-0.06)*correction  + ( 520 / 1080 )- 0.037 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
 					
 					if (0) {
 					textureCoordData[ i * 2 + 0 ]  =0;
@@ -187,12 +184,11 @@ var indexData = GEOMETRY.indices;
 					} else { // PRAVA HEMISFERA angleX=0
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 446 / 1920 ) *correction   + ( 1470 / 1920 )-0.015  ;
-						textureCoordData[ i * 2 + 1 ] =   z * ( 464.5 / 1080 ) *correction   + ( 506 / 1080 )  -0.0238  ;
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.12-0.085)*correction      + ( 1470 / 1920 )-0.015 ;
+						textureCoordData[ i * 2 + 1 ] =   z * ( 410 / 1080 )*(1.12-0.084)*correction  + ( 506 / 1080 )  -0.0238;
  
 					}
 				}
- 
  
 var mouse = {
 	position : {
@@ -232,15 +228,22 @@ if (!gl) {
 	w('Webgl se nepodarilo inicializovat...');
 }
 
-var video = createImage("data/debug-model.jpg");
+var video = createVideo("data/theta2.mp4");
 
  
 
-video.onLoad = function() {
+video.oncanplaythrough = function() {
 	render();
+	//video.play();
 };
 
- 
+/*
+video.addEventListener("timeupdate", function(){
+    if(this.currentTime >= 8){
+        this.pause();
+    }
+});
+*/
 
  
 video.addEventListener("loadedmetadata",function() { 
@@ -394,14 +397,14 @@ video.addEventListener("loadedmetadata",function() {
  
 	function updateTexture() {
 
-	  //if (video.readyState >= video.HAVE_CURRENT_DATA ) {
+	  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
 		  gl.activeTexture(gl.TEXTURE0);
 		  gl.bindTexture(gl.TEXTURE_2D, texture);
 		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
 		  // the next line fails in Safari if the video is coming from another domain or subdomain
 		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
 		  gl.bindTexture(gl.TEXTURE_2D, null);
-	  //}
+	  }
 	}
 
 
