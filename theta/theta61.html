@@ -156,7 +156,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(100,100,7.0,1) ;
+var GEOMETRY = createSphereGeometry(101,101,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -174,18 +174,22 @@ var indexData = GEOMETRY.indices;
 						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
-						textureCoordData[ i * 2 + 0 ]  = x*( 410 / 1920 )*(0.72-0.06)*correction + ( 447 / 1920 ) + 0.015;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 410 / 1080 )*(0.72-0.06)*correction  + ( 520 / 1080 )- 0.037 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+						textureCoordData[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
 					
 					if (0) {
 					textureCoordData[ i * 2 + 0 ]  =0;
 					textureCoordData[ i * 2 + 1 ]  = 0;
 					}
 					} else { // PRAVA HEMISFERA angleX=0
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) )  ;
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.12-0.085)*correction      + ( 1470 / 1920 )-0.015 ;
-						textureCoordData[ i * 2 + 1 ] =   z * ( 410 / 1080 )*(1.12-0.10)*correction  + ( 506 / 1080 )  -0.0238;
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction      + ( 1441.2 / 1920 );
+						// pohyb po horizontalni ose: X -----------
+						textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
  
 					}
 				}

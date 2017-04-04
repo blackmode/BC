@@ -94,13 +94,13 @@
 
 
 
-            if (c > 0.998     &&c==0.0  ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
+            if (c > 0.998       ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
  				/*
  				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
  				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
  				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
  				*/
- 				gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
+ 				//gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
  				offset[0] =  0.0;
  				offset[1] =  1.0;
  				offset[2] =  2.0;
@@ -115,19 +115,20 @@
 
 				for (int i=1; i<5; i++) {
  
-					gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)+vec2(0.0,offset[i]))/1024.0) * weight[i];
+					//gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)+vec2(0.0,offset[i]))/1024.0) * weight[i];
 					//gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)-vec2(0.0,offset[i]))/1024.0) * weight[i];
  
 				}
 
 
- 				//gl_FragColor.a =   0.85;
+ 				 //gl_FragColor.a =   0.6;
             }
 
 
 			// korekce barvy
 			if (varyingTexture.x< 0.5      ) {
-				gl_FragColor.a =   0.988;
+				// gl_FragColor.a =   0.988;
+				 gl_FragColor.a =   0.8;
 			}
 
 		}
@@ -156,7 +157,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(101,101,7.0,1) ;
+var GEOMETRY = createSphereGeometry(100,100,7.0,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -174,18 +175,24 @@ var indexData = GEOMETRY.indices;
 						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
-						textureCoordData[ i * 2 + 0 ]  = x*( 410 / 1920 )*(0.72-0.06)*correction + ( 447 / 1920 ) + 0.014;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 410 / 1080 )*(0.72-0.06)*correction  + ( 520 / 1080 )- 0.037 ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						textureCoordData[ i * 2 + 0 ]  = x*( 448 / 1920 )*(0.7) * (0.95) * correction+ ( 482.52 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ]  = z*( 463 / 1080 )*(0.7) * (0.95) *correction + ( 480.04 / 1080 )  ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
 					
-					if (0) {
-					textureCoordData[ i * 2 + 0 ]  =0;
-					textureCoordData[ i * 2 + 1 ]  = 0;
-					}
+						if (0) {
+						textureCoordData[ i * 2 + 0 ]  =0;
+						textureCoordData[ i * 2 + 1 ]  = 0;
+						}
 					} else { // PRAVA HEMISFERA angleX=0
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 410 / 1920 )*(1.12-0.085)*correction      + ( 1470 / 1920 )-0.015 ;
-						textureCoordData[ i * 2 + 1 ] =   z * ( 410 / 1080 )*(1.12-0.084)*correction  + ( 506 / 1080 )  -0.0238;
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 446 / 1920 )*(1.10) * (1.0) *correction      + ( 1418.00 / 1920 ) /* SNIZOVALO SE */ ;
+						// pohyb po horizontalni ose: X -----------
+						textureCoordData[ i * 2 + 1 ] =    z * ( 465 / 1080 )*(1.10) * (1.0) *correction      + ( 470.296 / 1080 ) /* SNIZOVALO SE */ ; 
  
 					}
 				}
