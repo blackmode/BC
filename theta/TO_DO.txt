@@ -1,0 +1,8 @@
+
+- ovladani mysi
+- maticove transformace
+- pridat kompas, ukazatel uhlu, metadata do obrazku
+- GUI ovladani + cookies
+- dát to cely dokupy
+- zpresnit sev u videa
+- kompatibilita a testovani v jednotlivych prohlizecich + nove video s prehravacem

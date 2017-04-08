@@ -25,12 +25,14 @@
 	<script id="vs" type="x-shader/x-vertex">
 		attribute vec3 pos;
 		attribute vec2 texture;
+		attribute vec2 texture2;
 
 		uniform mat4 MMatrix;
 		uniform mat4 VMatrix;
 		uniform mat4 PMatrix;
 
 		varying vec2 varyingTexture;
+		varying vec2 varyingTexture2;
 
 		attribute vec3 fragPos;
 		varying vec3 varyingFragPosNormal;
@@ -38,6 +40,7 @@
 		void main(void) {
 			gl_Position = PMatrix * VMatrix * MMatrix * vec4(pos, 1.0);
 			varyingTexture = texture;
+			varyingTexture2 = texture2;
 			varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
  
 
@@ -49,7 +52,9 @@
 
 		varying vec3 varyingFragPosNormal;
 		varying vec2 varyingTexture;
+		varying vec2 varyingTexture2;
 		uniform sampler2D sampler;  
+		uniform sampler2D sampler2;  
 		#define PI 3.14159265359
 		#define KERNEL_LENGTH 30
 
@@ -60,75 +65,12 @@
 		// clamp(u,v) => vraci stredni hodnotu mezi dvema vstupnimi hodnotami 
 
 		void main(void) {
-			 gl_FragColor = texture2D(sampler, varyingTexture);
+   vec4 color0 = texture2D(sampler, varyingTexture);
+   vec4 color1 = texture2D(sampler2, varyingTexture2);
+color0.a = 0.8;
+			gl_FragColor = color1  * color0 ;
 
- /*
-
-             if (
-             	varyingTexture.x  >0.12 &&
-             	varyingTexture.x  <0.37 && 
-             	varyingTexture.y >0.30	&& 
-             	varyingTexture.y <0.57  
-             	); else if (varyingTexture.x <0.5){
- 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
- 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
- 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
-             }
-*/
-
-//(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
-
-            float x2=varyingFragPosNormal.x ;
-            float y2=varyingFragPosNormal.y  ;
-            float z2=varyingFragPosNormal.z  ;
-  
-
-            // souradnice stredu
-            float Sx = 0.0;
-            float Sy = 0.0;
-
-            float a = abs(Sx - x2);
-            float b = abs(Sy - y2);
-            float c = sqrt(a*a + b*b) ;
-            // DEBUG===========================================
-
-
-
-            if (c > 0.998     &&c==0.0  ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
- 				/*
- 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
- 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
- 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
- 				*/
- 				gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
- 				offset[0] =  0.0;
- 				offset[1] =  1.0;
- 				offset[2] =  2.0;
- 				offset[3] =  3.0;
- 				offset[4] =  4.0;
-
- 				weight[0] =  0.2270270270;
- 				weight[1] =  0.1945945946;
- 				weight[2] =  0.1216216216;
- 				weight[3] =   0.0540540541;
- 				weight[4] =   0.0162162162;
-
-				for (int i=1; i<5; i++) {
  
-					gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)+vec2(0.0,offset[i]))/1024.0) * weight[i];
-					//gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)-vec2(0.0,offset[i]))/1024.0) * weight[i];
- 
-				}
-
-
- 				//gl_FragColor.a =   0.85;
-            }
-
-
-			// korekce barvy
-			if (varyingTexture.x< 0.5      ) {
-				gl_FragColor.a =   0.988;
-			}
 
 		}
 	</script>
@@ -156,10 +98,11 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(101,101,7.0,1) ;
+var GEOMETRY = createSphereGeometry(100,100,7.0,getParamByKey("indices")=='false' ? 1 : 0) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
+var textureCoordData2 =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 
 // DEBUG===========================================
@@ -174,25 +117,62 @@ var indexData = GEOMETRY.indices;
 						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
-						textureCoordData[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						textureCoordData[ i * 2 + 0 ]  = x*( 448 / 1920 )*(0.7) * (0.95) * correction+ ( 482.52 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ]  = z*( 463 / 1080 )*(0.7) * (0.95) *correction + ( 480.04 / 1080 )  ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
 					
-					if (0) {
-					textureCoordData[ i * 2 + 0 ]  =0;
-					textureCoordData[ i * 2 + 1 ]  = 0;
-					}
+						if (0) {
+						textureCoordData[ i * 2 + 0 ]  =0;
+						textureCoordData[ i * 2 + 1 ]  = 0;
+						}
 					} else { // PRAVA HEMISFERA angleX=0
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) )  ;
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
 
 						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
 						// pohyb po vertikalni ose: Y |
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction      + ( 1441.2 / 1920 );
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 446 / 1920 )*(1.10) * (1.0) *correction      + ( 1418.00 / 1920 ) /* SNIZOVALO SE */ ;
 						// pohyb po horizontalni ose: X -----------
-						textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
+						textureCoordData[ i * 2 + 1 ] =    z * ( 465 / 1080 )*(1.10) * (1.0) *correction      + ( 470.296 / 1080 ) /* SNIZOVALO SE */ ; 
  
 					}
 				}
+
+
+				for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
+					var x = normalData[ i * 3 + 0 ];
+					var z = normalData[ i * 3 + 1 ];
+					var y = normalData[ i * 3 + 2 ];
+					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
+						// nasobenim / delenim se to zvetsuje/zmensuje
+						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						textureCoordData2[ i * 2 + 0 ]  = x*( 448 / 1920 )  * (0.95) * correction+ ( 482.52 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData2[ i * 2 + 1 ]  = z*( 463 / 1080 )  * (0.95) *correction + ( 480.04 / 1080 )  ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+					
+						if (0) {
+						textureCoordData2[ i * 2 + 0 ]  =0;
+						textureCoordData2[ i * 2 + 1 ]  = 0;
+						}
+					} else { // PRAVA HEMISFERA angleX=0
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textureCoordData2[ i * 2 + 0 ] =   -x * ( 446 / 1920 )  * (1.0) *correction       /* SNIZOVALO SE */ ;
+						// pohyb po horizontalni ose: X -----------
+						textureCoordData2[ i * 2 + 1 ] =    z * ( 465 / 1080 )  * (1.0) *correction        /* SNIZOVALO SE */ ; 
+ 
+					}
+				}
+
+
+
  
 var mouse = {
 	position : {
@@ -223,36 +203,32 @@ var normalBuffer;
 var indexBuffer;
 var program ;
 var samplerLoc ;
+var samplerLoc2 ;
 var vertexBuffer;
 var mmLoc;
 var texture;
+var textures = [];
 var canvas = document.querySelector("canvas");
 var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 if (!gl) {
 	w('Webgl se nepodarilo inicializovat...');
 }
 
-var video = createVideo("data/theta2.mp4");
+var video = createImage("data/debug-model.jpg");
 
- 
 
-video.oncanplaythrough = function() {
-	render();
-	//video.play();
+var videos = [];
+videos[0] = createImage("data/debug-model.jpg");
+videos[1] = createImage("data/t11.jpg");
+
+videos[0].onLoad = function() {
+	videos[1].onLoad = function() {
+			render();
+
+	};
 };
 
-/*
-video.addEventListener("timeupdate", function(){
-    if(this.currentTime >= 8){
-        this.pause();
-    }
-});
-*/
-
  
-video.addEventListener("loadedmetadata",function() { 
-	this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
-},false);
  
 
 	function initProgram() {
@@ -321,6 +297,8 @@ video.addEventListener("loadedmetadata",function() {
 			samplerLoc = gl.getUniformLocation(program, "sampler");
 			gl.uniform1i(samplerLoc, 0);
 
+			samplerLoc2 = gl.getUniformLocation(program, "sampler2");
+			gl.uniform1i(samplerLoc2, 1);
 
 			// -------- atributy
 			var posLoc = gl.getAttribLocation(program, "pos");
@@ -335,6 +313,10 @@ video.addEventListener("loadedmetadata",function() {
 			if (textureLoc==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
 			gl.enableVertexAttribArray(textureLoc);
 
+
+			var textureLoc2 = gl.getAttribLocation(program, "texture2");
+			if (textureLoc2==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
+			gl.enableVertexAttribArray(textureLoc2);
 
 			// -------- BUFFERY
 			vertexBuffer = gl.createBuffer();
@@ -352,6 +334,11 @@ video.addEventListener("loadedmetadata",function() {
 			gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData), gl.STATIC_DRAW);
 			gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
 
+			var textureBuffer2 = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer2);
+			gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData2), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(textureLoc2, 2, gl.FLOAT, false, 0, 0);
+
 			indexBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
@@ -364,6 +351,7 @@ video.addEventListener("loadedmetadata",function() {
 			 //gl.enable(gl.BLEND);
 			//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 			gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+
 
 			// ---- otoceni kamery do pocatecni pozice
 			mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
@@ -388,27 +376,47 @@ video.addEventListener("loadedmetadata",function() {
 			}
 
 			// ----- VYTVORENI TEXTURY
-			texture = gl.createTexture();
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			for (var i = 0; i < 2; i++) {
+				texture = gl.createTexture();
+				gl.bindTexture(gl.TEXTURE_2D, texture);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videos[i]);
 
-			gl.bindTexture(gl.TEXTURE_2D, null);
+				gl.bindTexture(gl.TEXTURE_2D, null);
+				textures.push(texture);
+			};
+	return true;
 	}
 
  
 	function updateTexture() {
 
-	  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
-		  gl.activeTexture(gl.TEXTURE0);
-		  gl.bindTexture(gl.TEXTURE_2D, texture);
+  		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
 		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
 		  // the next line fails in Safari if the video is coming from another domain or subdomain
-		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, videos[0]);
 		  gl.bindTexture(gl.TEXTURE_2D, null);
-	  }
+
+  		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+			gl.uniform1i(samplerLoc, 0);
+
+
+
+   		  gl.activeTexture(gl.TEXTURE1);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+		  // the next line fails in Safari if the video is coming from another domain or subdomain
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, videos[1]);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+
+   		  gl.activeTexture(gl.TEXTURE1);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+			gl.uniform1i(samplerLoc2, 1);
 	}
 
 
@@ -422,9 +430,7 @@ video.addEventListener("loadedmetadata",function() {
  
 
 
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.uniform1i(samplerLoc, 0);
+
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -528,7 +534,8 @@ video.addEventListener("loadedmetadata",function() {
 
 		function main() {
 			DebugThreeStat();
-			initProgram();
+			if (!initProgram()) 
+				return w('nemuzeme dal pokracovat v provadeni programu, fatal error');
 			render();
 		}
  
