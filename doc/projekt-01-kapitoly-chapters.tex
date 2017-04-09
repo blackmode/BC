@@ -29,6 +29,18 @@ Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutn
 
 \newpage
 
+Další velice důležitou věcí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit přizpůsobit tomu běh programu:
+
+
+
+\begin{itemize}
+	\item HAVE\_NOTHING - ekvivalentní hodnotě 0, nastane v situaci kdy video neni dostupné
+	\item musíme vědět, komu to chceme říci,
+	\item musíme si dokonale promyslet obsah,
+	\item musíme psát strukturovaně. 
+\end{itemize}
+
+
 Důležité atributy pro práci s videem jsou uvedeny níže.
 
 \begin{description}
@@ -42,15 +54,19 @@ Důležité atributy pro práci s videem jsou uvedeny níže.
 \subsubsection{Track}
 Pokud by video  mělo více jazyků, je možné k videu přidat více jazykových stop, k tomuto účelu slouží element <track>.
 
+\newpage
 
 \subsection{Plátno}
 Jak již bylo avizováno výše, plátno, neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů. herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu.
 
 Plátno je bezpochyby nejdůležítější částí pro realizaci celé práce. Bude pro vyobrazení používat především \texttt{<video>}, z kterého bude číst data a využije tedy element video jak zdroj. Díky DOM pak dokážeme s objektem snadno manipulovat. Díky elementu \texttt{<canvas>} jsme tedy schopni získat kontext Javascriptového API - WebGl a díky němu schopni pracovat na úrovni grafické karty.
 
+\newpage
 
 \section{WebGL}
 Sem webgl
+
+\newpage
 
 \section{GLSL}
 GLSL
