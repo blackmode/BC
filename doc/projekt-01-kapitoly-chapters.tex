@@ -29,15 +29,16 @@ Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutn
 
 \newpage
 
-Další velice důležitou věcí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit přizpůsobit tomu běh programu:
-
+Další velice důležitou věcí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od 0 do 4 a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
-	\item HAVE\_NOTHING - ekvivalentní hodnotě 0, nastane v situaci kdy video neni dostupné
-	\item musíme vědět, komu to chceme říci,
-	\item musíme si dokonale promyslet obsah,
-	\item musíme psát strukturovaně. 
+	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
+	 - nastane v situaci kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovída konstantě \texttt{NETWORK\_EMPTY}
+	\item \texttt{HAVE\_METADATA }
+	\item \texttt{HAVE\_CURRENT\_DATA }
+	\item \texttt{HAVE\_FUTURE\_DATA }	
+	\item \texttt{HAVE\_ENOUGH\_DATA }
 \end{itemize}
 
 
