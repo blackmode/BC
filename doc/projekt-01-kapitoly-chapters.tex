@@ -7,8 +7,7 @@ V současné době se technologie ve všech odvětvích stále posouvá a není 
 
 Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých modech, ve kterých je video interpretováno. Cílem je tedy navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání např. sférického videa v režimu rybího oka specifický program, který by video musel nejprve překonvertovat. To stejné se týká i panoramatických snímku a videí v equirectangulárním modu.  
 
-Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení není k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti náhledu v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí apod.
-
+Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení není k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti náhledu v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí popřípadě blíže popsat zachycenou scénu.
 
 
 \chapter{Webové technologie prohlížeče}
@@ -17,20 +16,37 @@ Další inovací v prohlížení videí je přidání některých dat, které v 
 
 Jazyk HTML (HyperText Markup Language) je značkovací jazyk určený pro popis webových stránek. Vychází z univerzálního značkovacího jazyka SGML (Standard Generalized Markup Language). V současné době aktuální verzi  jazyka HTML je jeho již pátá verze -  HTML5. Nová verze HTML přináší zásadní vylepšení, nové funkce a možnosti, které jsou nezbytné pro návrh a implementaci webového prohlížeče. 
 
-Pro návrh samotného programu je nezbytná podpora multimedií – tedy audio a video, v neposlední řádě také plátno canvas sloužící pro práci s grafikou.
+Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio a video, v neposlední řádě také plátno canvas sloužící pro práci s grafikou.
 
 
 
 \subsection{Video}
-Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomu účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo jak objekt. Nejvíce rozšířeným přehráváčem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo se v širším spektru stal adobe flash, který funkcí přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5.
+Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5.
 
-Nový prvek v HTML5 vytvořený k tomuto účelu je <video>. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat.
-\subsection{Audio}
+Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}, v opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
+
+Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
+
+\newpage
+
+Důležité atributy pro práci s videem jsou uvedeny níže.
+
+\begin{description}
+	\item[src]  - jedná se o atribut, do kterého se definuje zdrojové adresa videa jako URL, které se má zobrazit. Používá se zejména v situaci, kdy je video jen v jedné verzi.
+	\item[autoplay]  - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky	
+	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku.
+	\item[controls]  - jedná se opět o atribut typu \texttt{bool}, který říká, aby prohlížeč použil vlastní ovládací prvky pro video. Ovládací prvky se dají také vytvořit a přizpůsobit velice snadno díky DOMu.
+ 
+\end{description}
+
+\subsubsection{Track}
+Pokud by video  mělo více jazyků, je možné k videu přidat více jazykových stop, k tomuto účelu slouží element <track>.
+
 
 \subsection{Plátno}
-Jak již bylo avizováno výše, plátno, neboli element <canvas> slouží v HTML5 pro vykreslení grafů. herní grafiky, obrázů bitmap apod. Díky elementu <canvas> lze vykreslovat i náročnější grafické objekty zapomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu.
+Jak již bylo avizováno výše, plátno, neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů. herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu.
 
-Plátno je bezpochyby nejdůležítější částí pro realizaci celé práce. Bude pro vyobrazení používat především <video>, zkterého bude číst data a využíje tedy elemtn video jak zdroj. Díky DOM pak dokážeme s objektem snadno manipulovat. Díky elementu <canvas> jsme tedy schopni získat kontext Javascriptového API - WebGl a díky němu schopni pracovat na úorovni grafické karty.
+Plátno je bezpochyby nejdůležítější částí pro realizaci celé práce. Bude pro vyobrazení používat především \texttt{<video>}, z kterého bude číst data a využije tedy element video jak zdroj. Díky DOM pak dokážeme s objektem snadno manipulovat. Díky elementu \texttt{<canvas>} jsme tedy schopni získat kontext Javascriptového API - WebGl a díky němu schopni pracovat na úrovni grafické karty.
 
 
 \section{WebGL}
