@@ -3,7 +3,7 @@
 
 \chapter{Úvod}
 
-V současné době se technologie ve všech odvětvích stále posouvá a není tomu jinak ani u prohlížení fotek a videí. V současné době i takto nahrané informace pomocí digitálních zařízení, je trend dále posouvat a zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360° kamerám, je dnes možné zaznamenat video o srovnatelné velikosti jako u dnes běžného telefonu, ale s mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i jiní uživatelé mohli svá takto natočená videa přehrávat, popř. sdílet.
+V současné době se technologie ve všech odvětvích stále posouvá a není tomu jinak ani u prohlížení fotek a videí. V současné době i takto nahrané informace pomocí digitálních zařízení, je trend dále posouvat a zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o srovnatelné velikosti jako u dnes běžného telefonu, ale s mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i jiní uživatelé mohli svá takto natočená videa přehrávat, popř. sdílet.
 
 Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých modech, ve kterých je video interpretováno. Cílem je tedy navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání např. sférického videa v režimu rybího oka specifický program, který by video musel nejprve překonvertovat. To stejné se týká i panoramatických snímku a videí v equirectangulárním modu.  
 
@@ -35,10 +35,12 @@ Další velice důležitou věcí je načítáni videa a jeho ověření, zdali 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
 	 - nastane v situaci kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovída konstantě \texttt{NETWORK\_EMPTY}
-	\item \texttt{HAVE\_METADATA }
-	\item \texttt{HAVE\_CURRENT\_DATA }
-	\item \texttt{HAVE\_FUTURE\_DATA }	
-	\item \texttt{HAVE\_ENOUGH\_DATA }
+	\item \texttt{HAVE\_METADATA} \newline
+		-  nějaké data se již podařilo získat a zdroj je tedy považován jako dostupný, ale zatím ještě není dostatek dat, aby bylo možné začít s přehráváním.
+	\item \texttt{HAVE\_CURRENT\_DATA }\newline
+		- data pro bezprostřední začátek přehrávání jsou připravena
+	\item \texttt{HAVE\_FUTURE\_DATA}\newline	
+	\item \texttt{HAVE\_ENOUGH\_DATA}\newline
 \end{itemize}
 
 
@@ -46,10 +48,15 @@ Důležité atributy pro práci s videem jsou uvedeny níže.
 
 \begin{description}
 	\item[src]  - jedná se o atribut, do kterého se definuje zdrojové adresa videa jako URL, které se má zobrazit. Používá se zejména v situaci, kdy je video jen v jedné verzi.
-	\item[autoplay]  - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky	
-	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku.
+	\item[autoplay]  - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}	
+	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku. 
 	\item[controls]  - jedná se opět o atribut typu \texttt{bool}, který říká, aby prohlížeč použil vlastní ovládací prvky pro video. Ovládací prvky se dají také vytvořit a přizpůsobit velice snadno díky DOMu.
- 
+ 	\item[preload]  - tímto říkáme, jakou část videa by měl webový prohlížeč načíst ihned po načtení stránky. Tento atribut nabývá jednou ze tří hodnot:
+	 	\begin{itemize}
+	 		\item \texttt{none} - nebude načítat nic	 		
+	 		\item \texttt{metadata} - načte pouze metadata daného videa
+	 		\item \texttt{auto} - sám zvolí, co přesně udělá
+	 	\end{itemize}
 \end{description}
 
 \subsubsection{Track}
@@ -70,8 +77,13 @@ Sem webgl
 \newpage
 
 \section{GLSL}
-GLSL
+GLSL úvod
 
+\subsection{Vertext shader}
+Vertext shader
+
+\subsection{Fragment shader}
+Fragment shader
 
 \chapter{Nikdy to nebude naprosto dokonalé}
 Když jsme už napsali vše, o~čem jsme přemýšleli, uděláme si den nebo dva dny volna a~pak si přečteme sami rukopis znovu. Uděláme ještě poslední úpravy a~skončíme. Jsme si vědomi toho, že vždy zůstane něco nedokončeno, vždy existuje lepší způsob, jak něco vysvětlit, ale každá etapa úprav musí být konečná.
