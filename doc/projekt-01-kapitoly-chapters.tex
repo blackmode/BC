@@ -29,17 +29,18 @@ Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutn
 
 \newpage
 
-Další velice důležitou věcí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od 0 do 4 a dle hodnot rozlišujeme:
+Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od 0 do 4 a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
-	 - nastane v situaci kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovída konstantě \texttt{NETWORK\_EMPTY}
+	 - nastane v situaci kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovídá konstantě \texttt{NETWORK\_EMPTY}
 	\item \texttt{HAVE\_METADATA} \newline
 		-  nějaké data se již podařilo získat a zdroj je tedy považován jako dostupný, ale zatím ještě není dostatek dat, aby bylo možné začít s přehráváním.
 	\item \texttt{HAVE\_CURRENT\_DATA }\newline
-		- data pro bezprostřední začátek přehrávání jsou připravena
-	\item \texttt{HAVE\_FUTURE\_DATA}\newline	
+		- data pro bezprostřední začátek přehrávání jsou připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání může dostat do stavu \texttt{HAVE\_METADATA}, nebo následující data videa již nejsou k dispozici.
+	\item \texttt{HAVE\_FUTURE\_DATA}\newline
+		- data pro bezprostřední začátek přehrávání jsou připravena	
 	\item \texttt{HAVE\_ENOUGH\_DATA}\newline
 \end{itemize}
 
