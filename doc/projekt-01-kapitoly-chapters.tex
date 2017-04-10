@@ -57,11 +57,16 @@ Další velice důležitou částí je načítáni videa a jeho ověření, zdal
 		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}
 \end{itemize}
 
-Kromě  stavů načtení videa jsou tu i stavy indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
+Mimo stavy načtení videa jsou tu i stavy indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
+
+
 
 \begin{itemize}
-	\item \texttt{playing}\newline
-	- nastane v situaci, kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - 
+	\item \texttt{playing} - video se aktuálně přehrává, atribut \texttt{paused} je nastaven na \texttt{false}	
+	\item \texttt{waiting} - přehrávání videa je pozastaveno	
+	\item \texttt{ended} - přehrávání videa doběhlo nakonec
+	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosahnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}.
+	
 \end{itemize}
 
 
@@ -74,7 +79,7 @@ Důležité atributy pro manipulaci s videem a nastavením.
 \begin{description}
 	\item[src] - jedná se o atribut, do kterého se definuje zdrojové adresa videa jako URL, které se má zobrazit. Používá se zejména v situaci, kdy je k dispozici právě jedna verze videa.
 	
-	\item[autoplay] - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky jakmile je vše připraveno. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}	
+	\item[autoplay] - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky jakmile je vše připraveno. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}.	
 	
 	\item[poster]  - Slouží k vystihnutí obsahu daného videa. Ještě než začne samotné přehrávání, je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, HTML automaticky zvolí jeden z prvních neprázdných rámců.
 	
@@ -83,7 +88,9 @@ Důležité atributy pro manipulaci s videem a nastavením.
 	\item[width] - šířka přehrávače v pixelech.
 	
 	\item[height] - výška přehrávače v pixelech.
-	
+
+	\item[paused] - atribut videa typu \texttt{bool}. Indikuje, zdali se video přehrává či nikoliv.
+
 	\item[controls] - jedná se opět o atribut typu \texttt{bool}, který říká, aby prohlížeč použil vlastní ovládací prvky pro video. Ovládací prvky se dají také vytvořit a přizpůsobit velice snadno díky DOMu.
  	
  	\item[preload]  - tímto říkáme, jakou část videa by měl webový prohlížeč načíst ihned po načtení stránky. Tento atribut nabývá jednou ze tří hodnot:
@@ -94,14 +101,34 @@ Důležité atributy pro manipulaci s videem a nastavením.
 	 	\end{itemize}
 \end{description}
 
+\newpage
 
-\subsubsection{Události videa}
+\subsubsection{Metody videa}
+Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, tak jsou tedy nutné metody k ovlivnění jeho atributů, aby bylo možné s přehráváním videa manipulovat.
 
+\begin{description}
+	\item[\texttt{play()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{false}, pokud video již skončilo, začne je přehrávat od začátku.
+	\item[\texttt{pause()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{true}, tím dojde k pozastavení videa
+	\item[\texttt{canplaytype()}] - metoda sloužící k ověření, zdali webový prohlížeč dokáže video daného typu přehrát. Metoda vrací jednu z následujících hodnot:
+	 	\begin{itemize}		
+			\item \texttt{""} - pokud by metoda vrátila prázdný řetězec, video prohlížeč nedokáže přehrát.
+			\item \texttt{maybe} - prohlížeč si není zcela jist, zdali dokáže formát přehrát.
+			\item \texttt{probably} - daný formát videa dokáže prohlížeč přehrát s vysokou pravděpodobností.
+		\end{itemize}
+	\item[\texttt{load()}] - všechny data videa se načtou znovu, čímž dojde ke zrušení všech akcí a současných dat, které byly doposud staženy a načteny. Poté se vše zavolá a načte znovu následujícím způsobem:
+	 	\begin{enumerate}
+			\item Nejprve dojde k inicializaci, kdy \texttt{readyState} je nastaven na \texttt{HAVE\_NOTHING} a  nastaví i příslušný síťový atribut \texttt{networkState} na \texttt{0}, \texttt{seeking} je nastaven na \texttt{false}, \texttt{paused} je nastaven na \texttt{true}, vše ostatní je prázdné, nebo nula	
+			
+			\item vybere se zdroj z atributu \texttt{src} nebo \texttt{<source>}, dále je vyvolána událost \texttt{loadstart} a dochází ke stažení metadat videa
+			
+			\item jakmile jsou metadata stažena, nastaví se zakladní vlastnosti videa - šířka, výška, délka a \texttt{readyState} je nastaven na \texttt{HAVE\_METADATA} a spolu s tím je vyvolána událost \texttt{loadedmetadata}
+			
+			\item Jakmile je \texttt{readyState} větší nebo roven \texttt{HAVE\_FUTURE\_DATA} je vyvolána událost \texttt{canplay} a \texttt{loadeddata}
+			
+			\item dojde ke spuštění přehrávání. Je vyvolána událost \texttt{play} a \texttt{playing}, atribut \texttt{paused} nastaven na \texttt{false}
+		\end{enumerate}
+\end{description}
 
-
-
-\subsubsection{Track}
-Pokud by video  mělo více jazyků, je možné k videu přidat více jazykových stop, k tomuto účelu slouží element <track>.
 
 %=========================================================================
 \newpage
