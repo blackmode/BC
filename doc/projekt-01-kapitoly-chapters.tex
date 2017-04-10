@@ -147,15 +147,15 @@ Canvas má pouze dva atributy a těmi jsou \texttt{width} a \texttt{height} pro 
 \subsubsection{Použití a práce s plátnem}
 Použit plátno lze pomocí rozhraní \texttt{HTMLCanvasElement}, které slouží pro přístup k jeho vlastnostem a metodám. Přístup k objektu \texttt{HTMLCanvasElement} lze pomoci standardní javascriptové metody \texttt{getElementById()} v případě, že je v tagu \texttt{<canvas>} nastaven atribut \texttt{id}, nebo lze objekt získat pomocí metody \texttt{querySelector("canvas")}.
 
-Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou metod:
+Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou metod (počet volání dané metody vrátí pokaždé ten stejný objekt):
 	 	\begin{itemize}		
 			\item \texttt{ toDataURL([type[,quality]])}\newline
 			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude výsledný typ obrázku navrácen. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Návratová adresa URL bude navrácena ve formě řetězce.
 			\item \texttt{getContext(contextId[, ... ])}\newline
-			 - metoda vrací referenci na daný objekt aplikačního rozhraní, díky kterému bude možné kreslit na plátno. Typ aplikačního rozhraní je vybrán na základě argumentu metody:
+			 - metoda vrací referenci na daný objekt aplikačního rozhraní, díky kterému bude možné kreslit na plátno. Pokud by kontext pro daný argzment nebyl podporován prohlížečem, navratová hodnota bude \texttt{null}. Typ aplikačního rozhraní je vybrán na základě argumentu metody:
 			 \begin{itemize}
-			 	\item  \texttt{\textbf{2d}} description 		 	
-			 	\item \texttt{\textbf{webgl}} description
+			 	\item  \texttt{\textbf{2d}} - vrací objektové rozhraní \texttt{CanvasRenderingContext2D}, kterí slouží pro kreslení grafických primitiv.
+			 	\item \texttt{\textbf{webgl}} - pokud tuto funkci prohlížeč podporuje, bude navrácen objekt \newline \texttt{WebGLRenderingContext}. 
 			 \end{itemize}
 		 
  
