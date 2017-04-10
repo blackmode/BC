@@ -1,16 +1,17 @@
 %=========================================================================
 % (c) Michal Bidlo, Bohuslav Křena, 2008
+\setcounter{secnumdepth}{4} % cislovani nadpisu do hloubky
 
 \chapter{Úvod}
 \label{chapter:1}
 
-V současné době se technologie ve všech odvětvích stále posouvá a není tomu jinak ani u prohlížení fotek a videí. V současné době i takto nahrané informace pomocí digitálních zařízení, je trend dále posouvat a zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o srovnatelné velikosti jako u dnes běžného telefonu, ale s mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i jiní uživatelé mohli svá takto natočená videa přehrávat, popř. sdílet.
+V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotek a~videí. V současné době i~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
 
 
-Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých modech, ve kterých je video interpretováno. Cílem je tedy navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání např. sférického videa v režimu rybího oka specifický program, který by video musel nejprve překonvertovat. To stejné se týká i panoramatických snímku a videí v equirectangulárním zobrazení.  
+Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých módech, ve kterých je video interpretováno. Cílem je tedy navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání např. sférického videa v režimu rybího oka specifický program, který by video musel nejprve překonvertovat. To stejné se týká i~panoramatických snímku a~videí v equirectangulárním zobrazení.  
 
 
-Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení není k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti náhledu v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí popřípadě blíže popsat zachycenou scénu.
+Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení není k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti zorného pole v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí popřípadě blíže popsat zachycenou scénu.
 \newline
 
 Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} se budu věnovat nastínění všech použitých technologií nutných pro pochopení problematiky, se kterými se bude pracovat v následujících kapitolách. O návrhu řešení pojednává kapitola \nameref{chapter:3}, na kterou navazuje implementační část \nameref{chapter:4}. Otestování správného návrhu a implementace se zabývá kapitola s názvem \nameref{chapter:5}. V poslední části práce \nameref{chapter:6} jsou prezentovány dosažené výsledky a možnosti dalšího rozšíření.
@@ -34,41 +35,70 @@ Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomu
 
 Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}, v opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
 
-Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
+Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Všechny elementy webové stránky jsou interpretovány v DOM jako objekt Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
 
 %=========================================================================
 \newpage
 
-Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí metody \texttt{networkState()}, popřípadě přímo zjišťovat připravenost videa pomocí metody \texttt{readyState()}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od 0 do 4 a dle hodnot rozlišujeme:
+\subsubsection{Stavy načítání a přehrávání videa}
+Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od 0 do 4 a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
-	 - nastane v situaci kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovídá konstantě \texttt{NETWORK\_EMPTY}
+	 - nastane v situaci, kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovídá konstantě \texttt{NETWORK\_EMPTY}
 	\item \texttt{HAVE\_METADATA} \newline
-		-  nějaké data se již podařilo získat a zdroj je tedy považován jako dostupný, ale zatím ještě není dostatek dat, aby bylo možné začít s přehráváním.
+		-  základní data o zdroji se podařilo získat a zdroj je tedy považován jako dostupný. Zatím ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V tomto stavu jsou k dispozici jen data popisující přehrávány subjekt, jako délka, šířka, dekódovaní apod. Dochází k vyvolání události \texttt{loadedmetadata}
 	\item \texttt{HAVE\_CURRENT\_DATA }\newline
 		- data pro bezprostřední začátek přehrávání jsou připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání může dostat do stavu \texttt{HAVE\_METADATA}, nebo následující data videa již nejsou k dispozici.
 	\item \texttt{HAVE\_FUTURE\_DATA}\newline
-		- data pro bezprostřední začátek přehrávání jsou připravena	
+		- data pro přehrávání jsou připravena pro současnou i nadcházející pozici. V případě, že by bylo video dosáhlo takového stavu poprvé, bude vyvolána událost \texttt{canplay}.
 	\item \texttt{HAVE\_ENOUGH\_DATA}\newline
+		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}
+\end{itemize}
+
+Kromě  stavů načtení videa jsou tu i stavy indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
+
+\begin{itemize}
+	\item \texttt{playing}\newline
+	- nastane v situaci, kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - 
 \end{itemize}
 
 
-Důležité atributy pro práci s videem jsou uvedeny níže.
+\newpage
+\subsubsection{Atributy videa}
+Důležité atributy pro manipulaci s videem a nastavením.
+
+
 
 \begin{description}
-	\item[src]  - jedná se o atribut, do kterého se definuje zdrojové adresa videa jako URL, které se má zobrazit. Používá se zejména v situaci, kdy je video jen v jedné verzi.
-	\item[autoplay]  - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}	
-	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku. 
-	\item[controls]  - jedná se opět o atribut typu \texttt{bool}, který říká, aby prohlížeč použil vlastní ovládací prvky pro video. Ovládací prvky se dají také vytvořit a přizpůsobit velice snadno díky DOMu.
+	\item[src] - jedná se o atribut, do kterého se definuje zdrojové adresa videa jako URL, které se má zobrazit. Používá se zejména v situaci, kdy je k dispozici právě jedna verze videa.
+	
+	\item[autoplay] - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky jakmile je vše připraveno. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}	
+	
+	\item[poster]  - Slouží k vystihnutí obsahu daného videa. Ještě než začne samotné přehrávání, je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, HTML automaticky zvolí jeden z prvních neprázdných rámců.
+	
+	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku. Tato operace se provádí v nekonečné smyčce.
+
+	\item[width] - šířka přehrávače v pixelech.
+	
+	\item[height] - výška přehrávače v pixelech.
+	
+	\item[controls] - jedná se opět o atribut typu \texttt{bool}, který říká, aby prohlížeč použil vlastní ovládací prvky pro video. Ovládací prvky se dají také vytvořit a přizpůsobit velice snadno díky DOMu.
+ 	
  	\item[preload]  - tímto říkáme, jakou část videa by měl webový prohlížeč načíst ihned po načtení stránky. Tento atribut nabývá jednou ze tří hodnot:
 	 	\begin{itemize}
-	 		\item \texttt{none} - nebude načítat nic	 		
-	 		\item \texttt{metadata} - načte pouze metadata daného videa
-	 		\item \texttt{auto} - sám zvolí, co přesně udělá
+	 		\item \texttt{none} - nebude načítat nic, výhodné v případě, kdy je potřeba minimalizovat vytížení pásma	 		
+	 		\item \texttt{metadata} - načte pouze metadata daného videa - základní údaje o jeho délce apod.
+	 		\item \texttt{auto} - sám zvolí, co přesně udělá 
 	 	\end{itemize}
 \end{description}
+
+
+\subsubsection{Události videa}
+
+
+
 
 \subsubsection{Track}
 Pokud by video  mělo více jazyků, je možné k videu přidat více jazykových stop, k tomuto účelu slouží element <track>.
