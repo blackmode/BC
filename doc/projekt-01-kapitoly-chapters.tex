@@ -139,10 +139,27 @@ Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, 
 
 Jak již bylo avizováno výše, plátno, neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů. herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu. Plátno je párový  element, přesto se mezi párové tagy zdánlivě nic nevykresluje, celý obsah je skryt. Takový obsah se nazývá tzv. \textit{fallback content} a je zobrazen v případě chyby, nebo prohlížečům, které tento element HTML5 nepodporují.
 
-
 Plátno je bezpochyby nejdůležítější částí pro realizaci celé práce. Bude pro vyobrazení používat především \texttt{<video>}, z kterého bude číst data a využije tedy element video jak zdroj. Díky DOM pak dokážeme s objektem snadno manipulovat. Díky elementu \texttt{<canvas>} jsme tedy schopni získat kontext Javascriptového API - WebGl a díky němu schopni pracovat na úrovni grafické karty.
 
+\subsubsection{Atributy plátna}
 Canvas má pouze dva atributy a těmi jsou \texttt{width} a \texttt{height} pro nastaveni šířky a výšky plátna. Je možné nastavit výšku a šířku pomocí kaskádových stylů, avšak tato možnost není doporučována, protože by mohlo dojít k nežádoucí deformaci obsahu. Při změně velikosti bitmapy pomocí atributů dojde pouze ke změně velikosti dané bitmapy, změna kaskádovými styly ale změní velikost obsahu celé bitmapy a tím tedy dojde ke zkreslení.
+
+\subsubsection{Použití a práce s plátnem}
+Použit plátno lze pomocí rozhraní \texttt{HTMLCanvasElement}, které slouží pro přístup k jeho vlastnostem a metodám. Přístup k objektu \texttt{HTMLCanvasElement} lze pomoci standardní javascriptové metody \texttt{getElementById()} v případě, že je v tagu \texttt{<canvas>} nastaven atribut \texttt{id}, nebo lze objekt získat pomocí metody \texttt{querySelector("canvas")}.
+
+Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou metod:
+	 	\begin{itemize}		
+			\item \texttt{ toDataURL([type[,quality]])}\newline
+			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude výsledný typ obrázku navrácen. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Návratová adresa URL bude navrácena ve formě řetězce.
+			\item \texttt{getContext(contextId[, ... ])}\newline
+			 - metoda vrací referenci na daný objekt aplikačního rozhraní, díky kterému bude možné kreslit na plátno. Typ aplikačního rozhraní je vybrán na základě argumentu metody:
+			 \begin{itemize}
+			 	\item  \texttt{\textbf{2d}} description 		 	
+			 	\item \texttt{\textbf{webgl}} description
+			 \end{itemize}
+		 
+ 
+		\end{itemize}
 
 %=========================================================================
 \newpage
