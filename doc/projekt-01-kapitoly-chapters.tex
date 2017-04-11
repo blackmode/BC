@@ -179,7 +179,7 @@ V současné době je oficiálně vydána verze WebGL 1.0, která je založeno n
 GLSL (OpenGL Shading Language) - jedná se o jazyk pro psaní shaderů. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v jazyku C, každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. 
 
 \subsection{Vertext shader}
-Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie.
+Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie. Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y}, \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech.
 
 \subsection{Fragment shader}
 Je program, která je volán pro každý pixel vykreslované scény.
