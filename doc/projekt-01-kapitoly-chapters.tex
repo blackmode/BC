@@ -229,13 +229,13 @@ Některé frameworky\footnote{Rámcová softwarová struktura usnadňující ře
   
 Pokud bychom chtěl vykreslit nejaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod. Aby nedocházelo k neustálému přepisování hodnot v paměti na GPU, veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
-\subsection{Model}
+\subsubsection{Model}
 Jedná se o matici, která držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
 
-\subsection{View}
+\subsubsection{View}
 Díky teto transformační matici realizujeme již avizovanou "roli kamery", kdy simulujeme vzájemná vztah scény a pozorovatele.
 
-\subsection{Perspective}
+\subsubsection{Perspective}
 Stará se o perspektivní zkreslení scény.
 %=========================================================================
 
