@@ -225,18 +225,23 @@ Buffery resp. vyrovnávací paměti jsou rychle přístupné paměti na grafick�
 \newpage
 
 \subsection{Projekce}
-Některé frameworky\footnote{Rámcová softwarová struktura usnadňující řešení dané problematiky} založené na WebGL zaměňují projekci za kameru, ta bohužel jako taková ve WebGL neexistuje. Jedná se pouze o způsob vykreslení grafické informace, ke které jsou využívány právě projekční zobrazení.
+Některé frameworky\footnote{Rámcová softwarová struktura usnadňující řešení dané problematiky} založené na WebGL zaměňují projekci za kameru, ta bohužel jako taková ve WebGL neexistuje. Jedná se pouze o způsob vykreslení grafické informace, ke které jsou využívány právě projekční zobrazení. WebGL podporuje dva základní typy projekce - ortografickou a perspektivní. 
+
+Ortografická projekce využívá skutečné velikosti objektu. Scéna je reprezentována jako pravoúhlý hranol.
+
+Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude  jevit jako menší.
   
 Pokud bychom chtěl vykreslit nejaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod. Aby nedocházelo k neustálému přepisování hodnot v paměti na GPU, veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
 \subsubsection{Model}
-Jedná se o matici, která držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
+Jedná se o matici, kterou držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
 
 \subsubsection{View}
 Díky teto transformační matici realizujeme již avizovanou "roli kamery", kdy simulujeme vzájemná vztah scény a pozorovatele.
 
 \subsubsection{Perspective}
-Stará se o perspektivní zkreslení scény.
+Stará se o perspektivní zkreslení scény. Tato transformace rozhoduje o tom, jak velké zorné pole bude vykresleno a mapováno 
+na obrazovku monitoru
 %=========================================================================
 
 \chapter{Návrh řešení: sem nějakej zajimavej název kapitoly}
