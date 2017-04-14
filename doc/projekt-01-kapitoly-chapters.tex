@@ -2,6 +2,8 @@
 % (c) Michal Bidlo, Bohuslav Křena, 2008
 \setcounter{secnumdepth}{4} % cislovani nadpisu do hloubky
 
+
+
 \chapter{Úvod}
 \label{chapter:1}
 
@@ -170,7 +172,11 @@ Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou met
 \textbf{GLSL} (Open\textbf{GL} \textbf{S}hading \textbf{L}anguage) - jedná se o jazyk pro psaní shaderů \footnote{Jedná se o programy řídící vykreslování na grafické kartě}. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v jazyku C, každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. V hlavní funkci programu jsou vyhrazeny proměnné se speciálním významem, jako např. \texttt{gl\_Position}, kterou nastavujeme  pozici vrcholu ve vertex shaderu, nebo \texttt{gl\_FragColor} pro nastavení barvy ve fragment shaderu.
 
 \subsection{Vertext shader}
-Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie. Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y}, \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
+Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie. 
+
+Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y}, \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
+
+Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
 
 \subsection{Fragment shader}
 Je program - označovaný taktéž jako \textit{pixel shader}, který je volán pro každý pixel vykreslované scény. Jeho úkolem je výpočet barvy každého pixelu a díky tomu lze s takto získanou barvou  dále pracovat. Barva je získána jako čtyřsložkový vektor, první tří složky tvoří paletu RGB, poslední čtvrtá složka tvoří $\alpha$ kanál \footnote{Složka pixelu udávající jeho průhlednost}. V případě vykreslování složitějších objektů umožňuje GLSL automaticky body geometrie interpolovat, tedy automaticky získat pixel dané geometrie, aniž by musel být každý samostatně definován. Ukázka interpolace je demonstrována na obrázku \ref{img:1}.
@@ -263,8 +269,48 @@ Aby panoramatický prohlížeč jednotlivých fotek či videí dokázal vyobrazi
 
  
 Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního polu s a  jižním polem. Horizontálních čar (rovnoběžek) budeme potřebovat o něco méně, takže je nastavíme na hodnotu 50. Čím více rovnoběžek a poledníků vytvořili, tím by byla hustota bodů v polích hustší, a mapování textury tedy jemnější. Tato vlastnost se nám bude hodit např. v situaci, kdy bychom měli velký geometrický objekt se spoustou miniaturních sekvenci v geometrii. Větší mezery jsou nadruhou stranu rychlejší na vykreslování a to se stejným výsledkem (v našem konkrétním případě). Geometrii nastavíme výpočtem souřadnic X, Y, Z. Jelikož poledník je rozdělen rovnoběžkami, můžeme tedy 180° úhel rozdělit mezi jednotlivé rovnoběžky, tedy PÍ/Počet rovnoběžek = theta, který bude svírat vertikální čára geometrie s osou Z, tudíž můžeme souřadnici X vyjádřit vztahem X= sin(theta) * cos(phi).  
+   
+ 
+ 
+ 
+\begin{tikzpicture}
+
+% Define radius
+\def\r{3}
+
+% Bloch vector
+\draw (0,0) node[circle,fill,inner sep=1] (orig) {} -- (\r/3,\r/2) node[circle,fill,inner sep=0.7,label=above:$\vec{a}$] (a) {};
+\draw[dashed] (orig) -- (\r/3,-\r/5) node (phi) {} -- (a);
+
+% Sphere
+\draw (orig) circle (\r);
+\draw[dashed] (orig) ellipse (\r{} and \r/3);
+
+\draw (orig) ellipse (\r/2.55 and  \r);
+
+%\draw (0,0) circle (2);
+
+% Axes
+\draw[->] (orig) -- ++(-\r/2.67,-\r/3.25) node[below] (x1) {$x_1$};
+\draw[->] (orig) -- ++(\r,0) node[right] (x2) {$x_2$};
+
+\draw[->] (orig) -- ++(0,\r) node[above] (x3) {$x_3$};
+\draw (-0.08,-0.3) node[anchor=north west] {$\varphi$};
+\draw (0.01,0.9) node[anchor=north west] {$\theta$};
 
 
+
+
+\draw [shift={(0,0)}, lightgray, fill, fill opacity=0.1] (0,0) -- (56.7:0.4) arc (56.7:90.:0.4) -- cycle;
+\draw [shift={(0,0)}, lightgray, fill, fill opacity=0.1] (0,0) -- (-142.7:0.4) arc (-142.7:-33.2:0.4) -- cycle;
+
+
+ 
+\end{tikzpicture}
+ 
+ 
+ 
+ 
 
 \subsection{Vertex}
 \subsection{Normály}
@@ -272,6 +318,10 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pol
 \subsection{Indices}
 
 \section{Korekce textur}
+
+
+ 
+
 
 \section{Projekce}
 \subsection{Modelová matice}
