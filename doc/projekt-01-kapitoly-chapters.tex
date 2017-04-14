@@ -268,45 +268,12 @@ Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy 
 Aby panoramatický prohlížeč jednotlivých fotek či videí dokázal vyobrazit naše data, je nejprve potřeba vytvořit geometrii. Jedná se o pole souřadnic formátu  [x1,y1,z1 , x2,y2,z2,…], které utváří jednotlivé body v prostoru, body pak mezi sebou tvoří prostor, na který budou data mapovaná. Ve Webgl umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve webgl používá vykreslení pomocí trojúhelníku, jako základní jednotkou plochy.  Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.\\
 
  
-Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního polu s a  jižním polem. Horizontálních čar (rovnoběžek) budeme potřebovat o něco méně, takže je nastavíme na hodnotu 50. Čím více rovnoběžek a poledníků vytvořili, tím by byla hustota bodů v polích hustší, a mapování textury tedy jemnější. Tato vlastnost se nám bude hodit např. v situaci, kdy bychom měli velký geometrický objekt se spoustou miniaturních sekvenci v geometrii. Větší mezery jsou nadruhou stranu rychlejší na vykreslování a to se stejným výsledkem (v našem konkrétním případě). Geometrii nastavíme výpočtem souřadnic X, Y, Z. Jelikož poledník je rozdělen rovnoběžkami, můžeme tedy 180° úhel rozdělit mezi jednotlivé rovnoběžky, tedy PÍ/Počet rovnoběžek = theta, který bude svírat vertikální čára geometrie s osou Z, tudíž můžeme souřadnici X vyjádřit vztahem X= sin(theta) * cos(phi).  
+Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního polu s a  jižním polem. Horizontálních čar (rovnoběžek) budeme potřebovat o něco méně, takže je nastavíme na hodnotu 50. Čím více rovnoběžek a poledníků vytvořili, tím by byla hustota bodů v polích hustší, a mapování textury tedy jemnější. Tato vlastnost se nám bude hodit např. v situaci, kdy bychom měli velký geometrický objekt se spoustou miniaturních sekvenci v geometrii. Větší mezery jsou nadruhou stranu rychlejší na vykreslování a to se stejným výsledkem (v našem konkrétním případě). Geometrii nastavíme výpočtem souřadnic X, Y, Z. Jelikož poledník je rozdělen rovnoběžkami, můžeme tedy 180 stupňový úhel rozdělit mezi jednotlivé rovnoběžky, tedy PÍ/Počet rovnoběžek = theta, který bude svírat vertikální čára geometrie s osou Z, tudíž můžeme souřadnici X vyjádřit vztahem X= sin(theta) * cos(phi).  
    
  
  
  
-\begin{tikzpicture}
 
-% Define radius
-\def\r{3}
-
-% Bloch vector
-\draw (0,0) node[circle,fill,inner sep=1] (orig) {} -- (\r/3,\r/2) node[circle,fill,inner sep=0.7,label=above:$\vec{a}$] (a) {};
-\draw[dashed] (orig) -- (\r/3,-\r/5) node (phi) {} -- (a);
-
-% Sphere
-\draw (orig) circle (\r);
-\draw[dashed] (orig) ellipse (\r{} and \r/3);
-
-\draw (orig) ellipse (\r/2.55 and  \r);
-
-%\draw (0,0) circle (2);
-
-% Axes
-\draw[->] (orig) -- ++(-\r/2.67,-\r/3.25) node[below] (x1) {$x_1$};
-\draw[->] (orig) -- ++(\r,0) node[right] (x2) {$x_2$};
-
-\draw[->] (orig) -- ++(0,\r) node[above] (x3) {$x_3$};
-\draw (-0.08,-0.3) node[anchor=north west] {$\varphi$};
-\draw (0.01,0.9) node[anchor=north west] {$\theta$};
-
-
-
-
-\draw [shift={(0,0)}, lightgray, fill, fill opacity=0.1] (0,0) -- (56.7:0.4) arc (56.7:90.:0.4) -- cycle;
-\draw [shift={(0,0)}, lightgray, fill, fill opacity=0.1] (0,0) -- (-142.7:0.4) arc (-142.7:-33.2:0.4) -- cycle;
-
-
- 
-\end{tikzpicture}
  
  
  
