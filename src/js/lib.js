@@ -637,6 +637,7 @@ function createCompass(width, height) {
 		}
 		else {
 			compass_box.append(div);
+			return div;
 		}
 	}
 	else {
