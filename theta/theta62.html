@@ -141,17 +141,22 @@
 		 <source src="data/firefox.ogv" type="video/mp4"> 
 		<source src="data/theta2.mp4" type="video/mp4">
 	  </video> -->
-
-		<canvas id="glcanvas" width="800" height="600"></canvas>
+		<div id="viewer" style="position:relative ">
+			<canvas id="glcanvas" width="1200" height="800"></canvas>
+			<div id="compass-box" ></div>
+		</div>
 		<div id="data"></div>
 	</body>
 
 
+ 
 
 	<script>
 
- 
-var mmatrix = createIdentityMatrix4();
+createCompass(200,200) ;
+
+
+ var mmatrix = createIdentityMatrix4();
 var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
@@ -162,37 +167,8 @@ var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 
-// DEBUG===========================================
-				// Zde se provadi korekce
-				// http://localhost/BC/theta/theta61.html?time=14.85&angleX=1.0&camera=-4.0&correction=true&angleZ=0.0
-				for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
-					var x = normalData[ i * 3 + 0 ];
-					var z = normalData[ i * 3 + 1 ];
-					var y = normalData[ i * 3 + 2 ];
-					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
-						// nasobenim / delenim se to zvetsuje/zmensuje
-						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
-						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
-						textureCoordData[ i * 2 + 0 ]  = x*( 272.0 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textureCoordData[ i * 2 + 1 ] = z  * ( 272.0  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
-					
-					if (0) {
-					textureCoordData[ i * 2 + 0 ]  =0;
-					textureCoordData[ i * 2 + 1 ]  = 0;
-					}
-					} else { // PRAVA HEMISFERA angleX=0
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) )  ;
-						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
-
-						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
-						// pohyb po vertikalni ose: Y |
-						textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction      + ( 1441.2 / 1920 );
-						// pohyb po horizontalni ose: X -----------
-						textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
  
-					}
-				}
+
 var mouse = {
 	position : {
 		x: 0.0,
@@ -226,6 +202,8 @@ var vertexBuffer;
 var mmLoc;
 var texture;
 var canvas = document.querySelector("canvas");
+ 
+
 var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 if (!gl) {
 	w('Webgl se nepodarilo inicializovat...');

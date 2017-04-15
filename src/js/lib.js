@@ -174,26 +174,50 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 
 				// Zde se provadi korekce
-				/*for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
-
+				// http://localhost/BC/theta/theta61.html?time=14.85&angleX=1.0&camera=-4.0&correction=true&angleZ=0.0
+				for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
 					var x = normals[ i * 3 + 0 ];
 					var z = normals[ i * 3 + 1 ];
 					var y = normals[ i * 3 + 2 ];
+					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
+						// nasobenim / delenim se to zvetsuje/zmensuje
+						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
 
-					if ( i < l / 2 ) {
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textures[ i * 2 + 0 ]  = x*( 404 / 1920 )*correction + ( 447 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textures[ i * 2 + 1 ] = z  * ( 404 / 1080 )*correction  + ( 520 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ;
+						// DEBUG===============
+						if (getParamByKey("correction") == 'false')   
+							correction = 1.0;
 
-					} else {
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						textures[ i * 2 + 0 ] =   -x * ( 404 / 1920 )*correction   + ( 1470 / 1920 ) ;
-						textures[ i * 2 + 1 ] =  z * ( 404 / 1080 )*correction   + ( 520 / 1080 ) ;
-
-
+						textures[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textures[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+					
+						if (0) {
+						textures[ i * 2 + 0 ]  = 0;
+						textures[ i * 2 + 1 ]  = 0;
+						}
 					}
+					else { // PRAVA HEMISFERA angleX=0
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) )  ;
 
-				}*/
+						// DEBUG===================
+						if (getParamByKey("correction") == 'false')   
+							correction = 1.0;
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textures[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction      + ( 1441.2 / 1920 );
+						// pohyb po horizontalni ose: X -----------
+						textures[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
+ 
+					}
+				}
+
+
+
+
+
+
+
 	}
 
  
@@ -578,4 +602,44 @@ function createImage( src ) {
     var image =  new Image();
     image.src = src;
 	return image;
+}
+
+function createCompass(width, height) {
+
+	var div = document.getElementById("compass-box");
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		w('Neexistuje TAG <canvas>!');
+		return false;
+	}
+	var compass_width = width;
+	var compass_height = height;
+
+	// Umisteni v canvasu na dolni okraj doprostred
+	var compass_left = ( (canvas_dom.width/2)-(compass_width/2)) | 0;
+	var compass_top =   ((canvas_dom.height)-(compass_height)) | 0;
+
+	if (div) {
+		var div = document.createElement('div');
+		div.setAttribute('id', 'compass');
+		div.style.width = compass_width+'px';
+		div.style.height = compass_height+'px';
+		div.style.left = compass_left+'px';
+		div.style.top = compass_top+'px';
+		div.style.backgroundColor  = 'blue';
+		div.style.opacity  = 0.4;
+		div.style.position = 'absolute';
+		div.style.overflow = 'hidden';
+
+		var compass_box = document.getElementById("compass-box");
+		if (!compass_box) {
+			w('Neexistuje TAG <BODY> s ID body, nutne pro logger!');
+		}
+		else {
+			compass_box.append(div);
+		}
+	}
+	else {
+		w('DIV s ID: compass-box NEEXISTUJE!');
+	}
 }
