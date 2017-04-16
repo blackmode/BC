@@ -293,6 +293,8 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pol
 
 \section{Metadata}
 
+\section{Zorný úhel}
+
 \section{Kompas}
 
 \section{Blending}
@@ -300,6 +302,17 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pol
 
 \chapter{Implementace panoramatického prohlížeče}
 \label{chapter:4}
+
+
+\section{Grafické rozhraní}
+Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
+
+\section{Kompas}
+Prvek překrývající plátno \texttt{<canvas>}. Vstupnímí metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorové souřadnice, které ovlivňují odchylku severu, popř. jihu od původní zadané pozice v metadatech.
+
+\subsection{Pozicování}
+Vytvoření samotného komapsu realizuje funkce \texttt{createCompass(width, height)}
+
 
 Pravidla \cite{Pravidla}. 
 
