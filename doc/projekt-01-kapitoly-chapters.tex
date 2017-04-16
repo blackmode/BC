@@ -308,10 +308,13 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pol
 Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
 
 \section{Kompas}
-Prvek překrývající plátno \texttt{<canvas>}. Vstupnímí metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorové souřadnice, které ovlivňují odchylku severu, popř. jihu od původní zadané pozice v metadatech.
+Prvek překrývající plátno \texttt{<canvas>}. Vstupnímí metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorové úhel, který ovlivňuje odchylku severu, popř. jihu od původní zadané pozice v metadatech.
+
+Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{createCompass()}.
 
 \subsection{Pozicování}
-Vytvoření samotného komapsu realizuje funkce \texttt{createCompass(width, height)}
+Vytvoření samotného kompasu realizuje funkce \texttt{createCompass(width, height)}, argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
+\texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} je vypočten tak, že si načteme celkovou šířku
 
 
 Pravidla \cite{Pravidla}. 
