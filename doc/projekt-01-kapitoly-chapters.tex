@@ -326,8 +326,25 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pol
 
 \section{Metadata}
 
-\section{Zorný úhel}
+%=========================================================================
+\newpage
 
+\section{Zorný úhel}
+Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Tento úhel se mění na základě přibližování, nebi oddalování scény od pozorovatele. 
+
+\subsection{Návrh prvku}
+K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, přoč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
+
+Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na sférické souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu (x,y) jsou známy hodnoty odvěsen a je možní spočítat přeponu. Takto odvodíme vztahy pro \texttt{x} a \texttt{y}
+
+\begin{description}
+	\item [{\LARGE $ x = r\cdot\cos(\theta) $}] 
+	\item [{\LARGE $ y = r\cdot\sin(\theta) $}]
+\end{description}
+ 
+
+%=========================================================================
+\newpage
 
 
 \section{Kompas}
