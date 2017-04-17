@@ -644,3 +644,105 @@ function createCompass(width, height) {
 		w('DIV s ID: compass-box NEEXISTUJE!');
 	}
 }
+
+/*
+function createFieldVision(width, height) {
+
+
+	function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+	  var angleShift = 180;
+	  var angleInRadians = (angleInDegrees-angleShift) * (Math.PI / 180.0);
+
+	  return {
+	    x: centerX + (radius * Math.cos(angleInRadians)),
+	    y: centerY + (radius * Math.sin(angleInRadians))
+	  };
+	}
+
+	function describeArc(x, y, radius, startAngle, endAngle){
+
+	    var start = polarToCartesian(x, y, radius, endAngle);
+	    var end = polarToCartesian(x, y, radius, startAngle);
+
+	    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+	    var d = [
+	        "M", start.x, start.y, 
+	        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+	    ].join(" ");
+
+	    return d;       
+	}
+
+	var viewer = document.getElementById("viewer");
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		w('Neexistuje TAG <canvas>!');
+		return false;
+	}
+	var field_vision_width = width;
+	var field_vision_height = height;
+
+	// Umisteni v canvasu na dolni okraj doprostred
+	var field_vision_left =  ((canvas_dom.width/4)-(field_vision_width/4)) | 0;
+	var field_vision_top =   ((canvas_dom.height) -(field_vision_height))  | 0;
+
+	if (viewer) {
+		var div = document.createElement('div');
+		div.setAttribute('id', 'field_vision');
+		div.style.width = field_vision_width+'px';
+		div.style.height = field_vision_height+'px';
+		div.style.left = field_vision_left+'px';
+		div.style.top = field_vision_top+'px';6
+		div.style.backgroundColor  = 'red';
+		div.style.opacity  = 0.6;
+		div.style.position = 'absolute';
+		div.style.overflow = 'hidden';
+
+		if (!document.getElementById("field_vision")) {
+			viewer.append(div);
+		}
+
+		var field_vision = document.getElementById("field_vision");
+		if (field_vision) {
+			var svg = document.createElement('svg');
+			svg.setAttribute('id', 'svg_field_vision');
+
+			if (!document.getElementById("svg_field_vision")) {
+				field_vision.append(svg);
+			}
+
+			var svg_field_vision = document.getElementById("svg_field_vision")
+			if (svg_field_vision) {
+				var svg_path = document.createElement('path');
+				svg_path.setAttribute('id', 'arc1');
+				svg_path.setAttribute('fill', 'none');
+				svg_path.setAttribute('stroke', '#A00');
+				svg_path.setAttribute('stroke-width', '100');
+				svg_path.setAttribute('d', describeArc(150, 150, 80, 0, 180));
+				svg_field_vision.append(svg_path);
+
+				if (!document.getElementById("arc1")) {
+					svg_field_vision.append(svg_path);
+				}
+
+
+			}
+			else {
+				w('svg_field_vision: nepodarilo se jej nacist');
+			}
+		}
+		else {
+			w('field_vision: nepodarilo se jej nacist');
+		}
+
+
+		return div;
+ 
+	}
+	else {
+		w('DIV s ID: viewer NEEXISTUJE!');
+	}
+}
+
+ */
