@@ -7,7 +7,7 @@
 		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
 		 <script type="text/javascript" src="../src/js/lib.js"></script>
 		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
-
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
 
 	<style type="text/css">
@@ -128,7 +128,7 @@
 			if (varyingTexture.x< 0.5      ) {
 				// gl_FragColor.a =   0.988;
  			}
-
+//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
 		}
 	</script>
 
@@ -146,12 +146,12 @@
 
 		<div id="viewer" style="position:relative ">
 			<canvas id="glcanvas" width="1200" height="800"></canvas>
-			<div id="compass-box" ></div>
+			<div id="compass-box"></div>
 			<div id="field_vision">
-				<svg  id="svg_field_vision">
-					<path id="arc1" fill="none" stroke="#A00"  stroke-width="100" />
+				<svg>
+					<path id="svg_path"></path>
 				</svg>
-		  	</div>
+			</div>
 		</div>
 		<div id="data"></div>
 	</body>
@@ -161,15 +161,7 @@
 
 	<script>
 
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-  var angleShift = 180;
-  var angleInRadians = (angleInDegrees-angleShift) * (Math.PI / 180.0);
 
-  return {
-    x: centerX + (radius * Math.cos(angleInRadians)),
-    y: centerY + (radius * Math.sin(angleInRadians))
-  };
-}
 
 function describeArc(x, y, radius, startAngle, endAngle){
 
@@ -193,7 +185,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
 
 
-function createFieldVision(width, height) {
+function createFieldVision(width, height, position_x, position_y) {
 
 
  
@@ -208,8 +200,16 @@ function createFieldVision(width, height) {
 	var field_vision_height = height;
 
 	// Umisteni v canvasu na dolni okraj doprostred
+	// staticke umisteni
 	var field_vision_left =  ((canvas_dom.width/4)-(field_vision_width/4)) | 0;
 	var field_vision_top =   ((canvas_dom.height) -(field_vision_height))  | 0;
+
+	// dynamicke umisteni zadane parametrem
+	var left_correction = (width/canvas_dom.width); 
+	var field_vision_left =  canvas_dom.width*((position_x)-left_correction);
+
+	var top_correction = (height/canvas_dom.height); 
+	var field_vision_top =   canvas_dom.height*((position_y)-top_correction);
 
 	if (viewer) {
 		var div = document.getElementById("field_vision");
@@ -217,19 +217,36 @@ function createFieldVision(width, height) {
 		div.style.height = field_vision_height+'px';
 		div.style.left = field_vision_left+'px';
 		div.style.top = field_vision_top+'px';
-		//div.style.backgroundColor  = 'red';
-		div.style.opacity  = 0.7;
-		div.style.border  = '1px solid black';
+		div.style.backgroundColor  = 'transparent'; // transparent
+		div.style.opacity  = 1.0;
+		//div.style.border  = '1px solid black';
 		div.style.position = 'absolute';
 		div.style.overflow = 'hidden';
-
+		div.setAttribute('stroke', '#093')
  
-  
-		var vision = document.getElementById("arc1");
+  		//nastaveni SVG path
+		var vision = document.getElementById("svg_path");
 		vision.setAttribute("stroke-width", '30');
-		vision.setAttribute("d", describeArc(100, 100, 60, 60, 180));
+		vision.setAttribute('stroke', '#069')
+		vision.setAttribute('fill', 'none')
+		vision.style.opacity = 0.7;
+		vision.style.backgroundColor = 'transparent';
 
+		// nasteveni uhlu
+		var posun_koleckem = getParamByKey("fv") ? getParamByKey("fv") : 0;
+
+		var posun_koleckem_tmp = (180 - posun_koleckem)/2; // pro kazdou stranu
+		var posun_mysi =   parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
  
+		var uhel_zacatku_zorneho_pole = (0-posun_mysi)+posun_koleckem_tmp;
+		var uhel_konce_zorneho_pole = (180-posun_mysi)-posun_koleckem_tmp;
+
+		var stred_x = parseInt(width/2);
+		var stred_y = parseInt(height/2);
+		var velikost = 0.75; // v procentech
+		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
+
+  		vision.setAttribute("d", describeArc(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
  
 		return div;
@@ -240,8 +257,9 @@ function createFieldVision(width, height) {
 		return false
 	}
 }
+ document.onload = createFieldVision(150,150,0.4,1); 
+
  
- createFieldVision(200,200);
  
 
 
@@ -386,7 +404,7 @@ video.addEventListener("loadedmetadata",function() {
 			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
 			
-			mat4.perspective(pmatrix, Math.PI/2.5, 1.3, 0.1, 100);
+			mat4.perspective(pmatrix, Math.PI/1.8, 1.3, 0.1, 100);
 			var pmLoc = gl.getUniformLocation(program, "PMatrix");
 			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
 

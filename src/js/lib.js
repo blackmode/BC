@@ -594,6 +594,27 @@ function createVideo( src ) {
 	return video;
 }
 
+// degrees to radians
+function degToRad(degrees) { 
+	return parseFloat(degrees * (Math.PI / 180.0));
+}
+
+function polarToCartesian(xPostionOfCenter, xPositionOfCenter, radius, degreesAngle) {
+  var angleShift = 180; //posun vuci puvodni pozici
+  var angleInRadians = degToRad(degreesAngle-angleShift);
+
+  // x = r * cos (theta);
+  var x = xPostionOfCenter + (radius * Math.cos(angleInRadians));
+  // y = r * sin (theta);
+  var y = xPositionOfCenter + (radius * Math.sin(angleInRadians));
+
+  return {
+    x: x,
+    y: y
+  };
+}
+
+
 function createImage( src ) {
 	if (!checkIfFileExists(src)) {
 		w('Zdrojovy obrazek neexistuje');
