@@ -1,0 +1,14 @@
+PRAVIDLA PSANI
+
+PSANI:
+1.) vyhnout se pouzivani pri vysvetlovani zvratného "se", resp. aby to nebylo moc caste misto toho pouzivat autorske "my" nebo "ja" abybylo jasne co jsem delal a co ne
+
+CIRACE:
+1.) myslenky ktere josu prebirany musi byt citovany -> dodan zdroj, odkud bylo cerpano
+2.) 
+
+
+NAVRHOVANE ZMENY
+
+- v druhe kapitole dokumentuju jednolitve funkce, tohle by melo byt spis v navrhu... popisuju tam beh programu, takze to je jasna implementace!
+- jako muzou tam byt nejaky metodyuvedeny pokud vim, ze se jim nebudu tolik specifikcy venovat, napr u html5 apod., ale funkce webgl bych predelal

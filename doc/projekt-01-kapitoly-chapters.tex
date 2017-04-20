@@ -344,8 +344,16 @@ Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy 
 
 
 \section{Geometrie}
-Aby panoramatický prohlížeč jednotlivých fotek či videí dokázal vyobrazit naše data, je nejprve potřeba vytvořit geometrii. Jedná se o pole souřadnic formátu  \texttt{[x1,y1,z1, x2,y2,z2, …]}, které utváří jednotlivé body v prostoru. Body pak mezi sebou tvoří prostor, na který budou data mapovaná. Ve Webgl umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve Webgl používá vykreslení pomocí trojúhelníku, jako základní jednotkou plochy.
+Geometrie je potřebná k mapování textury, a to tak, aby daná textura reflektovala scénu co nejvěrněji. Kdybychom pro texturu nevytvářeli geometrii, na kterou se bude mapovat a jednoduše data namapovali do libovolné 2D roviny, dojde k významnému zkreslení pořizované scény.
 
+K vyobrazení geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, …]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve Webgl umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve Webgl používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
+
+Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. pořízená data, která budeme zpracovávat jsou zachycena ve sférickém modu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
+
+Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního polu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky, nabývá hodnot od 0-360 stupňů. Rovnoběžkou je myšlena kružnice svírající úhel s počátkem souřadnic od 0-180 stupňů. 
+
+Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků bude, tím bude geometrie přesnější, ale zároveň také náročnější data vykreslovat. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání.
+\\\\
 Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.\\
 
  
@@ -429,8 +437,8 @@ Vytvoření samotného kompasu realizuje funkce \texttt{createCompass(width, hei
 \section{Zorný úhel}
 
 
-Pravidla \cite{Pravidla}. 
-
+Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
+Goniometrie
 \chapter{Testování}
 \label{chapter:5}
 
