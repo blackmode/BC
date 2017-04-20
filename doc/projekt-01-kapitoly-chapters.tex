@@ -356,6 +356,8 @@ Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových 
 \\\\
 %Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.%
 
+\subsection{Výpočet}
+
 Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky, tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Provedením této operaci pro všechny horizontální obvodové kružnice, vypočítáme všechny body geometrie.
 
 \begin{figure}[h]
@@ -366,7 +368,7 @@ Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky
 	\label{fig:geom}
 \end{figure}
  
-\subsection{Výpočet}
+
 Z obrázku \ref{fig:geom} 
 \\\\
 Abychom mohli vytvořit naší geometrii, musíme spočítat body [x,y,z] pro všechny poledníky a rovnoběžky. Každá vertikální čára od severního pólu k jižnímu (poledník) se protíná s našimi rovnoběžkami. Jelikož poledník nabývá od severního polu k jížnímu 0\degree - 180\degree, tak podělením  tohoto úhlu počtem rovnoběžek geometrie nám vzniká rovnoměrné rozložení bodů po celém poledníku. Takto máme vyřešen jeden poledník a průnik rovnoběžek, dále je potřeba tuto operaci provést pro všechny poledníky, aby byl model kompletní. Součet úhlů všech poledníku nabývá hodnot od   0-360\degree, tudíž šířka jednoho poledníku a tedy úhel mezi dvěma vertikálními čarami od počátku soustavy souřadnic  X,Y,Z je roven podělení  360\degree všemi poledníky.  Tím dojde k aproximaci celé koule, na kterou budeme mapovat naše data.
