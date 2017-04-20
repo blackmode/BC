@@ -635,7 +635,7 @@ function createImage( src ) {
 	return image;
 }
 
-function createCompass(width, height) {
+function createCompass(width, height, position_x, position_y) {
 
 	var div = document.getElementById("compass-box");
 	var canvas_dom = document.getElementsByTagName("canvas")[0];
@@ -649,6 +649,13 @@ function createCompass(width, height) {
 	// Umisteni v canvasu na dolni okraj doprostred
 	var compass_left = ( (canvas_dom.width/2)-(compass_width/2)) | 0;
 	var compass_top =   ((canvas_dom.height)-(compass_height)) | 0;
+
+	// dynamicke umisteni zadane parametrem
+	var left_correction = (width/canvas_dom.width); 
+	var compass_left =  canvas_dom.width*((position_x)-left_correction);
+
+	var top_correction = (height/canvas_dom.height); 
+	var compass_top =   canvas_dom.height*((position_y)-top_correction);
 
 	if (div) {
 		var div = document.createElement('div');
@@ -667,7 +674,7 @@ function createCompass(width, height) {
 			w('Neexistuje TAG <BODY> s ID body, nutne pro logger!');
 		}
 		else {
-			compass_box.append(div);
+			compass_box.appendChild(div);
 			return div;
 		}
 	}
@@ -702,7 +709,7 @@ function fieldVisionCoord(x, y, radius, startAngle, endAngle){
     ];
 }
 
-
+// wheel_angle = zorny uhel: 0-180 stupnu, mouse_angle = smer kam se divam, udavan ve stupnich V ROZMEZI: 0 - (+-k * PI)
 function createFieldVision(width, height, position_x, position_y, wheel_angle, mouse_angle) {
 
 	var viewer = document.getElementById("viewer");

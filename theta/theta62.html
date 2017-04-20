@@ -165,91 +165,11 @@
 
 
 
-function createFieldVision(width, height, position_x, position_y, wheel_angle, mouse_angle) {
 
-	var viewer = document.getElementById("viewer");
-	var canvas_dom = document.getElementsByTagName("canvas")[0];
-	if (!canvas_dom) {
-		e('Neexistuje TAG <canvas>!');
-		return false;
-	}
-	var field_vision_width = width;
-	var field_vision_height = height;
-
-	// Umisteni v canvasu na dolni okraj doprostred
-	// staticke umisteni
-	var field_vision_left =  ((canvas_dom.width/4)-(field_vision_width/4)) | 0;
-	var field_vision_top =   ((canvas_dom.height) -(field_vision_height))  | 0;
-
-	// dynamicke umisteni zadane parametrem
-	var left_correction = (width/canvas_dom.width); 
-	var field_vision_left =  canvas_dom.width*((position_x)-left_correction);
-
-	var top_correction = (height/canvas_dom.height); 
-	var field_vision_top =   canvas_dom.height*((position_y)-top_correction);
-
-	if (viewer) {
-		var field_vision = document.getElementById("field_vision");
-
-		if (!field_vision) {
-			e('DIV s ID: field_vision NEEXISTUJE!');
-			return false;
-		}
-
- 		field_vision.style.width = field_vision_width+'px';
-		field_vision.style.height = field_vision_height+'px';
-		field_vision.style.left = field_vision_left+'px';
-		field_vision.style.top = field_vision_top+'px';
-		field_vision.style.backgroundColor  = 'transparent'; // transparent
-		field_vision.style.opacity  = 1.0;
-		//field_vision.style.border  = '1px solid black';
-		field_vision.style.position = 'absolute';
-		field_vision.style.overflow = 'hidden';
-		field_vision.setAttribute('stroke', '#093')
- 
-  		//nastaveni SVG path
-		var vision = document.getElementById("svg_path");
-		vision.setAttribute("stroke-width", '30');
-		vision.setAttribute('stroke', '#069')
-		vision.setAttribute('fill', 'none')
-		vision.style.opacity = 0.7;
-		vision.style.backgroundColor = 'transparent';
-
-		// nasteveni uhlu
-		var posun_koleckem = getParamByKey("fv") ? getParamByKey("fv") : 0;
-
-		var posun_koleckem_tmp = (180 - posun_koleckem)/2; // pro kazdou stranu
-		var posun_mysi =   parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
- 
-		var uhel_zacatku_zorneho_pole = (0-posun_mysi)+posun_koleckem_tmp;
-		var uhel_konce_zorneho_pole = (180-posun_mysi)-posun_koleckem_tmp;
-
-		var stred_x = parseInt(width/2);
-		var stred_y = parseInt(height/2);
-		var velikost = 0.75; // v procentech
-		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
-
-  		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
- 
- 
-		return vision;
- 
-	}
-	else {
-		w('DIV s ID: viewer NEEXISTUJE!');
-		return false
-	}
-}
  
 createFieldVision(150,150,0.4,1, getParamByKey("fv"), getParamByKey("fvs")); 
 
- 
- 
-
-
- 
- 
-//createCompass(200,200) ;
+createCompass(200,200, 0.6, 1) ;
 
 
 var mmatrix = createIdentityMatrix4();
