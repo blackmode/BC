@@ -438,6 +438,13 @@ function w(object) {
     console.log("___________________ WARN ENDS ____________________");
 }
 
+// ERROR method
+function e(object) {
+    console.log("------------------- ERROR STARTS-------------------");
+    console.error(object);
+    console.log("___________________ ERROR ENDS ____________________");
+}
+
 // checking if file exists by JS and XHR
 // OK
 function checkIfFileExists(url)
@@ -599,6 +606,7 @@ function degToRad(degrees) {
 	return parseFloat(degrees * (Math.PI / 180.0));
 }
 
+// prevody souradnic
 function polarToCartesian(xPostionOfCenter, xPositionOfCenter, radius, degreesAngle) {
   var angleShift = 180; //posun vuci puvodni pozici
   var angleInRadians = degToRad(degreesAngle-angleShift);
@@ -613,6 +621,8 @@ function polarToCartesian(xPostionOfCenter, xPositionOfCenter, radius, degreesAn
     y: y
   };
 }
+
+
 
 
 function createImage( src ) {
@@ -666,104 +676,105 @@ function createCompass(width, height) {
 	}
 }
 
-/*
-function createFieldVision(width, height) {
+// vytvoreni cesty
+function fieldVisionCoord(x, y, radius, startAngle, endAngle){
+
+    var startPoint = polarToCartesian(x, y, radius, endAngle);
+    var endPoint = polarToCartesian(x, y, radius, startAngle);
+
+    var largeArcFlag = ((endAngle-startAngle) > 180) ? '1' : '0';
+    var _SP_ = " ";
+
+    // vytvoreni cesty SVG
+    return   [
+        "M" 				+_SP_+ 
+	        startPoint.x 	+_SP_+ 
+	        startPoint.y 	+_SP_+
+
+        "A" 				+_SP_+ 
+	        radius 			+_SP_+ 
+	        radius 			+_SP_+ 
+	        0 				+_SP_+ 
+	        largeArcFlag 	+_SP_+ 
+	        0 				+_SP_+ 
+	        endPoint.x 		+_SP_+ 
+	        endPoint.y
+    ];
+}
 
 
-	function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-	  var angleShift = 180;
-	  var angleInRadians = (angleInDegrees-angleShift) * (Math.PI / 180.0);
-
-	  return {
-	    x: centerX + (radius * Math.cos(angleInRadians)),
-	    y: centerY + (radius * Math.sin(angleInRadians))
-	  };
-	}
-
-	function describeArc(x, y, radius, startAngle, endAngle){
-
-	    var start = polarToCartesian(x, y, radius, endAngle);
-	    var end = polarToCartesian(x, y, radius, startAngle);
-
-	    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-
-	    var d = [
-	        "M", start.x, start.y, 
-	        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-	    ].join(" ");
-
-	    return d;       
-	}
+function createFieldVision(width, height, position_x, position_y, wheel_angle, mouse_angle) {
 
 	var viewer = document.getElementById("viewer");
 	var canvas_dom = document.getElementsByTagName("canvas")[0];
 	if (!canvas_dom) {
-		w('Neexistuje TAG <canvas>!');
+		e('Neexistuje TAG <canvas>!');
 		return false;
 	}
 	var field_vision_width = width;
 	var field_vision_height = height;
 
 	// Umisteni v canvasu na dolni okraj doprostred
+	// staticke umisteni
 	var field_vision_left =  ((canvas_dom.width/4)-(field_vision_width/4)) | 0;
 	var field_vision_top =   ((canvas_dom.height) -(field_vision_height))  | 0;
 
+	// dynamicke umisteni zadane parametrem
+	var left_correction = (width/canvas_dom.width); 
+	var field_vision_left =  canvas_dom.width*((position_x)-left_correction);
+
+	var top_correction = (height/canvas_dom.height); 
+	var field_vision_top =   canvas_dom.height*((position_y)-top_correction);
+
 	if (viewer) {
-		var div = document.createElement('div');
-		div.setAttribute('id', 'field_vision');
-		div.style.width = field_vision_width+'px';
-		div.style.height = field_vision_height+'px';
-		div.style.left = field_vision_left+'px';
-		div.style.top = field_vision_top+'px';6
-		div.style.backgroundColor  = 'red';
-		div.style.opacity  = 0.6;
-		div.style.position = 'absolute';
-		div.style.overflow = 'hidden';
-
-		if (!document.getElementById("field_vision")) {
-			viewer.append(div);
-		}
-
 		var field_vision = document.getElementById("field_vision");
-		if (field_vision) {
-			var svg = document.createElement('svg');
-			svg.setAttribute('id', 'svg_field_vision');
 
-			if (!document.getElementById("svg_field_vision")) {
-				field_vision.append(svg);
-			}
-
-			var svg_field_vision = document.getElementById("svg_field_vision")
-			if (svg_field_vision) {
-				var svg_path = document.createElement('path');
-				svg_path.setAttribute('id', 'arc1');
-				svg_path.setAttribute('fill', 'none');
-				svg_path.setAttribute('stroke', '#A00');
-				svg_path.setAttribute('stroke-width', '100');
-				svg_path.setAttribute('d', describeArc(150, 150, 80, 0, 180));
-				svg_field_vision.append(svg_path);
-
-				if (!document.getElementById("arc1")) {
-					svg_field_vision.append(svg_path);
-				}
-
-
-			}
-			else {
-				w('svg_field_vision: nepodarilo se jej nacist');
-			}
-		}
-		else {
-			w('field_vision: nepodarilo se jej nacist');
+		if (!field_vision) {
+			e('DIV s ID: field_vision NEEXISTUJE!');
+			return false;
 		}
 
+ 		field_vision.style.width = field_vision_width+'px';
+		field_vision.style.height = field_vision_height+'px';
+		field_vision.style.left = field_vision_left+'px';
+		field_vision.style.top = field_vision_top+'px';
+		field_vision.style.backgroundColor  = 'transparent'; // transparent
+		field_vision.style.opacity  = 1.0;
+		//field_vision.style.border  = '1px solid black';
+		field_vision.style.position = 'absolute';
+		field_vision.style.overflow = 'hidden';
+		field_vision.setAttribute('stroke', '#093')
+ 
+  		//nastaveni SVG path
+		var vision = document.getElementById("svg_path");
+		vision.setAttribute("stroke-width", '30');
+		vision.setAttribute('stroke', '#069')
+		vision.setAttribute('fill', 'none')
+		vision.style.opacity = 0.7;
+		vision.style.backgroundColor = 'transparent';
 
-		return div;
+		// nasteveni uhlu
+		var posun_koleckem = getParamByKey("fv") ? getParamByKey("fv") : 0;
+
+		var posun_koleckem_tmp = (180 - posun_koleckem)/2; // pro kazdou stranu
+		var posun_mysi =   parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
+ 
+		var uhel_zacatku_zorneho_pole = (0-posun_mysi)+posun_koleckem_tmp;
+		var uhel_konce_zorneho_pole = (180-posun_mysi)-posun_koleckem_tmp;
+
+		var stred_x = parseInt(width/2);
+		var stred_y = parseInt(height/2);
+		var velikost = 0.75; // v procentech
+		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
+
+  		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
+ 
+ 
+		return vision;
  
 	}
 	else {
 		w('DIV s ID: viewer NEEXISTUJE!');
+		return false
 	}
 }
-
- */

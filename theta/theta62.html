@@ -161,39 +161,16 @@
 
 	<script>
 
-
-
-function describeArc(x, y, radius, startAngle, endAngle){
-
-    var start = polarToCartesian(x, y, radius, endAngle);
-    var end = polarToCartesian(x, y, radius, startAngle);
-
-    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-
-    var d = [
-        "M", start.x, start.y, 
-        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-    ].join(" ");
-
-    return d;       
-}
-
  
 
 
 
-
-
-
-function createFieldVision(width, height, position_x, position_y) {
-
-
- 
+function createFieldVision(width, height, position_x, position_y, wheel_angle, mouse_angle) {
 
 	var viewer = document.getElementById("viewer");
 	var canvas_dom = document.getElementsByTagName("canvas")[0];
 	if (!canvas_dom) {
-		w('Neexistuje TAG <canvas>!');
+		e('Neexistuje TAG <canvas>!');
 		return false;
 	}
 	var field_vision_width = width;
@@ -212,17 +189,23 @@ function createFieldVision(width, height, position_x, position_y) {
 	var field_vision_top =   canvas_dom.height*((position_y)-top_correction);
 
 	if (viewer) {
-		var div = document.getElementById("field_vision");
- 		div.style.width = field_vision_width+'px';
-		div.style.height = field_vision_height+'px';
-		div.style.left = field_vision_left+'px';
-		div.style.top = field_vision_top+'px';
-		div.style.backgroundColor  = 'transparent'; // transparent
-		div.style.opacity  = 1.0;
-		//div.style.border  = '1px solid black';
-		div.style.position = 'absolute';
-		div.style.overflow = 'hidden';
-		div.setAttribute('stroke', '#093')
+		var field_vision = document.getElementById("field_vision");
+
+		if (!field_vision) {
+			e('DIV s ID: field_vision NEEXISTUJE!');
+			return false;
+		}
+
+ 		field_vision.style.width = field_vision_width+'px';
+		field_vision.style.height = field_vision_height+'px';
+		field_vision.style.left = field_vision_left+'px';
+		field_vision.style.top = field_vision_top+'px';
+		field_vision.style.backgroundColor  = 'transparent'; // transparent
+		field_vision.style.opacity  = 1.0;
+		//field_vision.style.border  = '1px solid black';
+		field_vision.style.position = 'absolute';
+		field_vision.style.overflow = 'hidden';
+		field_vision.setAttribute('stroke', '#093')
  
   		//nastaveni SVG path
 		var vision = document.getElementById("svg_path");
@@ -246,10 +229,10 @@ function createFieldVision(width, height, position_x, position_y) {
 		var velikost = 0.75; // v procentech
 		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
 
-  		vision.setAttribute("d", describeArc(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
+  		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
  
-		return div;
+		return vision;
  
 	}
 	else {
@@ -257,14 +240,14 @@ function createFieldVision(width, height, position_x, position_y) {
 		return false
 	}
 }
- document.onload = createFieldVision(150,150,0.4,1); 
+ 
+createFieldVision(150,150,0.4,1, getParamByKey("fv"), getParamByKey("fvs")); 
 
  
  
 
 
-
-d(document);
+ 
  
 //createCompass(200,200) ;
 
