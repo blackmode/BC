@@ -346,20 +346,18 @@ Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy 
 \section{Geometrie}
 Geometrie je potřebná k mapování textury, a to tak, aby daná textura reflektovala scénu co nejvěrněji. Kdybychom pro texturu nevytvářeli geometrii, na kterou se bude mapovat a jednoduše data namapovali do libovolné 2D roviny, dojde k významnému zkreslení pořizované scény.
 
-K vyobrazení geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, …]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve Webgl umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve Webgl používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
+K vyobrazení geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, …]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve WebGL umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve WebGL používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
 
 Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. pořízená data, která budeme zpracovávat jsou zachycena ve sférickém modu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
 
-Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního polu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky, nabývá hodnot od 0-360 stupňů. Rovnoběžkou je myšlena kružnice svírající úhel s počátkem souřadnic od 0-180 stupňů. 
+Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky, nabývá hodnot od 0-360\degree. Rovnoběžkou je myšlena kružnice svírající úhel s počátkem souřadnic od 0-180\degree. 
 
-Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků bude, tím bude geometrie přesnější, ale zároveň také náročnější data vykreslovat. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání.
+Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli - zvýší se hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl tedy nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše ubrat náročnost, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
 \\\\
-Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.\\
+%Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.%
 
- 
-Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pólu a s a jižním polem. Horizontálních čar (rovnoběžek) budeme potřebovat o něco méně, takže je nastavíme na hodnotu 50. Čím více rovnoběžek a poledníků vytvořili, tím by byla hustota bodů v polích hustší, a mapování textury tedy jemnější. Tato vlastnost se nám bude hodit např. v situaci, kdy bychom měli velký geometrický objekt se spoustou miniaturních sekvenci v geometrii. Větší mezery jsou nadruhou stranu rychlejší na vykreslování a to se stejným výsledkem (v našem konkrétním případě). Geometrii nastavíme výpočtem souřadnic X, Y, Z. Jelikož poledník je rozdělen rovnoběžkami, můžeme tedy 180 stupňový úhel rozdělit mezi jednotlivé rovnoběžky, tedy PÍ/Počet rovnoběžek = theta, který bude svírat vertikální čára geometrie s osou Z, tudíž můžeme souřadnici X vyjádřit vztahem X= sin(theta) * cos(phi).  
-   
- 
+Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky, tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Provedením této operaci pro všechny horizontální obvodové kružnice, vypočítáme všechny body geometrie.
+
 \begin{figure}[h]
 	\label{img:2}
 	\centering
@@ -368,8 +366,10 @@ Geometrie prohlížeče je nastavena na 60 vertikálních spojnic severního pó
 	\label{fig:geom}
 \end{figure}
  
- 
-
+\subsection{Výpočet}
+Z obrázku \ref{fig:geom} 
+\\\\
+Abychom mohli vytvořit naší geometrii, musíme spočítat body [x,y,z] pro všechny poledníky a rovnoběžky. Každá vertikální čára od severního pólu k jižnímu (poledník) se protíná s našimi rovnoběžkami. Jelikož poledník nabývá od severního polu k jížnímu 0\degree - 180\degree, tak podělením  tohoto úhlu počtem rovnoběžek geometrie nám vzniká rovnoměrné rozložení bodů po celém poledníku. Takto máme vyřešen jeden poledník a průnik rovnoběžek, dále je potřeba tuto operaci provést pro všechny poledníky, aby byl model kompletní. Součet úhlů všech poledníku nabývá hodnot od   0-360\degree, tudíž šířka jednoho poledníku a tedy úhel mezi dvěma vertikálními čarami od počátku soustavy souřadnic  X,Y,Z je roven podělení  360\degree všemi poledníky.  Tím dojde k aproximaci celé koule, na kterou budeme mapovat naše data.
 
 \subsection{Vertex}
 \subsection{Normály}
