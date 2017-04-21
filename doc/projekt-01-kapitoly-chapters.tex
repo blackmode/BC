@@ -44,7 +44,7 @@ Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutn
 
 
 \subsubsection{Stavy načítání a přehrávání videa}
-Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od \texttt{0} do \texttt{4} a dle hodnot rozlišujeme:
+Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState} \cite{html5}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od \texttt{0} do \texttt{4} a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
@@ -152,7 +152,7 @@ Použit plátno lze pomocí rozhraní \texttt{HTMLCanvasElement}, které slouž�
 
 Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou metod (počet volání dané metody vrátí pokaždé ten stejný objekt):
 	 	\begin{itemize}		
-			\item \texttt{ toDataURL([type[,quality]])}\newline
+			\item \texttt{ toDataURL([type[,quality]])} \cite{html5}\newline
 			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude navrácen výsledný typ obrázku. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Výsledná adresa URL bude vrácena jako řetězec.
 			\item \texttt{getContext(contextId[, ... ])}\newline
 			 - metoda vrací referenci na daný objekt aplikačního rozhraní, díky kterému bude možné kreslit na plátno. Pokud by kontext pro daný argument nebyl podporován prohlížečem, návratová hodnota bude \texttt{null}. Typ aplikačního rozhraní je vybrán na základě argumentu metody:
@@ -169,7 +169,7 @@ Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou met
 
 
 \subsection{Vektory}
-SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zažitý standard. Doposud ale nebylo možné kód \texttt{svg} vkládat přímo do HTML. Změna přišla až s HTML5. SVG vychází z jazyka XML (e\textbf{X}tensible \textbf{M}arkup \textbf{L}anguage)\footnote{obecný značkovací jazyk pro serializaci dat}. Mezi jeho nesporné výhody patří velikost, přenositelnost a nezávislost na rozlišení aj. Do HTML se vkládá pomocí elementu \texttt{<svg>}, který má zpravidla dále zanořené elementy, které reflektují jeho obsah. Mezi takové vnořené elementy patří take tág \texttt{<path>}.
+SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zažitý standard. Doposud ale nebylo možné kód \texttt{svg} vkládat přímo do HTML. Změna přišla až s HTML5. SVG vychází z jazyka XML (e\textbf{X}tensible \textbf{M}arkup \textbf{L}anguage)\footnote{obecný značkovací jazyk pro serializaci dat.}. Mezi jeho nesporné výhody patří velikost, přenositelnost a nezávislost na rozlišení aj. Do HTML se vkládá pomocí elementu \texttt{<svg>}, který má zpravidla dále zanořené elementy, které reflektují jeho obsah. Mezi takové vnořené elementy patří take tág \texttt{<path>}.
 
 
 \subsubsection{Element path}
@@ -178,7 +178,7 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 \begin{description}
 	\item[d]  - tento atribut nese informace o cestě, resp. data k vyrekslení obrysu, který poté můžeme vyplnit konkrétní barvou, popř. jej využít k dalším podobným účelům víz výše. Data atributu se skládají z následujících částí:
 	\begin{itemize}
-		\item \texttt{\textbf{M}}/\texttt{\textbf{m}} (\textit{moveto}) její syntaxe: \texttt{\textbf{M x y}} nebo \texttt{\textbf{m x y}} - realizuje posun na danou dvojice souřadnic \texttt{(x, y)} bez kreslení. Velké písmeno \texttt{M} značí, že souřadnice budou absolutní. Malé písmeno \texttt{m} indikuje, že budou souřadnice relativní\footnote{Velikost písmen má stejný význam u všech příkazů}. Tuto vlastnost je velice výhodné používat pro všechny cesty, jinak by vždy následující čára začínala na konci té předchozí.\\
+		\item \texttt{\textbf{M}}/\texttt{\textbf{m}} (\textit{moveto}) její syntaxe: \texttt{\textbf{M x y}} nebo \texttt{\textbf{m x y}} - realizuje posun na danou dvojice souřadnic \texttt{(x, y)} bez kreslení. Velké písmeno \texttt{M} značí, že souřadnice budou absolutní. Malé písmeno \texttt{m} indikuje, že budou souřadnice relativní\footnote{Velikost písmen má stejný význam u všech příkazů.}. Tuto vlastnost je velice výhodné používat pro všechny cesty, jinak by vždy následující čára začínala na konci té předchozí.\\
 		
 		\item \texttt{\textbf{Z}}/\texttt{\textbf{z}} (\textit{closepath}) - tento příkaz je bez parametrů a slouží k uzavření cest, tedy spojení posledního bodu s prvním bodem vykreslovaných cest.\\
 		
@@ -202,17 +202,17 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 \newpage
 
 \section{GLSL}
-\textbf{GLSL} (Open\textbf{GL} \textbf{S}hading \textbf{L}anguage) - jedná se o jazyk pro psaní shaderů \footnote{Jedná se o programy řídící vykreslování na grafické kartě}. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v jazyku C, každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. V hlavní funkci programu jsou vyhrazeny proměnné se speciálním významem, jako např. \texttt{gl\_Position}, kterou nastavujeme  pozici vrcholu ve vertex shaderu, nebo \texttt{gl\_FragColor} pro nastavení barvy ve fragment shaderu.
+\textbf{GLSL} (Open\textbf{GL} \textbf{S}hading \textbf{L}anguage) - jedná se o jazyk pro psaní shaderů \footnote{Jedná se o programy řídící vykreslování na grafické kartě.}. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v jazyku C, každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. V hlavní funkci programu jsou vyhrazeny proměnné se speciálním významem, jako např. \texttt{gl\_Position}, kterou nastavujeme  pozici vrcholu ve vertex shaderu, nebo \texttt{gl\_FragColor} pro nastavení barvy ve fragment shaderu.
 
 \subsection{Vertext shader}
 Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie. 
 
 Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y}, \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
 
-Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
+Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates.} \cite{opengl}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
 
 \subsection{Fragment shader}
-Je program - označovaný taktéž jako \textit{pixel shader}, který je volán pro každý pixel vykreslované scény. Jeho úkolem je výpočet barvy každého pixelu a díky tomu lze s takto získanou barvou  dále pracovat. Barva je získána jako čtyřsložkový vektor, první tří složky tvoří paletu RGB, poslední čtvrtá složka tvoří $\alpha$ kanál \footnote{Složka pixelu udávající jeho průhlednost}. V případě vykreslování složitějších objektů umožňuje GLSL automaticky body geometrie interpolovat, tedy automaticky získat pixel dané geometrie, aniž by musel být každý samostatně definován. Ukázka interpolace je demonstrována na obrázku \ref{img:1}.
+Je program - označovaný taktéž jako \textit{pixel shader}, který je volán pro každý pixel vykreslované scény. Jeho úkolem je výpočet barvy každého pixelu a díky tomu lze s takto získanou barvou  dále pracovat. Barva je získána jako čtyřsložkový vektor, první tří složky tvoří paletu RGB, poslední čtvrtá složka tvoří $\alpha$ kanál \footnote{Složka pixelu udávající jeho průhlednost.}. V případě vykreslování složitějších objektů umožňuje GLSL automaticky body geometrie interpolovat, tedy automaticky získat pixel dané geometrie, aniž by musel být každý samostatně definován. Ukázka interpolace je demonstrována na obrázku \ref{img:1}.
 
 %=========================================================================
 \newpage
@@ -248,11 +248,11 @@ Předávání hodnot v globálních proměnných může probíhat za pomocí tř
 \newpage
 
 \section{WebGL}
-WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven, nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod..
+WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče \cite{mozilla}. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven, nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod..
 
 K samotnému vykreslení je použit již výše zmíněný element HTML5 \texttt{<canvas>}.
 
-V současné době je oficiálně vydána verze WebGL 1.0, která je založeno na OpenGL ES 2.0. Doposud se jedná o jedinou stabilní verzi. OpenGL ES\footnote{OpenGL for Embedded Systems} je zjednodušená verze OpenGL, která eliminuje většinu vykreslovacích pipeline. Tato verze je především určena pro menší vestavěné systémy. Dalším rozšířením WebGL bude verze 2.0, která se stále nachází ve vývoji. Bude založena na OpenGL ES 3.0 přinášející velká vylepšení v zobrazování 3D grafiky - zejména textur, akceleraci vizuálních efektů, novou verzí jazyka GLSL s plnou podporu desetinných a celočíselných operací apod.
+V současné době je oficiálně vydána verze WebGL 1.0, která je založeno na OpenGL ES 2.0. Doposud se jedná o jedinou stabilní verzi. OpenGL ES\footnote{OpenGL for Embedded Systems.} je zjednodušená verze OpenGL, která eliminuje většinu vykreslovacích pipeline. Tato verze je především určena pro menší vestavěné systémy. Dalším rozšířením WebGL bude verze 2.0, která se stále nachází ve vývoji. Bude založena na OpenGL ES 3.0 přinášející velká vylepšení v zobrazování 3D grafiky - zejména textur, akceleraci vizuálních efektů, novou verzí jazyka GLSL s plnou podporu desetinných a celočíselných operací apod.
 
 \subsection{Vykreslování primitiv}
 K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě věci - vrcholy přepočítané do tzv. \textit{clipspace} a jemu přiřazené odpovídající barvy. Jak pro vrcholy tak pro barvy slouží jiný GLSL shader. K vyobrazení objektu používá WebGL tří základní primitiva - vykreslení samotných bodů, čar nebo trojúhelníku. Vše funguje tak, že zadaný bod, kterému budeme chtít přiřadit barvu, se načte do odpovídající speciální globální proměnné ve vertex shaderu, tam se daná hodnota přepočítá do intervalu \texttt{<-1,1>} pro všechny jeho osy a vzniklá hodnota se uloží na grafické kartě. Počet bodu záleží na primitivu, které vykreslujeme. Pokud se tedy jedná o bod, stačí pouze jeden bod ve vertex shaderu, pokud se jedna o čáru tak dvě popř. trojúhelník, tak trojice bodů. GPU\footnote{Graphic Processing Unit - grafický procesor} poté zjistí, které pixely korespondují s vykreslovaným primitivem a pro každý takový pixel zavolá fragment shader. 
@@ -380,65 +380,73 @@ K výpočtu využijeme goniometrické funkce  a vztahy v pravoúhlém trojúheln
 \begin{equation}
  \cos (\varphi) = \frac{x}{K}  \Rightarrow x = \cos (\varphi) \cdot K
 \end{equation}
-
-
-
+\\
 Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup$ $\arrowvert xKy\arrowvert$, ale odvěsnou v $\bigtriangleup$ $\arrowvert zrK\arrowvert$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony \cite{Goniometrie} mají vztah:
-
+\\
 \begin{equation}
 \label{math:K}
 \sin (\theta) = \frac{K}{r}  \Rightarrow K = \sin (\theta) \cdot r
 \end{equation}
-
-Všechny neznáme máme již dopočítané a můžeme dosadit do první rovnice, čímž dostáváme výsledný vztah převedené souřadnice z kartézské soustavy souřadnic do sférického souřadného systému.
-
-
+\\
+Všechny neznáme máme již dopočítané a můžeme dosadit do první rovnice, čímž dostáváme výsledný vztah převedené souřadnice z kartézské soustavy souřadnic do sférického souřadného systému:
+\\
 \begin{equation}
 \label{math:x}
 x = \sin (\theta) \cdot  \cos (\varphi) \cdot r
 \end{equation}
-
-Následující souřadnici \texttt{y} vyjádříme obdobným vztahem jako u předchozí souřadnice:
-
-
-
+\\
+Následující souřadnici \texttt{y} vyjádříme obdobným vztahem jako u předchozí souřadnice, ale s tím rozdílem, že protilehlá odvěsna bude k úhlu $\varphi$ a přeponou bude strana \texttt{K}:
+\\
 \begin{displaymath}
 \sin (\varphi) = \frac{y}{K}  \Rightarrow y = \sin (\varphi) \cdot K
 \end{displaymath}
-
-Opět máme v rovnici proměnnou \texttt{K}, kterou ale máme již vypočtenou ve vztahu \ref{math:K}, tudíž už jen tento vztah dosadíme a vznikne rovnice pro souřadnici \texttt{y}:
-
+\\
+Opět máme v rovnici pro výpočet souřadnice \texttt{y} stranu \texttt{K}, kterou ale máme již vypočtenou ve vztahu \ref{math:K}, tudíž už jen tento vztah dosadíme a vznikne výsledná rovnice hledané  souřadnice:
+\\
 \begin{equation}
 \label{math:y}
 y = \sin (\varphi) \cdot \sin (\theta) \cdot r
 \end{equation}
-
-Poslední souřadnice \texttt{z} je značně jednodušší, protože nám odpadá proměnná \texttt{K}. Výsledný vtah je tedy možné vyjádřit následovně:
-
+\\
+Poslední souřadnice \texttt{z} je značně jednodušší, protože nám odpadá proměnná \texttt{K}. Vyjádření souřadnice \texttt{z} je principiálně úplně stejné, jako tomu bylo u souřadnice \texttt{x} - přilehlá odvěsna k úhlu $\varphi$ ku přeponě \texttt{r}. Výsledný vztah je tedy možné vyjádřit následovně:
+\\
 \begin{equation}
 \label{math:z}
 \cos (\varphi) = \frac{z}{r} \Rightarrow z = \cos (\varphi) \cdot r
 \end{equation}
 
+%=========================================================================
+\newpage
+
+
+\subsection{Vrcholy}
+Jakmile máme vypočítány konkrétní složky trojrozměrného prostoru, můžeme přistoupit ke kompletaci dat určených k nahrání do grafické karty. Těmito daty jsou vrcholy samotné geometrie, texturovací data a indexy. 
+
+Získání samotného vrcholu lze vynásobením složek \texttt{x}, \texttt{y} a \texttt{z} průměrem tělesa \texttt{r}. Tato operace musí být provedena u všech bodů koule.
+
+Vzniklé těleso vyobrazené pomocí čar\footnote{Použito grafické primitivum \texttt{gl.LINES}.} je demonstrováno na obr. \ref{img:3}.
+
 
 \begin{figure}[h]
 	\label{img:3}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.65\linewidth]{obrazky-figures/vertex}
-	\caption{Aproximovaná koule}
+	\includegraphics[scale=1.0,angle=0,width=0.7\linewidth]{obrazky-figures/vertex}
+	\caption{Koule vyobrazena pomocí čar}
 	\label{fig:geom2}
 \end{figure}
 
 
-
-\subsection{Vertex}
-\subsection{Normály}
 \subsection{Textura}
-\subsection{Indices}
+\subsection{indexy}
+
+
+
+
 
 \section{Korekce textur}
 
 
+\cite{geometrie}
  
 
 
@@ -465,6 +473,7 @@ Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{
 	\item [{\LARGE $ y = r\cdot\sin(\theta) $}]
 \end{description}
  
+
 
 %=========================================================================
 \newpage
