@@ -437,10 +437,10 @@ Vzniklé těleso vyobrazené pomocí čar\footnote{Použito grafické primitivum
 
 
 \subsection{Textura}
-Data textury se počítají oproti vrcholům zcela odlišně. Všechny body textur jsou v současné stabilní verzi WebGL dvojrozměrné, tudíž souřadnice \texttt{z} nebudeme potřebovat.
+Data textury se počítají oproti vrcholům zcela odlišně. Všechny body textur jsou v současné stabilní verzi WebGL pouze dvojrozměrné, tudíž souřadnice \texttt{z} nebudeme potřebovat.
 Počet bodů textury bude přímo záviset na počtu rovnoběžek a poledníků.
 
-Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bodů textury tak, že pro každou rovnoběžku se spočítají všechny poledníky. Z toho vyplývá, že počet bodů textur bude roven vztahu: \textit{počet\_rovnoběžek $\cdot$ počet\_poledníků}.
+Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bodů textury tak, že pro každou rovnoběžku se spočítají všechny poledníky. Celkový počet bodů textury bude tedy: \textit{počet\_rovnoběžek $\cdot$ počet\_poledníků}.
 
 %=========================================================================
 \newpage
@@ -452,7 +452,7 @@ Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} 
 \begin{figure}[h]
 	\label{img:4}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.5\linewidth]{obrazky-figures/grid}
+	\includegraphics[scale=1.0,angle=0,width=0.4\linewidth]{obrazky-figures/grid}
 	\caption{Mapování textury}
 	\label{fig:grid}
 \end{figure}
