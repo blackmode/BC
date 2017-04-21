@@ -350,15 +350,17 @@ K vyobrazení geometrie budeme využívat klasické pole, kde každý bod bude t
 
 Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. pořízená data, která budeme zpracovávat jsou zachycena ve sférickém modu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
 
-Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky, nabývá hodnot od 0-360\degree. Rovnoběžkou je myšlena kružnice svírající úhel s počátkem souřadnic od 0-180\degree. 
+Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 - 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0-180\degree. 
 
 Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli - zvýší se hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl tedy nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše snížit počet rovnoběžek a poledníků, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
 \\\\
 %Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.%
 
-\subsection{Výpočet}
+\subsection{Sférický souřadný systém}
 
-Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky, tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Na obrázku \ref{fig:geom} označujeme tento úhel jako $\theta$. Provedením této operaci pro všechny horizontální obvodové kružnice, vypočítáme všechny svírané úhly s počátkem souřadnic. Dále je nutné vypočítat svíraná úhel všech poledníků - vertikálních čar svírajících úhel s počátkem souřadnic. Úhel nabývá od 0 do 360\degree resp. $0-2\pi$. Vytyčený úhel mezi jednotlivými čarami tedy jsme schopni spočítat tak, že úhel podělíme počtem vertikálních čar a vynásobíme aktuálním poledníkem. Na obrázku \ref{fig:geom} je označen jako úhel $\varphi$. 
+Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky, tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Na obrázku \ref{fig:geom} označujeme tento úhel jako $\theta$. Provedením této operaci pro všechny horizontální obvodové kružnice, vypočítáme všechny svírané úhly s počátkem souřadnic. 
+
+Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních čar svírajících jej s počátkem souřadnic. Na obrázku \ref{fig:geom} je vyznačen jako $\varphi$. Jak jsem již nastínil výše, $\varphi$ nabývá hodnot od 0 do 360\degree resp. $0-2\pi$. Vytyčený úhel mezi jednotlivými čarami jsme schopni spočítat tak, že jej podělíme počtem vertikálních čar a vynásobíme aktuálním poledníkem. Takto získáme rovnoměrné rozložení bodů na celé rovnoběžce. Provedením  operace pro všechny rovnoběžky již bude geometrie koule z hlediska úhlů kompletní.
 
 \begin{figure}[h]
 	\label{img:2}
@@ -368,10 +370,57 @@ Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky
 	\label{fig:geom}
 \end{figure}
  
+Na základě vypočtených úhlů, je možné již spočítat jednotlivé složky kartézské soustavy souřadnic \texttt{[x,y,z]} každému bodu, čímž dojde ke kompletní aproximaci tělesa.
 
-Z obrázku \ref{fig:geom} 
-\\\\
-Abychom mohli vytvořit naší geometrii, musíme spočítat body [x,y,z] pro všechny poledníky a rovnoběžky. Každá vertikální čára od severního pólu k jižnímu (poledník) se protíná s našimi rovnoběžkami. Jelikož poledník nabývá od severního polu k jížnímu 0\degree - 180\degree, tak podělením  tohoto úhlu počtem rovnoběžek geometrie nám vzniká rovnoměrné rozložení bodů po celém poledníku. Takto máme vyřešen jeden poledník a průnik rovnoběžek, dále je potřeba tuto operaci provést pro všechny poledníky, aby byl model kompletní. Součet úhlů všech poledníku nabývá hodnot od   0-360\degree, tudíž šířka jednoho poledníku a tedy úhel mezi dvěma vertikálními čarami od počátku soustavy souřadnic  X,Y,Z je roven podělení  360\degree všemi poledníky.  Tím dojde k aproximaci celé koule, na kterou budeme mapovat naše data.
+%=========================================================================
+\newpage
+
+K výpočtu využijeme goniometrické funkce  a vztahy v pravoúhlém trojúhelníku. Jelikož $ \cos (\varphi) $ je dána poměrem délky přilehlé odvěsny a přeponou \cite{Goniometrie}, tak souřadnici \texttt{\textit{x}} definujeme vtahem:
+ 
+\begin{equation}
+ \cos (\varphi) = \frac{x}{K}  \Rightarrow x = \cos (\varphi) \cdot K
+\end{equation}
+
+
+
+Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup$ $\arrowvert xKy\arrowvert$, ale odvěsnou v $\bigtriangleup$ $\arrowvert zrK\arrowvert$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony \cite{Goniometrie} mají vztah:
+
+\begin{equation}
+\label{math:K}
+\sin (\theta) = \frac{K}{r}  \Rightarrow K = \sin (\theta) \cdot r
+\end{equation}
+
+Všechny neznáme máme již dopočítané a můžeme dosadit do první rovnice, čímž dostáváme výsledný vztah převedené souřadnice z kartézské soustavy souřadnic do sférického souřadného systému.
+
+
+\begin{equation}
+\label{math:x}
+x = \sin (\theta) \cdot  \cos (\varphi) \cdot r
+\end{equation}
+
+Následující souřadnici \texttt{y} vyjádříme obdobným vztahem jako u předchozí souřadnice:
+
+
+
+\begin{displaymath}
+\sin (\varphi) = \frac{y}{K}  \Rightarrow y = \sin (\varphi) \cdot K
+\end{displaymath}
+
+Opět máme v rovnici proměnnou \texttt{K}, kterou ale máme již vypočtenou ve vztahu \ref{math:K}, tudíž už jen tento vztah dosadíme a vznikne rovnice pro souřadnici \texttt{y}:
+
+\begin{equation}
+\label{math:y}
+y = \sin (\varphi) \cdot \sin (\theta) \cdot r
+\end{equation}
+
+Poslední souřadnice \texttt{z} je značně jednodušší, protože nám odpadá proměnná \texttt{K}. Výsledný vtah je tedy možné vyjádřit následovně:
+
+\begin{equation}
+\label{math:z}
+\cos (\varphi) = \frac{z}{r} \Rightarrow z = \cos (\varphi) \cdot r
+\end{equation}
+
+
 
 \subsection{Vertex}
 \subsection{Normály}
