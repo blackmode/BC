@@ -420,7 +420,7 @@ Poslední souřadnice \texttt{z} je značně jednodušší, protože nám odpad�
 
 
 \subsection{Vrcholy}
-Jakmile máme vypočítány konkrétní složky trojrozměrného prostoru, můžeme přistoupit ke kompletaci dat určených k nahrání do grafické karty. Těmito daty jsou vrcholy samotné geometrie, texturovací data a indexy. 
+Jakmile máme vypočítány konkrétní složky trojrozměrného prostoru - tedy kompletně spočtený sférický souřadný systém, můžeme přistoupit ke kompletaci dat určených k nahrání do grafické karty. Těmito daty jsou vrcholy samotné geometrie, texturovací data a indexy. 
 
 Získání samotného vrcholu lze vynásobením složek \texttt{x}, \texttt{y} a \texttt{z} průměrem tělesa \texttt{r}. Tato operace musí být provedena u všech bodů koule.
 
@@ -437,6 +437,27 @@ Vzniklé těleso vyobrazené pomocí čar\footnote{Použito grafické primitivum
 
 
 \subsection{Textura}
+Data textury se počítají oproti vrcholům zcela odlišně. Všechny body textur jsou v současné stabilní verzi WebGL dvojrozměrné, tudíž souřadnice \texttt{z} nebudeme potřebovat.
+Počet bodů textury bude přímo záviset na počtu rovnoběžek a poledníků.
+
+Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bodů textury tak, že pro každou rovnoběžku se spočítají všechny poledníky. Z toho vyplývá, že počet bodů textur bude roven vztahu: \textit{počet\_rovnoběžek $\cdot$ počet\_poledníků}.
+
+%=========================================================================
+\newpage
+
+Pro lepší představu mapovaní textury můžeme jak poledníky, tak rovnoběžky znázornit ve dvourozměrném prostoru, kde jednotlivé průsečíky tvoří body textury, přičemž horizontální čáry prezentují souřadnici s označením \texttt{\textbf{u}}. Vertikální čáry zase souřadnici \texttt{\textbf{v}}. 
+
+Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} spočteme vydělením \textit{k}-tého poledníky celkovým počtem poledníků. Souřadnici \texttt{v} naproti tomu zase vydělením \textit{k}-té rovnoběžky celkovým počtem rovnoběžek.
+
+\begin{figure}[h]
+	\label{img:4}
+	\centering
+	\includegraphics[scale=1.0,angle=0,width=0.5\linewidth]{obrazky-figures/grid}
+	\caption{Mapování textury}
+	\label{fig:grid}
+\end{figure}
+
+
 \subsection{indexy}
 
 
