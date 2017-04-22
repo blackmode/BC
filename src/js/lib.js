@@ -95,8 +95,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
  
 
-    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
-      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {// zde ukazuje na ktere jsme rovnobezce
+      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {// zde ukazuje na kterym jsme poledniku
         var first = (latNumber * (longitudeBands + 1)) + longNumber;
         var second = first + longitudeBands + 1;
         indices.push(first);

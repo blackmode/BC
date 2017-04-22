@@ -447,7 +447,7 @@ Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bo
 
 Pro lepší představu mapovaní textury můžeme jak poledníky, tak rovnoběžky znázornit ve dvourozměrném prostoru, kde jednotlivé průsečíky tvoří body textury, přičemž horizontální čáry prezentují souřadnici s označením \texttt{\textbf{u}}. Vertikální čáry zase souřadnici \texttt{\textbf{v}}. 
 
-Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} spočteme vydělením \textit{k}-tého poledníky celkovým počtem poledníků. Souřadnici \texttt{v} naproti tomu zase vydělením \textit{k}-té rovnoběžky celkovým počtem rovnoběžek.
+Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} spočteme vydělením \textit{k}-tého poledníku celkovým počtem poledníků. Souřadnici \texttt{\textbf{v}} vydělením \textit{k}-té rovnoběžky celkovým počtem rovnoběžek.
 
 \begin{figure}[h]
 	\label{img:4}
@@ -460,11 +460,11 @@ Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} 
 
 \subsection{indexy}
 
-
-
+ 
 
 
 \section{Korekce textur}
+Základní mapování textury lze pozorovat na obr. \ref{img:4}, takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro mód rybího oka je situace složitější, protože vstupní textura není v equirectangulárním modu a naším úkolem je udělat korekcí textury tak, aby se textura namapovala na kouli co nejpřesněji.
 
 
 \cite{geometrie}
