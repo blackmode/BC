@@ -412,7 +412,7 @@ Poslední souřadnice \texttt{z} je značně jednodušší, protože nám odpad�
 \\
 \begin{equation}
 \label{math:z}
-\cos (\varphi) = \frac{z}{r} \Rightarrow z = \cos (\varphi) \cdot r
+\cos (\theta) = \frac{z}{r} \Rightarrow z = \cos (\theta) \cdot r
 \end{equation}
 
 %=========================================================================
@@ -458,19 +458,45 @@ Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} 
 \end{figure}
 
 
-\subsection{indexy}
+\subsection{Indexy}
 
  
-
+%=========================================================================
+\newpage
 
 \section{Korekce textur}
-Základní mapování textury lze pozorovat na obr. \ref{img:4}, takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro mód rybího oka je situace složitější, protože vstupní textura není v equirectangulárním modu a naším úkolem je udělat korekcí textury tak, aby se textura namapovala na kouli co nejpřesněji.
+Základní mapování textury lze pozorovat na obr. \ref{img:4}, takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro mód rybího oka je situace složitější, protože vstupní textura není v equirectangulárním modu a naším úkolem je udělat korekci textury tak, aby se textura namapovala na kouli co nejpřesněji.
 
 \section{Korekce pro rybí oko}
-Pro výpočet korekce můžeme využít jako počáteční hodntoy
+Korekci využijeme především k tomu, aby se nám textura mapovala přesněji v oblasti švu, tedy přesně v polovině tělesa. Důvodem je ten, že pokud bychom korekci textury neudělali, okraje by byly rozostřené  a v oblasti švu data hůře čitelná.  Samotná korekce nemá na funkci prohlížení žádný vliv.
+S korekcí se mapuje textura daleko přesněji, resp. okraje hemisféry.
+
+Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic již ty spočítané pro normály\footnote{V našem případě hodnota souřadnice vrcholu podělená průměrem tělesa.} popř. vrcholy geometrie.
+
+Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně, tedy hlavně u bodů, které odpovídají bodům v oblasti švu, v tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
+
+
+Je-li definována souřadnice \textit{\textbf{y}} z rovnice \ref{math:y} a souřadnice \textit{\textbf{z}} rovnicí \ref{math:z} , tak korekce textury bude definována tak, že souřadnice vynásobíme funkcí \textit{\textbf{arccos(y)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{x}}, resp. výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic, jinak bychom nemohli mapovat obě sféry, spojily by se nám do jedné tj. body by se překrývaly - důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice, by se bod zobrazil až   ``za'' vyobrazeným bodem na obrazovce. \\
+
+Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{v}} spočítáme následujícím způsobem:
+
+\begin{itemize}
+	\item Pro levou hemisféru bude platit následující vztah:\\
+		    $$u =  x \cdot \arccos(y) \wedge v =  z \cdot \arccos(y)$$   
+
+	\item Pro pravou hemisféru bude platit vztah:\\
+			$$u =  -x \cdot \arccos(y) \wedge v =  z \cdot \arccos(y) $$ 
+ 
+\end{itemize}
+ 
+
+ 
 
 \cite{geometrie}
  
+
+%=========================================================================
+\newpage
 
 
 \section{Projekce}
