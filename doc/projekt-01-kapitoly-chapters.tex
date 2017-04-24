@@ -476,16 +476,19 @@ Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic ji
 Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně, tedy hlavně u bodů, které odpovídají bodům v oblasti švu, v tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
 
 
-Je-li definována souřadnice \textit{\textbf{y}} z rovnice \ref{math:y} a souřadnice \textit{\textbf{z}} rovnicí \ref{math:z} , tak korekce textury bude definována tak, že souřadnice vynásobíme funkcí \textit{\textbf{arccos(y)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{x}}, resp. výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic, jinak bychom nemohli mapovat obě sféry, spojily by se nám do jedné tj. body by se překrývaly - důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice, by se bod zobrazil až   ``za'' vyobrazeným bodem na obrazovce. \\
+Je-li  souřadnice \textit{\textbf{\axisY}} definována rovnicí \ref{math:\axisY} a souřadnice \textit{\textbf{\axisZ}} vztahem \ref{math:\axisZ}, tak korekce textury bude realizována vynásobením  vertikální a horizontální souřadnice funkcí \textit{\textbf{arccos(\axisY)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{\axisX{}}}, resp. výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic, jinak bychom nemohli mapovat obě sféry, spojily by se nám do jedné tj. body by se překrývaly - důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice, by se bod zobrazil až   ``za'' vyobrazeným bodem na obrazovce. \\
 
 Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{v}} spočítáme následujícím způsobem:
 
+
+
+
 \begin{itemize}
 	\item Pro levou hemisféru bude platit následující vztah:\\
-		    $$u =  x \cdot \arccos(y) \wedge v =  z \cdot \arccos(y)$$   
+		    $$u =  \axisX{} \cdot \arccos(\axisY{}) \wedge v =  \axisZ{} \cdot \arccos(\axisY{})$$   
 
 	\item Pro pravou hemisféru bude platit vztah:\\
-			$$u =  -x \cdot \arccos(y) \wedge v =  z \cdot \arccos(y) $$ 
+			$$u =  -\axisX{} \cdot \arccos(\axisY{}) \wedge v =  \axisZ{} \cdot \arccos(\axisY{}) $$ 
  
 \end{itemize}
  

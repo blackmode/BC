@@ -159,6 +159,12 @@ Uvedl jsem všechny literární prameny a publikace, ze kterých jsem čerpal.}
 \widowpenalty=10000
 
 \begin{document}
+  % v pripade zmeny souradnic v implementaci je potreba definvoat souradnice centralni
+  % aby se nemusely menit na kazde strance zvlast
+	\newcommand{\axisX}{x}
+	\newcommand{\axisY}{y}
+	\newcommand{\axisZ}{z}	
+	
   % Vysazeni titulnich stran / Typesetting of the title pages
   % ----------------------------------------------
   \maketitle
