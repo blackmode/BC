@@ -459,8 +459,10 @@ Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} 
 
 
 \subsection{Indexy}
+Zavádění indexů se vyplatí tehdy, pokud chceme vykreslování objektu zefektivnit z hlediska vykreslování jednotlivých bodů. V případě, že se při vykreslování nepoužívá index buffer, tak se pro každé vykreslované primitivum načítá adekvátní počet vrcholů. Potíž nastává v situaci, kdy je vrcholy společný. Dojde k tomu, že souřadnice vrcholu jednoho bodu bude v paměti vícekrát a bude volán pro každé primitivum zvlášť. Díky indexům je pro danou geometrii zmíněn sdílený bod právě jednou, v index bufferu je tento bod zmíněn vícekrát, ale odpovídá mu právě jeden bod geometrie. Díky tomuto odkazování se nám sníží počet vykreslovaných bodů. Indexování se používá spolu s funkcí \texttt{drawElements()} a pro účely implementace bude využita pro zrychlení načítání ekvidistantního zobrazení textur.
 
- 
+\subsubsection{Návrh index bufferu}
+
 %=========================================================================
 \newpage
 
