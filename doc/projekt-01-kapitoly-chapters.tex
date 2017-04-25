@@ -467,13 +467,26 @@ Znázornění demonstruje obrázek \ref{img:4}. Souřadnici \texttt{\textbf{u}} 
 \section{Korekce textur}
 Základní mapování textury lze pozorovat na obr. \ref{img:4}, takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro mód rybího oka je situace složitější, protože vstupní textura není v equirectangulárním modu a naším úkolem je udělat korekci textury tak, aby se textura namapovala na kouli co nejpřesněji.
 
+
+\begin{figure}[h]
+	\label{img:texture_without_correction}
+	\centering
+	\includegraphics[scale=1.0,angle=0,width=0.6\linewidth]{obrazky-figures/texture}
+	\caption{Textura vycházející z předpočítaných dat. Bez korekce.}
+	\label{fig:texture}
+\end{figure}
+
 \section{Korekce pro rybí oko}
 Korekci využijeme především k tomu, aby se nám textura mapovala přesněji v oblasti švu, tedy přesně v polovině tělesa. Důvodem je ten, že pokud bychom korekci textury neudělali, okraje by byly rozostřené  a v oblasti švu data hůře čitelná.  Samotná korekce nemá na funkci prohlížení žádný vliv.
-S korekcí se mapuje textura daleko přesněji, resp. okraje hemisféry.
+S korekcí se mapuje textura daleko přesněji, resp. okraje hemisféry. Na obrázku \ref{img:texture_without_correction} si lze povšimnout ukázky dat textury ještě před provedením korekce krajních bodů.
 
 Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic již ty spočítané pro normály\footnote{V našem případě hodnota souřadnice vrcholu podělená průměrem tělesa.} popř. vrcholy geometrie.
 
 Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně, tedy hlavně u bodů, které odpovídají bodům v oblasti švu, v tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
+%=========================================================================
+\newpage
+
+
 
 
 Je-li  souřadnice \textit{\textbf{\axisY}} definována rovnicí \ref{math:\axisY} a souřadnice \textit{\textbf{\axisZ}} vztahem \ref{math:\axisZ}, tak korekce textury bude realizována vynásobením  vertikální a horizontální souřadnice funkcí \textit{\textbf{arccos(\axisY)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{\axisX{}}}, resp. výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic. V opačném případě bychom nemohli mapovat obě sféry, protože by se nám spojily do jedné tj. body by se překrývaly - důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice, by se bod zobrazil až  ``za'' vyobrazeným bodem na obrazovce\footnote{Z pohledu na těleso ve 3D.}. \\
@@ -493,14 +506,19 @@ Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{
 \end{itemize}
  
 
- 
+\begin{figure}[h]
+	\label{img:texture_with_correction}
+	\centering
+	\includegraphics[scale=1.0,angle=0,width=0.6\linewidth]{obrazky-figures/texture_correction}
+	\caption{Textura s korekcí krajních bodů.}
+\end{figure}
 
-\cite{geometrie}
+Obrázek \ref{img:texture_with_correction} demonstruje již aplikovanou avizovanou korekci vstupních dat  textury z obr. \ref{img:texture_without_correction}.
  
 
 %=========================================================================
 \newpage
-
+\cite{geometrie}
 
 \section{Projekce}
 \subsection{Modelová matice}
