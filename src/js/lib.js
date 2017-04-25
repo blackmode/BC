@@ -71,24 +71,7 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			// koordiunace textury
 			textures.push(u);
 			textures.push(v);
-
-
-
-
-			// zde zpracovavam index data
-			/*if (latNumber  < latitudeBands || longNumber <  longitudeBands) 
-			{
-				var first = (latNumber * (longitudeBands + 1)) + longNumber;
-				var second = first + longitudeBands + 1;
-				indices.push(first);
-				indices.push(second);
-				indices.push(first + 1);
-
-				indices.push(second);
-				indices.push(second + 1);
-				indices.push(first + 1);
-			}*/
-
+			
 		}
 
 	}
@@ -97,15 +80,25 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {// zde ukazuje na ktere jsme rovnobezce
       for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {// zde ukazuje na kterym jsme poledniku
-        var first = (latNumber * (longitudeBands + 1)) + longNumber;
-        var second = first + longitudeBands + 1;
-        indices.push(first);
-        indices.push(second);
-        indices.push(first + 1);
 
-        indices.push(second);
-        indices.push(second + 1);
-        indices.push(first + 1);
+        var firstHorizontLine = (latNumber * (longitudeBands + 1)) + longNumber;
+        var secondHorizontLine = firstHorizontLine + longitudeBands + 1;
+
+        // A--------B
+        // | \      |
+        // |   \    |
+        // |     \  |
+        // |       \| 
+        // D--------C
+
+        var pointA = firstHorizontLine;
+        var pointB = firstHorizontLine + 1;
+        var pointC = secondHorizontLine +1;
+        var pointD = secondHorizontLine;
+
+        indices.push(pointA, pointB, pointC);
+        indices.push(pointA, pointD, pointC);
+ 
       }
     }
 
@@ -168,6 +161,9 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 	 
 				}
 		 
+
+
+
 				textures = data2.textures.array;
 				vertices = data2.position.array;
 				normals = data2.normals.array;
