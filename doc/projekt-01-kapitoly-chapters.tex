@@ -381,7 +381,7 @@ K výpočtu využijeme goniometrické funkce  a vztahy v pravoúhlém trojúheln
  \cos (\varphi) = \frac{x}{K}  \Rightarrow x = \cos (\varphi) \cdot K
 \end{equation}
 \\
-Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup$ $\arrowvert xKy\arrowvert$, ale odvěsnou v $\bigtriangleup$ $\arrowvert zrK\arrowvert$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony \cite{Goniometrie} mají vztah:
+Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup xKy$, ale odvěsnou v $\bigtriangleup zrK$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony \cite{Goniometrie} mají vztah:
 \\
 \begin{equation}
 \label{math:K}
@@ -535,12 +535,83 @@ Obrázek \ref{img:texture_with_correction} demonstruje již aplikovanou  korekci
 
 %=========================================================================
 \newpage
-\cite{geometrie}
+
 
 \section{Projekce}
+Součástí již avizované projekce v druhé kapitole jsou další dílčí matice jako např rotační matice po osách x,y a z apod. 
+
+Součásti manipulace trojrozměrného prostoru je ještě čtvrtá složka, jak již bylo avizované výše, jedná se o homogenní souřadnici, u které v zásadě platí, že v případě že je tato souřadnice nastavena na jedničku, říkáme tím ze zbývající trojrozměrná složka xyz je definována jako pozice v prostoru, naproti tomu pokud by byla homogenní souřadnice nulová, jednalo by se o směr
+
+V případě rotace rozdíl homogenní souřadnice nepoznáme, ale pro translaci se věci již změní (when you move the point in a certain direction)
+
+
+
+
 \subsection{Modelová matice}
+Sem patři rotační matice všech os souřadného systému, dale scaling matrix a translačni matice
+
+ 
+
+Def scaling
+
+$$
+S =
+\begin{pmatrix} 
+x & 0 & 0 & 0\\
+0 & y & 0 & 0\\ 
+0 & 0 & z & 0\\ 
+0 & 0 & 0 & 1\\ 
+\end{pmatrix}$$
+ 
+$$
+R_{x}=
+\begin{pmatrix} 
+	1 & 0 & 0 & 0\\
+	0 & \cos(\alpha) & -\sin(\alpha) & 0\\ 
+	0 & \sin(\alpha) & \cos(\alpha) & 0\\ 
+	0 & 0 & 0 & 1\\ 
+\end{pmatrix}$$
+
+$$
+R_{y}=
+\begin{pmatrix} 
+ \cos(\alpha) & 0 & \sin(\alpha) & 0\\
+0 & 1 & 0 & 0\\ 
+-\sin(\alpha) & 0 & \cos(\alpha) & 0\\ 
+0 & 0 & 0 & 1\\ 
+\end{pmatrix}$$
+
+$$
+R_{z}=
+\begin{pmatrix} 
+\cos(\alpha) & -\sin(\alpha) & 0 & 0\\
+\sin(\alpha) & \cos(\alpha) & 0 & 0\\ 
+0 & 0 & 1 & 0\\ 
+0 & 0 & 0 & 1\\ 
+\end{pmatrix}$$
+
 \subsection{Zobrazovací matice}
+Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V našem konkrétním případě budeme view matrix používat k napodobeni pohybu kamery snímající objekt, jak je tomu v realném světě. Matice je opět jako u modelové matice 4x4 a je v ní důležité definovat pozici pozorovatele, bod kde kamera [aims] a posledni
+
+$$
+\begin{pmatrix} 
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\ 
+0 & 0 & 1 & 0\\ 
+0 & 0 & 0 & 1\\ 
+\end{pmatrix}
+$$
+
+
 \subsection{Perspektivní matice}
+$$
+\begin{pmatrix} 
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\ 
+0 & 0 & 1 & 0\\ 
+0 & 0 & 0 & 1\\ 
+\end{pmatrix}
+$$
 
 \section{Metadata}
 
