@@ -620,7 +620,6 @@ $$
 \end{pmatrix}
 $$
 
-\section{Metadata}
 
 %=========================================================================
 \newpage
@@ -645,7 +644,12 @@ Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{
 
 
 \section{Kompas}
+Dalším rozšířením prohlížení jsou údaje o světových stranách díky kompasu. Střelka kompasu se bude pohybovat k severu díky vstupním argumentům, které budou předány přímo do programu. Ukazatel severu se bude měnit na základě rozdílu vůči vstupní pozici, která definuje pozici severu ve scéně. Samotna realizace střelky bude díky obrázku \texttt{svg} a natáčení pomocí změně kaskádových stylů. Změna zobrazení bude udávána ve stupních vůči původní pozici. Samotná transformace zobrazení, resp. otočení střelky budeme realizovat pomocí vlastnosti kaskádových stylů \texttt{transform: rotate(\textbf{\emph{X}}deg)} kde \texttt{\textbf{\emph{X}}} je posuv ve stupních.
 
+\subsection{Výpočet posuvu}
+Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupní statickou pozici zadanou argumentem programu, která po celou dobu běhu programu nad danými daty zůstane neměnná. Tedy samotná korekce bude reagovat pouze na změnu horizontální osy.
+
+\section{Metadata}
 \section{Blending}
 %=========================================================================
 
