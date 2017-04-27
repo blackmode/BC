@@ -202,7 +202,8 @@ var mouse = {
 		x: 0.0,
 		y: 0.0,
 	} ,
-
+	distance : 0.0,
+	delta : 0.0,
 	lat : 0.0,
 	lon : 0.0,
 	active : false,
@@ -216,6 +217,7 @@ var program ;
 var samplerLoc ;
 var vertexBuffer;
 var mmLoc;
+var vmLoc;
 var texture;
 var canvas = document.querySelector("canvas");
  
@@ -248,12 +250,39 @@ video.addEventListener("loadedmetadata",function() {
 },false);
  
 
+
+function perspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
+  
+    // Construct a perspective matrix
+  
+    /*
+       Field of view - the angle in radians of what's in view along the Y axis
+       Aspect Ratio - the ratio of the canvas, typically canvas.width / canvas.height
+       Near - Anything before this point in the Z direction gets clipped (outside of the clip space)
+       Far - Anything after this point in the Z direction gets clipped (outside of the clip space)
+    */
+  
+    var f = 1.0 / Math.tan(fieldOfViewInRadians / 2);
+    var rangeInv = 1 / (near - far);
+ 
+    return [
+      f / aspectRatio, 0,                          0,   0,
+      0,               f,                          0,   0,
+      0,               0,    (near + far) * rangeInv,  -1,
+      0,               0,  near * far * rangeInv * 2,   0
+    ];
+  }
+
+
+
+
 	function initProgram() {
 
 			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 			document.addEventListener("keypress", onDocumentKeyPress, false);
+			document.addEventListener("mousewheel", onDocumentMouseWheel, false);
 
 			// nacteni, zkompilovani a overeni vertext shaderu
 			var str = document.querySelector("#vs").textContent;
@@ -299,15 +328,14 @@ video.addEventListener("loadedmetadata",function() {
 				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, getParamByKey("camera")));
 			}
 			else
-				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -1));
 
-
-
-			var vmLoc = gl.getUniformLocation(program, "VMatrix");
+ 
+			vmLoc = gl.getUniformLocation(program, "VMatrix");
 			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
 
 			
-			mat4.perspective(pmatrix, Math.PI/1.8, 1.3, 0.1, 100);
+			mat4.perspective(pmatrix, Math.PI/1.8, 1.5, 0.1, 100);
 			var pmLoc = gl.getUniformLocation(program, "PMatrix");
 			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
 
@@ -413,6 +441,8 @@ video.addEventListener("loadedmetadata",function() {
 			  //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			/// ROTACNI MATICE
  
+ 
+
 
 
 			gl.activeTexture(gl.TEXTURE0);
@@ -442,6 +472,35 @@ video.addEventListener("loadedmetadata",function() {
 
 
 
+			function onDocumentMouseWheel( event ) {
+
+ 				
+				mouse.distance = vmatrix[14];
+
+
+			    if (event.wheelDeltaY) {
+			        // WebKit
+			        mouse.delta +=event.wheelDeltaY * 0.05;
+ 			    } else if (event.wheelDelta) {
+			        // Opera / Explorer 9
+			        mouse.delta += event.wheelDelta * 0.05;
+  			    } else if (event.detail) {
+			        // Firefox
+ 			        mouse.delta  += event.detail * 1.5 ;
+ 			    }
+					mouse.delta = mouse.delta/100;
+ 			    	console.log(mouse.delta );
+ 			    	console.log(vmatrix[14] );
+
+ 
+					mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, mouse.delta));
+					gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+ 
+
+
+
+			}
+
 		function onDocumentMouseDown( event ) {
 			mouse.active = true;
 			mouse.down.x = event.clientX;
@@ -451,12 +510,52 @@ video.addEventListener("loadedmetadata",function() {
 		function onDocumentMouseMove( event ) {
   
 			if (mouse.active) {
+
+
+
+ 
+
+
+
+       var newX = event.clientX;
+        var newY = event.clientY;
+
+        var deltaX = newX - mouse.down.x;
+		var deltaY = newY - mouse.down.y;
+
+		var radX = degToRad(deltaX /  Math.PI);
+		var radY = degToRad(deltaY /  Math.PI );
+
+        var newRotationMatrix =mat4.create();
+        mat4.identity(newRotationMatrix);
+
+        mat4.rotate(newRotationMatrix, newRotationMatrix, radX, [0, 1, 0]);
+
+        
+        mat4.rotate(newRotationMatrix, newRotationMatrix, radY, [1, 0, 0]);
+
+ 
+
+
+
+        // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.
+         mat4.multiply(mmatrix, newRotationMatrix, mmatrix);
+          gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+          mouse.down.x = newX;
+        mouse.down.y = newY;
+
+ 
+
+
+/*
+
+
 				if (mouse.up.x!=event.clientX) {
 					mouse.lon = (mouse.down.x - event.clientX) * 0.01 + mouse.lon;
 					mouse.lon = mouse.lon / 80;
 
-					//mat4.rotateX(mmatrix, mmatrix,    mouse.lon );
-					//gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+					 mat4.rotateX(mmatrix, mmatrix,    mouse.lon );
+					 gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 				}
 
@@ -464,10 +563,12 @@ video.addEventListener("loadedmetadata",function() {
 					mouse.lat = (mouse.down.y - event.clientY) * 0.01 + mouse.lat;
 					mouse.lat = (mouse.lat / 80) *-1;
 
-	 				mat4.rotateZ(mmatrix, mmatrix,    mouse.lat );
-					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+	 				//mat4.rotateZ(mmatrix, mmatrix,    mouse.lat );
+					//gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 				}
+
+*/
 			}
 
 		}

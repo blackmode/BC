@@ -629,7 +629,7 @@ $$ V = M^{-1} $$
 Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazení:
 
 \begin{description}
-		\item[field] - pole, které definuje zorný úhel
+		\item[fov] - pole, které definuje zorný úhel
 		\item[aspect] - poměr šířky a výšky scény
 		\item[near] - reprezentuje rovinu, která ořeže tu část modelu, která je příliš blízko pozorovateli
 		\item[far] - reprezentuje rovinu, která ořeže tu část modelu, která je příliš daleko pozorovateli
@@ -639,8 +639,8 @@ Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazen�
 $$
 P =
 \begin{pmatrix} 
-\dfrac{1}{aspect \cdot \tan\left(\dfrac{ field }{2}\right)} & 0 & 0 & 0\\
-0 & \dfrac{1}{\tan\left(\dfrac{ field }{2}\right)} & 0 & 0\\ 
+\dfrac{1}{aspect \cdot \tan\left(\dfrac{ fov }{2}\right)} & 0 & 0 & 0\\
+0 & \dfrac{1}{\tan\left(\dfrac{ fov }{2}\right)} & 0 & 0\\ 
 0 & 0 & \left(\dfrac{near+far}{near-far}\right) & -1\\ 
 0 & 0 &  \left(\dfrac{near \cdot far \cdot 2}{near-far}\right)  & 1\\ 
 \end{pmatrix}
@@ -681,7 +681,19 @@ Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupn�
 
 \chapter{Implementace panoramatického prohlížeče}
 \label{chapter:4}
+V této kapitole rozeberu implementaci programu.
+\section{Běh programu}
 
+\subsection{Shadery}
+\subsection{Transformační matice}
+\subsection{Buffery a geometrie}
+\subsection{Načítání a vykreslování textur}
+
+\section{Mody prohlížení}
+
+\section{Ovládání myší}
+
+\section{Ovládání klávesnicí}
 
 \section{Grafické rozhraní}
 Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
@@ -695,16 +707,21 @@ Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}.
 Vytvoření samotného kompasu realizuje funkce \texttt{createCompass(width, height)}, argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
 \texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} je vypočten tak, že si načteme celkovou šířku
 
-%=========================================================================
-\newpage
-
 \section{Zorný úhel}
+
 
 
 Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
 Goniometrie
+
+
+%=========================================================================
+\newpage
+
 \chapter{Testování}
 \label{chapter:5}
+\section{Windows a linux}
+\section{Prohlížeče a kompatibilita}
 
 
 \chapter{Závěr}
