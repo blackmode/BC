@@ -489,12 +489,18 @@ function perspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
  			        mouse.delta  += event.detail * 1.5 ;
  			    }
 					mouse.delta = mouse.delta/100;
- 			    	console.log(mouse.delta );
+ 			    	//console.log(mouse.delta );
  			    	console.log(vmatrix[14] );
 
- 
+ 				if (mouse.distance < -1.95) {
+ 					vmatrix[14] = -1.9;
+ 				}
+ 				else if (mouse.distance>1.45) vmatrix[14] = 1.4;
+ 				else {
 					mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, mouse.delta));
 					gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+ 				}
+
  
 
 
