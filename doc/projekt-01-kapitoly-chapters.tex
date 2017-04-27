@@ -271,11 +271,16 @@ Ortografická projekce využívá skutečné velikosti objektu. Scéna je reprez
 
 Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude jevit jako menší, protože jeho pozice je středem této projekce. 
   
-Pokud bychom chtěl vykreslit nejaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod. Aby nedocházelo k neustálému přepisování hodnot v paměti na GPU, veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
+Pokud bychom chtěl vykreslit nejaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
 \subsubsection{Homogenní souřadnice}
-Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka a spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.
+Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka a spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.\cite{WebGLbeg}
 
+Perspektivním dělením - vydělením souřadnic \texttt{(x, y, z)} perspektivní sožkou \texttt{w}, lze získat normalizované hodnoty bodu zpět do trojrozměrného souřadného systému. Platí zde ale, že perspektivní složka nesmí být nulová. 
+
+Samotná perspektivní složka funguje v homogenních souřadnicích jako změna měřítka daného bodu geometrie.
+
+Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje definovat body do nekonečna, resp. nekonečnou délku vektoru, což ve standardním trojrozměrném prostoru možné není. Tato situace nastává v případě, kdy je složka rovna nule.
 
 \subsubsection{Model matrix}
 Jedná se o matici, kterou držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
@@ -353,8 +358,7 @@ Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. 
 Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 - 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0-180\degree. 
 
 Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli - zvýší se hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl tedy nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše snížit počet rovnoběžek a poledníků, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
-\\\\
-%Způsob vykreslení našich bodu určíme tedy řádkem: gl.drawElements(gl.TRINAGLES, 6, gl.UNSIGNED\_BYTE, 0), kde tedy říkáme že chceme vykreslovat plochu pomocí trojúhelníků, víz výše. (gl.TRINAGLES), druhým parametrem říkáme, kolik hodnot z index bufferu budeme potřebovat vykreslit, třetím parametrem oznamujeme velikost jednoho indexu a posledním parametrem říkáme, odkud začíná program číst naše body. Mohli bychom naše body vykreslovat ve webgl i pomoci příkazu: gl.drawArrays(), ale došlo by pak k situaci, že by se nám již vykreslené body zbytečně vykreslovali znovu. Abychom předešli duplikaci při vykreslování, bude nutné si vytvořit pole indexů, které nám budou ukazovat na jednotlivé vrcholy geometrie. Zde se již mohou indexy opakovat.%
+
 
 \subsection{Sférický souřadný systém}
 
@@ -538,28 +542,23 @@ Obrázek \ref{img:texture_with_correction} demonstruje již aplikovanou  korekci
 
 
 \section{Návrh projekce}
-Součástí již avizované projekce v druhé kapitole jsou další dílčí matice jako např rotační matice po osách x,y a z apod. 
+Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsem schopni projekci zrealizovat - kdy v perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
 
-Součásti manipulace trojrozměrného prostoru je ještě čtvrtá složka, jak již bylo avizované výše, jedná se o homogenní souřadnici, u které v zásadě platí, že v případě že je tato souřadnice nastavena na jedničku, říkáme tím ze zbývající trojrozměrná složka xyz je definována jako pozice v prostoru, naproti tomu pokud by byla homogenní souřadnice nulová, jednalo by se o směr
-
-V případě rotace rozdíl homogenní souřadnice nepoznáme, ale pro translaci se věci již změní (when you move the point in a certain direction)
 
 
 
 
 \subsection{Modelová matice}
-Sem patři rotační matice všech os souřadného systému, dale scaling matrix a translačni matice
+Sem patři rotační matice všech os souřadného systému, dále matice pro změnu měřítka souřadnic a posuvná matice objektu.
 
- 
-
-Matice pro změnu měřítka:
+Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůču kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Začneme s matici pro změnu měřítka modelu:
 
 $$
 S =
 \begin{pmatrix} 
-x & 0 & 0 & 0\\
-0 & y & 0 & 0\\ 
-0 & 0 & z & 0\\ 
+\textbf{x} & 0 & 0 & 0\\
+0 & \textbf{y} & 0 & 0\\ 
+0 & 0 & \textbf{z} & 0\\ 
 0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
@@ -597,26 +596,53 @@ R_{z}=
 0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
-\subsection{Zobrazovací matice}
-Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V našem konkrétním případě budeme view matrix používat k napodobeni pohybu kamery snímající objekt, jak je tomu v realném světě. Matice je opět jako u modelové matice 4x4 a je v ní důležité definovat pozici pozorovatele, bod kde kamera [aims] a posledni
+Matice pro posun objektu po osách \texttt{x},\texttt{y} a \texttt{z}. Přímo vychází z identické matice\footnote{Na hlavní diagonále jsou jedničky, všude jinde nuly.}:
 
 $$
+T =
 \begin{pmatrix} 
 1 & 0 & 0 & 0\\
 0 & 1 & 0 & 0\\ 
 0 & 0 & 1 & 0\\ 
-0 & 0 & 0 & 1\\ 
-\end{pmatrix}
-$$
+\textbf{x} & \textbf{y} & \textbf{z} & 1\\ 
+\end{pmatrix}$$
 
+%=========================================================================
+\newpage
+
+Výsledná modelová matice \texttt{\textbf{M}} je tedy dána vztahem:
+$$ M = T \cdot R_{x} \cdot R_{y} \cdot R_{z} \cdot S $$
+
+
+
+\subsection{Zobrazovací matice}
+Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V našem konkrétním případě budeme view matrix používat k napodobeni pohybu kamery snímající objekt, jak je tomu v reálném světě. 
+
+Prostor objektu, který jsme pomocí modelové matice transformovali do zobrazitelného prostoru musíme nyní převést do prostoru, který bude relativní vzhledem k pohledu pozorovatele.
+
+Takového efektu docílíme tak, že složku o kterou se chceme posunout vynásobíme opačnou hodnotou posunu.
+
+ 
 
 \subsection{Perspektivní matice}
+
+Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazení:
+
+\begin{description}
+	\item[fieldOfViewInRadians] description
+			\item[aspectRation] description
+		\item[near] description
+		\item[far] description
+\end{description}
+
+$ f = \dfrac{1}{\tan(\dfrac{ fieldOfViewInRadians }{2})} $
 $$
+P =
 \begin{pmatrix} 
-1 & 0 & 0 & 0\\
-0 & 1 & 0 & 0\\ 
-0 & 0 & 1 & 0\\ 
-0 & 0 & 0 & 1\\ 
+f/aspect & 0 & 0 & 0\\
+0 & f & 0 & 0\\ 
+0 & 0 & (near+far) \cdot (1/(near-far)) & -1\\ 
+0 & 0 & (near \cdot far \cdot (1/(near-far)) \cdot 2) & 1\\ 
 \end{pmatrix}
 $$
 
@@ -630,12 +656,12 @@ Zorný úhel je grafický prvek, který udává informace o aktuálním zorném 
 \subsection{Návrh prvku}
 K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, přoč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
 
-Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na sférické souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu (x,y) jsou známy hodnoty odvěsen a je možní spočítat přeponu. Takto odvodíme vztahy pro \texttt{x} a \texttt{y}
+Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na sférické souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možní spočítat přeponu. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
 
-\begin{description}
-	\item [{\LARGE $ x = r\cdot\cos(\theta) $}] 
-	\item [{\LARGE $ y = r\cdot\sin(\theta) $}]
-\end{description}
+
+ $$ x = r\cdot\cos(\theta) $$ 
+ $$ y = r\cdot\sin(\theta) $$  
+
  
 
 

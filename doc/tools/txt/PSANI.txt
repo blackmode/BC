@@ -12,3 +12,4 @@ NAVRHOVANE ZMENY
 
 - v druhe kapitole dokumentuju jednolitve funkce, tohle by melo byt spis v navrhu... popisuju tam beh programu, takze to je jasna implementace!
 - jako muzou tam byt nejaky metodyuvedeny pokud vim, ze se jim nebudu tolik specifikcy venovat, napr u html5 apod., ale funkce webgl bych predelal
+- podnadpis \subsubsection  bych nemel mit cislovanej, takze to je treba opravit a navrhnout strukturovani tak, aby bud tenhle podnadpis tam nebyl potreba apod.
