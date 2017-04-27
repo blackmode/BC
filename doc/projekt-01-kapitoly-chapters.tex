@@ -622,27 +622,27 @@ Prostor objektu, který jsme pomocí modelové matice transformovali do zobrazit
 
 Takového efektu docílíme tak, že složku o kterou se chceme posunout vynásobíme opačnou hodnotou posunu.
 
- 
+$$ V = M^{-1} $$ 
 
 \subsection{Perspektivní matice}
 
 Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazení:
 
 \begin{description}
-	\item[fieldOfViewInRadians] description
-			\item[aspectRation] description
-		\item[near] description
-		\item[far] description
+		\item[field] - pole, které definuje zorný úhel
+		\item[aspect] - poměr šířky a výšky scény
+		\item[near] - reprezentuje rovinu, která ořeže tu část modelu, která je příliš blízko pozorovateli
+		\item[far] - reprezentuje rovinu, která ořeže tu část modelu, která je příliš daleko pozorovateli
 \end{description}
 
-$ f = \dfrac{1}{\tan\biggr(\dfrac{ field\_of\_view }{2}\biggr)} $
+ 
 $$
 P =
 \begin{pmatrix} 
-f/aspect & 0 & 0 & 0\\
-0 & f & 0 & 0\\ 
-0 & 0 & (near+far) \cdot (1/(near-far)) & -1\\ 
-0 & 0 & (near \cdot far \cdot (1/(near-far)) \cdot 2) & 1\\ 
+\dfrac{1}{aspect \cdot \tan\left(\dfrac{ field }{2}\right)} & 0 & 0 & 0\\
+0 & \dfrac{1}{\tan\left(\dfrac{ field }{2}\right)} & 0 & 0\\ 
+0 & 0 & \left(\dfrac{near+far}{near-far}\right) & -1\\ 
+0 & 0 &  \left(\dfrac{near \cdot far \cdot 2}{near-far}\right)  & 1\\ 
 \end{pmatrix}
 $$
 
