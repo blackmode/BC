@@ -25,6 +25,7 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
     var vertexPositionData = [];
     var normalData = [];
     var textureCoordData = [];
+    var textureCoordData_2d = [];
     var prumer = 0.23541666666666666666666666666667;
     var aktualni_rovnobezka = 0;
 
@@ -96,11 +97,11 @@ var gl = document.querySelector("canvas").getContext("experimental-webgl");
 
 
 
-
  
 var u = (longNumber / longitudeBands);
  var v =   (latNumber / latitudeBands);
  
+textureCoordData_2d.push( cosPhi*v, sinPhi*v);
 
 
 if (longNumber < longitudeBands/2)
@@ -223,13 +224,15 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
           var x = normalData[ i * 3 + 0 ];
           var z = normalData[ i * 3 + 1 ];
           var y = normalData[ i * 3 + 2 ];
+
           if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
             // nasobenim / delenim se to zvetsuje/zmensuje
             //var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
             var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
              textureCoordData[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
             textureCoordData[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
-          
+          correction =  Math.acos( y )/Math.sqrt( x * x + z * z);//Math.acos( y )/Math.sqrt( x * x + z * z);
+ 
           if (0) {
           textureCoordData[ i * 2 + 0 ]  =0;
           textureCoordData[ i * 2 + 1 ]  = 0;
@@ -239,13 +242,31 @@ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
  
             // NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
             // pohyb po vertikalni ose: Y |
-            textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction       + ( 1441.2 / 1920 );
+            textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *2      + ( 1441.2 / 1920 );
             // pohyb po horizontalni ose: X -----------
-            textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
+            textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *2    + ( 480.296 / 1080 )  ;
  
           }
         }
  
+
+ // 2D - neni to pro obe polokoule
+for ( var i = 0, l = textureCoordData_2d.length / 2; i < l; i ++ ) {
+  var x = textureCoordData_2d[i * 2 + 0]*( 270 / 1920 );
+  var y = textureCoordData_2d[i * 2 + 1]*( 270 / 1080 );
+
+  if (i < l/2) {
+    textureCoordData[ i * 2 + 0 ] = x + ( 475.8 / 1920 ) ;
+    textureCoordData[ i * 2 + 1] = y+ ( 480.04 / 1080 );
+  }
+  else {
+    textureCoordData[ i * 2 + 0 ] = -x+ ( 1441.2 / 1920 );
+    textureCoordData[ i * 2 + 1] = y+ ( 480.296 / 1080 ) ;
+  }
+
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

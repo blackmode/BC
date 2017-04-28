@@ -6,3 +6,8 @@
 - dát to cely dokupy
 - zpresnit sev u videa
 - kompatibilita a testovani v jednotlivych prohlizecich + nove video s prehravacem
+
+
+CO SE DA UDELAT JINAK:
+
+- KOREKCE TEXTUR, NENI TO TAM MOC JASNY, NAVIC SE DA POUZIT I JINY RESENI, ktery jasny je... pocitat to rovnou pro 2D a vysrat sa na nejakou korekci

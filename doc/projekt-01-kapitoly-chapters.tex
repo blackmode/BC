@@ -519,10 +519,10 @@ Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{
 
 \begin{itemize}
 	\item Pro levou hemisféru bude platit následující vztah:\\
-		    $$u =  \axisX{} \cdot \arccos(\axisY{}) \wedge v =  \axisZ{} \cdot \arccos(\axisY{})$$   
+		    $$u =  \axisX{} \cdot \frac{\arccos(\axisY{})}{r} \wedge v =  \axisZ{} \cdot \frac{\arccos(\axisY{})}{r}$$   
 		   
 	\item Pravá hemisféra je difinována vztahem:\\
-			$$u =  -\axisX{} \cdot \arccos(\axisY{}) \wedge v =  \axisZ{} \cdot \arccos(\axisY{}) $$ 
+			$$u =  -\axisX{} \cdot \frac{\arccos(\axisY{})}{r}\wedge v =  \axisZ{} \cdot \frac{\arccos(\axisY{})}{r} $$ 
  
 \end{itemize}
  
@@ -534,7 +534,7 @@ Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{
 	\caption{Textura s korekcí krajních bodů.}
 \end{figure}
 
-Obrázek \ref{img:texture_with_correction} demonstruje již aplikovanou  korekci vstupních dat  textury z obr. \ref{img:texture_without_correction} avizovanou výše.
+Proměnná \texttt{r} označuje poloměr koule, resp. kružnice ve 2D. Obrázek \ref{img:texture_with_correction} demonstruje již aplikovanou  korekci vstupních dat  textury z obr. \ref{img:texture_without_correction} avizovanou výše.
  
 
 %=========================================================================
@@ -551,7 +551,7 @@ Součástí již avizované projekce v předchozí kapitole, jsou matice, které
 \subsection{Modelová matice}
 Sem patři rotační matice všech os souřadného systému, dále matice pro změnu měřítka souřadnic a posuvná matice objektu.
 
-Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůču kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Začneme s matici pro změnu měřítka modelu:
+Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůču kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Cílem modelové matice je posunout a pootočit zobrazovaným objektem do výchozí pozice promítání. Otáčení apod. operace v reálném čase jsou  doménou zobrazovací matice. Začneme s matici pro změnu měřítka modelu:
 
 $$
 S =
@@ -620,9 +620,9 @@ Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V n
 
 Prostor objektu, který jsme pomocí modelové matice transformovali do zobrazitelného prostoru musíme nyní převést do prostoru, který bude relativní vzhledem k pohledu pozorovatele.
 
-Takového efektu docílíme tak, že složku o kterou se chceme posunout vynásobíme opačnou hodnotou posunu.
+Takového efektu docílíme tak, že složku o kterou se chceme posunout, vynásobíme opačnou hodnotou modelu ve scéně. Výsledný vztah pro výpočet zobrazovací matice tedy je:
 
-$$ V = M^{-1} $$ 
+$$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$ 
 
 \subsection{Perspektivní matice}
 
