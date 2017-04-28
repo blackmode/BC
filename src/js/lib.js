@@ -4,6 +4,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 	var textures = [];
 	var normals = [];
 	var indices = [];
+	var hypotenuse_normal = []; // prepona K
+	var hypotenuse = []; // prepona K
 
 	var rad = 180/Math.PI;
 
@@ -48,6 +50,9 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			var x = sin(theta) * cos(phi) * radius;
 			var y = sin(phi) * sin(theta) * radius;
 			var z = cos(theta) * radius;
+			
+			// prepona
+			var K = sin(theta) * radius;
 
 			// normaly
 			var normals_x = x/radius;
@@ -57,6 +62,10 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			// textury
 			u= longNumber/longitudeBands;
 			v= latNumber/latitudeBands;
+
+			// pomocna prepona
+			hypotenuse.push(K);
+			hypotenuse_normal.push(K/radius);
 
 			// pridame vrcholy
 			vertices.push(x);
@@ -175,10 +184,17 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 					var x = normals[ i * 3 + 0 ];
 					var z = normals[ i * 3 + 1 ];
 					var y = normals[ i * 3 + 2 ];
+					var r = Math.sqrt( x * x + z * z );
+
 					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
 						// nasobenim / delenim se to zvetsuje/zmensuje
 						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+						if (x == 0 && z == 0 ) {
+							correction = 1.0;
+						}
+						else {
+							correction =   Math.acos( y ) / r   ;
+						}
 
 						// DEBUG===============
 						if (getParamByKey("correction") == 'false')   
@@ -193,7 +209,15 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 						}
 					}
 					else { // PRAVA HEMISFERA angleX=0
-						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) )  ;
+
+
+						if (x == 0 && z == 0 ) {
+							correction = 1.0;
+						}
+						else {
+							correction =   Math.acos( -y ) / r   ;
+						}
+
 
 						// DEBUG===================
 						if (getParamByKey("correction") == 'false')   
@@ -222,6 +246,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 		vertices: new Float32Array(vertices),
 		textures: new Float32Array(textures),
 		normals: new Float32Array(normals),
+		hypotenuse: new Float32Array(hypotenuse),
+		hypotenuse_normal: new Float32Array(hypotenuse_normal),
 		indices: new Uint16Array(indices),
 		noIndices: noIndices,
 	};
@@ -589,7 +615,7 @@ function createVideo( src ) {
 	}
     var video = document.createElement( 'video' );
     video.loop = true;
-    video.muted = true;
+    video.muted = false;
     video.autoplay = false;
     video.src = src;
     video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
