@@ -522,8 +522,8 @@ video.addEventListener("loadedmetadata",function() {
         var deltaX = newX - mouse.down.x;
 		var deltaY = newY - mouse.down.y;
 
-		mouse.move.currentAngle.x = degToRad(deltaX /  Math.PI/2);
-		mouse.move.currentAngle.y = degToRad(deltaY /  Math.PI/2 );
+		mouse.move.currentAngle.x = degToRad(deltaX /  Math.PI);
+		mouse.move.currentAngle.y = degToRad(deltaY /  Math.PI );
 
         var newRotationMatrix =mat4.create();
         mat4.identity(newRotationMatrix);
@@ -531,15 +531,16 @@ video.addEventListener("loadedmetadata",function() {
  
  
 
-		mat4.rotateX(mmatrix,mmatrix,mouse.move.currentAngle.x);
-		gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+ mat4.rotateX(mmatrix,mmatrix,mouse.move.currentAngle.x);
+        
+     mat4.rotate(newRotationMatrix, newRotationMatrix, mouse.move.currentAngle.y, [1, 0, 0]);
 
-		mat4.rotate(newRotationMatrix, newRotationMatrix, mouse.move.currentAngle.y, [1, 0, 0]);
-  
-        mat4.multiply(mmatrix, newRotationMatrix, mmatrix);
-        gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+ 
 
-          event.preventDefault();
+        // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.
+          mat4.multiply(mmatrix, newRotationMatrix, mmatrix);
+          gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
 
  
 }
