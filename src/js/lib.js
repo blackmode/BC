@@ -809,7 +809,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 }
 
 
-function perspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
+function createPerspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
   
     // Construct a perspective matrix
   
@@ -819,7 +819,7 @@ function perspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
        Near - Anything before this point in the Z direction gets clipped (outside of the clip space)
        Far - Anything after this point in the Z direction gets clipped (outside of the clip space)
     */
-  
+  	//var fovy = 2 * Math.atan(Math.tan(hfov/2) * canvas.clientHeight / canvas.clientWidth);
     var f = 1.0 / Math.tan(fieldOfViewInRadians / 2);
     var rangeInv = 1 / (near - far);
  
@@ -830,3 +830,137 @@ function perspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
       0,               0,  near * far * rangeInv * 2,   0
     ];
   }
+
+function rotateX(m, angle) {
+	var c = Math.cos(angle);
+	var s = Math.sin(angle);
+	// smer otaceni
+	var direction = -1;
+
+	// zalohovani hodnot
+	var m1_tmp = m[1];
+	var m5_tmp = m[5]; 
+	var m9_tmp = m[9];
+	
+	// vynasobeni puvodni matice M rotacni matici RotX, tedy (M x RotX)
+	m[1] = m[1]*c + m[2]*s  * direction;
+	m[5] = m[5]*c + m[6]*s  * direction;
+	m[9] = m[9]*c + m[10]*s * direction;
+
+	m[2] = 	m[2] *c - m1_tmp*s * direction;
+	m[6] = 	m[6] *c - m5_tmp*s * direction;
+	m[10] = m[10]*c - m9_tmp*s * direction;
+	return m;
+}
+
+
+function rotateY(m, angle) {
+	var c = Math.cos(angle);
+	var s = Math.sin(angle);
+
+	// smer otaceni
+	var direction = 1;
+
+	// zalohovani hodnot
+	var m0_tmp = m[0];
+	var m4_tmp = m[4];
+	var m8_tmp = m[8];
+	
+	// vynasobeni puvodni matice M rotacni matici RotX, tedy (M x RotX)
+	m[0] = c*m[0] - s*m[2]*direction;
+	m[4] = c*m[4] - s*m[6]*direction;
+	m[8] = c*m[8] - s*m[10]*direction;
+
+	m[2] = c*m[2] + s*m0_tmp*direction;
+	m[6] = c*m[6] + s*m4_tmp*direction;
+	m[10] = c*m[10] + s*m8_tmp*direction;
+	return m;
+	/*
+		return m=[
+			(c*m[0] + s*m[2]*direction), m[1], (c*m[2] - s*m0_tmp*direction), m[3],
+			(c*m[4] + s*m[6]*direction), m[5], (c*m[6] - s*m4_tmp*direction), m[7],
+			(c*m[8] + s*m[10]*direction), m[9], (c*m[10] - s*m8_tmp*direction), m[11],
+			m[12], 	m[13], m[14], m[15]
+		];
+	*/
+}
+
+function createVideoStatusBar(width, height, position_x, position_y, video) {
+
+	var id = 'video_status_bar';
+	var video_status_bar = document.getElementById(id);
+	if (!video_status_bar) {
+		w('ERROR: chybi div pro '+id);
+		return false;
+	}
+
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		w('Neexistuje TAG <canvas>!');
+		return false;
+	}
+
+	if (video_status_bar) 
+	{
+		var status_bar_box = document.getElementById(id+'_id');
+		if (!status_bar_box) 
+		{
+			// neexistoval, tak jej vytvorim
+			var status_bar_width = width;
+			var status_bar_height = height;
+
+			// dynamicke umisteni zadane parametrem
+			var left_correction = (width/canvas_dom.width); 
+			var status_bar_left =  canvas_dom.width*((position_x)-left_correction);
+
+			var top_correction = (height/canvas_dom.height); 
+			var status_bar_top =   canvas_dom.height*((position_y)-top_correction);
+
+			// stylovani prvku
+			var div = document.createElement('div');
+			div.setAttribute('id', id+'_id');
+			div.style.width = status_bar_width+'px';
+			div.style.height = status_bar_height+'px';
+			div.style.left = status_bar_left+'px';
+			div.style.top = status_bar_top+'px';
+			div.style.backgroundColor  = 'white';
+			div.style.opacity  = 0.4;
+			div.style.position = 'absolute';
+			div.style.overflow = 'hidden';
+			div.style.padding = '5px';
+			video_status_bar.appendChild(div);
+
+
+
+
+
+		}
+		else {
+
+			var progress_bar_box = document.getElementById('progress_bar');
+			if (!progress_bar_box)
+			{
+				var progress_bar = document.createElement('progress');
+				progress_bar.setAttribute('id', 'progress_bar');
+				progress_bar.setAttribute('class', 'unique');
+				
+				progress_bar.style.width = status_bar_width+'px';
+				progress_bar.style.height = status_bar_height+'px';
+				progress_bar.style.background = '#333';
+				status_bar_box.appendChild(progress_bar);
+			}
+
+			// ujistime se, ze video ma jiz metadata
+			if (video.readyState >= video.HAVE_METADATA) {
+				progress_bar_box = document.getElementById('progress_bar');
+				progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
+				progress_bar_box.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+			}
+			
+			return status_bar_box;
+		}
+	}
+	else {
+		w('DIV s ID: compass-box NEEXISTUJE!');
+	}
+}
