@@ -18,7 +18,9 @@
 			width: auto;
 			height: auto;
 		}
- 
+		 .unique:before {
+		   content: attr(data-label);
+		}
 	</style>
 
 	<script id="vs" type="x-shader/x-vertex">
@@ -145,13 +147,14 @@
 
 
 		<div id="viewer" style="position:relative ">
-			<canvas id="glcanvas" width="1200" height="800"></canvas>
+			<canvas id="glcanvas" width="1000" height="700"></canvas>
 			<div id="compass-box"></div>
 			<div id="field_vision">
 				<svg>
 					<path id="svg_path"></path>
 				</svg>
 			</div>
+			<div id="video_status_bar"></div>
 		</div>
 		<div id="data"></div>
 	</body>
@@ -169,7 +172,7 @@
  
 createFieldVision(150,150,0.4,1, getParamByKey("fv"), getParamByKey("fvs")); 
 
-createCompass(200,200, 0.6, 1) ;
+//createCompass(200,200, 0.6, 1) ;
 
 
 var mmatrix = createIdentityMatrix4();
@@ -184,33 +187,9 @@ var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 var hypot = GEOMETRY.hypotenuse_normal;
 
-         function rotateX(m, angle) {
-            var c = Math.cos(angle);
-            var s = Math.sin(angle);
-            var mv1 = m[1], mv5 = m[5], mv9 = m[9];
-				
-            m[1] = m[1]*c-m[2]*s;
-            m[5] = m[5]*c-m[6]*s;
-            m[9] = m[9]*c-m[10]*s;
+ 
 
-            m[2] = m[2]*c+mv1*s;
-            m[6] = m[6]*c+mv5*s;
-            m[10] = m[10]*c+mv9*s;
-         }
 
-         function rotateY(m, angle) {
-            var c = Math.cos(angle);
-            var s = Math.sin(angle);
-            var mv0 = m[0], mv4 = m[4], mv8 = m[8];
-				
-            m[0] = c*m[0]+s*m[2];
-            m[4] = c*m[4]+s*m[6];
-            m[8] = c*m[8]+s*m[10];
-
-            m[2] = c*m[2]-s*mv0;
-            m[6] = c*m[6]-s*mv4;
-            m[10] = c*m[10]-s*mv8;
-         }
 
         var AMORTIZATION = 0.95;
          var drag = false;
@@ -250,8 +229,29 @@ var mouse = {
 	active : false,
 };
 
- 
+var settings = {
+	mode : {
+		equirectangular : {
+			panorama: false,
+			video: false,
+		} ,
+		fisheye : {
+			panorama: false,
+			video: true,
+		} ,	
+	} ,
+};
 
+
+var program = {
+	shader : {
+		equirectangular : {
+			panorama: false,
+			video: false,
+		} ,
+	},
+};
+var vide_playing = 0;
 var normalBuffer;
 var indexBuffer;
 var program ;
@@ -270,7 +270,8 @@ if (!gl) {
 }
 
 //var video = createVideo("data/theta2.mp4");
-var video = createVideo("data/R0010079.mp4");
+//var video = createVideo("data/R0010079.mp4");
+var video = createVideo("data/R0010081.mp4");
 
  
 
@@ -290,9 +291,8 @@ video.addEventListener("timeupdate", function(){
  
 video.addEventListener("loadedmetadata",function() { 
 	this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
-},false);
+ },false);
  
-
 
 
 	function initProgram() {
@@ -371,22 +371,16 @@ video.addEventListener("loadedmetadata",function() {
 			else
 				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -1));
 
- //mat4.lookAt(vmatrix, vec3.fromValues(0.0, 0.0, 1), vec3.fromValues(0.0, 0, 0), vec3.fromValues(0, 1, 0));
-
 
 			// perspektivni matice
-			mat4.perspective(pmatrix, Math.PI/1.8, 1.5, 0.1, 1000);
-         var mo_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
-         var view_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
-
-
-
+			pmatrix = createPerspectiveMatrix(Math.PI/1.5, 1.4, 0.1, 100);
+			
 			// ------ nahrani matic do promennych ==============================================================
  			mmLoc = gl.getUniformLocation(program, "MMatrix");
 			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 			vmLoc = gl.getUniformLocation(program, "VMatrix");
-			gl.uniformMatrix4fv(vmLoc, false, view_matrix);
+			gl.uniformMatrix4fv(vmLoc, false, mmatrix);
 		
 			pmLoc = gl.getUniformLocation(program, "PMatrix");
 			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
@@ -466,7 +460,11 @@ video.addEventListener("loadedmetadata",function() {
 
 
 		function render() {
-			var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime ;
+			var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
+
+ createVideoStatusBar(170, 30, 0.8, 1, video);
+
+
 			 updateTexture();
 			 
 			  // mat4.rotateX(mmatrix, mmatrix, rotation);
@@ -478,13 +476,14 @@ video.addEventListener("loadedmetadata",function() {
  mat4.rotateZ(mmatrix, mmatrix,   - Math.PI/2 );
 
  
-             rotateY(mmatrix, THETA);
-            rotateX(mmatrix, PHI);
  
+ rotateY( mmatrix, THETA);
+rotateX( mmatrix, PHI);
 
-gl.uniformMatrix4fv(pmLoc, false, pmatrix);
-gl.uniformMatrix4fv(vmLoc, false, vmatrix);
-gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			// nahrani matic do programu
+			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
 			gl.activeTexture(gl.TEXTURE0);
@@ -594,11 +593,14 @@ gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 		}
 
 		function onDocumentKeyPress( event ) {
+			d(vide_playing);
  			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
+ 				vide_playing = 1;
 				video.play();
  			}
-			if (event.keyCode == 101 || event.keyCode == 69  ) { // q/Q
+			if (event.keyCode == 101 || event.keyCode == 69) { // q/Q
 				video.pause();
+				vide_playing = 0;
 			}
  
 			if (event.keyCode == 97    ) { 
@@ -629,6 +631,20 @@ gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 			}
 
+			// start/stop pomoci mezerniku
+			if (event.keyCode === 0 || event.keyCode === 32) {
+				if (!vide_playing ) {
+					video.play();
+					vide_playing = 1;
+				}	
+				else if (vide_playing ) {
+					d('jsem tady');
+					video.pause();
+					vide_playing = 0;
+				}
+		
+				
+			}
 
 		}
 

@@ -60,15 +60,15 @@ Další velice důležitou částí je načítáni videa a jeho ověření, zdal
 		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}
 \end{itemize}
 
-Mimo stavy načtení videa jsou tu i stavy indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
+Mimo stavy načtení videa jsou tu i události indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
 
 
 
 \begin{itemize}
 	\item \texttt{playing} - video se aktuálně přehrává, atribut \texttt{paused} je nastaven na \texttt{false}	
-	\item \texttt{waiting} - přehrávání videa je pozastaveno	
+	\item \texttt{waiting} - přehrávání videa je pozastaveno, protože následující data videa nejsou k dispozici, webový prohlížeč ale očekává, že v vzápětí dostane
 	\item \texttt{ended} - přehrávání videa doběhlo nakonec
-	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosahnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}.
+	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosáhnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}.
 	
 \end{itemize}
 
@@ -613,6 +613,9 @@ T =
 Výsledná modelová matice \texttt{\textbf{M}} je tedy dána vztahem:
 $$ M = T \cdot R_{x} \cdot R_{y} \cdot R_{z} \cdot S $$
 
+Při násobení původní matice rotační maticemi hrají  velkou roli také znaménka. Jelikož v implementační části budeme používat interakce s myší a tím měnit náhled pozorovatele resp. kamery na náš model, bude třeba zvolit směr posuvu zorného pole kamery. 
+
+Vlastnosti prohození znamének využijeme právě u  rotace $R_{x}$ a $R_{y}$, které reprezentují pohyb myši.  
 
 
 \subsection{Zobrazovací matice}
