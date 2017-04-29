@@ -11,3 +11,24 @@
 CO SE DA UDELAT JINAK:
 
 - KOREKCE TEXTUR, NENI TO TAM MOC JASNY, NAVIC SE DA POUZIT I JINY RESENI, ktery jasny je... pocitat to rovnou pro 2D a vysrat sa na nejakou korekci
+
+
+ZJISTENY ZADRHELY:
+
+-nasobeni a otoceni asi neni to stejny v gl matrix frameworku
+-je rozdil jestli nasboim jiz vytvorenou matici, nebo vytvorim novou a do ni dam resp. zakoduju danou rotaci
+-je potreba volat vsechny matice pri renderovani! jak asi promitnu do programu nejakej update matice??
+-model MATIC JE HEZKY UAKZAJE V tutorialu viz sekce ZDROJE
+-
+
+
+
+KROKY K RYCHLEMEU DOKONCENI BC
+- zaimplementovat matice + pochopit a doplnit chybejici veci do dokumentace
+- na zaklade matic sestavit DATA FLOW PROGRAMU a dat dokupy vsechny aspekty prohlizecich modu
+	- navrhnout jednoduchou manipulaci s programem a dat tomu finalni kostru, popr. tak, aby se to dalo editovat
+- sepsat min 6 stran implementace + dovysvetlit ty matice apod na jednu normostranu ==> 7celkem
+- nastinit testovani cca 1normostrana 
+- sepsat zaver =>  jednu normostranu
+----> sakup prdum: mam tedka napsano cca 24normostrana + 7 implementace a navrh + 2 zaver a testovani = 24+7+2=33
+to vsechno do NEDELE 23:59! IDEALNE uz zitra ten program a vsechno, abych mhol marusce poslat link na video :-)
