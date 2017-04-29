@@ -184,10 +184,41 @@ var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 var hypot = GEOMETRY.hypotenuse_normal;
 
+         function rotateX(m, angle) {
+            var c = Math.cos(angle);
+            var s = Math.sin(angle);
+            var mv1 = m[1], mv5 = m[5], mv9 = m[9];
+				
+            m[1] = m[1]*c-m[2]*s;
+            m[5] = m[5]*c-m[6]*s;
+            m[9] = m[9]*c-m[10]*s;
 
+            m[2] = m[2]*c+mv1*s;
+            m[6] = m[6]*c+mv5*s;
+            m[10] = m[10]*c+mv9*s;
+         }
 
+         function rotateY(m, angle) {
+            var c = Math.cos(angle);
+            var s = Math.sin(angle);
+            var mv0 = m[0], mv4 = m[4], mv8 = m[8];
+				
+            m[0] = c*m[0]+s*m[2];
+            m[4] = c*m[4]+s*m[6];
+            m[8] = c*m[8]+s*m[10];
 
+            m[2] = c*m[2]-s*mv0;
+            m[6] = c*m[6]-s*mv4;
+            m[10] = c*m[10]-s*mv8;
+         }
 
+        var AMORTIZATION = 0.95;
+         var drag = false;
+         var old_x, old_y;
+         var dX = 0, dY = 0;
+         var THETA = 0,
+         PHI = 0;
+         var time_old = 0;
 
 var mouse = {
 	position : {
@@ -345,13 +376,17 @@ video.addEventListener("loadedmetadata",function() {
 
 			// perspektivni matice
 			mat4.perspective(pmatrix, Math.PI/1.8, 1.5, 0.1, 1000);
+         var mo_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
+         var view_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
+
+
 
 			// ------ nahrani matic do promennych ==============================================================
  			mmLoc = gl.getUniformLocation(program, "MMatrix");
 			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 			vmLoc = gl.getUniformLocation(program, "VMatrix");
-			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+			gl.uniformMatrix4fv(vmLoc, false, view_matrix);
 		
 			pmLoc = gl.getUniformLocation(program, "PMatrix");
 			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
@@ -438,8 +473,18 @@ video.addEventListener("loadedmetadata",function() {
 			  //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			/// ROTACNI MATICE
  
+
+            mat4.identity(mmatrix );
+ mat4.rotateZ(mmatrix, mmatrix,   - Math.PI/2 );
+
+ 
+             rotateY(mmatrix, THETA);
+            rotateX(mmatrix, PHI);
  
 
+gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
 			gl.activeTexture(gl.TEXTURE0);
@@ -500,53 +545,23 @@ video.addEventListener("loadedmetadata",function() {
 
 			}
 
-		function onDocumentMouseDown( event ) {
-			mouse.active = true;
-			mouse.down.x = event.clientX;
-			mouse.down.y = event.clientY;
+		function onDocumentMouseDown( e ) {
+            drag = true;
+            old_x = e.pageX, old_y = e.pageY;
+            e.preventDefault();
+            return false;
 		}
 
-		function onDocumentMouseMove( event ) {
+		function onDocumentMouseMove( e ) {
   
-			if (mouse.active) {
+            if (!drag) return false;
+            dX = (e.pageX-old_x)*2*Math.PI/canvas.width,
+            dY = (e.pageY-old_y)*2*Math.PI/canvas.height;
+            THETA+= dX;
+            PHI+=dY;
+            old_x = e.pageX, old_y = e.pageY;
+            e.preventDefault();
 
-
-
- 
-
-
-
-       var newX = event.clientX;
-        var newY = event.clientY;
-
-        var deltaX = newX - mouse.down.x;
-		var deltaY = newY - mouse.down.y;
-
-		mouse.move.currentAngle.x = degToRad(deltaX /  Math.PI);
-		mouse.move.currentAngle.y = degToRad(deltaY /  Math.PI );
-
-        var newRotationMatrix =mat4.create();
-        mat4.identity(newRotationMatrix);
-
- 
- 
-
- mat4.rotateX(mmatrix,mmatrix,mouse.move.currentAngle.x);
-        
-     mat4.rotate(newRotationMatrix, newRotationMatrix, mouse.move.currentAngle.y, [1, 0, 0]);
-
- 
-
-        // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.
-          mat4.multiply(mmatrix, newRotationMatrix, mmatrix);
-          gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-
-
- 
-}
-
-          mouse.down.x = newX;
-        mouse.down.y = newY;
 
 /*
 
@@ -574,10 +589,8 @@ video.addEventListener("loadedmetadata",function() {
 
 		}
 
-		function onDocumentMouseUp( event ) {
-			mouse.up.x = event.clientX;
-			mouse.up.y = event.clientY;
-			mouse.active = false;
+		function onDocumentMouseUp( e ) {
+			drag = false;
 		}
 
 		function onDocumentKeyPress( event ) {
