@@ -928,8 +928,8 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 			div.style.height = status_bar_height+'px';
 			div.style.left = status_bar_left+'px';
 			div.style.top = status_bar_top+'px';
-			div.style.backgroundColor  = 'white';
-			div.style.opacity  = 0.4;
+			div.style.backgroundColor  = 'transparent';
+			div.style.opacity  = 0.35;
 			div.style.position = 'absolute';
 			div.style.overflow = 'hidden';
 			div.style.padding = '5px';
@@ -937,6 +937,7 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 		}
 		else {
 
+			// ------- progres bar
 			var progress_bar_box = document.getElementById('progress_bar');
 			if (!progress_bar_box)
 			{
@@ -944,9 +945,10 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 				progress_bar.setAttribute('id', 'progress_bar');
 				progress_bar.setAttribute('class', 'unique');
 				
-				progress_bar.style.width = status_bar_width+'px';
+				progress_bar.style.width = '75%';//status_bar_width+'px';
 				progress_bar.style.height = status_bar_height+'px';
 				progress_bar.style.background = '#333';
+				progress_bar.style.float = 'left';
 				status_bar_box.appendChild(progress_bar);
 			}
 
@@ -954,9 +956,24 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 			if (video.readyState >= video.HAVE_METADATA) {
 				progress_bar_box = document.getElementById('progress_bar');
 				progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
-				progress_bar_box.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
 			}
-			
+			// ------- progres bar KONEC
+
+			// ------- progres v procentech
+			var progress_bar_text = document.getElementById('progress_bar_text');
+			if (!progress_bar_text)
+			{
+				var progress_bar_text = document.createElement('progress_bar_text');
+				progress_bar_text.setAttribute('id', 'progress_bar_text');
+				progress_bar_text.style.width = status_bar_width/2+'px';
+				progress_bar_text.style.height = status_bar_height+'px';
+				progress_bar_text.style.float = 'right';
+ 				status_bar_box.appendChild(progress_bar_text);
+			}
+
+			progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+			// ------- progres v procentech, KONEC
+
 			return status_bar_box;
 		}
 	}
