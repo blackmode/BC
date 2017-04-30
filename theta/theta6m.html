@@ -192,7 +192,7 @@ var vmatrix = createIdentityMatrix4();
 var pmatrix = createIdentityMatrix4();
 
  
-var GEOMETRY = createSphereGeometry(60,60,7.0,1) ;
+var GEOMETRY = createSphereGeometry(60,60,50,1) ;
 var vertexPositionData = GEOMETRY.vertices;
 var normalData = GEOMETRY.normals;
 var textureCoordData =GEOMETRY.textures;
@@ -223,8 +223,8 @@ var mouse = {
 		} ,
 	} ,
 	wheel : {
-		sensitivity: 0.15,
-		reduction: 4.0, // radius/4
+		sensitivity: 1.5,
+		reduction: 1.3, // radius/4
 		delta: 0.0,
 	} ,
 
@@ -262,7 +262,7 @@ var settings = {
 				active: true,
 				latitudes: 60,
 				longtitudes: 60,
-				radius: 7.0,
+				radius: 50,
 			} ,
 		} ,	
 	},
@@ -356,7 +356,9 @@ if (!gl) {
 			
 			// -------- ZOBRAZOVACI matice
 			// model matrix
-			mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
+			//mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
+
+			scale(mmatrix, 1.0, 1.0, 1.0);
 			mat4.translate(mmatrix, mmatrix, vec3.fromValues(0.0, 0.0, 0.0));
 
 
@@ -583,12 +585,15 @@ if (!gl) {
 			        newDelta  += event.detail;
 			    }
 
-			    if (Math.abs(mouse.wheel.delta) < settings.mode.fisheye.video.radius/mouse.wheel.reduction) 
+			    // zmenseni maximalniho priblizeni
+			    var reduction = (mouse.wheel.reduction > 1.0) ? mouse.wheel.reduction : 1.0;
+
+			    if (Math.abs(mouse.wheel.delta) < (settings.mode.fisheye.video.radius-2*mouse.wheel.sensitivity)/reduction) 
 			    {
 			    	if (newDelta>0) 
 			    	{ 	
 			    		// je pozitivni
-					mouse.wheel.delta+=mouse.wheel.sensitivity;
+						mouse.wheel.delta+=mouse.wheel.sensitivity;
 			    	}
 			    	else {
 			    		mouse.wheel.delta-=mouse.wheel.sensitivity;

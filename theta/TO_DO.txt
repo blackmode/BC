@@ -33,6 +33,3 @@ KROKY K RYCHLEMEU DOKONCENI BC
 ----> sakup prdum: mam tedka napsano cca 24normostrana + 7 implementace a navrh + 2 zaver a testovani = 24+7+2=33
 to vsechno do NEDELE 23:59! IDEALNE uz zitra ten program a vsechno, abych mhol marusce poslat link na video :-)
 
-
-NEDODELKY:
-- KLAVESNICE SE MIRNE BIJE S MYSI, tj. kdyz hejbnu mysi a pak pouzije klavesnici na pohyb, tak se v maticich neco posere

@@ -897,8 +897,20 @@ function rotateY(matrix, angle) {
 	}
  }
 
- function multiply(matrix, b,a) {
+ function multiply(matrix, b, a) {
  
+	matrix[0]  = b[0]*a[0]  +  b[1]*a[4]  +  b[2]*a[8];
+	matrix[1]  = b[0]*a[1]  +  b[1]*a[5]  +  b[2]*a[9];
+	matrix[2]  = b[0]*a[2]  +  b[1]*a[6]  +  b[2]*a[10];
+
+	matrix[4]  = b[4]*a[0]  +  b[5]*a[4]  +  b[6]*a[8];
+	matrix[5]  = b[4]*a[1]  +  b[5]*a[5]  +  b[6]*a[9];
+	matrix[6]  = b[4]*a[2]  +  b[5]*a[6]  +  b[6]*a[10];
+
+	matrix[8]  = b[8]*a[0]  +  b[9]*a[4]  +  b[10]*a[8];
+	matrix[9]  = b[8]*a[1]  +  b[9]*a[5]  +  b[10]*a[9];
+	matrix[10] = b[8]*a[2]  +  b[9]*a[6]  +  b[10]*a[10];
+
 	if (matrix.constructor === Float32Array) {
 		return matrix;
 	}
@@ -908,6 +920,20 @@ function rotateY(matrix, angle) {
  }
 
 
+ function scaleMatrix(x,y,z) {
+ 	return [
+ 		x, 0, 0, 0,
+ 		0, y, 0, 0,
+ 		0, 0, z, 0,
+ 		0, 0, 0, 1
+ 	];
+ }
+
+
+ function scale(matrix, x,y,z) {
+ 	var s = scaleMatrix(x,y,z);
+ 	return multiply(matrix, matrix, s);
+ }
 
 
 function createVideoStatusBar(width, height, position_x, position_y, video) {
