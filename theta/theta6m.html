@@ -155,7 +155,7 @@
 
 
 		<div id="viewer" style="position:relative ">
-			<canvas id="glcanvas" width="1000" height="700"></canvas>
+			<canvas id="glcanvas" width="800" height="600"></canvas>
 			<div id="compass-box"></div>
 			<div id="field_vision">
 				<svg>
@@ -222,6 +222,12 @@ var mouse = {
 			y: 0.0,
 		} ,
 	} ,
+	wheel : {
+		sensitivity: 0.15,
+		distance: 0.0,
+		delta: 0.0,
+	} ,
+
 	distance : 0.0,
 	delta : 0.0,
 	lon: 0.0,
@@ -252,7 +258,12 @@ var settings = {
 		} ,
 		fisheye : {
 			panorama: false,
-			video: true,
+			video : {
+				active: true,
+				latitudes: 60,
+				longtitudes: 60,
+				radius: 7.0,
+			} ,
 		} ,	
 	},
 	field_vision : {
@@ -306,6 +317,7 @@ if (!gl) {
 			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 			document.addEventListener("keypress", onDocumentKeyPress, false);
 			document.addEventListener("mousewheel", onDocumentMouseWheel, false);
+			window.addEventListener('resize', onWindowResize, true);
 
 			// nacteni, zkompilovani a overeni vertext shaderu
 			var str = document.querySelector("#vs").textContent;
@@ -369,11 +381,10 @@ if (!gl) {
 			// DEBUG===========================================
 			// VIEW matrix
 			if (getParamByKey("camera")) {
-				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0,getParamByKey("camera") ));
+				mat4.translate(mmatrix, mmatrix, vec3.fromValues(0, 0, getParamByKey("camera") ));
 			}
 			else
-				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
-
+				mat4.translate(mmatrix, mmatrix, vec3.fromValues(0, 0,0));
 
 			// perspektivni matice
 			pmatrix = createPerspectiveMatrix(Math.PI/1.5, 1.4, 0.1, 100);
@@ -450,7 +461,7 @@ if (!gl) {
 
  
 	function updateTexture() {
-		if (settings.mode.fisheye.video) 
+		if (settings.mode.fisheye.video.active) 
 		{
 		  if (video.readyState >= video.HAVE_CURRENT_DATA) 
 		  {
@@ -466,7 +477,7 @@ if (!gl) {
 
 		  if (video.readyState < video.HAVE_CURRENT_DATA) {
 
-				d('video se nacita...');
+				console.log('video se nacita...');
 				// neexistoval, tak jej vytvorim
 				var status_bar_width = 150;
 				var status_bar_height = 150;
@@ -494,6 +505,7 @@ if (!gl) {
 				return false;
 
 		  }
+
 		}
 	}
 
@@ -518,6 +530,7 @@ if (!gl) {
 				//rotateX( mmatrix, keyboard.lat);
 
 	  			/// ROTACe MATICE pomoci MYSi
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, mouse.wheel.delta));
 				rotateY( vmatrix, mouse.move.angle.y);
 				rotateX( vmatrix, mouse.move.angle.x);
 
@@ -557,34 +570,35 @@ if (!gl) {
 
 			function onDocumentMouseWheel( event ) {
 
- 				
-				mouse.distance = vmatrix[14];
-
-
+				var newDelta = 0;
 			    if (event.wheelDeltaY) {
 			        // WebKit
-			        mouse.delta +=event.wheelDeltaY * 0.05;
- 			    } else if (event.wheelDelta) {
+			        newDelta +=event.wheelDeltaY;
+ 			    }
+ 			    else if (event.wheelDelta) {
 			        // Opera / Explorer 9
-			        mouse.delta += event.wheelDelta * 0.05;
-  			    } else if (event.detail) {
+			        newDelta += event.wheelDelta;
+  			    }
+  			    else if (event.detail) {
 			        // Firefox
- 			        mouse.delta  += event.detail * 1.5 ;
+ 			        newDelta  += event.detail;
  			    }
 
- 				mouse.delta = mouse.delta/100;
-
- 				if (mouse.distance < -1.95) {
- 					vmatrix[14] = -1.9;
- 				}
- 				else if (mouse.distance>1.45) 
- 					vmatrix[14] = 1.4;
- 				else {
-					mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, mouse.delta));
-					gl.uniformMatrix4fv(vmLoc, false, vmatrix);
- 				}
-
-
+ 			    if (mouse.wheel.delta < settings.mode.fisheye.video.radius) 
+ 			    {
+ 			    	if (newDelta>0) 
+ 			    	{ 	
+ 			    		// je pozitivni
+						mouse.wheel.delta+=mouse.wheel.sensitivity;
+ 			    	}
+ 			    	else {
+ 			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+ 			    	}
+ 			    }
+ 			    else {
+ 			    	//mouse.wheel.delta = settings.mode.fisheye.video.radius - mouse.wheel.sensitivity;
+ 			    }
+ 			    console.log(mouse.wheel.delta);
  			}
 
 		function onDocumentMouseUp( event ) {
@@ -659,11 +673,17 @@ if (!gl) {
 	 
 				}
 			}
-
-
-
-
 		}
+
+		function onWindowResize( event ) {
+
+			var element_canvas = document.querySelector("canvas");
+			if (element_canvas && 0) {
+				element_canvas.width = window.innerWidth;
+            	element_canvas.height = window.innerHeight;
+			}
+		}
+
 
 
 
