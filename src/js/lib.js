@@ -791,16 +791,6 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 
 
 function createPerspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
-  
-    // Construct a perspective matrix
-  
-    /*
-       Field of view - the angle in radians of what's in view along the Y axis
-       Aspect Ratio - the ratio of the canvas, typically canvas.width / canvas.height
-       Near - Anything before this point in the Z direction gets clipped (outside of the clip space)
-       Far - Anything after this point in the Z direction gets clipped (outside of the clip space)
-    */
-  	//var fovy = 2 * Math.atan(Math.tan(hfov/2) * canvas.clientHeight / canvas.clientWidth);
     var f = 1.0 / Math.tan(fieldOfViewInRadians / 2);
     var rangeInv = 1 / (near - far);
  
@@ -831,7 +821,7 @@ function rotateX(matrix, angle) {
 	matrix[2] = 	matrix[2] *c - m1_tmp*s * direction;
 	matrix[6] = 	matrix[6] *c - m5_tmp*s * direction;
 	matrix[10] = matrix[10]*c - m9_tmp*s * direction;
-	
+
 	if (matrix.constructor === Float32Array) {
 		return matrix;
 	}
