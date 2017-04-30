@@ -897,6 +897,19 @@ function rotateY(matrix, angle) {
 	}
  }
 
+ function multiply(matrix, b,a) {
+ 
+	if (matrix.constructor === Float32Array) {
+		return matrix;
+	}
+	else {
+		return new Float32Array(matrix);
+	}
+ }
+
+
+
+
 function createVideoStatusBar(width, height, position_x, position_y, video) {
 
 	var id = 'video_status_bar';

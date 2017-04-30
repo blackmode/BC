@@ -349,9 +349,9 @@ if (!gl) {
 
 
 			// ---- otoceni kamery do pocatecni pozice
-			mmatrix=rotateZ( mmatrix,    Math.PI/2);
-			mmatrix=rotateX(mmatrix,   0);
-			mmatrix=rotateY(mmatrix,   Math.PI);
+			rotateZ(mmatrix,   Math.PI/2);
+			rotateX(mmatrix,   2*Math.PI );
+			rotateY(mmatrix,   2*Math.PI );
 
 			if (getParamByKey("angleX")) {
 				mat4.rotateX(mmatrix, mmatrix,    Math.PI * getParamByKey("angleX") );
