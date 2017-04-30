@@ -163,6 +163,7 @@
 				</svg>
 			</div>
 			<div id="video_status_bar"></div>
+			<div id="overlay"></div>
 		</div>
 		<div id="data"></div>
 	</body>
@@ -182,7 +183,7 @@
 
 //var video = createVideo("data/theta2.mp4");
 //var video = createVideo("data/R0010079.mp4");
-var video = createVideo("data/theta2.mp4"); 
+var video = createVideo("data/R0010081.mp4"); 
 //createCompass(200,200, 0.6, 1) ;
 
 
@@ -348,10 +349,9 @@ if (!gl) {
 
 
 			// ---- otoceni kamery do pocatecni pozice
-			mat4.rotateZ(mmatrix, mmatrix,   -Math.PI/2 );
-			mat4.rotateX(mmatrix, mmatrix, 	 -Math.PI/2 );
-			mat4.rotateX(mmatrix, mmatrix,    Math.PI/2 );
-			mat4.rotateX(mmatrix, mmatrix,    Math.PI/2 );
+			rotateZ( mmatrix,    -Math.PI/2);
+			rotateX(mmatrix,   0);
+			rotateY(mmatrix,   Math.PI);
 
 			if (getParamByKey("angleX")) {
 				mat4.rotateX(mmatrix, mmatrix,    Math.PI * getParamByKey("angleX") );
@@ -372,7 +372,7 @@ if (!gl) {
 				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0,getParamByKey("camera") ));
 			}
 			else
-				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, -1));
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
 
 
 			// perspektivni matice
@@ -450,15 +450,51 @@ if (!gl) {
 
  
 	function updateTexture() {
+		if (settings.mode.fisheye.video) 
+		{
+		  if (video.readyState >= video.HAVE_CURRENT_DATA) 
+		  {
+			  gl.activeTexture(gl.TEXTURE0);
+			  gl.bindTexture(gl.TEXTURE_2D, texture);
+			  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+			  // the next line fails in Safari if the video is coming from another domain or subdomain
+			  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+			  gl.bindTexture(gl.TEXTURE_2D, null);
+			  document.getElementById('overlay').style.display = 'none';
+			  return true;
+		  }
 
-	  if (video.readyState >= video.HAVE_CURRENT_DATA ) {
-		  gl.activeTexture(gl.TEXTURE0);
-		  gl.bindTexture(gl.TEXTURE_2D, texture);
-		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
-		  // the next line fails in Safari if the video is coming from another domain or subdomain
-		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
-		  gl.bindTexture(gl.TEXTURE_2D, null);
-	  }
+		  if (video.readyState < video.HAVE_CURRENT_DATA) {
+
+				d('video se nacita...');
+				// neexistoval, tak jej vytvorim
+				var status_bar_width = 150;
+				var status_bar_height = 150;
+				var canvas_dom = document.getElementsByTagName("canvas")[0];
+				// dynamicke umisteni zadane parametrem
+				var left_correction = (150/canvas_dom.width); 
+				var status_bar_left =  canvas_dom.width*((0.55)-left_correction);
+
+				var top_correction = (150/canvas_dom.height); 
+				var status_bar_top =   canvas_dom.height*((0.55)-top_correction);
+
+				// stylovani prvku
+				var div = document.getElementById('overlay');
+				div.style.width = status_bar_width+'px';
+				div.style.height = status_bar_height+'px';
+				div.style.left = status_bar_left+'px';
+				div.style.top = status_bar_top+'px';
+				div.style.backgroundColor  = 'transparent';
+				div.style.background  = 'url(../src/img/loading.gif)';
+				div.style.opacity  = 1;
+				div.style.position = 'absolute';
+				div.style.overflow = 'hidden';
+				div.style.padding = '5px';
+
+				return false;
+
+		  }
+		}
 	}
 
 
@@ -472,42 +508,42 @@ if (!gl) {
 			createFieldVision(150,150,0.4,1, parseInt(mouse.distance *40), koef*57-20); 
 
 			// aktualizace textury
-			updateTexture();
-			 
-			/// ROTACNI MATICE pomoci MYSI
-            mat4.identity(mmatrix );
- 			mat4.rotateZ(mmatrix, mmatrix,   - Math.PI/2 );
- 
-  			/// ROTACe MATICE pomoci klavesnice
-			rotateY( mmatrix, keyboard.lon);
-			rotateX( mmatrix, keyboard.lat);
+			if (updateTexture()) {
+				/// ROTACNI MATICE pomoci MYSI
+	            mat4.identity(vmatrix );
+	 			//mat4.rotateZ(vmatrix, vmatrix,   - Math.PI/2 );
+	 
+	  			/// ROTACe MATICE pomoci klavesnice
+				//rotateY( mmatrix, keyboard.lon);
+				//rotateX( mmatrix, keyboard.lat);
 
-  			/// ROTACe MATICE pomoci MYSi
-			rotateY( mmatrix, mouse.move.angle.y);
-			rotateX( mmatrix, mouse.move.angle.x);
+	  			/// ROTACe MATICE pomoci MYSi
+				rotateY( vmatrix, mouse.move.angle.y);
+				rotateX( vmatrix, mouse.move.angle.x);
 
-			// nahrani matic do programu
-			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
-			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
-			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+				// nahrani matic do programu
+				gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+				gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 
 
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.uniform1i(samplerLoc, 0);
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, texture);
+				gl.uniform1i(samplerLoc, 0);
 
-			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+				//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-			// zde prepinanim renderovani
-			if (!GEOMETRY.noIndices) {
-				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-				gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
-			}
-			else {
+				// zde prepinanim renderovani
+				if (!GEOMETRY.noIndices) {
+					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+					gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+				}
+				else {
 
-				gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);// HAZI TO VIC CHYB, nevim  jeste proc
-				gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
+					gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);// HAZI TO VIC CHYB, nevim  jeste proc
+					gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
+				}
 			}
 			requestAnimationFrame(render);
 		}
@@ -608,18 +644,18 @@ if (!gl) {
 
 				if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
 					
-					 keyboard.lon += keyboard.sensitivity.x;
+					 mouse.move.angle.y += keyboard.sensitivity.x;
 	 			}
 				else if (event.keyCode == 100    ||  event.keyCode==100-32) {  // d/D
- 					 keyboard.lon -= keyboard.sensitivity.x;
+ 					 mouse.move.angle.y -= keyboard.sensitivity.x;
 	 			}
 	  
 				else if (event.keyCode == 119 ||   event.keyCode == 119-32 ) {  // w/W
- 						 keyboard.lat -=  keyboard.sensitivity.y;
+ 						 mouse.move.angle.x -=  keyboard.sensitivity.y;
 	 
 				}
 				else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
- 					 keyboard.lat +=  keyboard.sensitivity.y;
+ 					 mouse.move.angle.x +=  keyboard.sensitivity.y;
 	 
 				}
 			}
@@ -634,7 +670,7 @@ if (!gl) {
 		function main() {
 			
 			initProgram();
-			//render();
+			render();
 
 
 			 

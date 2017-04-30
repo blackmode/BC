@@ -524,30 +524,6 @@ function createIdentityMatrix4()
 }
 
 
-function Mat4rotateX(mat, angle)
-{
-	var cos_angle = Math.cos(angle);
-	var sin_angle = Math.cos(angle);
-
-	var tmp = mat;
-	var out = [];
-	mat[5]  = mat[5] + mat[5]*cos_angle;
-	mat[6]  = mat[6]+mat[6]*(-sin_angle);
-	mat[9]  = mat[9]+mat[9]*sin_angle;
-	mat[10] =  mat[10]+mat[10]*cos_angle;
-
-
-	if (mat.constructor === Float32Array) {
-		return mat;
-	}
-	else {
-		return new Float32Array(mat);
-	}
-
-}
-
-
-
 function logger(msg) {
 
 	var div = document.getElementById("logger");
@@ -836,30 +812,36 @@ function createPerspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far)
     ];
   }
 
-function rotateX(m, angle) {
+function rotateX(matrix, angle) {
 	var c = Math.cos(angle);
 	var s = Math.sin(angle);
 	// smer otaceni
 	var direction = -1;
 
 	// zalohovani hodnot
-	var m1_tmp = m[1];
-	var m5_tmp = m[5]; 
-	var m9_tmp = m[9];
+	var m1_tmp = matrix[1];
+	var m5_tmp = matrix[5]; 
+	var m9_tmp = matrix[9];
 	
 	// vynasobeni puvodni matice M rotacni matici RotX, tedy (M x RotX)
-	m[1] = m[1]*c + m[2]*s  * direction;
-	m[5] = m[5]*c + m[6]*s  * direction;
-	m[9] = m[9]*c + m[10]*s * direction;
+	matrix[1] = matrix[1]*c + matrix[2]*s  * direction;
+	matrix[5] = matrix[5]*c + matrix[6]*s  * direction;
+	matrix[9] = matrix[9]*c + matrix[10]*s * direction;
 
-	m[2] = 	m[2] *c - m1_tmp*s * direction;
-	m[6] = 	m[6] *c - m5_tmp*s * direction;
-	m[10] = m[10]*c - m9_tmp*s * direction;
-	return m;
+	matrix[2] = 	matrix[2] *c - m1_tmp*s * direction;
+	matrix[6] = 	matrix[6] *c - m5_tmp*s * direction;
+	matrix[10] = matrix[10]*c - m9_tmp*s * direction;
+	
+	if (matrix.constructor === Float32Array) {
+		return matrix;
+	}
+	else {
+		return new Float32Array(matrix);
+	}
 }
 
 
-function rotateY(m, angle) {
+function rotateY(matrix, angle) {
 	var c = Math.cos(angle);
 	var s = Math.sin(angle);
 
@@ -867,19 +849,26 @@ function rotateY(m, angle) {
 	var direction = 1;
 
 	// zalohovani hodnot
-	var m0_tmp = m[0];
-	var m4_tmp = m[4];
-	var m8_tmp = m[8];
+	var m0_tmp = matrix[0];
+	var m4_tmp = matrix[4];
+	var m8_tmp = matrix[8];
 	
 	// vynasobeni puvodni matice M rotacni matici RotX, tedy (M x RotX)
-	m[0] = c*m[0] - s*m[2]*direction;
-	m[4] = c*m[4] - s*m[6]*direction;
-	m[8] = c*m[8] - s*m[10]*direction;
+	matrix[0] = c*matrix[0] - s*matrix[2]*direction;
+	matrix[4] = c*matrix[4] - s*matrix[6]*direction;
+	matrix[8] = c*matrix[8] - s*matrix[10]*direction;
 
-	m[2] = c*m[2] + s*m0_tmp*direction;
-	m[6] = c*m[6] + s*m4_tmp*direction;
-	m[10] = c*m[10] + s*m8_tmp*direction;
-	return m;
+	matrix[2] = c*matrix[2] + s*m0_tmp*direction;
+	matrix[6] = c*matrix[6] + s*m4_tmp*direction;
+	matrix[10] = c*matrix[10] + s*m8_tmp*direction;
+
+	if (matrix.constructor === Float32Array) {
+		return matrix;
+	}
+	else {
+		return new Float32Array(matrix);
+	}
+
 	/*
 		return m=[
 			(c*m[0] + s*m[2]*direction), m[1], (c*m[2] - s*m0_tmp*direction), m[3],
@@ -889,6 +878,34 @@ function rotateY(m, angle) {
 		];
 	*/
 }
+
+
+ function rotateZ(matrix, angle) {
+	// smer otaceni
+	var direction = 1;
+
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
+
+    var m0_tmp = matrix[0];
+    var m4_tmp = matrix[4];
+    var m8_tmp = matrix[8]; 
+		
+    matrix[0] = c*matrix[0] + s*matrix[1]*direction;
+    matrix[4] = c*matrix[4] + s*matrix[5]*direction;
+    matrix[8] = c*matrix[8] + s*matrix[9]*direction;
+    
+    matrix[1] = c*matrix[1] - s*m0_tmp*direction;
+    matrix[5] = c*matrix[5] - s*m4_tmp*direction;
+    matrix[9] = c*matrix[9] - s*m8_tmp*direction;
+
+	if (matrix.constructor === Float32Array) {
+		return matrix;
+	}
+	else {
+		return new Float32Array(matrix);
+	}
+ }
 
 function createVideoStatusBar(width, height, position_x, position_y, video) {
 
