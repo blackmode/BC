@@ -224,7 +224,7 @@ var mouse = {
 	} ,
 	wheel : {
 		sensitivity: 0.15,
-		distance: 0.0,
+		reduction: 4.0, // radius/4
 		delta: 0.0,
 	} ,
 
@@ -365,26 +365,26 @@ if (!gl) {
 			rotateX(mmatrix,   2*Math.PI );
 			rotateY(mmatrix,   2*Math.PI );
 
-			if (getParamByKey("angleX")) {
-				mat4.rotateX(mmatrix, mmatrix,    Math.PI * getParamByKey("angleX") );
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-			}
-			if (getParamByKey("angleZ")) {
-				mat4.rotateZ(mmatrix, mmatrix,    Math.PI * getParamByKey("angleZ") );
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-			}
-			if (getParamByKey("angleY")) {
-				mat4.rotateY(mmatrix, mmatrix,    Math.PI * getParamByKey("angleY") );
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-			}
 
 			// DEBUG===========================================
+			if (getParamByKey("angleX")) {
+				rotateX(mmatrix,    Math.PI * getParamByKey("angleX") );
+			}
+
+			if (getParamByKey("angleZ")) {
+				rotateZ(mmatrix,    Math.PI * getParamByKey("angleZ") );
+			}
+
+			if (getParamByKey("angleY")) {
+				rotateY(mmatrix,    Math.PI * getParamByKey("angleY") );
+			}
+
 			// VIEW matrix
 			if (getParamByKey("camera")) {
 				mat4.translate(mmatrix, mmatrix, vec3.fromValues(0, 0, getParamByKey("camera") ));
 			}
-			else
-				mat4.translate(mmatrix, mmatrix, vec3.fromValues(0, 0,0));
+			// DEBUG===========================================, konec
+
 
 			// perspektivni matice
 			pmatrix = createPerspectiveMatrix(Math.PI/1.5, 1.4, 0.1, 100);
@@ -517,7 +517,7 @@ if (!gl) {
  			
  			// zorny uhel
 			var koef = (Math.abs(mouse.move.angle.y)/2*Math.PI)%2;
-			createFieldVision(150,150,0.4,1, parseInt(mouse.distance *40), koef*57-20); 
+			createFieldVision(150,150,0.4,1, -parseInt(160-mouse.wheel.delta *80), 0.0/*mouse.move.angle.y*57*/); 
 
 			// aktualizace textury
 			if (updateTexture()) {
@@ -568,43 +568,43 @@ if (!gl) {
 
 
 
-			function onDocumentMouseWheel( event ) {
+		function onDocumentMouseWheel( event ) {
+			var newDelta = 0;
+			if (event.wheelDeltaY) {
+			    // WebKit
+			    newDelta +=event.wheelDeltaY;
+			    }
+			    else if (event.wheelDelta) {
+			    // Opera / Explorer 9
+			    newDelta += event.wheelDelta;
+			    }
+			    else if (event.detail) {
+			    // Firefox
+			        newDelta  += event.detail;
+			    }
 
-				var newDelta = 0;
-			    if (event.wheelDeltaY) {
-			        // WebKit
-			        newDelta +=event.wheelDeltaY;
- 			    }
- 			    else if (event.wheelDelta) {
-			        // Opera / Explorer 9
-			        newDelta += event.wheelDelta;
-  			    }
-  			    else if (event.detail) {
-			        // Firefox
- 			        newDelta  += event.detail;
- 			    }
+			    if (Math.abs(mouse.wheel.delta) < settings.mode.fisheye.video.radius/mouse.wheel.reduction) 
+			    {
+			    	if (newDelta>0) 
+			    	{ 	
+			    		// je pozitivni
+					mouse.wheel.delta+=mouse.wheel.sensitivity;
+			    	}
+			    	else {
+			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+			    	}
+			    }
+			    else {
+			    	if (mouse.wheel.delta>0) {
+			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+			    	}
+			    	else {
+			    		mouse.wheel.delta+=mouse.wheel.sensitivity;
+			    	}
+			    }
+			    console.log(mouse.wheel.delta);
+		}
 
- 			    if (Math.abs(mouse.wheel.delta) < settings.mode.fisheye.video.radius/4) 
- 			    {
- 			    	if (newDelta>0) 
- 			    	{ 	
- 			    		// je pozitivni
-						mouse.wheel.delta+=mouse.wheel.sensitivity;
- 			    	}
- 			    	else {
- 			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
- 			    	}
- 			    }
- 			    else {
- 			    	if (mouse.wheel.delta>0) {
- 			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
- 			    	}
- 			    	else {
- 			    		mouse.wheel.delta+=mouse.wheel.sensitivity;
- 			    	}
- 			    }
- 			    console.log(mouse.wheel.delta);
- 			}
 
 		function onDocumentMouseUp( event ) {
 			mouse.active = false;
@@ -631,7 +631,6 @@ if (!gl) {
 	            event.preventDefault();
       		}
 		}
-
 
 
 		function onDocumentKeyPress( event ) {
@@ -688,8 +687,6 @@ if (!gl) {
             	element_canvas.height = window.innerHeight;
 			}
 		}
-
-
 
 
 		function main() {
