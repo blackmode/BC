@@ -628,6 +628,11 @@ function degToRad(degrees) {
 	return parseFloat(degrees * (Math.PI / 180.0));
 }
 
+//radians  to degrees   
+function radToDeg(rads) { 
+	return parseFloat(rads * (  180.0/Math.PI));
+}
+
 // prevody souradnic
 function polarToCartesian(xPostionOfCenter, xPositionOfCenter, radius, degreesAngle) {
   var angleShift = 180; //posun vuci puvodni pozici
@@ -783,10 +788,10 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 		vision.style.backgroundColor = 'transparent';
 
 		// nasteveni uhlu
-		var posun_koleckem = getParamByKey("fv") ? getParamByKey("fv") : 0;
+		var posun_koleckem = Math.abs(parseInt(wheel_angle));//getParamByKey("fv") ? getParamByKey("fv") : 0;
 
 		var posun_koleckem_tmp = (180 - posun_koleckem)/2; // pro kazdou stranu
-		var posun_mysi =   parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
+		var posun_mysi =   parseInt(Math.abs(mouse_angle));//parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
  
 		var uhel_zacatku_zorneho_pole = (0-posun_mysi)+posun_koleckem_tmp;
 		var uhel_konce_zorneho_pole = (180-posun_mysi)-posun_koleckem_tmp;

@@ -170,8 +170,8 @@
 
 
  
-createFieldVision(150,150,0.4,1, getParamByKey("fv"), getParamByKey("fvs")); 
 
+ 
 //createCompass(200,200, 0.6, 1) ;
 
 
@@ -187,17 +187,7 @@ var textureCoordData =GEOMETRY.textures;
 var indexData = GEOMETRY.indices;
 var hypot = GEOMETRY.hypotenuse_normal;
 
- 
 
-
-
-        var AMORTIZATION = 0.95;
-         var drag = false;
-         var old_x, old_y;
-         var dX = 0, dY = 0;
-         var THETA = 0,
-         PHI = 0;
-         var time_old = 0;
 
 var mouse = {
 	position : {
@@ -215,19 +205,18 @@ var mouse = {
 	move : {
 		x: 0.0,
 		y: 0.0,
-		currentAngle: {
+		angle: {
 			x: 0.0,
 			y: 0.0,
 		} ,
 	} ,
 	distance : 0.0,
 	delta : 0.0,
-	lat : 0.0,
-	lon : 0.0,
-	THETA: 0.0,
-	PHI: 0.0,
+
 	active : false,
 };
+ 
+
 
 var settings = {
 	mode : {
@@ -271,7 +260,7 @@ if (!gl) {
 
 //var video = createVideo("data/theta2.mp4");
 //var video = createVideo("data/R0010079.mp4");
-var video = createVideo("data/R0010081.mp4");
+var video = createVideo("data/theta2.mp4");
 
  
 
@@ -460,25 +449,23 @@ video.addEventListener("loadedmetadata",function() {
 
 
 		function render() {
+			// status bar a cas
 			var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
+			createVideoStatusBar(170, 30, 0.8, 1, video);
+ 			
+ 			// zorny uhel
+			var koef = (Math.abs(mouse.move.angle.y)/2*Math.PI)%2;
+			createFieldVision(150,150,0.4,1, parseInt(mouse.distance *40), koef*57-20); 
 
- createVideoStatusBar(170, 30, 0.8, 1, video);
-
-
-			 updateTexture();
+			// aktualizace textury
+			updateTexture();
 			 
-			  // mat4.rotateX(mmatrix, mmatrix, rotation);
-			  //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
 			/// ROTACNI MATICE
- 
-
             mat4.identity(mmatrix );
- mat4.rotateZ(mmatrix, mmatrix,   - Math.PI/2 );
-
- 
- 
- rotateY( mmatrix, THETA);
-rotateX( mmatrix, PHI);
+ 			mat4.rotateZ(mmatrix, mmatrix,   - Math.PI/2 );
+  
+			rotateY( mmatrix, mouse.move.angle.y);
+			rotateX( mmatrix, mouse.move.angle.x);
 
 			// nahrani matic do programu
 			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
@@ -529,8 +516,8 @@ rotateX( mmatrix, PHI);
 			        // Firefox
  			        mouse.delta  += event.detail * 1.5 ;
  			    }
-				
-				mouse.delta = mouse.delta/100;
+
+ 				mouse.delta = mouse.delta/100;
 
  				if (mouse.distance < -1.95) {
  					vmatrix[14] = -1.9;
@@ -542,63 +529,43 @@ rotateX( mmatrix, PHI);
 					gl.uniformMatrix4fv(vmLoc, false, vmatrix);
  				}
 
-			}
 
-		function onDocumentMouseDown( e ) {
-            drag = true;
-            old_x = e.pageX, old_y = e.pageY;
-            e.preventDefault();
+ 			}
+
+		function onDocumentMouseUp( event ) {
+			mouse.active = false;
+		}
+ 
+ 
+		function onDocumentMouseDown( event ) {
+            mouse.active = true;
+            mouse.down.x = event.pageX;
+            mouse.down.y = event.pageY;
+            event.preventDefault();
             return false;
 		}
 
-		function onDocumentMouseMove( e ) {
-  
-            if (!drag) return false;
-            dX = (e.pageX-old_x)*2*Math.PI/canvas.width,
-            dY = (e.pageY-old_y)*2*Math.PI/canvas.height;
-            THETA+= dX;
-            PHI+=dY;
-            old_x = e.pageX, old_y = e.pageY;
-            e.preventDefault();
-
-
-/*
-
-
-				if (mouse.up.x!=event.clientX) {
-					mouse.lon = (mouse.down.x - event.clientX) * 0.01 + mouse.lon;
-					mouse.lon = mouse.lon / 80;
-
-					 mat4.rotateX(mmatrix, mmatrix,    mouse.lon );
-					 gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-
-				}
-
-				if (mouse.up.y!=event.clientY) {
-					mouse.lat = (mouse.down.y - event.clientY) * 0.01 + mouse.lat;
-					mouse.lat = (mouse.lat / 80) *-1;
-
-	 				//mat4.rotateZ(mmatrix, mmatrix,    mouse.lat );
-					//gl.uniformMatrix4fv(mmLoc, false, mmatrix);
-
-				}
-
-*/
-			//}
-
+		function onDocumentMouseMove( event ) {
+ 
+            if (mouse.active) {
+	            mouse.move.x = (event.pageX - mouse.down.x)*2*Math.PI/canvas.width,
+	            mouse.move.y = (event.pageY - mouse.down.y)*2*Math.PI/canvas.height;
+	            mouse.move.angle.y+= mouse.move.x;
+	            mouse.move.angle.x+=mouse.move.y;
+	            mouse.down.x = event.pageX; 
+	            mouse.down.y = event.pageY;
+	            event.preventDefault();
+      		}
 		}
 
-		function onDocumentMouseUp( e ) {
-			drag = false;
-		}
+
 
 		function onDocumentKeyPress( event ) {
-			d(vide_playing);
  			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
  				vide_playing = 1;
 				video.play();
  			}
-			if (event.keyCode == 101 || event.keyCode == 69) { // q/Q
+			if (event.keyCode == 101 || event.keyCode == 69) { // e/E
 				video.pause();
 				vide_playing = 0;
 			}
@@ -638,7 +605,6 @@ rotateX( mmatrix, PHI);
 					vide_playing = 1;
 				}	
 				else if (vide_playing ) {
-					d('jsem tady');
 					video.pause();
 					vide_playing = 0;
 				}
@@ -651,9 +617,9 @@ rotateX( mmatrix, PHI);
 
 
 		function main() {
-			DebugThreeStat();
+			
 			initProgram();
-			render();
+			//render();
 		}
  
 
