@@ -584,7 +584,7 @@ if (!gl) {
  			        newDelta  += event.detail;
  			    }
 
- 			    if (mouse.wheel.delta < settings.mode.fisheye.video.radius) 
+ 			    if (Math.abs(mouse.wheel.delta) < settings.mode.fisheye.video.radius/4) 
  			    {
  			    	if (newDelta>0) 
  			    	{ 	
@@ -596,7 +596,12 @@ if (!gl) {
  			    	}
  			    }
  			    else {
- 			    	//mouse.wheel.delta = settings.mode.fisheye.video.radius - mouse.wheel.sensitivity;
+ 			    	if (mouse.wheel.delta>0) {
+ 			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+ 			    	}
+ 			    	else {
+ 			    		mouse.wheel.delta+=mouse.wheel.sensitivity;
+ 			    	}
  			    }
  			    console.log(mouse.wheel.delta);
  			}
