@@ -934,11 +934,6 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 			div.style.overflow = 'hidden';
 			div.style.padding = '5px';
 			video_status_bar.appendChild(div);
-
-
-
-
-
 		}
 		else {
 

@@ -171,7 +171,10 @@
 
  
 
- 
+
+//var video = createVideo("data/theta2.mp4");
+//var video = createVideo("data/R0010079.mp4");
+var video = createVideo("data/theta2.mp4"); 
 //createCompass(200,200, 0.6, 1) ;
 
 
@@ -212,7 +215,8 @@ var mouse = {
 	} ,
 	distance : 0.0,
 	delta : 0.0,
-
+	lon: 0.0,
+	lat: 0.0,
 	active : false,
 };
  
@@ -258,30 +262,7 @@ if (!gl) {
 	w('Webgl se nepodarilo inicializovat...');
 }
 
-//var video = createVideo("data/theta2.mp4");
-//var video = createVideo("data/R0010079.mp4");
-var video = createVideo("data/theta2.mp4");
 
- 
-
-video.oncanplaythrough = function() {
-	render();
-	//video.play();
-};
-
-/*
-video.addEventListener("timeupdate", function(){
-    if(this.currentTime >= 8){
-        this.pause();
-    }
-});
-*/
-
- 
-video.addEventListener("loadedmetadata",function() { 
-	this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
- },false);
- 
 
 
 	function initProgram() {
@@ -620,6 +601,33 @@ video.addEventListener("loadedmetadata",function() {
 			
 			initProgram();
 			//render();
+
+
+			 
+
+			video.oncanplaythrough = function() {
+				render();
+				//video.play();
+			};
+
+			/*
+			video.addEventListener("timeupdate", function(){
+			    if(this.currentTime >= 8){
+			        this.pause();
+			    }
+			});
+			*/
+
+			 
+			video.addEventListener("loadedmetadata",function() { 
+				this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
+			 },false);
+ 
+
+
+
+
+			
 		}
  
 
