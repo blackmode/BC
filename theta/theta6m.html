@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - dual fisheye panorama</title>
+		<title>BC - panorama viewer</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
@@ -138,7 +138,7 @@
 			if (varyingTexture.x< 0.5      ) {
 				// gl_FragColor.a =   0.988;
  			}
-//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
+			//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
 		}
 	</script>
 
@@ -171,46 +171,25 @@
 
  
 
-	<script>
-
- 
-
-
-
-
- 
+<script>
 
 
 //var video = createVideo("data/theta2.mp4");
 //var video = createVideo("data/R0010079.mp4");
-var video = createVideo("data/R0010081.mp4"); 
+
 //createCompass(200,200, 0.6, 1) ;
-
-
-var mmatrix = createIdentityMatrix4();
-var vmatrix = createIdentityMatrix4();
-var pmatrix = createIdentityMatrix4();
-
  
-var GEOMETRY = createSphereGeometry(60,60,7,1) ;
-var vertexPositionData = GEOMETRY.vertices;
-var normalData = GEOMETRY.normals;
-var textureCoordData =GEOMETRY.textures;
-var indexData = GEOMETRY.indices;
-var hypot = GEOMETRY.hypotenuse_normal;
 
 
+var gl;
+var GEOMETRY;
+var vide_playing = 0;
+var video = createVideo("data/R0010081.mp4"); 
 
-var mouse = {
-	position : {
-		x: 0.0,
-		y: 0.0,
-	} ,
+
+/// ------ VSECHNY PROMENNE PRO MYS
+var MOUSE = {
 	down : {
-		x: 0.0,
-		y: 0.0,
-	} ,
-	up : {
 		x: 0.0,
 		y: 0.0,
 	} ,
@@ -228,17 +207,12 @@ var mouse = {
 		delta: 0.0,
 	} ,
 
-	distance : 0.0,
-	delta : 0.0,
-	lon: 0.0,
-	lat: 0.0,
-	active : false,
+ 	active : false,
 };
- 
 
 
-
-var keyboard = {
+/// ------ VSECHNY PROMENNE PRO KLAVESNICI
+var KEYBOARD = {
 	active : true,
 	sensitivity : {
 		x: 0.06,
@@ -247,15 +221,15 @@ var keyboard = {
 };
 
 
-
-var settings = {
+/// ------ VSECHNY nastaveni PROGRAMU
+var SETTINGS = {
 	mode : {
 		equirectangular : {
-			panorama: false,
-			video: false,
+			panorama: null,
+			video: null,
 		} ,
 		fisheye : {
-			panorama: false,
+			panorama: null,
 			video : {
 				active: true,
 				latitudes: 60,
@@ -278,37 +252,78 @@ var settings = {
 	} ,
 };
 
+/// ------ VSECHNY promenne PROGRAMU
+var PROG = {
 
-var program = {
 	shader : {
 		equirectangular : {
-			panorama: false,
-			video: false,
+			panorama: null,
+			video: null,
 		} ,
 	},
+
+	buffer : {
+		normal: null,
+		index: null,
+		vertex: null,
+		texture: null,
+	} ,
+
+	attributes : {
+		vertex: null,
+		fragment: null,
+		texture: null,
+	} ,
+
+	
+	matrices : {
+		model : {
+			link: null,
+			data: null,
+		} ,
+		view : {
+			link: null,
+			data: null,
+		} ,
+		projection : {
+			link: null,
+			data: null,
+		} ,
+	} ,
+
+
+	texture: null,
+	sampler: null,
+	gl: null,
+	program: null,
+	canvas: null,
 };
-var vide_playing = 0;
-var normalBuffer;
-var indexBuffer;
-var program ;
-var samplerLoc ;
-var vertexBuffer;
-var mmLoc;
-var vmLoc;
-var pmLoc;
-var texture;
-var canvas = document.querySelector("canvas");
+
  
-
-var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-if (!gl) {
-	w('Webgl se nepodarilo inicializovat...');
-}
-
-
 
 
 	function initProgram() {
+
+		GEOMETRY = createSphereGeometry(60,60,7,1) ;
+		PROG.matrices.model.data = createIdentityMatrix4();
+		PROG.matrices.view.data = createIdentityMatrix4();
+		PROG.matrices.projection.data = createIdentityMatrix4();
+
+ 		PROG.canvas = document.querySelector("canvas");
+
+		gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
+		if (!gl) {
+			w('Webgl se nepodarilo inicializovat...');
+		}
+
+		return true;
+	}
+
+	function setupProgram() {
+			if (!initProgram()) {
+				e('FATALNI CHYBA, nepodarilo se inicializovat program');
+				return false;
+			}
 
 			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -340,103 +355,103 @@ if (!gl) {
 			}
 
 			// vytvoreni programu, pridani vertex a fragment shaderu a overeni
-			program = gl.createProgram();
-			gl.attachShader(program, vs);
-			gl.attachShader(program, fs);
-			gl.linkProgram(program);
-			gl.useProgram(program);
-			var programSuccess = gl.getProgramParameter( program, gl.LINK_STATUS);
+			PROG.program = gl.createProgram();
+			gl.attachShader(PROG.program, vs);
+			gl.attachShader(PROG.program, fs);
+			gl.linkProgram(PROG.program);
+			gl.useProgram(PROG.program);
+			var programSuccess = gl.getProgramParameter( PROG.program, gl.LINK_STATUS);
 			if ( ! programSuccess) {
-			  var info = gl.getProgramInfoLog(program);
-			  w ('nepodařilo se zkompilovat WebGL program. \n\n' + info);
+			  var info = gl.getProgramInfoLog(PROG.program);
+			  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
 			  return false;
 			}
 			
 			// -------- ZOBRAZOVACI matice
 			// MODEL matrix
 
-			scale(mmatrix, 1.0, 1.0, 1.0);
-			translate(mmatrix, 0.0, 0.0, 0.0);
+			scale(PROG.matrices.model.data, 1.0, 1.0, 1.0);
+			translate(PROG.matrices.model.data, 0.0, 0.0, 0.0);
 
 			// ---- otoceni kamery do pocatecni pozice
-			rotateZ(mmatrix,   Math.PI/2);
-			rotateX(mmatrix,   2*Math.PI );
-			rotateY(mmatrix,   2*Math.PI );
+			rotateZ(PROG.matrices.model.data,   Math.PI/2);
+			rotateX(PROG.matrices.model.data,   2*Math.PI );
+			rotateY(PROG.matrices.model.data,   2*Math.PI );
 
 
 			// DEBUG===========================================
 			if (getParamByKey("angleX")) {
-				rotateX(mmatrix,    Math.PI * getParamByKey("angleX") );
+				rotateX(PROG.matrices.model.data,    Math.PI * getParamByKey("angleX") );
 			}
 
 			if (getParamByKey("angleZ")) {
-				rotateZ(mmatrix,    Math.PI * getParamByKey("angleZ") );
+				rotateZ(PROG.matrices.model.data,    Math.PI * getParamByKey("angleZ") );
 			}
 
 			if (getParamByKey("angleY")) {
-				rotateY(mmatrix,    Math.PI * getParamByKey("angleY") );
+				rotateY(PROG.matrices.model.data,    Math.PI * getParamByKey("angleY") );
 			}
 
 			// VIEW matrix
 			if (getParamByKey("camera")) {
-				mat4.translate(mmatrix, mmatrix, vec3.fromValues(0, 0, getParamByKey("camera") ));
+				mat4.translate(PROG.matrices.model.data, PROG.matrices.model.data, vec3.fromValues(0, 0, getParamByKey("camera") ));
 			}
 			// DEBUG===========================================, konec
 
 
 			// perspektivni matice
 			// zorny uhel je 90%, pomer je jasnej
-			pmatrix = createPerspectiveMatrix(Math.PI/2, canvas.width/canvas.height, 0.1, 100);
-			
-			// ------ nahrani matic do promennych ==============================================================
- 			mmLoc = gl.getUniformLocation(program, "MMatrix");
-			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
-			vmLoc = gl.getUniformLocation(program, "VMatrix");
-			gl.uniformMatrix4fv(vmLoc, false, mmatrix);
+			// ------ nahrani matic do promennych ==============================================================
+ 			PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
+			gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
+
+			PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "VMatrix");
+			gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.model.data);
 		
-			pmLoc = gl.getUniformLocation(program, "PMatrix");
-			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+			PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "PMatrix");
+			gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
 
 
 			// sampler
-			samplerLoc = gl.getUniformLocation(program, "sampler");
-			gl.uniform1i(samplerLoc, 0);
+			PROG.sampler = gl.getUniformLocation(PROG.program, "sampler");
+			gl.uniform1i(PROG.sampler, 0);
 
 
 			// -------- atributy
-			var posLoc = gl.getAttribLocation(program, "pos");
-			if (posLoc===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
-			gl.enableVertexAttribArray(posLoc);
+			PROG.attributes.vertex = gl.getAttribLocation(PROG.program, "pos");
+			if (PROG.attributes.vertex===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
+			gl.enableVertexAttribArray(PROG.attributes.vertex);
 
-			var fragPos = gl.getAttribLocation(program, "fragPos");
-			if (fragPos==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
-			gl.enableVertexAttribArray(fragPos);
+			PROG.attributes.fragment = gl.getAttribLocation(PROG.program, "fragPos");
+			if (PROG.attributes.fragment==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
+			gl.enableVertexAttribArray(PROG.attributes.fragment);
 
-			var textureLoc = gl.getAttribLocation(program, "texture");
-			if (textureLoc==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
-			gl.enableVertexAttribArray(textureLoc);
+			PROG.attributes.texture = gl.getAttribLocation(PROG.program, "texture");
+			if (PROG.attributes.texture==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
+			gl.enableVertexAttribArray(PROG.attributes.texture);
 
 
 			// -------- BUFFERY
-			vertexBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, (vertexPositionData), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+			PROG.buffer.vertex = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);
+			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.vertices), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(PROG.attributes.vertex, 3, gl.FLOAT, false, 0, 0);
 			
-			normalBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, (normalData), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(fragPos, 3, gl.FLOAT, false, 0, 0);
+			PROG.buffer.normal = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.normal);
+			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.normals), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(PROG.attributes.fragment, 3, gl.FLOAT, false, 0, 0);
 
-			var textureBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
+			PROG.buffer.texture = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.texture);
+			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.textures), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(PROG.attributes.texture, 2, gl.FLOAT, false, 0, 0);
 
-			indexBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
+			PROG.buffer.index = gl.createBuffer();
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
+			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (GEOMETRY.indices), gl.STATIC_DRAW);
 
 			// ---- NASTAVENI
 			//gl.disable(gl.DEPTH_TEST);
@@ -460,7 +475,7 @@ if (!gl) {
 
  
 	function updateTexture() {
-		if (settings.mode.fisheye.video.active) 
+		if (SETTINGS.mode.fisheye.video.active) 
 		{
 		  if (video.readyState >= video.HAVE_CURRENT_DATA) 
 		  {
@@ -512,20 +527,20 @@ if (!gl) {
 		 function initViewMatrix() {
 			/// ROTACNI MATICE pomoci MYSI
 			var atr = 0;
-			makeIdentityFrom(vmatrix );
-			translate(vmatrix,0, 0, atr);
+			makeIdentityFrom(PROG.matrices.view.data );
+			translate(PROG.matrices.view.data,0, 0, atr);
 
  		 }
 
 		function updateCameraPosition() {
 			/// ROTACe MATICE pomoci MYSi a klavesnice
-			translate(vmatrix,0, 0, mouse.wheel.delta);
-			rotateY( vmatrix, mouse.move.angle.y);
-			rotateX( vmatrix, mouse.move.angle.x);
+			translate(PROG.matrices.view.data,0, 0, MOUSE.wheel.delta);
+			rotateY( PROG.matrices.view.data, MOUSE.move.angle.y);
+			rotateX( PROG.matrices.view.data, MOUSE.move.angle.x);
 		}
 
 		function getCameraPosition() {
-			return vmatrix[14];
+			return PROG.matrices.view.data[14];
 		}
 
 		function render() {
@@ -534,9 +549,9 @@ if (!gl) {
 			createVideoStatusBar(170, 30, 0.8, 1, video);
  			
  			// zorny uhel
-			var koef = (Math.abs(mouse.move.angle.y)/2*Math.PI)%2;
-			//createFieldVision(150,150,0.4,1, -parseInt(160-mouse.wheel.delta *80), 0.0/*mouse.move.angle.y*57*/); 
-			createFieldVision(150,150,0.4,1, 30, mouse.move.angle.y * (180/Math.PI) ); 
+			var koef = (Math.abs(MOUSE.move.angle.y)/2*Math.PI)%2;
+			//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
+			createFieldVision(150,150,0.4,1, 30, MOUSE.move.angle.y * (180/Math.PI) ); 
 			// aktualizace textury
 			if (updateTexture()) 
 			{
@@ -547,27 +562,27 @@ if (!gl) {
 				updateCameraPosition();
 
 				// nahrani matic do programu
-				gl.uniformMatrix4fv(pmLoc, false, pmatrix);
-				gl.uniformMatrix4fv(vmLoc, false, vmatrix);
-				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+				gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
+				gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.view.data);
+				gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
 
 
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, texture);
-				gl.uniform1i(samplerLoc, 0);
+				gl.uniform1i(PROG.sampler, 0);
 
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+				//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
 
 				// zde prepinanim renderovani
 				if (!GEOMETRY.noIndices) {
-					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-					gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
+					gl.drawElements(gl.TRIANGLES, GEOMETRY.indices.length, gl.UNSIGNED_SHORT, 0);
 				}
 				else {
 
-					gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);// HAZI TO VIC CHYB, nevim  jeste proc
-					gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
+					gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);// HAZI TO VIC CHYB, nevim  jeste proc
+					gl.drawArrays(gl.TRIANGLES,0, GEOMETRY.normals.length/3);
 				}
 			}
 			requestAnimationFrame(render);
@@ -596,26 +611,26 @@ if (!gl) {
 			    }
 
 			    // zmenseni maximalniho priblizeni
-			    var reduction = (mouse.wheel.reduction > 1.0) ? mouse.wheel.reduction : 1.0;
+			    var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 
-			    if (Math.abs(mouse.wheel.delta) < (settings.mode.fisheye.video.radius-2*mouse.wheel.sensitivity)/reduction) 
+			    if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
 			    {
 			    	if (newDelta>0) 
 			    	{ 	
 			    		// je pozitivni
 
-						mouse.wheel.delta+=mouse.wheel.sensitivity;
+						MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 			    	}
 			    	else {
-			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+			    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
 			    	}
 			    }
 			    else {
-			    	if (mouse.wheel.delta>0) {
-			    		mouse.wheel.delta-=mouse.wheel.sensitivity;
+			    	if (MOUSE.wheel.delta>0) {
+			    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
 			    	}
 			    	else {
-			    		mouse.wheel.delta+=mouse.wheel.sensitivity;
+			    		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 			    	}
 			    }
 			   d(getCameraPosition());
@@ -623,34 +638,34 @@ if (!gl) {
 
 
 		function onDocumentMouseUp( event ) {
-			mouse.active = false;
+			MOUSE.active = false;
 		}
  
  
 		function onDocumentMouseDown( event ) {
-            mouse.active = true;
-            mouse.down.x = event.pageX;
-            mouse.down.y = event.pageY;
+            MOUSE.active = true;
+            MOUSE.down.x = event.pageX;
+            MOUSE.down.y = event.pageY;
             event.preventDefault();
             return false;
 		}
 
 		function onDocumentMouseMove( event ) {
  
-            if (mouse.active) {
-	            mouse.move.x = (event.pageX - mouse.down.x)*2*Math.PI/canvas.width,
-	            mouse.move.y = (event.pageY - mouse.down.y)*2*Math.PI/canvas.height;
-	            mouse.move.angle.y+= mouse.move.x;
-	            mouse.move.angle.x+=mouse.move.y;
-	            mouse.down.x = event.pageX; 
-	            mouse.down.y = event.pageY;
+            if (MOUSE.active) {
+	            MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
+	            MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
+	            MOUSE.move.angle.y+= MOUSE.move.x;
+	            MOUSE.move.angle.x+=MOUSE.move.y;
+	            MOUSE.down.x = event.pageX; 
+	            MOUSE.down.y = event.pageY;
 	            event.preventDefault();
       		}
 		}
 
 
 		function onDocumentKeyPress( event ) {
-			if (keyboard.active) 
+			if (KEYBOARD.active) 
 			{
 
 	 			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
@@ -678,18 +693,18 @@ if (!gl) {
 
 				if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
 					
-					 mouse.move.angle.y += keyboard.sensitivity.x;
+					 MOUSE.move.angle.y += KEYBOARD.sensitivity.x;
 	 			}
 				else if (event.keyCode == 100    ||  event.keyCode==100-32) {  // d/D
- 					 mouse.move.angle.y -= keyboard.sensitivity.x;
+ 					 MOUSE.move.angle.y -= KEYBOARD.sensitivity.x;
 	 			}
 	  
 				else if (event.keyCode == 119 ||   event.keyCode == 119-32 ) {  // w/W
- 						 mouse.move.angle.x -=  keyboard.sensitivity.y;
+ 						 MOUSE.move.angle.x -=  KEYBOARD.sensitivity.y;
 	 
 				}
 				else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
- 					 mouse.move.angle.x +=  keyboard.sensitivity.y;
+ 					 MOUSE.move.angle.x +=  KEYBOARD.sensitivity.y;
 	 
 				}
 			}
@@ -706,8 +721,8 @@ if (!gl) {
 
 
 		function main() {
-			
 			initProgram();
+			setupProgram();
 			render();
 
 
