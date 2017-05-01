@@ -544,6 +544,7 @@ function updateCameraPosition() {
 	translate(PROG.matrices.view.data,0, 0, MOUSE.wheel.delta);
 	rotateY( PROG.matrices.view.data, MOUSE.move.angle.y);
 	rotateX( PROG.matrices.view.data, MOUSE.move.angle.x);
+	d(MOUSE.wheel.delta);
 }
 
 function getCameraPosition() {
@@ -558,7 +559,7 @@ function render() {
 		// zorny uhel
 	var koef = (Math.abs(MOUSE.move.angle.y)/2*Math.PI)%2;
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
-	createFieldVision(150,150,0.4,1, 30, MOUSE.move.angle.y * (180/Math.PI) ); 
+	createFieldVision(150,150,0.4,1, 30, (MOUSE.move.angle.y * (180/Math.PI))%360 ); 
 
 	// aktualizace textury
 	if (updateTexture()) 
@@ -641,7 +642,6 @@ function onDocumentMouseWheel( event ) {
 	    		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 	    	}
 	    }
-	   d(getCameraPosition());
 }
 
 

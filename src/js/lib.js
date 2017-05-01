@@ -650,13 +650,12 @@ function createIdentityMatrix4()
 
 function createPerspectiveMatrix  (fieldOfViewInRadians, aspectRatio, near, far) {
     var f = 1.0 / Math.tan(fieldOfViewInRadians / 2);
-    var rangeInv = 1 / (near - far);
  
     return [
-      f / aspectRatio, 0,                          0,   0,
-      0,               f,                          0,   0,
-      0,               0,    (near + far) * rangeInv,  -1,
-      0,               0,  near * far * rangeInv * 2,   0
+      f / aspectRatio, 0,                             0,   0,
+      0,               f,                          	  0,   0,
+      0,               0,	(near + far) / (near - far),  -1,
+      0,               0,	(near*far*2) / (near - far),   0
     ];
   }
 
@@ -756,10 +755,10 @@ function rotateY(matrix, angle) {
  }
 
 
- function multiply(matrix, b, a) {
- 
- 	var tempB = b;
- 	var tempA = a;
+function multiply(matrix, b, a) {
+
+	var tempB = b;
+	var tempA = a;
 	matrix[0]  = tempB[0]*tempA[0]  +  tempB[1]*tempA[4]  +  tempB[2]*tempA[8]  +  tempB[3]*tempA[12];
 	matrix[1]  = tempB[0]*tempA[1]  +  tempB[1]*tempA[5]  +  tempB[2]*tempA[9]  +  tempB[3]*tempA[13];
 	matrix[2]  = tempB[0]*tempA[2]  +  tempB[1]*tempA[6]  +  tempB[2]*tempA[10] +  tempB[3]*tempA[14];
@@ -787,48 +786,48 @@ function rotateY(matrix, angle) {
 	else {
 		return new Float32Array(matrix);
 	}
- }
+}
 
 
- function scaleMatrix(x,y,z) {
- 	return [
- 		x, 0, 0, 0,
- 		0, y, 0, 0,
- 		0, 0, z, 0,
- 		0, 0, 0, 1
- 	];
- }
+function scaleMatrix(x,y,z) {
+	return [
+		x, 0, 0, 0,
+		0, y, 0, 0,
+		0, 0, z, 0,
+		0, 0, 0, 1
+	];
+}
 
 
 
- function translateMatrix(x,y,z) {
- 	return [
- 		1, 0, 0, 0,
- 		0, 1, 0, 0,
- 		0, 0, 1, 0,
- 		x, y, z, 1
- 	];
- }
+function translateMatrix(x,y,z) {
+	return [
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		x, y, z, 1
+	];
+}
 
- function scale(matrix, x,y,z) {
- 	var s = scaleMatrix(x,y,z);
- 	return multiply(matrix, matrix, s);
- }
+function scale(matrix, x,y,z) {
+	var s = scaleMatrix(x,y,z);
+	return multiply(matrix, matrix, s);
+}
 
 
- function translate(matrix, x,y,z) {
- 	var s = translateMatrix(x,y,z);
- 	return multiply(matrix, matrix, s);
- }
+function translate(matrix, x,y,z) {
+	var s = translateMatrix(x,y,z);
+	return multiply(matrix, matrix, s);
+}
 
 // udela ze vstupni matice indentickou matici
- function makeIdentityFrom(matrix) {
- 	var id = createIdentityMatrix4();
- 	for (var i = 0; i < id.length; i++) {
- 		matrix[i] = id[i];
- 	};
- 	return matrix;
- }
+function makeIdentityFrom(matrix) {
+	var id = createIdentityMatrix4();
+	for (var i = 0; i < id.length; i++) {
+		matrix[i] = id[i];
+	};
+	return matrix;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
