@@ -1125,7 +1125,10 @@ function createLoader(width, height, position_x, position_y, active)
 
 
 function imgLoaded(img_object) {
-  return 
-  img_object.complete && 
-  (img_object.naturalHeight !== 0);
+	if (!img_object.complete || img_object.naturalWidth  == 0) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }

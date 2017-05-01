@@ -23,10 +23,10 @@
 		}
 
 		progress {
-	  		display: block;
+			display: block;
 			/* Important Thing */
 			-webkit-appearance: none !Important;
-	 		border: none;
+			border: none;
 		}
 
 	</style>
@@ -73,54 +73,54 @@
 
  /*
 
-             if (
-             	varyingTexture.x  >0.12 &&
-             	varyingTexture.x  <0.37 && 
-             	varyingTexture.y >0.30	&& 
-             	varyingTexture.y <0.57  
-             	); else if (varyingTexture.x <0.5){
- 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
- 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
- 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
-             }
+			 if (
+				varyingTexture.x  >0.12 &&
+				varyingTexture.x  <0.37 && 
+				varyingTexture.y >0.30	&& 
+				varyingTexture.y <0.57  
+				); else if (varyingTexture.x <0.5){
+				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
+				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
+				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
+			 }
 */
 
 //(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
 
-            float x2=varyingFragPosNormal.x ;
-            float y2=varyingFragPosNormal.y  ;
-            float z2=varyingFragPosNormal.z  ;
+			float x2=varyingFragPosNormal.x ;
+			float y2=varyingFragPosNormal.y  ;
+			float z2=varyingFragPosNormal.z  ;
   
 
-            // souradnice stredu
-            float Sx = 0.0;
-            float Sy = 0.0;
+			// souradnice stredu
+			float Sx = 0.0;
+			float Sy = 0.0;
 
-            float a = abs(Sx - x2);
-            float b = abs(Sy - y2);
-            float c = sqrt(a*a + b*b) ;
-            // DEBUG===========================================
+			float a = abs(Sx - x2);
+			float b = abs(Sy - y2);
+			float c = sqrt(a*a + b*b) ;
+			// DEBUG===========================================
 
 
 
-            if (c > 0.998       ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
- 				/*
- 				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
- 				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
- 				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
- 				*/
- 				//gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
- 				offset[0] =  0.0;
- 				offset[1] =  1.0;
- 				offset[2] =  2.0;
- 				offset[3] =  3.0;
- 				offset[4] =  4.0;
+			if (c > 0.998       ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
+				/*
+				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
+				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
+				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
+				*/
+				//gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
+				offset[0] =  0.0;
+				offset[1] =  1.0;
+				offset[2] =  2.0;
+				offset[3] =  3.0;
+				offset[4] =  4.0;
 
- 				weight[0] =  0.2270270270;
- 				weight[1] =  0.1945945946;
- 				weight[2] =  0.1216216216;
- 				weight[3] =   0.0540540541;
- 				weight[4] =   0.0162162162;
+				weight[0] =  0.2270270270;
+				weight[1] =  0.1945945946;
+				weight[2] =  0.1216216216;
+				weight[3] =   0.0540540541;
+				weight[4] =   0.0162162162;
 
 				for (int i=1; i<5; i++) {
  
@@ -130,14 +130,14 @@
 				}
 
 
- 				 //gl_FragColor.a =   0.6;
-            }
+				 //gl_FragColor.a =   0.6;
+			}
 
 
 			// korekce barvy
 			if (varyingTexture.x< 0.5      ) {
 				// gl_FragColor.a =   0.988;
- 			}
+			}
 			//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
 		}
 	</script>
@@ -146,7 +146,7 @@
 
 	<body onload="main()" id="body">
 	<!--
- 	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted autoplay>
+	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted autoplay>
 		 <source src="data/firefox.ogv" type="video/mp4"> 
 		<source src="data/theta2.mp4" type="video/mp4">
 	  </video> -->
@@ -172,13 +172,6 @@
  
 
 <script>
-
-
-//var video = createVideo("data/theta2.mp4");
-//var video = createVideo("data/R0010079.mp4");
-
-//createCompass(200,200, 0.6, 1) ;
- 
 
 
 var gl;
@@ -208,7 +201,7 @@ var MOUSE = {
 		deltaMin: 0.0,
 	} ,
 
- 	active : false,
+	active : false,
 };
 
 
@@ -317,6 +310,7 @@ var PROG = {
 
 SETTINGS.input.video =  createVideo("data/R0010081.mp4"); // R0010014_20161217101030_er / R0010081
 SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
+createCompass(150,150, 0.6, 1) ;
 
 function initProgram() {
 
@@ -331,7 +325,7 @@ function initProgram() {
 	var fisheye_or_equi_mode = null;
 	if (SETTINGS.mode.equirectangular.panorama.active  || SETTINGS.mode.equirectangular.video.active) {
 		fisheye_or_equi_mode = 0;
- 	}
+	}
 	else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.fisheye.video.active ) {
 		fisheye_or_equi_mode = 1;
 	}
@@ -534,11 +528,11 @@ function setupProgram()
 				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 			}
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, SETTINGS.input.image);
-        }
-        else {
-        	w('obrazek se nepodarilo uspesne nacist');
-        	return false;
-        }
+		}
+		else {
+			w('obrazek se nepodarilo uspesne nacist');
+			return false;
+		}
 	}
 
 }
@@ -656,46 +650,46 @@ window.requestAnimationFrame = window.requestAnimationFrame
 function onDocumentMouseWheel( event ) {
 	var newDelta = 0;
 	if (event.wheelDeltaY) {
-	    // WebKit
-	    newDelta +=event.wheelDeltaY;
-	    }
-	    else if (event.wheelDelta) {
-	    // Opera / Explorer 9
-	    newDelta += event.wheelDelta;
-	    }
-	    else if (event.detail) {
-	    // Firefox
-	        newDelta  += event.detail;
-	    }
+		// WebKit
+		newDelta +=event.wheelDeltaY;
+		}
+		else if (event.wheelDelta) {
+		// Opera / Explorer 9
+		newDelta += event.wheelDelta;
+		}
+		else if (event.detail) {
+		// Firefox
+			newDelta  += event.detail;
+		}
 
-	    // zmenseni maximalniho priblizeni
-	    var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+		// zmenseni maximalniho priblizeni
+		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 
-	    // meze kolecka
-	    MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
-	    MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
+		// meze kolecka
+		MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
+		MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
 
-	    // osetreni mezi kolecka
-	    if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
-	    {
-	    	if (newDelta>0) 
-	    	{ 	
-	    		// je pozitivni
+		// osetreni mezi kolecka
+		if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
+		{
+			if (newDelta>0) 
+			{ 	
+				// je pozitivni
 
 				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-	    	}
-	    	else {
-	    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-	    	}
-	    }
-	    else {
-	    	if (MOUSE.wheel.delta>0) {
-	    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-	    	}
-	    	else {
-	    		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-	    	}
-	    }
+			}
+			else {
+				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+			}
+		}
+		else {
+			if (MOUSE.wheel.delta>0) {
+				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+			}
+			else {
+				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+			}
+		}
 }
 
 
@@ -705,23 +699,23 @@ function onDocumentMouseUp( event ) {
 
 
 function onDocumentMouseDown( event ) {
-    MOUSE.active = true;
-    MOUSE.down.x = event.pageX;
-    MOUSE.down.y = event.pageY;
-    event.preventDefault();
-    return false;
+	MOUSE.active = true;
+	MOUSE.down.x = event.pageX;
+	MOUSE.down.y = event.pageY;
+	event.preventDefault();
+	return false;
 }
 
 function onDocumentMouseMove( event ) {
 
-    if (MOUSE.active) {
-        MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
-        MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
-        MOUSE.move.angle.y+= MOUSE.move.x;
-        MOUSE.move.angle.x+=MOUSE.move.y;
-        MOUSE.down.x = event.pageX; 
-        MOUSE.down.y = event.pageY;
-        event.preventDefault();
+	if (MOUSE.active) {
+		MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
+		MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
+		MOUSE.move.angle.y+= MOUSE.move.x;
+		MOUSE.move.angle.x+=MOUSE.move.y;
+		MOUSE.down.x = event.pageX; 
+		MOUSE.down.y = event.pageY;
+		event.preventDefault();
 		}
 }
 
@@ -774,7 +768,7 @@ function onWindowResize( event ) {
 	var element_canvas = document.querySelector("canvas");
 	if (element_canvas && 0) {
 		element_canvas.width = window.innerWidth;
-    	element_canvas.height = window.innerHeight;
+		element_canvas.height = window.innerHeight;
 	}
 }
 
@@ -794,9 +788,9 @@ function main() {
 
 	/*
 	video.addEventListener("timeupdate", function(){
-	    if(this.currentTime >= 8){
-	        this.pause();
-	    }
+		if(this.currentTime >= 8){
+			this.pause();
+		}
 	});
 	*/
 
