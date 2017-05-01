@@ -385,7 +385,8 @@ if (!gl) {
 
 
 			// perspektivni matice
-			pmatrix = createPerspectiveMatrix(Math.PI/1.5, 1.4, 0.1, 100);
+			// zorny uhel je 90%, pomer je jasnej
+			pmatrix = createPerspectiveMatrix(Math.PI/2, canvas.width/canvas.height, 0.1, 100);
 			
 			// ------ nahrani matic do promennych ==============================================================
  			mmLoc = gl.getUniformLocation(program, "MMatrix");
@@ -507,6 +508,25 @@ if (!gl) {
 		}
 	}
 
+ 
+		 function initViewMatrix() {
+			/// ROTACNI MATICE pomoci MYSI
+			var atr = 0;
+			makeIdentityFrom(vmatrix );
+			translate(vmatrix,0, 0, atr);
+
+ 		 }
+
+		function updateCameraPosition() {
+			/// ROTACe MATICE pomoci MYSi a klavesnice
+			translate(vmatrix,0, 0, mouse.wheel.delta);
+			rotateY( vmatrix, mouse.move.angle.y);
+			rotateX( vmatrix, mouse.move.angle.x);
+		}
+
+		function getCameraPosition() {
+			return vmatrix[14];
+		}
 
 		function render() {
 			// status bar a cas
@@ -515,17 +535,16 @@ if (!gl) {
  			
  			// zorny uhel
 			var koef = (Math.abs(mouse.move.angle.y)/2*Math.PI)%2;
-			createFieldVision(150,150,0.4,1, -parseInt(160-mouse.wheel.delta *80), 0.0/*mouse.move.angle.y*57*/); 
-
+			//createFieldVision(150,150,0.4,1, -parseInt(160-mouse.wheel.delta *80), 0.0/*mouse.move.angle.y*57*/); 
+			createFieldVision(150,150,0.4,1, 30, mouse.move.angle.y * (180/Math.PI) ); 
 			// aktualizace textury
-			if (updateTexture()) {
-				/// ROTACNI MATICE pomoci MYSI
-	            makeIdentityFrom(vmatrix );
+			if (updateTexture()) 
+			{
+				// inicializace zobrazovaci matice
+				initViewMatrix();
 	 
-	  			/// ROTACe MATICE pomoci MYSi a klavesnice
-				translate(vmatrix,0, 0, mouse.wheel.delta);
-				rotateY( vmatrix, mouse.move.angle.y);
-				rotateX( vmatrix, mouse.move.angle.x);
+	 			// zmena pozice zobrazeni
+				updateCameraPosition();
 
 				// nahrani matic do programu
 				gl.uniformMatrix4fv(pmLoc, false, pmatrix);
@@ -584,6 +603,7 @@ if (!gl) {
 			    	if (newDelta>0) 
 			    	{ 	
 			    		// je pozitivni
+
 						mouse.wheel.delta+=mouse.wheel.sensitivity;
 			    	}
 			    	else {
@@ -598,7 +618,7 @@ if (!gl) {
 			    		mouse.wheel.delta+=mouse.wheel.sensitivity;
 			    	}
 			    }
-			    console.log(mouse.wheel.delta);
+			   d(getCameraPosition());
 		}
 
 
