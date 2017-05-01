@@ -184,8 +184,8 @@
 var gl;
 var GEOMETRY;
 var vide_playing = 0;
-var video = createVideo("data/R0010081.mp4"); 
-var image = createImage("data/p7.jpg");
+var video = createVideo("data/R0010014_20161217101030_er.mp4"); // R0010014_20161217101030_er / R0010081
+var image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
 /// ------ VSECHNY PROMENNE PRO MYS
 var MOUSE = {
@@ -239,11 +239,11 @@ var SETTINGS = {
 		} ,
 		fisheye : {
 			panorama : {
-				active: false,
+				active: true,
 			},
 			video : {
 				src: null,
-				active: true,
+				active: false,
 				latitudes: 60,
 				longtitudes: 60,
 				radius: 7,
@@ -323,12 +323,12 @@ function initProgram() {
 	var fisheye_or_equi_mode = null;
 	if (SETTINGS.mode.equirectangular.panorama.active  || SETTINGS.mode.equirectangular.video.active) {
 		fisheye_or_equi_mode = 0;
-		d('jsem zdee');
-	}
-	if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.fisheye.video.active ) {
+ 	}
+	else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.fisheye.video.active ) {
 		fisheye_or_equi_mode = 1;
 	}
-
+ 
+	d(fisheye_or_equi_mode);
 	GEOMETRY = createSphereGeometry(60, 60, 7, fisheye_or_equi_mode) ;
 	PROG.matrices.model.data = createIdentityMatrix4();
 	PROG.matrices.view.data = createIdentityMatrix4();
@@ -401,9 +401,14 @@ function setupProgram()
 
 	// ---- otoceni kamery do pocatecni pozice
 	// PRO equirectangular
-	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.equirectangular.video.active) {
+	if (SETTINGS.mode.equirectangular.panorama.active) {
 		rotateZ(PROG.matrices.model.data,   Math.PI/2);
 		rotateX(PROG.matrices.model.data,   Math.PI/2 );
+		rotateY(PROG.matrices.model.data,   Math.PI/2 );
+	}
+	else if (SETTINGS.mode.equirectangular.video.active) {
+		rotateZ(PROG.matrices.model.data,   Math.PI/2);
+		rotateX(PROG.matrices.model.data,   3/2*Math.PI);
 		rotateY(PROG.matrices.model.data,   Math.PI/2 );
 	}
 	// PRO fisheye
@@ -511,13 +516,15 @@ function setupProgram()
 	// mapovani OBRAZKU =======================================
 	// MUSI BYT TADY, protoze textura se narozdil od videa neaktualizuje
 	// equirectangular
-	if (SETTINGS.mode.equirectangular.panorama.active) 
+	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) 
 	{
 		createLoader(150, 150, 0.55, 0.55, 1) ;
 		if (imgLoaded){
 			createLoader(150, 150, 0.55, 0.55,0) ;
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
-			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+			if (SETTINGS.mode.equirectangular.panorama.active) {
+				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+			}
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
         }
         else {
@@ -530,7 +537,7 @@ function setupProgram()
 
 
 function updateTexture() {
-	if (SETTINGS.mode.fisheye.video.active) 
+	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) 
 	{
 		if (video.readyState >= video.HAVE_CURRENT_DATA) 
 		{
@@ -582,7 +589,7 @@ function render() {
 
 	// METADATa PRO VIDEO VIDEO
 	// status bar a cas
-	if (SETTINGS.mode.fisheye.video.active) {
+	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
 		var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
 		createVideoStatusBar(170, 30, 0.8, 1, video);
 	}
