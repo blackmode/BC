@@ -520,7 +520,7 @@ if (!gl) {
 			// aktualizace textury
 			if (updateTexture()) {
 				/// ROTACNI MATICE pomoci MYSI
-	            mat4.identity(vmatrix );
+	            makeIdentityFrom(vmatrix );
 	 
 	  			/// ROTACe MATICE pomoci MYSi a klavesnice
 				translate(vmatrix,0, 0, mouse.wheel.delta);
