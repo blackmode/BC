@@ -694,12 +694,20 @@ Jelikož samotná implementace ve WebGL vyžaduje k realizaci problematiky více
 Každá důležitá část implementace má svůj vlastní objekt proměnných, které se k dané problematice vztahují, včetně všech nutných interních stavů.
 
 \subsection{Myš a klávesnice}
-Veškeré interakce s myší se z hlediska datové částí promítají do objektové proměnné \texttt{MOUSE}, která udržuje data o pohybu pozorovatele ve scéně po vertikální a horizontální ose otáčení, včetně hloubky posuvu - tedy přibližování scény pomocí kolečka. Drtivá většina udržovaných dat v proměnné \texttt{MOUSE} pochází z Javascriptové metody \texttt{addEventListener()}.
-Dalším objektem je klávesnice realizována pomocí objektové proměnné \texttt{KEYBOARD}, která udržuje pouze základní informace, zdali je aktivní popř. jaká citlivost pohybu pozorovatele ve scéně pomocí klávesnice má být. Veškeré interakce s klávesnici jsou dále realizovány pomocí události \texttt{event}, do které se načítají údaje o stisku kláves, tudíž není třeba další data uchovávat. 
+Veškeré interakce s myší se z hlediska datové částí promítají do objektové proměnné \texttt{MOUSE}, která udržuje data o pohybu pozorovatele ve scéně po vertikální a horizontální ose otáčení, včetně hloubky posuvu - tedy přibližování scény pomocí kolečka. Většina udržovaných dat v proměnné \texttt{MOUSE} pochází z objektu \texttt{MouseEvent} popř. \texttt{WheelEvent}. Objekty poté díky Javascriptové metodě \texttt{addEventListener()} uchovávají aktuální hodnoty vstupu odkud se čtou.
+Dalším objektem je klávesnice realizována pomocí objektové proměnné \texttt{KEYBOARD}, která udržuje pouze základní informace, zdali je aktivní popř. jaká citlivost pohybu pozorovatele ve scéně pomocí klávesnice má být. Veškeré interakce s klávesnici jsou dále realizovány pomocí čtení z objektu \texttt{KeyboardEvent}, do které se načítají údaje o stisku kláves, tudíž na rozdíl od myši není třeba tyto data uchovávat, protože klávesnice je závislá pouze na aktuálním stavu. 
 
-Před samotným spuštěním programu je ještě nutné provést některé inicializační operace
+%=========================================================================
+\newpage
+
+\subsection{Data programu a nastavení}
+Obdobným způsobem, jak je již nastíněno výše, jsou uchovávány proměnné a nastavení samotného programu. Programová objektová proměnná \texttt{PROG} uchovává data jako jsou buffery programu, transformační matice nad kterými probíhá projekce a v neposlední řadě atributy shaderů, díky kterým jsou data matic, bufferů apod. nahrávány na grafickou kartu. 
+
+Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení modu programu resp. formát dat, které bude program vyobrazovat. Dále informace pro nastavení a inicializaci grafických prvků.
+
+
 \section{Běh programu}
-
+Před samotným spuštěním programu je ještě nutné provést některé inicializační operace, nastavení a ověření. Jednou ze zásadních problémů testování je podpora prohlížečů, kterou musíme ověřit nejdříve.
 
 \subsection{Shadery}
 \subsection{Transformační matice}
