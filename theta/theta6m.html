@@ -239,8 +239,6 @@ var mouse = {
 
 
 var keyboard = {
-	lon: 0.0,
-	lat: 0.0,
 	active : true,
 	sensitivity : {
 		x: 0.06,
@@ -523,14 +521,9 @@ if (!gl) {
 			if (updateTexture()) {
 				/// ROTACNI MATICE pomoci MYSI
 	            mat4.identity(vmatrix );
-	 			//mat4.rotateZ(vmatrix, vmatrix,   - Math.PI/2 );
 	 
-	  			/// ROTACe MATICE pomoci klavesnice
-				//rotateY( mmatrix, keyboard.lon);
-				//rotateX( mmatrix, keyboard.lat);
-
-	  			/// ROTACe MATICE pomoci MYSi
-				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, mouse.wheel.delta));
+	  			/// ROTACe MATICE pomoci MYSi a klavesnice
+				translate(vmatrix,0, 0, mouse.wheel.delta);
 				rotateY( vmatrix, mouse.move.angle.y);
 				rotateX( vmatrix, mouse.move.angle.x);
 
