@@ -184,8 +184,7 @@
 var gl;
 var GEOMETRY;
 var vide_playing = 0;
-var video = createVideo("data/R0010014_20161217101030_er.mp4"); // R0010014_20161217101030_er / R0010081
-var image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
+
 
 /// ------ VSECHNY PROMENNE PRO MYS
 var MOUSE = {
@@ -230,8 +229,7 @@ var SETTINGS = {
 	mode : {
 		equirectangular : {
 			panorama : {
-				active: false,
-				src: null,
+				active: true,
 			},
 			video : {
 				active: false,
@@ -239,10 +237,9 @@ var SETTINGS = {
 		} ,
 		fisheye : {
 			panorama : {
-				active: true,
+				active: false,
 			},
 			video : {
-				src: null,
 				active: false,
 				latitudes: 60,
 				longtitudes: 60,
@@ -250,6 +247,10 @@ var SETTINGS = {
 			} ,
 		} ,	
 	},
+	input : {
+		video: null,
+		image:  null,
+	} ,
 	field_vision : {
 		wdith: 0.06,
 		height:  0.06,
@@ -314,10 +315,17 @@ var PROG = {
 	canvas: null,
 };
 
- 
-
+SETTINGS.input.video =  createVideo("data/R0010081.mp4"); // R0010014_20161217101030_er / R0010081
+SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
 function initProgram() {
+
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.fisheye.video.active 				= true;
+
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+
 
 	// nastaveni modu geometrie
 	var fisheye_or_equi_mode = null;
@@ -525,7 +533,7 @@ function setupProgram()
 			if (SETTINGS.mode.equirectangular.panorama.active) {
 				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 			}
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, SETTINGS.input.image);
         }
         else {
         	w('obrazek se nepodarilo uspesne nacist');
@@ -539,19 +547,19 @@ function setupProgram()
 function updateTexture() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) 
 	{
-		if (video.readyState >= video.HAVE_CURRENT_DATA) 
+		if (SETTINGS.input.video.readyState >= SETTINGS.input.video.HAVE_CURRENT_DATA) 
 		{
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
 			//gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
 			// the next line fails in Safari if the video is coming from another domain or subdomain
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, SETTINGS.input.video);
 			gl.bindTexture(gl.TEXTURE_2D, null);
 			createLoader(150, 150, 0.55, 0.55,0) ;
 			return true;
 		}
 
-		if (video.readyState < video.HAVE_CURRENT_DATA) 
+		if (SETTINGS.input.video.readyState < SETTINGS.input.video.HAVE_CURRENT_DATA) 
 		{
 			console.log('video se nacita...');
 			createLoader(150, 150, 0.55, 0.55, 1) ;
@@ -590,8 +598,8 @@ function render() {
 	// METADATa PRO VIDEO VIDEO
 	// status bar a cas
 	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
-		var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
-		createVideoStatusBar(170, 30, 0.8, 1, video);
+		var elem = document.getElementById("data").innerHTML = 'Čas: '+SETTINGS.input.video.currentTime;
+		createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 	}
 		
 	// zorny uhel
@@ -625,12 +633,13 @@ function render() {
 
 		// zde prepinanim renderovani
 		if (!GEOMETRY.noIndices) {
+			// renderuje se equirectangularni zobrazeni, takze muzu pouzit indexy
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
 			gl.drawElements(gl.TRIANGLES, GEOMETRY.indices.length, gl.UNSIGNED_SHORT, 0);
 		}
 		else {
 
-			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);// HAZI TO VIC CHYB, nevim  jeste proc
+			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);
 			gl.drawArrays(gl.TRIANGLES,0, GEOMETRY.normals.length/3);
 		}
 	}
@@ -722,22 +731,22 @@ function onDocumentKeyPress( event ) {
 	{
 		if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
 			vide_playing = 1;
-			video.play();
+			SETTINGS.input.video.play();
 		}
 
 		if (event.keyCode == 101 || event.keyCode == 69) { // e/E
-			video.pause();
+			SETTINGS.input.video.pause();
 			vide_playing = 0;
 		}
 
 		// start/stop pomoci mezerniku
 		if (event.keyCode === 0 || event.keyCode === 32) {
 			if (!vide_playing ) {
-				video.play();
+				SETTINGS.input.video.play();
 				vide_playing = 1;
 			}	
 			else if (vide_playing ) {
-				video.pause();
+				SETTINGS.input.video.pause();
 				vide_playing = 0;
 			}
 		}
@@ -778,7 +787,7 @@ function main() {
 
 	 
 
-	video.oncanplaythrough = function() {
+	SETTINGS.input.video.oncanplaythrough = function() {
 		//render();
 		//video.play();
 	};
@@ -792,7 +801,7 @@ function main() {
 	*/
 
 	 
-	video.addEventListener("loadedmetadata",function() { 
+	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
 		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
 	 },false);
 
