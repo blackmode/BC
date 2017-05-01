@@ -330,7 +330,6 @@ function initProgram() {
 		fisheye_or_equi_mode = 1;
 	}
  
-	d(fisheye_or_equi_mode);
 	GEOMETRY = createSphereGeometry(60, 60, 7, fisheye_or_equi_mode) ;
 	PROG.matrices.model.data = createIdentityMatrix4();
 	PROG.matrices.view.data = createIdentityMatrix4();
@@ -537,16 +536,15 @@ function setupProgram()
 
 }
 
-
-function updateTexture() {
+// aktualizace textury v pripade videa
+function updateTexture() 
+{
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) 
 	{
 		if (SETTINGS.input.video.readyState >= SETTINGS.input.video.HAVE_CURRENT_DATA) 
 		{
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
-			//gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
-			// the next line fails in Safari if the video is coming from another domain or subdomain
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, SETTINGS.input.video);
 			gl.bindTexture(gl.TEXTURE_2D, null);
 			createLoader(150, 150, 0.55, 0.55,0) ;
@@ -563,7 +561,6 @@ function updateTexture() {
 	}
 
 	return true;
-
 }
 
 
@@ -769,6 +766,7 @@ function onWindowResize( event ) {
 	if (element_canvas && 0) {
 		element_canvas.width = window.innerWidth;
 		element_canvas.height = window.innerHeight;
+		main();
 	}
 }
 
@@ -777,27 +775,28 @@ function main() {
 	initProgram();
 	setupProgram();
 	render();
+ 
+
+/*
+SETTINGS.input.video.oncanplaythrough = function() {
+	render();
+	//video.play();
+};
+*/
 
 
-	 
-
-	SETTINGS.input.video.oncanplaythrough = function() {
-		//render();
-		//video.play();
-	};
-
-	/*
+/*
 	video.addEventListener("timeupdate", function(){
 		if(this.currentTime >= 8){
 			this.pause();
 		}
 	});
-	*/
+*/
 
 	 
 	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
 		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
-	 },false);
+	},false);
 
 
 

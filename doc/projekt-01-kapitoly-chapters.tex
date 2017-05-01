@@ -248,11 +248,13 @@ Předávání hodnot v globálních proměnných může probíhat za pomocí tř
 \newpage
 
 \section{WebGL}
-WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče \cite{mozilla}. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven, nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod..
+WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče \cite{mozilla}. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven, nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod.. Zpracování všech dat i samotný běh programu je z hlediska implementace velice podobný konečnému automatu. 
 
-K samotnému vykreslení je použit již výše zmíněný element HTML5 \texttt{<canvas>}.
+K samotnému vykreslení je použit již výše zmíněný element HTML5 \texttt{<canvas>}, ze kterého se získá WebGL kontext.
 
 V současné době je oficiálně vydána verze WebGL 1.0, která je založeno na OpenGL ES 2.0. Doposud se jedná o jedinou stabilní verzi. OpenGL ES\footnote{OpenGL for Embedded Systems.} je zjednodušená verze OpenGL, která eliminuje většinu vykreslovacích pipeline. Tato verze je především určena pro menší vestavěné systémy. Dalším rozšířením WebGL bude verze 2.0, která se stále nachází ve vývoji. Bude založena na OpenGL ES 3.0 přinášející velká vylepšení v zobrazování 3D grafiky - zejména textur, akceleraci vizuálních efektů, novou verzí jazyka GLSL s plnou podporu desetinných a celočíselných operací apod.
+
+
 
 \subsection{Vykreslování primitiv}
 K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě věci - vrcholy přepočítané do tzv. \textit{clipspace} a jemu přiřazené odpovídající barvy. Jak pro vrcholy tak pro barvy slouží jiný GLSL shader. K vyobrazení objektu používá WebGL tří základní primitiva - vykreslení samotných bodů, čar nebo trojúhelníku. Vše funguje tak, že zadaný bod, kterému budeme chtít přiřadit barvu, se načte do odpovídající speciální globální proměnné ve vertex shaderu, tam se daná hodnota přepočítá do intervalu \texttt{<-1,1>} pro všechny jeho osy a vzniklá hodnota se uloží na grafické kartě. Počet bodu záleží na primitivu, které vykreslujeme. Pokud se tedy jedná o bod, stačí pouze jeden bod ve vertex shaderu, pokud se jedna o čáru tak dvě popř. trojúhelník, tak trojice bodů. GPU\footnote{Graphic Processing Unit - grafický procesor} poté zjistí, které pixely korespondují s vykreslovaným primitivem a pro každý takový pixel zavolá fragment shader. 
@@ -260,6 +262,7 @@ K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě vě
 
 \subsection{Vyrovnávací paměť}
 Buffery resp. vyrovnávací paměti jsou rychle přístupné paměti na grafické kartě. V bufferech jsou  uloženy potřebné data k vykreslování grafických objektů jako např. body geometrie, normály, mapování textur apod. Data jsou poté snadno dále předávány GLSL shaderům, které s nimi pracují.
+
 
 %=========================================================================
 \newpage
@@ -269,26 +272,26 @@ Některé frameworky\footnote{Rámcová softwarová struktura usnadňující ře
 
 Ortografická projekce využívá skutečné velikosti objektu. Scéna je reprezentována jako pravoúhlý hranol.
 
-Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude jevit jako menší, protože jeho pozice je středem této projekce. 
+Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude jevit jako menší, protože jeho pozice je středem této projekce. Dalším příkladem bychom mohli uvést koleje, které se v dálce jeví, jakoby se sbíhaly v jednu jedinou apod.
   
-Pokud bychom chtěl vykreslit nejaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
+Pokud bychom chtěl vykreslit nějaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
-\subsubsection{Homogenní souřadnice}
+\subsection{Homogenní souřadnice}
 Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka a spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.\cite{WebGLbeg}
 
-Perspektivním dělením - vydělením souřadnic \texttt{(x, y, z)} perspektivní sožkou \texttt{w}, lze získat normalizované hodnoty bodu zpět do trojrozměrného souřadného systému. Platí zde ale, že perspektivní složka nesmí být nulová. 
+Perspektivním dělením - vydělením souřadnic \texttt{(x, y, z)} perspektivní složkou \texttt{w}, lze získat normalizované hodnoty bodu zpět do trojrozměrného souřadného systému. Platí zde ale, že perspektivní složka nesmí být nulová. 
 
 Samotná perspektivní složka funguje v homogenních souřadnicích jako změna měřítka daného bodu geometrie.
 
 Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje definovat body do nekonečna, resp. nekonečnou délku vektoru, což ve standardním trojrozměrném prostoru možné není. Tato situace nastává v případě, kdy je složka rovna nule.
 
-\subsubsection{Model matrix}
+\subsection{Model matrix}
 Jedná se o matici, kterou držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
 
-\subsubsection{View matrix}
+\subsection{View matrix}
 Díky teto transformační matici realizujeme již avizovanou ``roli kamery'' , kdy simulujeme vzájemná vztah scény a pozorovatele.
 
-\subsubsection{Perspective matrix}
+\subsection{Perspective matrix}
 Stará se o perspektivní zkreslení scény. Tato transformace rozhoduje o tom, jak velké zorné pole bude vykresleno a mapováno 
 na obrazovku monitoru. 
 
@@ -300,31 +303,31 @@ Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro pr�
 
 \begin{description}
 	\item[\texttt{gl.createShader(type)}] - vytvoří objekt shaderu, vstupním argumenty \texttt{type} mohou být \\ \texttt{gl.VERTEX\_SHADER} nebo \texttt{gl.FRAGMENT\_SHADER}
-
+	
 	\item[\texttt{gl.shaderSource(shader, source)}] - asociuje objekt shaderu \texttt{shader} se zdrojovým kódem samotného shaderu \texttt{source} v textové formě
 	
 	\item[\texttt{gl.compileShader(shader)}] - kompiluje GLSL kód na binární data, vstupním parametrem je objekt shaderu \texttt{shader}
-
+	
 \end{description}
 
 Následuje práce s programem. Funkce \texttt{gl.createProgram()} vytvoří objekt programu. Poté \texttt{gl.attachShader(program, shader)} - přiloží daný shader k programu.
 Funkce \\ \texttt{gl.linkProgram(program)}, která slinkuje vše dohromady, \texttt{gl.useProgram(program)} - nastaví daný webgl program jako část současného vykreslovacího stavu.
 
 \begin{description}
- 
+	
 	\item[\texttt{gl.getAttribLocation(program, attribute)}] - vrací referenci na atribut v ve vertex shaderu
-
+	
 	\item[\texttt{gl.enableAttribute(attribute)}] - aktivuje atribut 
 	
 	\item[\texttt{gl.createBuffer()}] - vytvoří nový buffer objekt pro data
 	
 	\item[\texttt{gl.bindBuffer(target, buffer)}] - nastaví vytvořený buffer \texttt{buffer} jako aktivní, parametr \texttt{target} specifikuje data s jakými se bude pracovat
-
+	
 	\item[\texttt{gl.bufferData(target, srcData, usage)}] - parametr \texttt{target} má stejný význam jako u funkce \texttt{bindBuffer}, \texttt{srcData} určuje data, která se nahrají do bufferu, poslední parametr \texttt{usage} specifikuje způsob využiti uložených dat
-
+	
 	\item[\texttt{gl.vertexAttribPointer(attrib, size, type, normalized, stride, offset)}] -  \texttt{attrib} prováže atribut programu s aktivním bufferem, \texttt{size} určuje, z kolika prvků se skládají data v bufferu, \texttt{type} spcecifikuje datový typ dat v bufferu, \texttt{normalized} určuje zdali budou hodnoty normalizovány, parametr je typu \texttt{bool}, dále \texttt{stride} udávající zdali budeme nějaké hodnoty přeskakovat, \texttt{offset} odkud budeme data číst.
-
-
+	
+	
 \end{description}
 
 Samotné vykreslení uložených data v bufferech se realizuje funkcemi:
@@ -340,8 +343,6 @@ Samotné vykreslení uložených data v bufferech se realizuje funkcemi:
 
 %=========================================================================
 \newpage
-
-
 
 \chapter{Návrh klíčových částí}
 \label{chapter:3}
@@ -551,7 +552,7 @@ Součástí již avizované projekce v předchozí kapitole, jsou matice, které
 \subsection{Modelová matice}
 Sem patři rotační matice všech os souřadného systému, dále matice pro změnu měřítka souřadnic a posuvná matice objektu.
 
-Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůču kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Cílem modelové matice je posunout a pootočit zobrazovaným objektem do výchozí pozice promítání. Otáčení apod. operace v reálném čase jsou  doménou zobrazovací matice. Začneme s matici pro změnu měřítka modelu:
+Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůči kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Cílem modelové matice je posunout a pootočit zobrazovaným objektem do výchozí pozice promítání. Otáčení apod. operace v reálném čase jsou  doménou zobrazovací matice. Začneme s matici pro změnu měřítka modelu:
 
 $$
 S =
@@ -686,6 +687,9 @@ Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupn�
 \label{chapter:4}
 V této kapitole rozeberu implementaci programu.
 \section{Běh programu}
+
+
+
 
 \subsection{Shadery}
 \subsection{Transformační matice}
