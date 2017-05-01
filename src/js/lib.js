@@ -620,6 +620,7 @@ function createImage( src ) {
 	}
     var image =  new Image();
     image.src = src;
+    image.crossOrigin = "anonymous";
 	return image;
 }
 
@@ -1077,4 +1078,54 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 	else {
 		w('DIV s ID: compass-box NEEXISTUJE!');
 	}
+}
+
+
+function createLoader(width, height, position_x, position_y, active) 
+{
+			// neexistoval, tak jej vytvorim
+			var status_bar_width = width;
+			var status_bar_height = height;
+			var canvas_dom = document.getElementsByTagName("canvas")[0];
+			// dynamicke umisteni zadane parametrem
+			var left_correction = (width/canvas_dom.width); 
+			var status_bar_left =  canvas_dom.width*((position_x)-left_correction);
+
+			var top_correction = (height/canvas_dom.height); 
+			var status_bar_top =   canvas_dom.height*((position_y)-top_correction);
+
+			// stylovani prvku
+			var div = document.getElementById('overlay');
+			if (div) {
+				div.style.width = status_bar_width+'px';
+				div.style.height = status_bar_height+'px';
+				div.style.left = status_bar_left+'px';
+				div.style.top = status_bar_top+'px';
+				div.style.backgroundColor  = 'transparent';
+				div.style.background  = 'url(../src/img/loading.gif)';
+				div.style.opacity  = 1;
+				div.style.position = 'absolute';
+				div.style.overflow = 'hidden';
+				div.style.padding = '5px';
+
+				if (active) {
+					div.style.display = 'block';
+				}
+				else {
+					div.style.display = 'none';
+				}
+			}
+			else {
+				w("overlay not exists");
+			}
+
+
+}
+
+
+
+function imgLoaded(img_object) {
+  return 
+  img_object.complete && 
+  (img_object.naturalHeight !== 0);
 }
