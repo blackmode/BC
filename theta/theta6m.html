@@ -187,6 +187,7 @@ var vide_playing = 0;
 var video = createVideo("data/R0010081.mp4"); 
 
 
+
 /// ------ VSECHNY PROMENNE PRO MYS
 var MOUSE = {
 	down : {
@@ -211,6 +212,7 @@ var MOUSE = {
 };
 
 
+
 /// ------ VSECHNY PROMENNE PRO KLAVESNICI
 var KEYBOARD = {
 	active : true,
@@ -219,6 +221,7 @@ var KEYBOARD = {
 		y:  0.06,
 	} ,
 };
+
 
 
 /// ------ VSECHNY nastaveni PROGRAMU
@@ -252,6 +255,8 @@ var SETTINGS = {
 	} ,
 };
 
+
+
 /// ------ VSECHNY promenne PROGRAMU
 var PROG = {
 
@@ -262,6 +267,7 @@ var PROG = {
 		} ,
 	},
 
+	// BUFFERY programu
 	buffer : {
 		normal: null,
 		index: null,
@@ -269,13 +275,14 @@ var PROG = {
 		texture: null,
 	} ,
 
+	// ATRIBUTY programu
 	attributes : {
 		vertex: null,
 		fragment: null,
 		texture: null,
 	} ,
 
-	
+	// MATICE
 	matrices : {
 		model : {
 			link: null,
@@ -294,7 +301,6 @@ var PROG = {
 
 	texture: null,
 	sampler: null,
-	gl: null,
 	program: null,
 	canvas: null,
 };
@@ -302,460 +308,453 @@ var PROG = {
  
 
 
-	function initProgram() {
+function initProgram() {
 
-		GEOMETRY = createSphereGeometry(60,60,7,1) ;
-		PROG.matrices.model.data = createIdentityMatrix4();
-		PROG.matrices.view.data = createIdentityMatrix4();
-		PROG.matrices.projection.data = createIdentityMatrix4();
+	GEOMETRY = createSphereGeometry(60,60,7,1) ;
+	PROG.matrices.model.data = createIdentityMatrix4();
+	PROG.matrices.view.data = createIdentityMatrix4();
+	PROG.matrices.projection.data = createIdentityMatrix4();
 
- 		PROG.canvas = document.querySelector("canvas");
+	PROG.canvas = document.querySelector("canvas");
 
-		gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
-		if (!gl) {
-			w('Webgl se nepodarilo inicializovat...');
-		}
-
-		return true;
+	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
+	if (!gl) {
+		w('Webgl se nepodarilo inicializovat...');
 	}
 
-		function setupProgram() 
-		{
-			if (!initProgram()) {
-				e('FATALNI CHYBA, nepodarilo se inicializovat program');
-				return false;
-			}
+	return true;
+}
 
-			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-			document.addEventListener("keypress", onDocumentKeyPress, false);
-			document.addEventListener("mousewheel", onDocumentMouseWheel, false);
-			window.addEventListener('resize', onWindowResize, true);
+function setupProgram() 
+{
+	if (!initProgram()) {
+		e('FATALNI CHYBA, nepodarilo se inicializovat program');
+		return false;
+	}
 
-			// nacteni, zkompilovani a overeni vertext shaderu
-			var str = document.querySelector("#vs").textContent;
-			var vs = gl.createShader(gl.VERTEX_SHADER);
-			gl.shaderSource(vs, str);
-			gl.compileShader(vs);
-			var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
-			if (!vertextSucces) {
-				w('nepodařilo se zkompilovat VERTEX_SHADER');
-				return false;
-			}
-			
-			// nacteni, zkompilovani a overeni fragment shaderu
-			var str = document.querySelector("#fs").textContent;
-			var fs = gl.createShader(gl.FRAGMENT_SHADER);
-			gl.shaderSource(fs, str);
-			gl.compileShader(fs);
-			var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
-			if (!fragmentSucces) {
-				w('nepodařilo se zkompilovat FRAGMENT_SHADER');
-				return false;
-			}
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	document.addEventListener("keypress", onDocumentKeyPress, false);
+	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
+	window.addEventListener('resize', onWindowResize, true);
 
-			// vytvoreni programu, pridani vertex a fragment shaderu a overeni
-			PROG.program = gl.createProgram();
-			gl.attachShader(PROG.program, vs);
-			gl.attachShader(PROG.program, fs);
-			gl.linkProgram(PROG.program);
-			gl.useProgram(PROG.program);
-			var programSuccess = gl.getProgramParameter( PROG.program, gl.LINK_STATUS);
-			if ( ! programSuccess) {
-			  var info = gl.getProgramInfoLog(PROG.program);
-			  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
-			  return false;
-			}
-			
-			// -------- ZOBRAZOVACI matice
-			// MODEL matrix
+	// nacteni, zkompilovani a overeni vertext shaderu
+	var str = document.querySelector("#vs").textContent;
+	var vs = gl.createShader(gl.VERTEX_SHADER);
+	gl.shaderSource(vs, str);
+	gl.compileShader(vs);
+	var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
+	if (!vertextSucces) {
+		w('nepodařilo se zkompilovat VERTEX_SHADER');
+		return false;
+	}
+	
+	// nacteni, zkompilovani a overeni fragment shaderu
+	var str = document.querySelector("#fs").textContent;
+	var fs = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(fs, str);
+	gl.compileShader(fs);
+	var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
+	if (!fragmentSucces) {
+		w('nepodařilo se zkompilovat FRAGMENT_SHADER');
+		return false;
+	}
 
-			scale(PROG.matrices.model.data, 1.0, 1.0, 1.0);
-			translate(PROG.matrices.model.data, 0.0, 0.0, 0.0);
+	// vytvoreni programu, pridani vertex a fragment shaderu a overeni
+	PROG.program = gl.createProgram();
+	gl.attachShader(PROG.program, vs);
+	gl.attachShader(PROG.program, fs);
+	gl.linkProgram(PROG.program);
+	gl.useProgram(PROG.program);
+	var programSuccess = gl.getProgramParameter( PROG.program, gl.LINK_STATUS);
+	if ( ! programSuccess) {
+	  var info = gl.getProgramInfoLog(PROG.program);
+	  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
+	  return false;
+	}
+	
+	// -------- ZOBRAZOVACI matice
+	// MODEL matrix
 
-			// ---- otoceni kamery do pocatecni pozice
-			rotateZ(PROG.matrices.model.data,   Math.PI/2);
-			rotateX(PROG.matrices.model.data,   2*Math.PI );
-			rotateY(PROG.matrices.model.data,   2*Math.PI );
+	scale(PROG.matrices.model.data, 1.0, 1.0, 1.0);
+	translate(PROG.matrices.model.data, 0.0, 0.0, 0.0);
 
-
-			// DEBUG===========================================
-			if (getParamByKey("angleX")) {
-				rotateX(PROG.matrices.model.data,    Math.PI * getParamByKey("angleX") );
-			}
-
-			if (getParamByKey("angleZ")) {
-				rotateZ(PROG.matrices.model.data,    Math.PI * getParamByKey("angleZ") );
-			}
-
-			if (getParamByKey("angleY")) {
-				rotateY(PROG.matrices.model.data,    Math.PI * getParamByKey("angleY") );
-			}
-
-			// VIEW matrix
-			if (getParamByKey("camera")) {
-				mat4.translate(PROG.matrices.model.data, PROG.matrices.model.data, vec3.fromValues(0, 0, getParamByKey("camera") ));
-			}
-			// DEBUG===========================================, konec
+	// ---- otoceni kamery do pocatecni pozice
+	rotateZ(PROG.matrices.model.data,   Math.PI/2);
+	rotateX(PROG.matrices.model.data,   2*Math.PI );
+	rotateY(PROG.matrices.model.data,   2*Math.PI );
 
 
-			// perspektivni matice
-			// zorny uhel je 90%, pomer je jasnej
-			PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
+	// DEBUG===========================================
+	if (getParamByKey("angleX")) {
+		rotateX(PROG.matrices.model.data,    Math.PI * getParamByKey("angleX") );
+	}
 
-			// ------ nahrani matic do promennych ==============================================================
-				PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
-			gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
+	if (getParamByKey("angleZ")) {
+		rotateZ(PROG.matrices.model.data,    Math.PI * getParamByKey("angleZ") );
+	}
 
-			PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "VMatrix");
-			gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.model.data);
+	if (getParamByKey("angleY")) {
+		rotateY(PROG.matrices.model.data,    Math.PI * getParamByKey("angleY") );
+	}
+
+	// VIEW matrix
+	if (getParamByKey("camera")) {
+		translate(PROG.matrices.model.data,  0, 0, getParamByKey("camera"));
+	}
+	// DEBUG===========================================, konec
+
+
+	// perspektivni matice
+	// zorny uhel je 90%, pomer je jasnej
+	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
+
+	// ------ nahrani matic do promennych ==============================================================
+		PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
+	gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
+
+	PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "VMatrix");
+	gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.model.data);
+
+	PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "PMatrix");
+	gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
+
+
+	// sampler
+	PROG.sampler = gl.getUniformLocation(PROG.program, "sampler");
+	gl.uniform1i(PROG.sampler, 0);
+
+
+	// -------- atributy
+	PROG.attributes.vertex = gl.getAttribLocation(PROG.program, "pos");
+	if (PROG.attributes.vertex===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
+	gl.enableVertexAttribArray(PROG.attributes.vertex);
+
+	PROG.attributes.fragment = gl.getAttribLocation(PROG.program, "fragPos");
+	if (PROG.attributes.fragment==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
+	gl.enableVertexAttribArray(PROG.attributes.fragment);
+
+	PROG.attributes.texture = gl.getAttribLocation(PROG.program, "texture");
+	if (PROG.attributes.texture==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
+	gl.enableVertexAttribArray(PROG.attributes.texture);
+
+
+	// -------- BUFFERY
+	PROG.buffer.vertex = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);
+	gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.vertices), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(PROG.attributes.vertex, 3, gl.FLOAT, false, 0, 0);
+	
+	PROG.buffer.normal = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.normal);
+	gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.normals), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(PROG.attributes.fragment, 3, gl.FLOAT, false, 0, 0);
+
+	PROG.buffer.texture = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.texture);
+	gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.textures), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(PROG.attributes.texture, 2, gl.FLOAT, false, 0, 0);
+
+	PROG.buffer.index = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (GEOMETRY.indices), gl.STATIC_DRAW);
+
+	// ---- NASTAVENI
+	//gl.disable(gl.DEPTH_TEST);
+	gl.enable(gl.DEPTH_TEST);
+	//gl.clearColor(0, 0, 0, 1);
+
+	 //gl.enable(gl.BLEND);
+	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+
+	// ----- VYTVORENI TEXTURY
+	texture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+	gl.bindTexture(gl.TEXTURE_2D, null);
+}
+
+
+function updateTexture() {
+	if (SETTINGS.mode.fisheye.video.active) 
+	{
+	  if (video.readyState >= video.HAVE_CURRENT_DATA) 
+	  {
+		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, texture);
+		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+		  // the next line fails in Safari if the video is coming from another domain or subdomain
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+		  document.getElementById('overlay').style.display = 'none';
+		  return true;
+	  }
+
+	  if (video.readyState < video.HAVE_CURRENT_DATA) {
+
+			console.log('video se nacita...');
+			// neexistoval, tak jej vytvorim
+			var status_bar_width = 150;
+			var status_bar_height = 150;
+			var canvas_dom = document.getElementsByTagName("canvas")[0];
+			// dynamicke umisteni zadane parametrem
+			var left_correction = (150/canvas_dom.width); 
+			var status_bar_left =  canvas_dom.width*((0.55)-left_correction);
+
+			var top_correction = (150/canvas_dom.height); 
+			var status_bar_top =   canvas_dom.height*((0.55)-top_correction);
+
+			// stylovani prvku
+			var div = document.getElementById('overlay');
+			div.style.width = status_bar_width+'px';
+			div.style.height = status_bar_height+'px';
+			div.style.left = status_bar_left+'px';
+			div.style.top = status_bar_top+'px';
+			div.style.backgroundColor  = 'transparent';
+			div.style.background  = 'url(../src/img/loading.gif)';
+			div.style.opacity  = 1;
+			div.style.position = 'absolute';
+			div.style.overflow = 'hidden';
+			div.style.padding = '5px';
+
+			return false;
+
+	  }
+
+	}
+}
+
+
+function initViewMatrix() {
+	
+	/// ROTACNI MATICE pomoci MYSI
+	var atr = 0;
+	makeIdentityFrom(PROG.matrices.view.data );
+	translate(PROG.matrices.view.data,0, 0, atr);
+}
+
+function updateCameraPosition() {
+	/// ROTACe MATICE pomoci MYSi a klavesnice
+	translate(PROG.matrices.view.data,0, 0, MOUSE.wheel.delta);
+	rotateY( PROG.matrices.view.data, MOUSE.move.angle.y);
+	rotateX( PROG.matrices.view.data, MOUSE.move.angle.x);
+}
+
+function getCameraPosition() {
+	return PROG.matrices.view.data[14];
+}
+
+function render() {
+	// status bar a cas
+	var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
+	createVideoStatusBar(170, 30, 0.8, 1, video);
 		
-			PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "PMatrix");
-			gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
+		// zorny uhel
+	var koef = (Math.abs(MOUSE.move.angle.y)/2*Math.PI)%2;
+	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
+	createFieldVision(150,150,0.4,1, 30, MOUSE.move.angle.y * (180/Math.PI) ); 
+
+	// aktualizace textury
+	if (updateTexture()) 
+	{
+		// inicializace zobrazovaci matice
+		initViewMatrix();
+
+			// zmena pozice zobrazeni
+		updateCameraPosition();
+
+		// nahrani matic do programu
+		gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
+		gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.view.data);
+		gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
 
 
-			// sampler
-			PROG.sampler = gl.getUniformLocation(PROG.program, "sampler");
-			gl.uniform1i(PROG.sampler, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(PROG.sampler, 0);
 
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
 
-			// -------- atributy
-			PROG.attributes.vertex = gl.getAttribLocation(PROG.program, "pos");
-			if (PROG.attributes.vertex===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
-			gl.enableVertexAttribArray(PROG.attributes.vertex);
-
-			PROG.attributes.fragment = gl.getAttribLocation(PROG.program, "fragPos");
-			if (PROG.attributes.fragment==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
-			gl.enableVertexAttribArray(PROG.attributes.fragment);
-
-			PROG.attributes.texture = gl.getAttribLocation(PROG.program, "texture");
-			if (PROG.attributes.texture==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
-			gl.enableVertexAttribArray(PROG.attributes.texture);
-
-
-			// -------- BUFFERY
-			PROG.buffer.vertex = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);
-			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.vertices), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(PROG.attributes.vertex, 3, gl.FLOAT, false, 0, 0);
-			
-			PROG.buffer.normal = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.normal);
-			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.normals), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(PROG.attributes.fragment, 3, gl.FLOAT, false, 0, 0);
-
-			PROG.buffer.texture = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.texture);
-			gl.bufferData(gl.ARRAY_BUFFER, (GEOMETRY.textures), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(PROG.attributes.texture, 2, gl.FLOAT, false, 0, 0);
-
-			PROG.buffer.index = gl.createBuffer();
+		// zde prepinanim renderovani
+		if (!GEOMETRY.noIndices) {
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
-			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (GEOMETRY.indices), gl.STATIC_DRAW);
+			gl.drawElements(gl.TRIANGLES, GEOMETRY.indices.length, gl.UNSIGNED_SHORT, 0);
+		}
+		else {
 
-			// ---- NASTAVENI
-			//gl.disable(gl.DEPTH_TEST);
-			gl.enable(gl.DEPTH_TEST);
-			//gl.clearColor(0, 0, 0, 1);
+			gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);// HAZI TO VIC CHYB, nevim  jeste proc
+			gl.drawArrays(gl.TRIANGLES,0, GEOMETRY.normals.length/3);
+		}
+	}
+	requestAnimationFrame(render);
+}
 
-			 //gl.enable(gl.BLEND);
-			//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+window.requestAnimationFrame = window.requestAnimationFrame 
+	|| window.mozRequestAnimationFrame
+	|| window.webkitRequestAnimationFrame
+	|| function(cb) { setTimeout(cb, 1000/60); };
 
 
-			// ----- VYTVORENI TEXTURY
-			texture = gl.createTexture();
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-			gl.bindTexture(gl.TEXTURE_2D, null);
+function onDocumentMouseWheel( event ) {
+	var newDelta = 0;
+	if (event.wheelDeltaY) {
+	    // WebKit
+	    newDelta +=event.wheelDeltaY;
+	    }
+	    else if (event.wheelDelta) {
+	    // Opera / Explorer 9
+	    newDelta += event.wheelDelta;
+	    }
+	    else if (event.detail) {
+	    // Firefox
+	        newDelta  += event.detail;
+	    }
+
+	    // zmenseni maximalniho priblizeni
+	    var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+
+	    if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
+	    {
+	    	if (newDelta>0) 
+	    	{ 	
+	    		// je pozitivni
+
+				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+	    	}
+	    	else {
+	    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+	    	}
+	    }
+	    else {
+	    	if (MOUSE.wheel.delta>0) {
+	    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+	    	}
+	    	else {
+	    		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+	    	}
+	    }
+	   d(getCameraPosition());
+}
+
+
+function onDocumentMouseUp( event ) {
+	MOUSE.active = false;
+}
+
+
+function onDocumentMouseDown( event ) {
+    MOUSE.active = true;
+    MOUSE.down.x = event.pageX;
+    MOUSE.down.y = event.pageY;
+    event.preventDefault();
+    return false;
+}
+
+function onDocumentMouseMove( event ) {
+
+    if (MOUSE.active) {
+        MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
+        MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
+        MOUSE.move.angle.y+= MOUSE.move.x;
+        MOUSE.move.angle.x+=MOUSE.move.y;
+        MOUSE.down.x = event.pageX; 
+        MOUSE.down.y = event.pageY;
+        event.preventDefault();
+		}
+}
+
+
+function onDocumentKeyPress( event ) {
+	if (KEYBOARD.active) 
+	{
+		if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
+			vide_playing = 1;
+			video.play();
 		}
 
- 
-		function updateTexture() {
-			if (SETTINGS.mode.fisheye.video.active) 
-			{
-			  if (video.readyState >= video.HAVE_CURRENT_DATA) 
-			  {
-				  gl.activeTexture(gl.TEXTURE0);
-				  gl.bindTexture(gl.TEXTURE_2D, texture);
-				  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
-				  // the next line fails in Safari if the video is coming from another domain or subdomain
-				  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
-				  gl.bindTexture(gl.TEXTURE_2D, null);
-				  document.getElementById('overlay').style.display = 'none';
-				  return true;
-			  }
-
-			  if (video.readyState < video.HAVE_CURRENT_DATA) {
-
-					console.log('video se nacita...');
-					// neexistoval, tak jej vytvorim
-					var status_bar_width = 150;
-					var status_bar_height = 150;
-					var canvas_dom = document.getElementsByTagName("canvas")[0];
-					// dynamicke umisteni zadane parametrem
-					var left_correction = (150/canvas_dom.width); 
-					var status_bar_left =  canvas_dom.width*((0.55)-left_correction);
-
-					var top_correction = (150/canvas_dom.height); 
-					var status_bar_top =   canvas_dom.height*((0.55)-top_correction);
-
-					// stylovani prvku
-					var div = document.getElementById('overlay');
-					div.style.width = status_bar_width+'px';
-					div.style.height = status_bar_height+'px';
-					div.style.left = status_bar_left+'px';
-					div.style.top = status_bar_top+'px';
-					div.style.backgroundColor  = 'transparent';
-					div.style.background  = 'url(../src/img/loading.gif)';
-					div.style.opacity  = 1;
-					div.style.position = 'absolute';
-					div.style.overflow = 'hidden';
-					div.style.padding = '5px';
-
-					return false;
-
-			  }
-
-			}
+		if (event.keyCode == 101 || event.keyCode == 69) { // e/E
+			video.pause();
+			vide_playing = 0;
 		}
 
- 
-		function initViewMatrix() {
-			
-			/// ROTACNI MATICE pomoci MYSI
-			var atr = 0;
-			makeIdentityFrom(PROG.matrices.view.data );
-			translate(PROG.matrices.view.data,0, 0, atr);
-		}
-
-		function updateCameraPosition() {
-			/// ROTACe MATICE pomoci MYSi a klavesnice
-			translate(PROG.matrices.view.data,0, 0, MOUSE.wheel.delta);
-			rotateY( PROG.matrices.view.data, MOUSE.move.angle.y);
-			rotateX( PROG.matrices.view.data, MOUSE.move.angle.x);
-		}
-
-		function getCameraPosition() {
-			return PROG.matrices.view.data[14];
-		}
-
-		function render() {
-			// status bar a cas
-			var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime;
-			createVideoStatusBar(170, 30, 0.8, 1, video);
- 			
- 			// zorny uhel
-			var koef = (Math.abs(MOUSE.move.angle.y)/2*Math.PI)%2;
-			//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
-			createFieldVision(150,150,0.4,1, 30, MOUSE.move.angle.y * (180/Math.PI) ); 
-
-			// aktualizace textury
-			if (updateTexture()) 
-			{
-				// inicializace zobrazovaci matice
-				initViewMatrix();
-	 
-	 			// zmena pozice zobrazeni
-				updateCameraPosition();
-
-				// nahrani matic do programu
-				gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
-				gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.view.data);
-				gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
-
-
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture);
-				gl.uniform1i(PROG.sampler, 0);
-
-				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
-
-				// zde prepinanim renderovani
-				if (!GEOMETRY.noIndices) {
-					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, PROG.buffer.index);
-					gl.drawElements(gl.TRIANGLES, GEOMETRY.indices.length, gl.UNSIGNED_SHORT, 0);
-				}
-				else {
-
-					gl.bindBuffer(gl.ARRAY_BUFFER, PROG.buffer.vertex);// HAZI TO VIC CHYB, nevim  jeste proc
-					gl.drawArrays(gl.TRIANGLES,0, GEOMETRY.normals.length/3);
-				}
-			}
-			requestAnimationFrame(render);
-		}
-
-		window.requestAnimationFrame = window.requestAnimationFrame 
-			|| window.mozRequestAnimationFrame
-			|| window.webkitRequestAnimationFrame
-			|| function(cb) { setTimeout(cb, 1000/60); };
-
-
-
-		function onDocumentMouseWheel( event ) {
-			var newDelta = 0;
-			if (event.wheelDeltaY) {
-			    // WebKit
-			    newDelta +=event.wheelDeltaY;
-			    }
-			    else if (event.wheelDelta) {
-			    // Opera / Explorer 9
-			    newDelta += event.wheelDelta;
-			    }
-			    else if (event.detail) {
-			    // Firefox
-			        newDelta  += event.detail;
-			    }
-
-			    // zmenseni maximalniho priblizeni
-			    var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
-
-			    if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
-			    {
-			    	if (newDelta>0) 
-			    	{ 	
-			    		// je pozitivni
-
-						MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-			    	}
-			    	else {
-			    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-			    	}
-			    }
-			    else {
-			    	if (MOUSE.wheel.delta>0) {
-			    		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-			    	}
-			    	else {
-			    		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-			    	}
-			    }
-			   d(getCameraPosition());
-		}
-
-
-		function onDocumentMouseUp( event ) {
-			MOUSE.active = false;
-		}
- 
- 
-		function onDocumentMouseDown( event ) {
-            MOUSE.active = true;
-            MOUSE.down.x = event.pageX;
-            MOUSE.down.y = event.pageY;
-            event.preventDefault();
-            return false;
-		}
-
-		function onDocumentMouseMove( event ) {
- 
-            if (MOUSE.active) {
-	            MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
-	            MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
-	            MOUSE.move.angle.y+= MOUSE.move.x;
-	            MOUSE.move.angle.x+=MOUSE.move.y;
-	            MOUSE.down.x = event.pageX; 
-	            MOUSE.down.y = event.pageY;
-	            event.preventDefault();
-      		}
-		}
-
-
-		function onDocumentKeyPress( event ) {
-			if (KEYBOARD.active) 
-			{
-
-	 			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
-	 				vide_playing = 1;
-					video.play();
-	 			}
-
-				if (event.keyCode == 101 || event.keyCode == 69) { // e/E
-					video.pause();
-					vide_playing = 0;
-				}
-	 
-				// start/stop pomoci mezerniku
-				if (event.keyCode === 0 || event.keyCode === 32) {
-					if (!vide_playing ) {
-						video.play();
-						vide_playing = 1;
-					}	
-					else if (vide_playing ) {
-						video.pause();
-						vide_playing = 0;
-					}
-				}
-
-
-				if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
-					
-					 MOUSE.move.angle.y += KEYBOARD.sensitivity.x;
-	 			}
-				else if (event.keyCode == 100    ||  event.keyCode==100-32) {  // d/D
- 					 MOUSE.move.angle.y -= KEYBOARD.sensitivity.x;
-	 			}
-	  
-				else if (event.keyCode == 119 ||   event.keyCode == 119-32 ) {  // w/W
- 						 MOUSE.move.angle.x -=  KEYBOARD.sensitivity.y;
-	 
-				}
-				else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
- 					 MOUSE.move.angle.x +=  KEYBOARD.sensitivity.y;
-	 
-				}
-			}
-		}
-
-		function onWindowResize( event ) {
-
-			var element_canvas = document.querySelector("canvas");
-			if (element_canvas && 0) {
-				element_canvas.width = window.innerWidth;
-            	element_canvas.height = window.innerHeight;
+		// start/stop pomoci mezerniku
+		if (event.keyCode === 0 || event.keyCode === 32) {
+			if (!vide_playing ) {
+				video.play();
+				vide_playing = 1;
+			}	
+			else if (vide_playing ) {
+				video.pause();
+				vide_playing = 0;
 			}
 		}
 
 
-		function main() {
-			initProgram();
-			setupProgram();
-			render();
+		if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
+			MOUSE.move.angle.y += KEYBOARD.sensitivity.x;
+		}
+		else if (event.keyCode == 100    ||  event.keyCode==100-32) {  // d/D
+			MOUSE.move.angle.y -= KEYBOARD.sensitivity.x;
+		}
 
-
-			 
-
-			video.oncanplaythrough = function() {
-				render();
-				//video.play();
-			};
-
-			/*
-			video.addEventListener("timeupdate", function(){
-			    if(this.currentTime >= 8){
-			        this.pause();
-			    }
-			});
-			*/
-
-			 
-			video.addEventListener("loadedmetadata",function() { 
-				this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
-			 },false);
- 
-
-
+		else if (event.keyCode == 119 ||   event.keyCode == 119-32 ) {  // w/W
+			MOUSE.move.angle.x -=  KEYBOARD.sensitivity.y;
 
 		}
- 
+		else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
+			MOUSE.move.angle.x +=  KEYBOARD.sensitivity.y;
+		}
+	}
+}
 
-	</script>
+function onWindowResize( event ) {
+
+	var element_canvas = document.querySelector("canvas");
+	if (element_canvas && 0) {
+		element_canvas.width = window.innerWidth;
+    	element_canvas.height = window.innerHeight;
+	}
+}
 
 
+function main() {
+	initProgram();
+	setupProgram();
+	render();
+
+
+	 
+
+	video.oncanplaythrough = function() {
+		render();
+		//video.play();
+	};
+
+	/*
+	video.addEventListener("timeupdate", function(){
+	    if(this.currentTime >= 8){
+	        this.pause();
+	    }
+	});
+	*/
+
+	 
+	video.addEventListener("loadedmetadata",function() { 
+		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
+	 },false);
+
+
+
+
+}
+</script>
 
 </html>
