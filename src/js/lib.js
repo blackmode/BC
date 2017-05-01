@@ -236,12 +236,6 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 					}
 				}
 
-
-
-
-
-
-
 	}
 
  

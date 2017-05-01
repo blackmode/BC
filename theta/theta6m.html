@@ -319,7 +319,8 @@ var PROG = {
 		return true;
 	}
 
-	function setupProgram() {
+		function setupProgram() 
+		{
 			if (!initProgram()) {
 				e('FATALNI CHYBA, nepodarilo se inicializovat program');
 				return false;
@@ -404,7 +405,7 @@ var PROG = {
 			PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
 			// ------ nahrani matic do promennych ==============================================================
- 			PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
+				PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
 			gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
 
 			PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "VMatrix");
@@ -471,66 +472,66 @@ var PROG = {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 			gl.bindTexture(gl.TEXTURE_2D, null);
-	}
-
- 
-	function updateTexture() {
-		if (SETTINGS.mode.fisheye.video.active) 
-		{
-		  if (video.readyState >= video.HAVE_CURRENT_DATA) 
-		  {
-			  gl.activeTexture(gl.TEXTURE0);
-			  gl.bindTexture(gl.TEXTURE_2D, texture);
-			  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
-			  // the next line fails in Safari if the video is coming from another domain or subdomain
-			  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
-			  gl.bindTexture(gl.TEXTURE_2D, null);
-			  document.getElementById('overlay').style.display = 'none';
-			  return true;
-		  }
-
-		  if (video.readyState < video.HAVE_CURRENT_DATA) {
-
-				console.log('video se nacita...');
-				// neexistoval, tak jej vytvorim
-				var status_bar_width = 150;
-				var status_bar_height = 150;
-				var canvas_dom = document.getElementsByTagName("canvas")[0];
-				// dynamicke umisteni zadane parametrem
-				var left_correction = (150/canvas_dom.width); 
-				var status_bar_left =  canvas_dom.width*((0.55)-left_correction);
-
-				var top_correction = (150/canvas_dom.height); 
-				var status_bar_top =   canvas_dom.height*((0.55)-top_correction);
-
-				// stylovani prvku
-				var div = document.getElementById('overlay');
-				div.style.width = status_bar_width+'px';
-				div.style.height = status_bar_height+'px';
-				div.style.left = status_bar_left+'px';
-				div.style.top = status_bar_top+'px';
-				div.style.backgroundColor  = 'transparent';
-				div.style.background  = 'url(../src/img/loading.gif)';
-				div.style.opacity  = 1;
-				div.style.position = 'absolute';
-				div.style.overflow = 'hidden';
-				div.style.padding = '5px';
-
-				return false;
-
-		  }
-
 		}
-	}
 
  
-		 function initViewMatrix() {
+		function updateTexture() {
+			if (SETTINGS.mode.fisheye.video.active) 
+			{
+			  if (video.readyState >= video.HAVE_CURRENT_DATA) 
+			  {
+				  gl.activeTexture(gl.TEXTURE0);
+				  gl.bindTexture(gl.TEXTURE_2D, texture);
+				  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+				  // the next line fails in Safari if the video is coming from another domain or subdomain
+				  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, video);
+				  gl.bindTexture(gl.TEXTURE_2D, null);
+				  document.getElementById('overlay').style.display = 'none';
+				  return true;
+			  }
+
+			  if (video.readyState < video.HAVE_CURRENT_DATA) {
+
+					console.log('video se nacita...');
+					// neexistoval, tak jej vytvorim
+					var status_bar_width = 150;
+					var status_bar_height = 150;
+					var canvas_dom = document.getElementsByTagName("canvas")[0];
+					// dynamicke umisteni zadane parametrem
+					var left_correction = (150/canvas_dom.width); 
+					var status_bar_left =  canvas_dom.width*((0.55)-left_correction);
+
+					var top_correction = (150/canvas_dom.height); 
+					var status_bar_top =   canvas_dom.height*((0.55)-top_correction);
+
+					// stylovani prvku
+					var div = document.getElementById('overlay');
+					div.style.width = status_bar_width+'px';
+					div.style.height = status_bar_height+'px';
+					div.style.left = status_bar_left+'px';
+					div.style.top = status_bar_top+'px';
+					div.style.backgroundColor  = 'transparent';
+					div.style.background  = 'url(../src/img/loading.gif)';
+					div.style.opacity  = 1;
+					div.style.position = 'absolute';
+					div.style.overflow = 'hidden';
+					div.style.padding = '5px';
+
+					return false;
+
+			  }
+
+			}
+		}
+
+ 
+		function initViewMatrix() {
+			
 			/// ROTACNI MATICE pomoci MYSI
 			var atr = 0;
 			makeIdentityFrom(PROG.matrices.view.data );
 			translate(PROG.matrices.view.data,0, 0, atr);
-
- 		 }
+		}
 
 		function updateCameraPosition() {
 			/// ROTACe MATICE pomoci MYSi a klavesnice
@@ -552,6 +553,7 @@ var PROG = {
 			var koef = (Math.abs(MOUSE.move.angle.y)/2*Math.PI)%2;
 			//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
 			createFieldVision(150,150,0.4,1, 30, MOUSE.move.angle.y * (180/Math.PI) ); 
+
 			// aktualizace textury
 			if (updateTexture()) 
 			{
