@@ -685,10 +685,20 @@ Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupn�
 
 \chapter{Implementace panoramatického prohlížeče}
 \label{chapter:4}
-V této kapitole rozeberu implementaci programu.
+V této kapitole rozeberu implementaci programu  spolu s  problémy, které bylo nutné v průběhu implementace řešit. Program se skládá z jazyka HTML5, ve kterém je nastíněna výchozí kostra, nad kterou pracuje veškerá funkcionalita. Jádro je napsáno v jazyce Javascript bez použití frameworků  a  shadery, které jsou implementovány v jazyce GLSL.
+
+
+\section{Stavy a data programu}
+Jelikož samotná implementace ve WebGL vyžaduje k realizaci problematiky více jazyků, vzniká v programu velké množství proměnných, které je velice vhodné určitým způsobem pro vyšší přehlednost v kódu sdružovat. Program jako takový je napsán procedurálním stylem, ale sám využívá některé objektové vlastnosti. Mezi ně patří právě sdružování proměnných, které jsou hierarchicky uspořádány do objektu.
+
+Každá důležitá část implementace má svůj vlastní objekt proměnných, které se k dané problematice vztahují, včetně všech nutných interních stavů.
+
+\subsection{Myš a klávesnice}
+Veškeré interakce s myší se z hlediska datové částí promítají do objektové proměnné \texttt{MOUSE}, která udržuje data o pohybu pozorovatele ve scéně po vertikální a horizontální ose otáčení, včetně hloubky posuvu - tedy přibližování scény pomocí kolečka. Drtivá většina udržovaných dat v proměnné \texttt{MOUSE} pochází z Javascriptové metody \texttt{addEventListener()}.
+Dalším objektem je klávesnice realizována pomocí objektové proměnné \texttt{KEYBOARD}, která udržuje pouze základní informace, zdali je aktivní popř. jaká citlivost pohybu pozorovatele ve scéně pomocí klávesnice má být. Veškeré interakce s klávesnici jsou dále realizovány pomocí události \texttt{event}, do které se načítají údaje o stisku kláves, tudíž není třeba další data uchovávat. 
+
+Před samotným spuštěním programu je ještě nutné provést některé inicializační operace
 \section{Běh programu}
-
-
 
 
 \subsection{Shadery}

@@ -340,6 +340,7 @@ function initProgram() {
 	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
 	if (!gl) {
 		w('Webgl se nepodarilo inicializovat...');
+		return false;
 	}
 
 	return true;
@@ -772,6 +773,9 @@ function onWindowResize( event ) {
 
 
 function main() {
+	if (!initProgram()) {
+		return false;
+	}
 	initProgram();
 	setupProgram();
 	render();
