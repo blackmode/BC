@@ -723,6 +723,11 @@ Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je
 
 
 \subsection{Shadery}
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami \texttt{<script></script>}. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut type na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+
+
+
+
 \subsection{Transformační matice}
 \subsection{Buffery a geometrie}
 \subsection{Načítání a vykreslování textur}
