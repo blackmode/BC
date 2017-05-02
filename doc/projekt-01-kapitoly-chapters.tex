@@ -18,6 +18,7 @@ Další inovací v prohlížení videí je přidání některých dat, které v 
 
 Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} se budu věnovat nastínění všech použitých technologií nutných pro pochopení problematiky, se kterými se bude pracovat v následujících kapitolách. O návrhu řešení pojednává kapitola \nameref{chapter:3}, na kterou navazuje implementační část \nameref{chapter:4}. Otestování správného návrhu a implementace se zabývá kapitola s názvem \nameref{chapter:5}. V poslední části práce \nameref{chapter:6} jsou prezentovány dosažené výsledky a možnosti dalšího rozšíření.
 
+
 %=========================================================================
 
 
@@ -685,7 +686,7 @@ Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupn�
 
 \chapter{Implementace panoramatického prohlížeče}
 \label{chapter:4}
-V této kapitole rozeberu implementaci programu  spolu s  problémy, které bylo nutné v průběhu implementace řešit. Program se skládá z jazyka HTML5, ve kterém je nastíněna výchozí kostra, nad kterou pracuje veškerá funkcionalita. Jádro je napsáno v jazyce Javascript bez použití frameworků  a  shadery, které jsou implementovány v jazyce GLSL.
+V této kapitole rozeberu implementaci programu  spolu s  problémy, které bylo nutné v průběhu implementace řešit. Program se skládá z jazyka HTML5, ve kterém je nastíněna výchozí kostra, nad kterou pracuje veškerá funkcionalita. Jádro je napsáno v jazyce Javascript bez použití frameworků  a  shadery, které jsou implementovány v jazyce GLSL. 
 
 
 \section{Stavy a data programu}
@@ -701,13 +702,25 @@ Dalším objektem je klávesnice realizována pomocí objektové proměnné \tex
 \newpage
 
 \subsection{Data programu a nastavení}
-Obdobným způsobem, jak je již nastíněno výše, jsou uchovávány proměnné a nastavení samotného programu. Programová objektová proměnná \texttt{PROG} uchovává data jako jsou buffery programu, transformační matice nad kterými probíhá projekce a v neposlední řadě atributy shaderů, díky kterým jsou data matic, bufferů apod. nahrávány na grafickou kartu. 
+Obdobným způsobem, jak je již nastíněno výše, jsou uchovávány proměnné a nastavení samotného programu. Programová objektová proměnná \texttt{PROG} uchovává data jako jsou buffery programu, transformační matice, nad kterými probíhá projekce a v neposlední řadě atributy shaderů, díky kterým jsou data matic, bufferů apod. nahrávány na grafickou kartu. 
 
-Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení modu programu resp. formát dat, které bude program vyobrazovat. Dále informace pro nastavení a inicializaci grafických prvků.
+Odděleně od programu je vytvořen objekt geometrie, který počítá a vytváří všechna data spojených s geometrií a mapováním textury pro nahrání na GPU. Objekt vytváří funkce \texttt{\createSphereGeometry}.
+
+Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení módu programu resp. formát dat, které bude program vyobrazovat. Dále informace pro nastavení a inicializaci grafických prvků.
 
 
 \section{Běh programu}
-Před samotným spuštěním programu je ještě nutné provést některé inicializační operace, nastavení a ověření. Jednou ze zásadních problémů testování je podpora prohlížečů, kterou musíme ověřit nejdříve.
+Ihned po načtení HTML kostry programu je zavolána hlavní funkce programu \texttt{\main}, která je spuštěna  na základě vyvolání události \texttt{onload()} \footnote{ Událost \texttt{onload()} nastane ihned po načtení webové stránky.} .
+
+Před samotným spuštěním programu je nutné provést některé inicializační operace - nastavení potřebných proměnných pro běh, ověření a ošetření. 
+
+Tuto roli obstarává funkce \texttt{\initProgram}. Je zde nutné ověřit, zdali se podařilo získat WebGL kontext z plátna \texttt{<canvas>}. Pokud by došlo k situaci, že prohlížeč nebude podporovat kontext WebGL, program se ukončí. Mezi další funkce inicializace patří, že na základě vstupu nastaví, jaký mód prohlížení bude zvolen, resp. na základě vstupních proměnných objektu \texttt{SETTINGS}  se nakonfiguruje funkce \texttt{\createSphereGeometry}. 
+
+V případě, že inicializování proběhlo v pořádku, zavolá se funkce \texttt{\setupProgram}, kde dochází k sestavení všech částí programu a nahrání nejdůležitějších dat na grafickou kartu. Dochází zde také ke kompilaci obou shaderů a provázání s programem. Mezi další operace, patří naslouchání vstupních informací z myši, kolečka klávesnice aj.  pomocí metody \texttt{addEventListener()}.
+
+Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je možné nahrát také texturu - pro panoramata jsou textury nahrávány také z funkce \texttt{\setupProgram}, v případě videa je tato operace  volána z funkce \texttt{\render}, důvodem je ten, že video potřebuje reflektovat změny v čase.
+
+
 
 \subsection{Shadery}
 \subsection{Transformační matice}

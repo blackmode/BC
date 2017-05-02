@@ -764,10 +764,13 @@ function onDocumentKeyPress( event ) {
 function onWindowResize( event ) {
 
 	var element_canvas = document.querySelector("canvas");
-	if (element_canvas && 0) {
+	if (element_canvas  && 0) { // blocked
 		element_canvas.width = window.innerWidth;
 		element_canvas.height = window.innerHeight;
-		main();
+		var width_offset = element_canvas.width/10;
+		var height_offset = element_canvas.height/10;
+		gl.viewport(0, 0, element_canvas.width-width_offset, element_canvas.height-height_offset);
+ 		//main();
 	}
 }
 
