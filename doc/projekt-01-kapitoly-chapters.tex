@@ -731,15 +731,17 @@ Modelová matice je z hlediska své implementace po celý běh programu stejná,
 
 V případě equirectangulárního prohlížení je vstup programu přímo mapován na kouli bez jakýkoliv úprav dat textury, protože vstupu odpovídá navrženy model. V módu pro rybí oko je nutné nad mapovanými daty sice provést korekci, ta samotná  ale na úpravu modelové matice nemá vliv, hlavním důvodem je posun vstupní projekce rybího oka vůči té equirectangulární o 90\degree
 
-U perspektivní matice je situace obdobná jako modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dale se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. Roli kamery, se pokaždé interakci se vstupním zařízením mezi a je nutné její data nahrát do shaderu znova. 
+U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dále se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. roli kamery, se pokaždé interakci se vstupním zařízením data mění a je proto nutné její data nahrát do shaderu znova. 
+
+
 
 
 \subsection{Shadery}
-Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami \texttt{<script></script>}. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut type na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
 
-Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech. Všechny matice se zde vynásobí aktuálním bodem geometrie, čímž dosáhneme požadované projekce bodu v prostoru. K nastavení konečného bodu v prostoru s vypočtenou projekcí slouží gl\_Position který je roven $PMatrix \cdot VMatrix \cdot MMatrix \cdot vec4(pos, 1.0)$
+Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech, konkrétně ve vertex shaderu. U projekce se všechny matice  vynásobí aktuálním bodem geometrie, která je do vertex shaderu předána z bufferu, tato operace se opakuje pro každý bod geometrie modelu. Jelikož vertex shader slouží pro propojení webgl programu  a obou shaderů, musí se předat do fragemtn shaderu textura, jejíž body se automaticky interpolují a předají fragment shaderu. K předání hodnoty slouží proměnná \texttt{varyingTexture}.
 
-
+Fragment shader se provádí nad každým pixelem textury, tudíž nejprve načte předanou hodnotu \texttt{varyingTexture} z vertex shaderu a podle interpolace načte aktuální pixel vykreslující grafické primitivum, čímž dojde k vykreslení celého trojúhelníku. Jakmie je fragment shader hotov s daným primitivem, zavolá se vertex shader pro další body u bufferu a operace fragment shaderu se opakuje.
 
 %=========================================================================
 \newpage
