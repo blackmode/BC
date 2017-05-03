@@ -544,8 +544,7 @@ Proměnná \texttt{r} označuje poloměr koule, resp. kružnice ve 2D. Obrázek 
 
 
 \section{Návrh projekce}
-Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsem schopni projekci zrealizovat - kdy v perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
-
+Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsme schopni projekci zrealizovat - kdy v perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
 
 
 
@@ -651,6 +650,13 @@ P =
 \end{pmatrix}
 $$
 
+ 
+
+\section{Výpočet projekce}
+Konečný  vztah pro výpočet projekce bude dán pouhým vynásobením spočtených matic v uvedeném pořadí:
+$$P \cdot V \cdot M  $$
+
+
 
 %=========================================================================
 \newpage
@@ -720,20 +726,20 @@ V případě, že inicializování proběhlo v pořádku, zavolá se funkce \tex
 
 Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je možné nahrát také texturu - pro panoramata jsou textury nahrávány také z funkce \texttt{\setupProgram}, v případě videa je tato operace  volána z funkce \texttt{\render}, důvodem je ten, že video potřebuje reflektovat změny v čase.
 
-
-
-\subsection{Shadery}
-Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami \texttt{<script></script>}. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut type na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
-
-
-
-
 \subsection{Transformační matice}
 Modelová matice je z hlediska své implementace po celý běh programu stejná, je jí ale potřeba přenastavit pro každý mód prohlížení, protože jak equirectangulární panorama tak fisheye mapuje texturu odlišným způsobem a je tedy nutné tomu přizpůsobit i modelovou matici.
 
 V případě equirectangulárního prohlížení je vstup programu přímo mapován na kouli bez jakýkoliv úprav dat textury, protože vstupu odpovídá navrženy model. V módu pro rybí oko je nutné nad mapovanými daty sice provést korekci, ta samotná  ale na úpravu modelové matice nemá vliv, hlavním důvodem je posun vstupní projekce rybího oka vůči té equirectangulární o 90\degree
 
 U perspektivní matice je situace obdobná jako modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dale se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. Roli kamery, se pokaždé interakci se vstupním zařízením mezi a je nutné její data nahrát do shaderu znova. 
+
+
+\subsection{Shadery}
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami \texttt{<script></script>}. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut type na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+
+Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech. Všechny matice se zde vynásobí aktuálním bodem geometrie, čímž dosáhneme požadované projekce bodu v prostoru. K nastavení konečného bodu v prostoru s vypočtenou projekcí slouží gl\_Position který je roven $PMatrix \cdot VMatrix \cdot MMatrix \cdot vec4(pos, 1.0)$
+
+
 
 %=========================================================================
 \newpage

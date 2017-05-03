@@ -881,7 +881,7 @@ function createCompass(width, height, position_x, position_y, north_position, an
 	div.style.top = compass_top+'px';
 	//div.style.backgroundColor  = 'blue';
 	div.style.backgroundImage   = 'url('+compas_skeleton_bg+')';
-	div.style.opacity  = 0.65;
+	div.style.opacity  = 0.5;
 	div.style.position = 'absolute';
 	div.style.overflow = 'hidden';
 	div.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';	// uprava sirky a vysky pozadi

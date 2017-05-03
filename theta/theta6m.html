@@ -613,10 +613,10 @@ function render() {
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
 	var angle =  radToDeg(Math.PI/2)  -(MOUSE.wheel.delta/MOUSE.wheel.deltaMax*65);
 	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
-	var north = 315; // umisteni severu v kompasu
-
-
 	createFieldVision(150,150,0.4,1, (angle ? angle : 10), 0); 
+
+	// kompas
+	var north = 315; // umisteni severu v kompasu
 	createCompass(180,180, 0.6, 0.95, north, shift) ;
 
 	// aktualizace textury
