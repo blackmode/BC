@@ -130,13 +130,13 @@
 				}
 
 
-				 //gl_FragColor.a =   0.6;
+				  //gl_FragColor.a =   0.6;
 			}
 
 
 			// korekce barvy
 			if (varyingTexture.x< 0.5      ) {
-				// gl_FragColor.a =   0.988;
+				 // gl_FragColor.a =   0.988;
 			}
 			//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
 		}
@@ -163,6 +163,7 @@
 				</svg>
 			</div>
 			<div id="video_status_bar"></div>
+			<div id="video_controlls"></div>
 			<div id="overlay"></div>
 		</div>
 		<div id="data"></div>
@@ -255,6 +256,8 @@ var SETTINGS = {
 		height:  0.06,
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
+		north: 0.0,
+		angle: 0.0
 	} ,
 };
 
@@ -314,7 +317,8 @@ SETTINGS.input.video =  createVideo("data/new/R0010087.mp4"); // R0010014_201612
  //SETTINGS.input.video = document.getElementById('video');
 SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
-
+		// ovladaci prvky
+		createVideoControlls(300,80, 0.5, 0.0,SETTINGS.input.video ) ;
 function initProgram() {
 
 	SETTINGS.mode.fisheye.panorama.active 			= false;
@@ -607,6 +611,8 @@ function render() {
 	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
 		var elem = document.getElementById("data").innerHTML = 'Čas: '+SETTINGS.input.video.currentTime;
 		createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
+
+
 	}
 		
 	// zorny uhel
@@ -617,7 +623,10 @@ function render() {
 
 	// kompas
 	var north = 315; // umisteni severu v kompasu
-	createCompass(180,180, 0.6, 0.95, north, shift) ;
+	SETTINGS.compass.north = 315;
+	SETTINGS.compass.angle = shift;
+	 createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
+
 
 	// aktualizace textury
 	if (updateTexture()) 
@@ -782,13 +791,13 @@ function onDocumentKeyPress( event ) {
 function onWindowResize( event ) {
 
 	var element_canvas = document.querySelector("canvas");
-	if (element_canvas  && 0) { // blocked
+	if (element_canvas ) { // blocked
 		element_canvas.width = window.innerWidth;
 		element_canvas.height = window.innerHeight;
 		var width_offset = element_canvas.width/10;
 		var height_offset = element_canvas.height/10;
 		gl.viewport(0, 0, element_canvas.width-width_offset, element_canvas.height-height_offset);
- 		//main();
+  		setupProgram() ;
 	}
 }
 

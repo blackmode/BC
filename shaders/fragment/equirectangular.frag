@@ -1,5 +1,5 @@
 // based on http://qiita.com/zinziroge/items/3676b4e0f7715fa60336
-
+precision mediump float;
 #version 150
 #define PI 3.14159265359
 
@@ -121,7 +121,7 @@ vec4 getBlendedPixel(float u, float v, int witchCam, float thresholdRadius, vec3
 void main (void) {
     float x = mod(translate + resolution.x - texCoordVarying.x, resolution.x);
     float y = resolution.y - texCoordVarying.y;
-    float xTransition = 0.5 + 0.5 * sin(-PI + 2 * PI * ((texCoordVarying.x / resolution.x)));
+    float xTransition = 0.5 + 0.5 * sin(-PI + 2.0 * PI * ((texCoordVarying.x / resolution.x)));
     
     //equi_xy_to_lnglat
     float lat = -PI / 2.0 + y / resolution.y * PI;
@@ -131,12 +131,12 @@ void main (void) {
     vec3 sph_1 = vec3(cos(lat) * cos(lng), sin(lat), -cos(lat) * sin(lng));
     
     // sph_1 -> sph_2
-    mat3 rot_base = createRotMatrix(PI/2, 0.0, -PI/2);
+    mat3 rot_base = createRotMatrix(PI/2.0, 0.0, -PI/2.0);
     vec3 sph_2 = rot_base * sph_1;
     
     float theta;
     if( abs(sph_2.y) >= 1.0 ) {
-        theta = 0;
+        theta = 0.0;
     } else {
         theta = acos(abs(sph_2.y));
     }

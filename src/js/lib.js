@@ -612,6 +612,15 @@ function createVideo( src ) {
 
 
 
+function imgLoaded(img_object) {
+	if (!img_object.complete || img_object.naturalWidth  == 0) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 
 
 function createImage( src ) {
@@ -862,55 +871,52 @@ function createCompass(width, height, position_x, position_y, north_position, an
 	var compass_width = width;
 	var compass_height = height;
 
-	// Umisteni v canvasu na dolni okraj doprostred
-	var compass_left = ( (canvas_dom.width/2)-(compass_width/2)) | 0;
-	var compass_top =   ((canvas_dom.height)-(compass_height)) | 0;
-
 	// dynamicke umisteni zadane parametrem
-	var left_correction = (width/canvas_dom.width); 
-	var compass_left =  canvas_dom.width*((position_x)-left_correction);
+	var compass_left = (canvas_dom.width - compass_width)*position_x;
+	var compass_top = (canvas_dom.height - compass_height)*position_y;
 
-	var top_correction = (height/canvas_dom.height); 
-	var compass_top =   canvas_dom.height*((position_y)-top_correction);
-
-	var div = document.createElement('div');
-	div.setAttribute('id', compass_id);
-	div.style.width = compass_width+'px';
-	div.style.height = compass_height+'px';
-	div.style.left = compass_left+'px';
-	div.style.top = compass_top+'px';
-	//div.style.backgroundColor  = 'blue';
-	div.style.backgroundImage   = 'url('+compas_skeleton_bg+')';
-	div.style.opacity  = 0.5;
-	div.style.position = 'absolute';
-	div.style.overflow = 'hidden';
-	div.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';	// uprava sirky a vysky pozadi
-
-	if (!document.getElementById(compass_id)) {
-		compass_box.appendChild(div);
-	}
 
 	var compass = document.getElementById(compass_id);
-
-	if (compass) {
-		var arrow = document.createElement('div');
-		arrow.setAttribute('id', compass_arrow_id);
-		arrow.style.width = compass_width+'px';
-		arrow.style.height = compass_height+'px';
- 		arrow.style.backgroundImage   = 'url('+compas_arrow_bg+')';
- 		arrow.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
-		arrow.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
-
-		if (!document.getElementById(compass_arrow_id)) {
-			compass.appendChild(arrow);
-		}
-		else {
-			var arrow_exists = document.getElementById(compass_arrow_id);
-			arrow_exists.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
-			arrow_exists.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
-			arrow_exists.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';
-		}
+	if (!compass) {
+		compass = document.createElement('div');
 	}
+
+	compass.setAttribute('id', compass_id);
+	compass.style.width = compass_width+'px';
+	compass.style.height = compass_height+'px';
+	compass.style.left = compass_left+'px';
+	compass.style.top = compass_top+'px';
+	//compass.style.backgroundColor  = 'blue';
+	compass.style.backgroundImage   = 'url('+compas_skeleton_bg+')';
+	compass.style.opacity  = 0.75;
+	compass.style.position = 'absolute';
+	compass.style.overflow = 'hidden';
+	compass.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';	// uprava sirky a vysky pozadi
+
+	// pridame kompas
+	if (!document.getElementById(compass_id)) {
+		compass_box.appendChild(compass);
+	}
+
+
+	var arrow = document.createElement('div');
+	arrow.setAttribute('id', compass_arrow_id);
+	arrow.style.width = compass_width+'px';
+	arrow.style.height = compass_height+'px';
+	arrow.style.backgroundImage   = 'url('+compas_arrow_bg+')';
+	arrow.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+	arrow.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+
+	if (!document.getElementById(compass_arrow_id)) {
+		compass.appendChild(arrow);
+	}
+	else {
+		var arrow_exists = document.getElementById(compass_arrow_id);
+		arrow_exists.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+		arrow_exists.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+		arrow_exists.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';
+	}
+	
 	return true; 
 }
 
@@ -952,17 +958,9 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 	var field_vision_width = width;
 	var field_vision_height = height;
 
-	// Umisteni v canvasu na dolni okraj doprostred
-	// staticke umisteni
-	var field_vision_left =  ((canvas_dom.width/4)-(field_vision_width/4)) | 0;
-	var field_vision_top =   ((canvas_dom.height) -(field_vision_height))  | 0;
-
 	// dynamicke umisteni zadane parametrem
-	var left_correction = (width/canvas_dom.width); 
-	var field_vision_left =  canvas_dom.width*((position_x)-left_correction);
-
-	var top_correction = (height/canvas_dom.height); 
-	var field_vision_top =   canvas_dom.height*((position_y)-top_correction);
+	var field_vision_left = (canvas_dom.width - field_vision_width)*position_x;
+	var field_vision_top = (canvas_dom.height - field_vision_height)*position_y;
 
 	if (viewer) {
 		var field_vision = document.getElementById("field_vision");
@@ -1043,11 +1041,8 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 			var status_bar_height = height;
 
 			// dynamicke umisteni zadane parametrem
-			var left_correction = (width/canvas_dom.width); 
-			var status_bar_left =  canvas_dom.width*((position_x)-left_correction);
-
-			var top_correction = (height/canvas_dom.height); 
-			var status_bar_top =   canvas_dom.height*((position_y)-top_correction);
+			var status_bar_left = (canvas_dom.width - status_bar_width)*position_x;
+			var status_bar_top = (canvas_dom.height - status_bar_height)*position_y;
 
 			// stylovani prvku
 			var div = document.createElement('div');
@@ -1117,12 +1112,10 @@ function createLoader(width, height, position_x, position_y, active)
 			var status_bar_width = width;
 			var status_bar_height = height;
 			var canvas_dom = document.getElementsByTagName("canvas")[0];
-			// dynamicke umisteni zadane parametrem
-			var left_correction = (width/canvas_dom.width); 
-			var status_bar_left =  canvas_dom.width*((position_x)-left_correction);
 
-			var top_correction = (height/canvas_dom.height); 
-			var status_bar_top =   canvas_dom.height*((position_y)-top_correction);
+			// dynamicke umisteni zadane parametrem
+			var status_bar_left = (canvas_dom.width - status_bar_width)*position_x;
+			var status_bar_top = (canvas_dom.height - status_bar_height)*position_y;
 
 			// stylovani prvku
 			var div = document.getElementById('overlay');
@@ -1154,11 +1147,100 @@ function createLoader(width, height, position_x, position_y, active)
 
 
 
-function imgLoaded(img_object) {
-	if (!img_object.complete || img_object.naturalWidth  == 0) {
+
+
+
+function createVideoControlls(width, height, position_x, position_y, video) {
+
+	// ID
+	var video_controlls_id  = "video_controlls";
+	var video_controlls_btn_play_id  = "video_controlls_btn_play";
+	var video_controlls_btn_slider_id = 'video_controlls_btn_slider';
+
+
+	// overeni existence potrebnych divu kostry
+	var viewer = document.getElementById("viewer");
+	if (!viewer) {
+		e('DIV s ID: viewer NEEXISTUJE!');
+		return false
+	}
+
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		e('Neexistuje TAG <canvas>!');
 		return false;
 	}
-	else {
-		return true;
+
+	var video_controlls = document.getElementById(video_controlls_id);
+	if (!video_controlls) {
+		e('DIV s ID: video_controlls NEEXISTUJE!');
+		return false;
 	}
+
+
+	var video_controlls_width = width;
+	var video_controlls_height = height;
+
+	// dynamicke umisteni zadane parametrem
+	video_controlls_left = (canvas_dom.width - video_controlls_width)*position_x;
+	video_controlls_top = (canvas_dom.height - video_controlls_height)*position_y;
+
+
+	// nastylovani a umsiteni boxu
+	video_controlls.style.width = video_controlls_width+'px';
+	video_controlls.style.height = video_controlls_height+'px';
+	video_controlls.style.left = video_controlls_left+'px';
+	video_controlls.style.top = video_controlls_top+'px';
+	video_controlls.style.backgroundColor  = 'purple'; // transparent
+	video_controlls.style.opacity  = 0.75;
+	//video_controlls.style.border  = '1px solid black';
+	video_controlls.style.position = 'absolute';
+	video_controlls.style.overflow = 'hidden';
+
+	// pridani jednotlivych prvku
+	// tlacitko PLAY
+	var video_controlls_btn_play = document.getElementById(video_controlls_btn_play_id);
+	if (!video_controlls_btn_play) {
+		video_controlls_btn_play = document.createElement('div');
+		video_controlls_btn_play.setAttribute('id', 'video_controlls_btn_play');
+		video_controlls_btn_play.style.left = video_controlls_btn_play.style.top = 'inherit';
+		video_controlls_btn_play.style.height = 'inherit';
+		video_controlls_btn_play.style.width =  '15%';
+		video_controlls_btn_play.style.backgroundColor  = 'red'; // transparent
+		video_controlls.appendChild(video_controlls_btn_play);
+	}
+
+
+	// tlacitko posuvnik casu
+	var video_controlls_btn_slider = document.getElementById(video_controlls_btn_slider_id);
+	if (!video_controlls_btn_slider) {
+		video_controlls_btn_slider = document.createElement('div');
+		video_controlls_btn_slider.setAttribute('id', 'video_controlls_btn_slider');
+		video_controlls_btn_slider.style.left = video_controlls_btn_slider.style.top = 'inherit';
+		video_controlls_btn_slider.style.height = 'inherit';
+		video_controlls_btn_slider.style.width =  '15%';
+		video_controlls_btn_slider.style.backgroundColor  = 'red'; // transparent
+		video_controlls.appendChild(video_controlls_btn_slider);
+	}
+
+	// lisnenery
+	video_controlls_btn_play.addEventListener("click", function() {
+		if (video.paused == true) {
+			// Play the video
+			video.play();
+
+			// Update the button text to 'Pause'
+			this.innerHTML = "Pause";
+		} else {
+			// Pause the video
+			video.pause();
+
+			// Update the button text to 'Play'
+			this.innerHTML = "Play";
+		}
+	});
+
+	return  video_controlls;
+ 
+
 }
