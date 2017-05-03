@@ -126,18 +126,18 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 				var data = {
 					textures : {
 						itemSize: 2,
-						array: textures
+						arrayName: textures
 					} ,
 					indices : {
-						array: indices
+						arrayName: indices
 					} ,
 					normals : {
 						itemSize: 3,
-						array: normals
+						arrayName: normals
 					} ,
 					position : {
 						itemSize: 3,
-						array: vertices
+						arrayName: vertices
 					} 
 				};
 
@@ -145,41 +145,42 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 				};
 		 
-				// TOHLE JE FUNKCE Z THREE.JS, udela to to, ze to prepocita indexy na vrcholy, k tomu to prepocita i dalsi veci jako textury apod
+				// udela to, ze to prepocita indexy na vrcholy, k tomu to prepocita i dalsi veci jako textury apod
 				//var indices = indices;
 				var attributes = data;
 				for ( var name in attributes ) {
 
 					var attribute = attributes[ name ];
 
-	 				var array = attribute.array;
+	 				var arrayName = attribute.arrayName;
 
 					var itemSize = attribute.itemSize;
-					var array2 = initArray(  indices.length * itemSize );
-					var index = 0, index2 = 0;
+					var number_of_indices = indices.length;
 
-					for ( var i = 0, l = indices.length ; i < l; i ++ ) {
+					var array2 = initArray(  number_of_indices * itemSize );
+					var index = 0;
+					var index2 = 0;
+
+					for ( var i = 0; i < number_of_indices; i ++ ) {
 
 						index = indices[ i ] * itemSize;
 
 	 					for ( var j = 0; j < itemSize; j ++ ) {
 
-							array2[ index2 ++ ] = array[ index ++ ];
+							array2[ index2 ++ ] = arrayName[ index ++ ];
 
 						}
-
 					}
-					data2 [name] = {array : array2, itemSize : itemSize};
-	 				//geometry2.addAttribute( name, new BufferAttribute( array2, itemSize ) );
+					data2 [name] = {arrayName : array2, itemSize : itemSize};
 	 
 				}
 		 
 
 
 
-				textures = data2.textures.array;
-				vertices = data2.position.array;
-				normals = data2.normals.array;
+				textures = data2.textures.arrayName;
+				vertices = data2.position.arrayName;
+				normals = data2.normals.arrayName;
 
 
 				// Zde se provadi korekce
