@@ -1106,36 +1106,30 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 }
 
 
-function createLoader(width, height, position_x, position_y, active) 
+function createLoader(width, height, position_x, position_y, active, delay) 
 {
-			// neexistoval, tak jej vytvorim
-			var status_bar_width = width;
-			var status_bar_height = height;
+
 			var canvas_dom = document.getElementsByTagName("canvas")[0];
-
-			// dynamicke umisteni zadane parametrem
-			var status_bar_left = (canvas_dom.width - status_bar_width)*position_x;
-			var status_bar_top = (canvas_dom.height - status_bar_height)*position_y;
-
 			// stylovani prvku
 			var div = document.getElementById('overlay');
 			if (div) {
-				div.style.width = status_bar_width+'px';
-				div.style.height = status_bar_height+'px';
-				div.style.left = status_bar_left+'px';
-				div.style.top = status_bar_top+'px';
-				div.style.backgroundColor  = 'transparent';
-				div.style.background  = 'url(../src/img/loading.gif)';
-				div.style.opacity  = 1;
-				div.style.position = 'absolute';
-				div.style.overflow = 'hidden';
-				div.style.padding = '5px';
+				div.style.width = canvas_dom.width+'px';
+				div.style.height = canvas_dom.height+'px';
+				div.style.left = '0px';
+				div.style.top = '0px';
+				div.style.opacity  = 1.0;
+ 
+				div.style.backgroundColor  = 'white';
+ 				
+ 
 
 				if (active) {
 					div.style.display = 'block';
 				}
 				else {
-					div.style.display = 'none';
+					setTimeout(function(){
+					    div.style.display = 'none';
+					}, (delay > 0 ? delay : 0));
 				}
 			}
 			else {
@@ -1144,9 +1138,6 @@ function createLoader(width, height, position_x, position_y, active)
 
 
 }
-
-
-
 
 
 
@@ -1203,9 +1194,10 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	if (!video_controlls_btn_play) {
 		video_controlls_btn_play = document.createElement('div');
 		video_controlls_btn_play.setAttribute('id', 'video_controlls_btn_play');
-		video_controlls_btn_play.style.left = video_controlls_btn_play.style.top = 'inherit';
+		//video_controlls_btn_play.style.left = video_controlls_btn_play.style.top = 'inherit';
 		video_controlls_btn_play.style.height = 'inherit';
 		video_controlls_btn_play.style.width =  '15%';
+		video_controlls_btn_play.style.float = 'left';
 		video_controlls_btn_play.style.backgroundColor  = 'red'; // transparent
 		video_controlls.appendChild(video_controlls_btn_play);
 	}
@@ -1214,12 +1206,15 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	// tlacitko posuvnik casu
 	var video_controlls_btn_slider = document.getElementById(video_controlls_btn_slider_id);
 	if (!video_controlls_btn_slider) {
-		video_controlls_btn_slider = document.createElement('div');
-		video_controlls_btn_slider.setAttribute('id', 'video_controlls_btn_slider');
-		video_controlls_btn_slider.style.left = video_controlls_btn_slider.style.top = 'inherit';
+		video_controlls_btn_slider = document.createElement('input');
+		video_controlls_btn_slider.setAttribute('id', video_controlls_btn_slider_id);
+		video_controlls_btn_slider.setAttribute('type', 'range');
+		video_controlls_btn_slider.setAttribute('value', '0');
+		//video_controlls_btn_slider.style.left = video_controlls_btn_slider.style.top = 'inherit';
 		video_controlls_btn_slider.style.height = 'inherit';
 		video_controlls_btn_slider.style.width =  '15%';
-		video_controlls_btn_slider.style.backgroundColor  = 'red'; // transparent
+		video_controlls_btn_slider.style.float = 'left';
+		video_controlls_btn_slider.style.backgroundColor  = 'yellow'; // transparent
 		video_controlls.appendChild(video_controlls_btn_slider);
 	}
 
@@ -1238,6 +1233,24 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 			// Update the button text to 'Play'
 			this.innerHTML = "Play";
 		}
+	});
+
+	video.addEventListener("timeupdate", function() {
+ 
+		// Calculate the slider value
+		var value = (100 / video.duration) * video.currentTime;
+
+		// Update the slider value
+		video_controlls_btn_slider.value = value;
+
+ 	});
+
+	video_controlls_btn_slider.addEventListener("change", function() {
+		// Calculate the new time
+		var time = video.duration * (video_controlls_btn_slider.value / 100);
+
+		// Update the video time
+		video.currentTime = time;
 	});
 
 	return  video_controlls;

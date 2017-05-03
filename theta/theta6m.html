@@ -24,12 +24,24 @@
 
 		progress {
 			display: block;
-			/* Important Thing */
-			-webkit-appearance: none !Important;
+ 			-webkit-appearance: none !Important;
 			border: none;
 		}
 
-	</style>
+		#overlay  {
+		    background-image: url(../src/img/loading.gif);  
+			background-repeat: no-repeat !important;
+			background-position:  center center   !important ;
+			background-color:  #ddd !important;
+			position :  absolute ;
+			overflow :   hidden ;
+		}
+
+
+
+		 
+ 
+ 	</style>
 
 	<script id="vs" type="x-shader/x-vertex">
 		attribute vec3 pos;
@@ -71,21 +83,21 @@
 		void main(void) {
 			 gl_FragColor = texture2D(sampler, varyingTexture);
 
- /*
+		 /*
 
-			 if (
-				varyingTexture.x  >0.12 &&
-				varyingTexture.x  <0.37 && 
-				varyingTexture.y >0.30	&& 
-				varyingTexture.y <0.57  
-				); else if (varyingTexture.x <0.5){
-				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
-				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
-				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
-			 }
-*/
+					 if (
+						varyingTexture.x  >0.12 &&
+						varyingTexture.x  <0.37 && 
+						varyingTexture.y >0.30	&& 
+						varyingTexture.y <0.57  
+						); else if (varyingTexture.x <0.5){
+						gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
+						gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
+						gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
+					 }
+		*/
 
-//(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
+			//(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
 
 			float x2=varyingFragPosNormal.x ;
 			float y2=varyingFragPosNormal.y  ;
@@ -153,7 +165,6 @@
  -->
 
 
-
 		<div id="viewer" style="position:relative ">
 			<canvas id="glcanvas" width="1100" height="700"></canvas>
 			<div id="compass-box"></div>
@@ -164,7 +175,8 @@
 			</div>
 			<div id="video_status_bar"></div>
 			<div id="video_controlls"></div>
-			<div id="overlay"></div>
+			 		<div id="overlay"></div>
+
 		</div>
 		<div id="data"></div>
 	</body>
@@ -203,6 +215,7 @@ var MOUSE = {
 	} ,
 
 	active : false,
+	interrupt: false,
 };
 
 
@@ -319,6 +332,7 @@ SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
 		// ovladaci prvky
 		createVideoControlls(300,80, 0.5, 0.0,SETTINGS.input.video ) ;
+ 
 function initProgram() {
 
 	SETTINGS.mode.fisheye.panorama.active 			= false;
@@ -371,11 +385,11 @@ function setupProgram()
 		return false;
 	}
 
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-	document.addEventListener("keypress", onDocumentKeyPress, false);
-	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
+	PROG.canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	PROG.canvas.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	PROG.canvas.addEventListener("keypress", onDocumentKeyPress, false);
+	PROG.canvas.addEventListener("mousewheel", onDocumentMouseWheel, false);
 	window.addEventListener('resize', onWindowResize, true);
 
 	// nacteni, zkompilovani a overeni vertext shaderu
@@ -538,9 +552,9 @@ function setupProgram()
 	// equirectangular
 	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) 
 	{
-		createLoader(150, 150, 0.55, 0.55, 1) ;
+		createLoader(150, 150, 0.5, 0.5, 1) ;
 		if (imgLoaded){
-			createLoader(150, 150, 0.55, 0.55,0) ;
+			createLoader(150, 150, 0.5, 0.5,0) ;
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
 			if (SETTINGS.mode.equirectangular.panorama.active) {
 				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -567,14 +581,14 @@ function updateTexture()
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, SETTINGS.input.video);
 			gl.bindTexture(gl.TEXTURE_2D, null);
-			createLoader(150, 150, 0.55, 0.55,0) ;
+			createLoader(150, 150, 0.5, 0.5,0) ;
 			return true;
 		}
 
 		if (SETTINGS.input.video.readyState < SETTINGS.input.video.HAVE_CURRENT_DATA) 
 		{
 			console.log('video se nacita...');
-			createLoader(150, 150, 0.55, 0.55, 1) ;
+			createLoader(150, 150, 0.5, 0.5, 1) ;
 			return false;
 
 		}
@@ -733,7 +747,7 @@ function onDocumentMouseDown( event ) {
 
 function onDocumentMouseMove( event ) {
 
-	if (MOUSE.active) {
+	if (MOUSE.active && !MOUSE.interrupt) {
 		MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
 		MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
 		MOUSE.move.angle.y+= MOUSE.move.x;
