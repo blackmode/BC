@@ -1108,35 +1108,26 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 
 function createLoader(width, height, position_x, position_y, active, delay) 
 {
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	// stylovani prvku
+	var div = document.getElementById('overlay');
+	if (div) 
+	{
+		div.style.width = canvas_dom.width+'px';
+		div.style.height = canvas_dom.height+'px';
 
-			var canvas_dom = document.getElementsByTagName("canvas")[0];
-			// stylovani prvku
-			var div = document.getElementById('overlay');
-			if (div) {
-				div.style.width = canvas_dom.width+'px';
-				div.style.height = canvas_dom.height+'px';
-				div.style.left = '0px';
-				div.style.top = '0px';
-				div.style.opacity  = 1.0;
- 
-				div.style.backgroundColor  = 'white';
- 				
- 
-
-				if (active) {
-					div.style.display = 'block';
-				}
-				else {
-					setTimeout(function(){
-					    div.style.display = 'none';
-					}, (delay > 0 ? delay : 0));
-				}
-			}
-			else {
-				w("overlay not exists");
-			}
-
-
+		if (active) {
+			div.style.display = 'block';
+		}
+		else {
+			setTimeout(function(){
+			    div.style.display = 'none';
+			}, (delay > 0 ? delay : 0));
+		}
+	}
+	else {
+		w("overlay not exists");
+	}
 }
 
 

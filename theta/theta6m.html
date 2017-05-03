@@ -29,12 +29,14 @@
 		}
 
 		#overlay  {
-		    background-image: url(../src/img/loading.gif);  
+		    background-image: url(../src/img/loader.gif);  
 			background-repeat: no-repeat !important;
 			background-position:  center center   !important ;
 			background-color:  #ddd !important;
 			position :  absolute ;
 			overflow :   hidden ;
+			left :   0px ;
+			top :   0px ;
 		}
 
 
@@ -552,9 +554,9 @@ function setupProgram()
 	// equirectangular
 	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) 
 	{
-		createLoader(150, 150, 0.5, 0.5, 1) ;
+		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		if (imgLoaded){
-			createLoader(150, 150, 0.5, 0.5,0) ;
+			createLoader(150, 150, 0.5, 0.5, 0, 1258) ;
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
 			if (SETTINGS.mode.equirectangular.panorama.active) {
 				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -581,14 +583,14 @@ function updateTexture()
 			gl.bindTexture(gl.TEXTURE_2D, PROG.texture);
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, SETTINGS.input.video);
 			gl.bindTexture(gl.TEXTURE_2D, null);
-			createLoader(150, 150, 0.5, 0.5,0) ;
+			createLoader(150, 150, 0.5, 0.5, 0, 1258) ;
 			return true;
 		}
 
 		if (SETTINGS.input.video.readyState < SETTINGS.input.video.HAVE_CURRENT_DATA) 
 		{
 			console.log('video se nacita...');
-			createLoader(150, 150, 0.5, 0.5, 1) ;
+			createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 			return false;
 
 		}
