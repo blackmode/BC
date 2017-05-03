@@ -729,6 +729,16 @@ Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProg
 
 
 \subsection{Transformační matice}
+Modelová matice je z hlediska své implementace po celý běh programu stejná, je jí ale potřeba přenastavit pro každý mód prohlížení, protože jak equirectangulární panorama tak fisheye mapuje texturu odlišným způsobem a je tedy nutné tomu přizpůsobit i modelovou matici.
+
+V případě equirectangulárního prohlížení je vstup programu přímo mapován na kouli bez jakýkoliv úprav dat textury, protože vstupu odpovídá navrženy model. V módu pro rybí oko je nutné nad mapovanými daty sice provést korekci, ta samotná  ale na úpravu modelové matice nemá vliv, hlavním důvodem je posun vstupní projekce rybího oka vůči té equirectangulární o 90\degree
+
+U perspektivní matice je situace obdobná jako modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dale se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. Roli kamery, se pokaždé interakci se vstupním zařízením mezi a je nutné její data nahrát do shaderu znova. 
+
+%=========================================================================
+\newpage
+
+
 \subsection{Buffery a geometrie}
 \subsection{Načítání a vykreslování textur}
 

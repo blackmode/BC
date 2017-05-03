@@ -836,9 +836,23 @@ function makeIdentityFrom(matrix) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function createCompass(width, height, position_x, position_y) {
+function createCompass(width, height, position_x, position_y, north_position, angle) {
+	// ID divu
+	var compass_box_id = "compass-box"; // ID kontejneru pro umisteni kompasu
+	var compass_id = "compass"; // id kostry kompasu 
+	var compass_arrow_id = "compass_arrow"; // id strelky kompasu 
 
-	var div = document.getElementById("compass-box");
+	// obrazky kompasu
+	var compas_skeleton_bg = '../src/img/kompas_bg2.png';
+	var compas_arrow_bg = '../src/img/strelka.png';
+
+	// overeni existence boxu
+	var compass_box = document.getElementById(compass_box_id);
+	if (!compass_box) {
+		w('DIV s ID: compass-box NEEXISTUJE!');
+		return false;
+	}
+
 	var canvas_dom = document.getElementsByTagName("canvas")[0];
 	if (!canvas_dom) {
 		w('Neexistuje TAG <canvas>!');
@@ -858,30 +872,45 @@ function createCompass(width, height, position_x, position_y) {
 	var top_correction = (height/canvas_dom.height); 
 	var compass_top =   canvas_dom.height*((position_y)-top_correction);
 
-	if (div) {
-		var div = document.createElement('div');
-		div.setAttribute('id', 'compass');
-		div.style.width = compass_width+'px';
-		div.style.height = compass_height+'px';
-		div.style.left = compass_left+'px';
-		div.style.top = compass_top+'px';
-		div.style.backgroundColor  = 'blue';
-		div.style.opacity  = 0.4;
-		div.style.position = 'absolute';
-		div.style.overflow = 'hidden';
+	var div = document.createElement('div');
+	div.setAttribute('id', compass_id);
+	div.style.width = compass_width+'px';
+	div.style.height = compass_height+'px';
+	div.style.left = compass_left+'px';
+	div.style.top = compass_top+'px';
+	//div.style.backgroundColor  = 'blue';
+	div.style.backgroundImage   = 'url('+compas_skeleton_bg+')';
+	div.style.opacity  = 0.65;
+	div.style.position = 'absolute';
+	div.style.overflow = 'hidden';
+	div.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';	// uprava sirky a vysky pozadi
 
-		var compass_box = document.getElementById("compass-box");
-		if (!compass_box) {
-			w('Neexistuje TAG <BODY> s ID body, nutne pro logger!');
+	if (!document.getElementById(compass_id)) {
+		compass_box.appendChild(div);
+	}
+
+	var compass = document.getElementById(compass_id);
+
+	if (compass) {
+		var arrow = document.createElement('div');
+		arrow.setAttribute('id', compass_arrow_id);
+		arrow.style.width = compass_width+'px';
+		arrow.style.height = compass_height+'px';
+ 		arrow.style.backgroundImage   = 'url('+compas_arrow_bg+')';
+ 		arrow.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+		arrow.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+
+		if (!document.getElementById(compass_arrow_id)) {
+			compass.appendChild(arrow);
 		}
 		else {
-			compass_box.appendChild(div);
-			return div;
+			var arrow_exists = document.getElementById(compass_arrow_id);
+			arrow_exists.style.transform = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+			arrow_exists.style.webkitTransform  = 'rotate(' + parseInt(north_position + angle) + 'deg)';
+			arrow_exists.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';
 		}
 	}
-	else {
-		w('DIV s ID: compass-box NEEXISTUJE!');
-	}
+	return true; 
 }
 
 // vytvoreni cesty

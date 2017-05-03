@@ -143,14 +143,14 @@
 	</script>
 
 
-
+<!-- <source src="data/firefox.ogv" type="video/mp4">   -->
 	<body onload="main()" id="body">
-	<!--
-	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted autoplay>
-		 <source src="data/firefox.ogv" type="video/mp4"> 
-		<source src="data/theta2.mp4" type="video/mp4">
-	  </video> -->
-
+ <!-- 
+	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="width: 800px; height: 600px; display: none " controls autoplay>
+		  
+		<source src="data/R0010082.mp4" type="video/mp4">
+	  </video>  
+ -->
 
 
 
@@ -308,9 +308,12 @@ var PROG = {
 	canvas: null,
 };
 
-SETTINGS.input.video =  createVideo("data/R0010081.mp4"); // R0010014_20161217101030_er / R0010081
+//SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
+SETTINGS.input.video =  createVideo("data/new/R0010087.mp4"); // R0010014_20161217101030_er / R0010081
+
+ //SETTINGS.input.video = document.getElementById('video');
 SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
-createCompass(150,150, 0.6, 1) ;
+
 
 function initProgram() {
 
@@ -342,6 +345,17 @@ function initProgram() {
 		w('Webgl se nepodarilo inicializovat...');
 		return false;
 	}
+
+	if (!SETTINGS.input.video) {
+		e('video se nepdarilo nacist!');
+		return false;
+	}
+	else  if (!SETTINGS.input.image) {
+		e('panorama se nepdarilo nacist!');
+		return false;
+	}
+
+
 
 	return true;
 }
@@ -535,6 +549,7 @@ function setupProgram()
 		}
 	}
 
+	return true;
 }
 
 // aktualizace textury v pripade videa
@@ -598,8 +613,11 @@ function render() {
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
 	var angle =  radToDeg(Math.PI/2)  -(MOUSE.wheel.delta/MOUSE.wheel.deltaMax*65);
 	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
+	var north = 315; // umisteni severu v kompasu
 
-	createFieldVision(150,150,0.4,1, (angle ? angle : 0), 0); 
+
+	createFieldVision(150,150,0.4,1, (angle ? angle : 10), 0); 
+	createCompass(180,180, 0.6, 0.95, north, shift) ;
 
 	// aktualizace textury
 	if (updateTexture()) 
@@ -775,12 +793,16 @@ function onWindowResize( event ) {
 }
 
 
-function main() {
+function main() 
+{
 	if (!initProgram()) {
 		return false;
 	}
-	initProgram();
-	setupProgram();
+
+	if (!setupProgram()) {
+		return false;
+	}
+
 	render();
  
 
@@ -809,6 +831,8 @@ SETTINGS.input.video.oncanplaythrough = function() {
 
 
 }
+
+
 </script>
 
 </html>
