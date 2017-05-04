@@ -1133,7 +1133,7 @@ function createLoader(width, height, position_x, position_y, active, delay)
 
 
 
-function createVideoControlls(width, height, position_x, position_y, video) {
+function createVideoControlls(width, height, position_x, position_y, video, update) {
 
 	// ID
 	var video_controlls_id  = "video_controlls";
@@ -1160,6 +1160,7 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 		e('DIV s ID: video_controlls NEEXISTUJE!');
 		return false;
 	}
+
 
 
 	var video_controlls_width = width;
@@ -1243,6 +1244,10 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 		video_controlls_btn_fullstreen.style.float = 'left';
 		video_controlls_btn_fullstreen.style.backgroundColor  = 'transparent'; // transparent
  		video_controlls.appendChild(video_controlls_btn_fullstreen);
+	}
+
+	if (update) {
+		return video_controlls;
 	}
 
 	// lisnenery
