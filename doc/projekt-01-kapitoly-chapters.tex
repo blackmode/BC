@@ -686,6 +686,14 @@ Dalším rozšířením prohlížení jsou údaje o světových stranách díky 
 \subsection{Výpočet posuvu}
 Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupní statickou pozici zadanou argumentem programu, která po celou dobu běhu programu nad danými daty zůstane neměnná. Tedy samotná korekce bude reagovat pouze na změnu horizontální osy.
 
+\subsection{Výpočet pozice kompasu v plátně}
+Výsledné zobrazení kompasu resp. jeho pozice je přímo závislá na rozměrech elementu \texttt{<canvas>}, je to z toho důvodu, že prvek plátno překrývá. Samotný výpočet a následné korekce změnou šířky plátna, popř. využítí režimu celé obraziocky vyžaduje přepočítání pozice, která je definována vztahem:
+
+$$ \left( Canvas_{width} - Compass_{width}\right) \cdot x  $$
+$$ \left( Canvas_{height} - Compass_{height}\right) \cdot y  $$
+
+kde $Canvas_{width}$ a $Canvas_{height}$ jsou vstupní argumenty kompasu udávající velikost prvku. Naproti tomu  $x$ a $y$ souřadnice nabývající hodnot od $0-1$, která definuje pozici v plátně nezávisle na rozlišení.
+
 \section{Metadata}
 \section{Blending}
 %=========================================================================
@@ -749,27 +757,34 @@ Fragment shader se provádí nad každým pixelem textury, tudíž nejprve načt
 
 \subsection{Buffery a geometrie}
 \subsection{Načítání a vykreslování textur}
-
-\section{Mody prohlížení}
+ 
+ 
+\section{Vykreslování a módy prohlížení}
 
 \section{Ovládání myší}
 
 \section{Ovládání klávesnicí}
+Ovládání zajišťuje funkce \texttt{onDocumentKeyPress(event)}. 
+
+
 
 \section{Grafické rozhraní}
 Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
 
 \section{Kompas}
-Prvek překrývající plátno \texttt{<canvas>}. Vstupnímí metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorové úhel, který ovlivňuje odchylku severu, popř. jihu od původní zadané pozice v metadatech.
+Prvek překrývající plátno \texttt{<canvas>}. Vstupními metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorové úhel, který ovlivňuje odchylku severu, popř. jihu od původní zadané pozice v metadatech.
 
-Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{createCompass()}.
+Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, který utváří element div s identifikátorem \texttt{<div id="compass">}. Statická část nese informace o odchylce k severu ve stupních, ne které bude ukazovat šipka. Druhá část je střelka, která je vložena jako další div. Střelka se poté otáčí pomoci transformace kaskádových stylů.
 
 \subsection{Pozicování}
-Vytvoření samotného kompasu realizuje funkce \texttt{createCompass(width, height)}, argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
-\texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} je vypočten tak, že si načteme celkovou šířku
+Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
+\texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} 
+
+ 
+
 
 \section{Ovládání videa}
-Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTML. Celá kostra s atributem \texttt{id=viewer} obsahuje i plátno, které překrývají \texttt{<canvas>}. Při změně velikosti plátna musíme pozice prvků vždy přepočítat. Veškeré operace nad ovládacími prvky zastřešuje funkce \createVideoControlls. Jedním ze vstupních argumentů je objekt videa, důvodem je ten, že nad objektem funguje celá řada událostí.
+Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTML. Celá kostra s atributem \texttt{id=viewer} obsahuje i plátno, které překrývají \texttt{<canvas>}. Při změně velikosti plátna musíme pozice prvků vždy přepočítat. Veškeré operace nad ovládacími prvky zastřešuje funkce \createVideoControlls, kde probíhá i přepočet pozice ovládacích prvků. Jedním ze vstupních argumentů funkce je objekt videa, který je již před-načten do objektové proměnné \texttt{SETTINGS.input.video}. Důvodem jen ten, že  nad objektem funguje celá řada vyvolávaných událostí. Pomocí funkce \texttt{addEventListener()} zde dochází, podobně jako v inicializační části, k vykonávání všech základních operací s videem na základě událostí. Veškeré typy jsou vyvolány interakcí uživatele, řízeni časové osy a dotazování se na množství načtených dat videa, je generovány automaticky. Tlačítko \texttt{fullscreen} pro zobrazení videa na celou šířku obrazovky, potřebuje přizpůsobit plátno tak, aby nedošlo k deformaci dat, čehož dosáhneme zavoláním funkce \texttt{gl.viewport()}. Ještě je třeba ale uchovávat informace p původní velikosti plátna \texttt{<canvas>}, abychom se mohli z režimu celé obrazovky vrátit. Tyto data jsou uchovány rovněž v objektové proměnné.
 
 
 \section{Zorný úhel}
