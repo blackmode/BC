@@ -47,7 +47,15 @@ input[type=range]::-moz-range-progress {
             border: 0px solid blue;
             width: auto;
             height: auto;
+            overflow: hidden;
+            overflow-x: hidden;
         }
+
+body::-webkit-scrollbar { 
+    display: none; 
+}
+
+
          .unique:before {
            content: attr(data-label);
         }
@@ -75,6 +83,7 @@ input[type=range]::-moz-range-progress {
             padding: 0px;
             border: 0px solid blue;
             overflow: hidden;
+
         } 
 
         #viewer {

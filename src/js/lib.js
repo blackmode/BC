@@ -1278,10 +1278,13 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	// ovladani posunu videa
 	video_controlls_btn_slider.addEventListener("mousedown", function() {
 		video.pause();
+
 	});
 
 	video_controlls_btn_slider.addEventListener("mouseup", function() {
 		video.play();
+		video_controlls_btn_play.setAttribute('class', 'pause_icon'); 
+
 	});
 
  
