@@ -734,6 +734,20 @@ V případě, že inicializování proběhlo v pořádku, zavolá se funkce \tex
 
 Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je možné nahrát také texturu - pro panoramata jsou textury nahrávány také z funkce \texttt{\setupProgram}, v případě videa je tato operace  volána z funkce \texttt{\render}, důvodem je ten, že video potřebuje reflektovat změny v čase.
 
+
+
+\subsection{Shadery}
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+
+Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech, konkrétně ve vertex shaderu. U projekce se všechny matice  vynásobí aktuálním bodem geometrie, která je do vertex shaderu předána z bufferu, tato operace se opakuje pro každý bod geometrie modelu. Jelikož vertex shader slouží pro propojení webgl programu  a obou shaderů, musí se předat do fragment shaderu textura, jejíž body se automaticky interpolují a předají fragment shaderu. K předání hodnoty slouží proměnná \texttt{varyingTexture}.
+
+Fragment shader se provádí nad každým pixelem textury, tudíž nejprve načte předanou hodnotu \texttt{varyingTexture} z vertex shaderu a podle interpolace načte aktuální pixel vykreslující grafické primitivum, čímž dojde k vykreslení celého trojúhelníku. Jakmile je fragment shader hotov s daným primitivem, zavolá se vertex shader pro další body u bufferu a operace fragment shaderu se opakuje.
+
+Kódy shaderů se nakonec musí propojit s WebGL, kde se jako první použije funkce \texttt{createShader()}, která shader vytvoří, poté funkcí \texttt{shaderSource()} načteme zdrojový kod daného shaderu a zkompilujeme pomocí \texttt{compileShader()}.
+
+Načtené a zkompilované shadery nejsou v globální objektové proměnné uloženy, protože se jako takové v programu využívají jen ve funkci \texttt{\setupProgram}.
+
+
 \subsection{Transformační matice}
 Modelová matice je z hlediska své implementace po celý běh programu stejná, je jí ale potřeba přenastavit pro každý mód prohlížení, protože jak equirectangulární panorama tak fisheye mapuje texturu odlišným způsobem a je tedy nutné tomu přizpůsobit i modelovou matici.
 
@@ -743,19 +757,28 @@ U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\s
 
 
 
+\subsection{Program}
+Ze zkompilovaných shaderů je nutné vytvořit program tzn. provázat oba shadery do jednoho WebGL programu, aby se mohlo nad nimi dále pracovat. Vytvoření programu se realizuje funkcí \texttt{ createProgram()} a následně se přiloží oba shadery k programu pomocí funkce \texttt{attachShader()}. V další fázi se program slinkuje s \texttt{linkProgram()} a funkcí \texttt{ useProgram()} aktivuje. Výsledný program spolu s přiloženými shadery reprezentuje globální objektová proměnná \texttt{PROG.program}.
 
-\subsection{Shadery}
-Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
-
-Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech, konkrétně ve vertex shaderu. U projekce se všechny matice  vynásobí aktuálním bodem geometrie, která je do vertex shaderu předána z bufferu, tato operace se opakuje pro každý bod geometrie modelu. Jelikož vertex shader slouží pro propojení webgl programu  a obou shaderů, musí se předat do fragemtn shaderu textura, jejíž body se automaticky interpolují a předají fragment shaderu. K předání hodnoty slouží proměnná \texttt{varyingTexture}.
-
-Fragment shader se provádí nad každým pixelem textury, tudíž nejprve načte předanou hodnotu \texttt{varyingTexture} z vertex shaderu a podle interpolace načte aktuální pixel vykreslující grafické primitivum, čímž dojde k vykreslení celého trojúhelníku. Jakmie je fragment shader hotov s daným primitivem, zavolá se vertex shader pro další body u bufferu a operace fragment shaderu se opakuje.
 
 %=========================================================================
 \newpage
 
 
 \subsection{Buffery a geometrie}
+
+WebGL funkcí \texttt{createBuffer()} se buffery musí nejprve vytvořit, poté nastavit funkci \texttt{bindBuffer()} jako  aktivni  a poté nahrát data geometrie funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívany tři buffery, a to vertex buferu pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případé modu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů.
+
+
+
+Objekt GEOMETRY vrací funkce \createSphereGeometry. 
+
+
+
+
+
+
+
 \subsection{Načítání a vykreslování textur}
  
  

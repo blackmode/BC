@@ -848,7 +848,7 @@ function resize() {
 	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 
-	createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
+	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
 }
 
 function main() 

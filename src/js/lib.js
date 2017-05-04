@@ -1246,6 +1246,7 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
  		video_controlls.appendChild(video_controlls_btn_fullstreen);
 	}
 
+	// je nutne rozlisit, zdali jde o aktualizaci pozice html elemtnu, nebo o udalost vyvalanou listnerem -> jinak by doslo k chybe
 	if (update) {
 		return video_controlls;
 	}
