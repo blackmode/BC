@@ -768,6 +768,10 @@ Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}.
 Vytvoření samotného kompasu realizuje funkce \texttt{createCompass(width, height)}, argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
 \texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} je vypočten tak, že si načteme celkovou šířku
 
+\section{Ovládání videa}
+Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTML. Celá kostra s atributem \texttt{id=viewer} obsahuje i plátno, které překrývají \texttt{<canvas>}. Při změně velikosti plátna musíme pozice prvků vždy přepočítat. Veškeré operace nad ovládacími prvky zastřešuje funkce \createVideoControlls. Jedním ze vstupních argumentů je objekt videa, důvodem je ten, že nad objektem funguje celá řada událostí.
+
+
 \section{Zorný úhel}
 
 

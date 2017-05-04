@@ -4,46 +4,13 @@
 		<title>BC - panorama viewer</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../src/css/style.css">
+
 		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
 		 <script type="text/javascript" src="../src/js/lib.js"></script>
 		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
-
-	<style type="text/css">
-		body {
-			margin: 0px;
-			padding: 0px;
-			border: 0px solid blue;
-			width: auto;
-			height: auto;
-		}
-		 .unique:before {
-		   content: attr(data-label);
-		}
-
-		progress {
-			display: block;
- 			-webkit-appearance: none !Important;
-			border: none;
-		}
-
-		#overlay  {
-		    background-image: url(../src/img/loader.gif);  
-			background-repeat: no-repeat !important;
-			background-position:  center center   !important ;
-			background-color:  #ddd !important;
-			position :  absolute ;
-			overflow :   hidden ;
-			left :   0px ;
-			top :   0px ;
-		}
-
-
-
-		 
- 
- 	</style>
 
 	<script id="vs" type="x-shader/x-vertex">
 		attribute vec3 pos;
@@ -157,16 +124,12 @@
 	</script>
 
 
-<!-- <source src="data/firefox.ogv" type="video/mp4">   -->
 	<body onload="main()" id="body">
  <!-- 
 	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="width: 800px; height: 600px; display: none " controls autoplay>
-		  
 		<source src="data/R0010082.mp4" type="video/mp4">
 	  </video>  
  -->
-
-
 		<div id="viewer" style="position:relative ">
 			<canvas id="glcanvas" width="1100" height="700"></canvas>
 			<div id="compass-box"></div>
@@ -177,17 +140,12 @@
 			</div>
 			<div id="video_status_bar"></div>
 			<div id="video_controlls"></div>
-			 		<div id="overlay"></div>
-
+			<div id="overlay"></div>
 		</div>
 		<div id="data"></div>
 	</body>
 
-
- 
-
 <script>
-
 
 var gl;
 var GEOMETRY;
@@ -332,9 +290,10 @@ SETTINGS.input.video =  createVideo("data/new/R0010087.mp4"); // R0010014_201612
  //SETTINGS.input.video = document.getElementById('video');
 SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
-		// ovladaci prvky
-		createVideoControlls(300,80, 0.5, 0.0,SETTINGS.input.video ) ;
- 
+
+// ovladaci prvky
+createVideoControlls(document.querySelector("canvas").width/2,80, 0.0, 1.0,SETTINGS.input.video ) ;
+
 function initProgram() {
 
 	SETTINGS.mode.fisheye.panorama.active 			= false;
@@ -359,6 +318,15 @@ function initProgram() {
 	PROG.matrices.projection.data = createIdentityMatrix4();
 
 	PROG.canvas = document.querySelector("canvas");
+
+
+
+
+
+
+
+
+
 
 	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
 	if (!gl) {
@@ -390,8 +358,8 @@ function setupProgram()
 	PROG.canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'mouseup', onDocumentMouseUp, false );
-	PROG.canvas.addEventListener("keypress", onDocumentKeyPress, false);
-	PROG.canvas.addEventListener("mousewheel", onDocumentMouseWheel, false);
+	document.addEventListener("keypress", onDocumentKeyPress, false);
+	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
 	window.addEventListener('resize', onWindowResize, true);
 
 	// nacteni, zkompilovani a overeni vertext shaderu
@@ -478,7 +446,7 @@ function setupProgram()
 
 	// perspektivni matice
 	// zorny uhel je 90%, pomer je jasnej
-	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
+	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2.0, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
 	// ------ nahrani matic do promennych ==============================================================
 	PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
@@ -748,8 +716,14 @@ function onDocumentMouseDown( event ) {
 }
 
 function onDocumentMouseMove( event ) {
-
-	if (MOUSE.active && !MOUSE.interrupt) {
+	if (MOUSE.active && !MOUSE.interrupt) 
+	{
+ 		// zastavi mys pred vyjetim z canvasu
+		if (event.pageX >= (PROG.canvas.width-10) || event.pageY >= (PROG.canvas.height-10)) {
+			MOUSE.active = false;
+			return false;
+		}
+ 
 		MOUSE.move.x = (event.pageX - MOUSE.down.x)*2*Math.PI/PROG.canvas.width,
 		MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
 		MOUSE.move.angle.y+= MOUSE.move.x;
@@ -757,7 +731,7 @@ function onDocumentMouseMove( event ) {
 		MOUSE.down.x = event.pageX; 
 		MOUSE.down.y = event.pageY;
 		event.preventDefault();
-		}
+	}
 }
 
 
@@ -810,13 +784,16 @@ function onWindowResize( event ) {
 	if (element_canvas ) { // blocked
 		element_canvas.width = window.innerWidth;
 		element_canvas.height = window.innerHeight;
-		var width_offset = element_canvas.width/10;
-		var height_offset = element_canvas.height/10;
-		gl.viewport(0, 0, element_canvas.width-width_offset, element_canvas.height-height_offset);
+		gl.viewport(0, 0, element_canvas.width, element_canvas.height);
   		setupProgram() ;
 	}
 }
 
+function resize() {
+	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
+	createFieldVision(150,150,0.4,1, (SETTINGS.compass.angle ? SETTINGS.compass.angle : 10), 0);
+	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
+}
 
 function main() 
 {

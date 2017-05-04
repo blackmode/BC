@@ -1,0 +1,159 @@
+input[type=range]{
+    -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #069;
+    margin-top: -5px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ddd;
+}
+
+/* progress bar */
+ 
+input[type=range]::-moz-range-progress {
+  background-color: green;
+  height: 1em;
+  border-radius: 5px;
+}
+
+ /* =========================================================== */
+ /* =============== IKONY + PROFRAM  ======================= */
+ /* =========================================================== */
+
+
+        body {
+            margin: 0px;
+            padding: 0px;
+            border: 0px solid blue;
+            width: auto;
+            height: auto;
+        }
+         .unique:before {
+           content: attr(data-label);
+        }
+
+        progress {
+            display: block;
+            -webkit-appearance: none !Important;
+            border: none;
+        }
+
+        #overlay  {
+            background-image: url(../src/img/loader.gif);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            background-color:  #ddd !important;
+            position :  absolute ;
+            overflow :   hidden ;
+            left :   0px ;
+            top :   0px ;
+        }
+
+
+        canvas {
+            margin: 0px;
+            padding: 0px;
+            border: 0px solid blue;
+            overflow: hidden;
+        } 
+
+        #viewer {
+            margin: 0px;
+            padding: 0px;
+            border: 0px solid blue;
+            overflow: hidden;
+        } 
+
+        .fullscreen_icon {
+            background-image: url(../src/img/icon_fullscreen.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+        .fullscreen_icon:hover {
+            opacity: 0.8;
+        }
+
+        .play_icon {
+            background-image: url(../src/img/icon_play.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+
+        .play_icon:hover {
+            opacity: 0.8;
+        }
+        .pause_icon {
+            background-image: url(../src/img/icon_pause.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+
+        .pause_icon:hover {
+            opacity: 0.8;
+        }
+        .normalscreen_icon {
+            background-image: url(../src/img/icon_normalscreen.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+
+        .normalscreen_icon:hover {
+            opacity: 0.8;
+        }
+
+        .sound_icon {
+            background-image: url(../src/img/icon_sound.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+
+        .sound_icon:hover {
+            opacity: 0.8;
+        }
+
+        #video_controlls_btn_fullstreen::before {
+            display: block;
+            background-image: url(../src/img/icon_sound.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+        }
+
+
+
+
+
+
+
+

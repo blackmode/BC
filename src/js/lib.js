@@ -1137,8 +1137,9 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	// ID
 	var video_controlls_id  = "video_controlls";
 	var video_controlls_btn_play_id  = "video_controlls_btn_play";
-	var video_controlls_btn_slider_id = 'video_controlls_btn_slider';
-
+	var video_controlls_btn_slider_id = 'video_controlls_btn_slider_video';
+	var video_controlls_btn_slider_volume_id = 'video_controlls_btn_slider_volume';
+	var video_controlls_btn_fullstreen_id = 'video_controlls_btn_fullstreen';
 
 	// overeni existence potrebnych divu kostry
 	var viewer = document.getElementById("viewer");
@@ -1173,7 +1174,7 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	video_controlls.style.height = video_controlls_height+'px';
 	video_controlls.style.left = video_controlls_left+'px';
 	video_controlls.style.top = video_controlls_top+'px';
-	video_controlls.style.backgroundColor  = 'purple'; // transparent
+	video_controlls.style.backgroundColor  = 'transparent'; // transparent
 	video_controlls.style.opacity  = 0.75;
 	//video_controlls.style.border  = '1px solid black';
 	video_controlls.style.position = 'absolute';
@@ -1185,11 +1186,12 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	if (!video_controlls_btn_play) {
 		video_controlls_btn_play = document.createElement('div');
 		video_controlls_btn_play.setAttribute('id', 'video_controlls_btn_play');
+		video_controlls_btn_play.setAttribute('class', 'play_icon'); 
 		//video_controlls_btn_play.style.left = video_controlls_btn_play.style.top = 'inherit';
 		video_controlls_btn_play.style.height = 'inherit';
 		video_controlls_btn_play.style.width =  '15%';
 		video_controlls_btn_play.style.float = 'left';
-		video_controlls_btn_play.style.backgroundColor  = 'red'; // transparent
+		video_controlls_btn_play.style.backgroundColor  = 'transparent'; // transparent
 		video_controlls.appendChild(video_controlls_btn_play);
 	}
 
@@ -1203,10 +1205,43 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 		video_controlls_btn_slider.setAttribute('value', '0');
 		//video_controlls_btn_slider.style.left = video_controlls_btn_slider.style.top = 'inherit';
 		video_controlls_btn_slider.style.height = 'inherit';
-		video_controlls_btn_slider.style.width =  '15%';
+		video_controlls_btn_slider.style.width =  '25%';
 		video_controlls_btn_slider.style.float = 'left';
-		video_controlls_btn_slider.style.backgroundColor  = 'yellow'; // transparent
+		video_controlls_btn_slider.style.backgroundColor  = 'transparent'; // transparent
 		video_controlls.appendChild(video_controlls_btn_slider);
+	}
+
+	// ovladani hlasitosti
+	var video_controlls_btn_slider_volume = document.getElementById(video_controlls_btn_slider_volume_id);
+	if (!video_controlls_btn_slider_volume) {
+		video_controlls_btn_slider_volume = document.createElement('input');
+		video_controlls_btn_slider_volume.setAttribute('id', video_controlls_btn_slider_volume_id);
+		video_controlls_btn_slider_volume.setAttribute('type', 'range');
+		video_controlls_btn_slider_volume.setAttribute('value', '1');
+		video_controlls_btn_slider_volume.setAttribute('min', '0');
+		video_controlls_btn_slider_volume.setAttribute('max', '1');
+		video_controlls_btn_slider_volume.setAttribute('step', '0.01');
+		//video_controlls_btn_slider_volume.style.left = video_controlls_btn_slider_volume.style.top = 'inherit';
+		video_controlls_btn_slider_volume.style.height = 'inherit';
+		video_controlls_btn_slider_volume.style.width =  '15%';
+		video_controlls_btn_slider_volume.style.float = 'left';
+		video_controlls_btn_slider_volume.style.backgroundColor = 'transparent';
+		video_controlls_btn_slider_volume.style.transform = 'rotate(-90deg)';
+		video_controlls_btn_slider_volume.style.webkitTransform = 'rotate(-90deg)';
+ 		video_controlls.appendChild(video_controlls_btn_slider_volume);
+	}
+
+	// fulstreen
+	var video_controlls_btn_fullstreen = document.getElementById(video_controlls_btn_fullstreen_id);
+	if (!video_controlls_btn_fullstreen) {
+		video_controlls_btn_fullstreen = document.createElement('input');
+		video_controlls_btn_fullstreen.setAttribute('id', video_controlls_btn_fullstreen_id);
+		video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon'); 
+		video_controlls_btn_fullstreen.style.height = 'inherit';
+		video_controlls_btn_fullstreen.style.width =  '15%';
+		video_controlls_btn_fullstreen.style.float = 'left';
+		video_controlls_btn_fullstreen.style.backgroundColor  = 'transparent'; // transparent
+ 		video_controlls.appendChild(video_controlls_btn_fullstreen);
 	}
 
 	// lisnenery
@@ -1216,33 +1251,73 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 			video.play();
 
 			// Update the button text to 'Pause'
-			this.innerHTML = "Pause";
+ 			video_controlls_btn_play.setAttribute('class', 'pause_icon'); 
 		} else {
 			// Pause the video
 			video.pause();
 
 			// Update the button text to 'Play'
-			this.innerHTML = "Play";
+ 			video_controlls_btn_play.setAttribute('class', 'play_icon'); 
 		}
 	});
 
 	video.addEventListener("timeupdate", function() {
  
-		// Calculate the slider value
-		var value = (100 / video.duration) * video.currentTime;
+ 		var value = (100 / video.duration) * video.currentTime;
 
-		// Update the slider value
-		video_controlls_btn_slider.value = value;
+ 		video_controlls_btn_slider.value = value;
 
  	});
 
+	// aktualizace casove osy videa
 	video_controlls_btn_slider.addEventListener("change", function() {
-		// Calculate the new time
-		var time = video.duration * (video_controlls_btn_slider.value / 100);
-
-		// Update the video time
+		var time = (video_controlls_btn_slider.value / 100) *  video.duration ;
 		video.currentTime = time;
 	});
+
+	// ovladani posunu videa
+	video_controlls_btn_slider.addEventListener("mousedown", function() {
+		video.pause();
+	});
+
+	video_controlls_btn_slider.addEventListener("mouseup", function() {
+		video.play();
+	});
+
+ 
+	// ovladani hlasitosti
+	video_controlls_btn_slider_volume.addEventListener("change", function() {
+		video.volume = video_controlls_btn_slider_volume.value;
+	});
+ 
+	// nacitani videa
+	video.addEventListener('progress', function() {
+	    var range = 0;
+	    var buffered = this.buffered;
+	    var time = this.currentTime;
+
+	});
+
+	video_controlls_btn_fullstreen.addEventListener('click', function() {
+ 
+ 		// nastaveni ikon
+		if (video_controlls_btn_fullstreen.getAttribute('class') == 'fullscreen_icon'){
+			video_controlls_btn_fullstreen.setAttribute('class', 'normalscreen_icon');
+
+		}
+		else if (video_controlls_btn_fullstreen.getAttribute('class') == 'normalscreen_icon'){
+			video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon');
+		}
+
+
+		canvas_dom.width =window.innerWidth;
+		canvas_dom.height = window.innerHeight;;
+		gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
+		resize();
+
+	});
+
+
 
 	return  video_controlls;
  
