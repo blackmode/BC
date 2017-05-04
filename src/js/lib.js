@@ -603,6 +603,7 @@ function createVideo( src ) {
     video.loop = true;
     video.muted = false;
     video.autoplay = false;
+    video.preload = 'auto';
     video.src = src;
     video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
 	//video.load();
@@ -1296,9 +1297,8 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 	// nacitani videa
 	video.addEventListener('progress', function() {
 	    var range = 0;
-	    var buffered = this.buffered;
+	    var buffered = video.buffered;
 	    var time = this.currentTime;
-
 	});
 
 	video_controlls_btn_fullstreen.addEventListener('click', function() {
@@ -1314,9 +1314,9 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 		}
 		else if (video_controlls_btn_fullstreen.getAttribute('class') == 'normalscreen_icon'){
 			video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon');
-			//fullscreen
-			canvas_dom.width =window.innerWidth/1.25;
-			canvas_dom.height = window.innerHeight/1.25;
+			//normalscreen
+			canvas_dom.width = SETTINGS.default.canvas.width;
+			canvas_dom.height = SETTINGS.default.canvas.height;
 			gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
 			resize();
 		}

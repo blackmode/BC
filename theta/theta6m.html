@@ -6,8 +6,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../src/css/style.css">
 
-		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
-		 <script type="text/javascript" src="../src/js/lib.js"></script>
+ 		 <script type="text/javascript" src="../src/js/lib.js"></script>
 		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
@@ -125,11 +124,11 @@
 
 
 	<body onload="main()" id="body">
- <!-- 
-	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="width: 800px; height: 600px; display: none " controls autoplay>
-		<source src="data/R0010082.mp4" type="video/mp4">
-	  </video>  
- -->
+ <!--
+	  <video preload="auto" id="video" loop="false"  style="display: none " controls  >
+		<source src="data/new/new2/R0010095.mp4" type="video/mp4">
+	  </video>  -->
+ 
 		<div id="viewer" style="position:relative ">
 			<canvas id="glcanvas" width="1100" height="700"></canvas>
 			<div id="compass-box"></div>
@@ -214,6 +213,12 @@ var SETTINGS = {
 			} ,
 		} ,	
 	},
+	default : {
+		canvas : {
+			width: null,
+			height:  null,
+		} ,
+	} ,
 	input : {
 		video: null,
 		image:  null,
@@ -285,10 +290,18 @@ var PROG = {
 };
 
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
-SETTINGS.input.video =  createVideo("data/new/R0010087.mp4"); // R0010014_20161217101030_er / R0010081
+//SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
+
+SETTINGS.input.video =  createVideo("data/new/new2/R0010095.mp4");
+
+if (getParamByKey("video_src")) {
+	SETTINGS.input.video =  createVideo("data/new/new2/"+getParamByKey("video_src")+".mp4");
+}
+
+
 
  //SETTINGS.input.video = document.getElementById('video');
-SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
+//SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
 
 // ovladaci prvky
@@ -312,38 +325,44 @@ function initProgram() {
 		fisheye_or_equi_mode = 1;
 	}
  
-	GEOMETRY = createSphereGeometry(60, 60, 7, fisheye_or_equi_mode) ;
-	PROG.matrices.model.data = createIdentityMatrix4();
-	PROG.matrices.view.data = createIdentityMatrix4();
-	PROG.matrices.projection.data = createIdentityMatrix4();
 
+	// init webgl
 	PROG.canvas = document.querySelector("canvas");
-
-
-
-
-
-
-
-
-
-
 	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
 	if (!gl) {
 		w('Webgl se nepodarilo inicializovat...');
 		return false;
 	}
 
-	if (!SETTINGS.input.video) {
+	// kontrola vstupnic dat
+	if ((SETTINGS.mode.equirectangular.video.active || SETTINGS.mode.fisheye.video.active) && !SETTINGS.input.video) {
 		e('video se nepdarilo nacist!');
 		return false;
 	}
-	else  if (!SETTINGS.input.image) {
+	
+	if ((SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) && !SETTINGS.input.image) {
 		e('panorama se nepdarilo nacist!');
 		return false;
 	}
 
 
+	// nastaveni vychozich data platna
+	SETTINGS.default.canvas.width = PROG.canvas.width;
+	SETTINGS.default.canvas.height = PROG.canvas.height;
+
+
+	// vypocet geometrie
+	GEOMETRY = createSphereGeometry(
+		SETTINGS.mode.fisheye.video.latitudes, 
+		SETTINGS.mode.fisheye.video.longtitudes, 
+		SETTINGS.mode.fisheye.video.radius, 
+		fisheye_or_equi_mode
+	);
+
+	// incializace matic
+	PROG.matrices.model.data = createIdentityMatrix4();
+	PROG.matrices.view.data = createIdentityMatrix4();
+	PROG.matrices.projection.data = createIdentityMatrix4();
 
 	return true;
 }
@@ -811,6 +830,8 @@ function resize() {
 
 function main() 
 {
+	if (!SETTINGS.input.video)  return false;
+
 	if (!initProgram()) {
 		return false;
 	}
