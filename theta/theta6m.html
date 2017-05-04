@@ -15,9 +15,9 @@
 		attribute vec3 pos;
 		attribute vec2 texture;
 
-		uniform mat4 MMatrix;
-		uniform mat4 VMatrix;
-		uniform mat4 PMatrix;
+		uniform mat4 M_Matrix;
+		uniform mat4 V_Matrix;
+		uniform mat4 P_Matrix;
 
 		varying vec2 varyingTexture;
 
@@ -25,7 +25,7 @@
 		varying vec3 varyingFragPosNormal;
 			
 		void main(void) {
-			gl_Position = PMatrix * VMatrix * MMatrix * vec4(pos, 1.0);
+			gl_Position = P_Matrix * V_Matrix * M_Matrix * vec4(pos, 1.0);
 			varyingTexture = texture;
 			varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
  
@@ -492,13 +492,13 @@ function setupProgram()
 	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2.0, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
 	// ------ nahrani matic do promennych ==============================================================
-	PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "MMatrix");
+	PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "M_Matrix");
 	gl.uniformMatrix4fv(PROG.matrices.model.link, false, PROG.matrices.model.data);
 
-	PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "VMatrix");
+	PROG.matrices.view.link = gl.getUniformLocation(PROG.program, "V_Matrix");
 	gl.uniformMatrix4fv(PROG.matrices.view.link, false, PROG.matrices.model.data);
 
-	PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "PMatrix");
+	PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "P_Matrix");
 	gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
 
 

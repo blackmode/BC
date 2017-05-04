@@ -747,18 +747,18 @@ Kódy shaderů se nakonec musí propojit s WebGL, kde se jako první použije fu
 
 Načtené a zkompilované shadery nejsou v globální objektové proměnné uloženy, protože se jako takové v programu využívají jen ve funkci \texttt{\setupProgram}.
 
+\subsection{Program}
+Ze zkompilovaných shaderů se vytvoří program resp.se oba shadery provážou  do jednoho WebGL programu, aby se mohlo nad nimi dále pracovat. Vytvoření programu se realizuje funkcí \texttt{ createProgram()} a následně se přiloží oba shadery k programu pomocí funkce \texttt{attachShader()}. V další fázi se program slinkuje s \texttt{linkProgram()} a funkcí \texttt{ useProgram()} aktivuje. Výsledný program spolu s přiloženými shadery reprezentuje globální objektová proměnná \texttt{PROG.program}.
+
 
 \subsection{Transformační matice}
-Modelová matice je z hlediska své implementace po celý běh programu stejná, je jí ale potřeba přenastavit pro každý mód prohlížení, protože jak equirectangulární panorama tak fisheye mapuje texturu odlišným způsobem a je tedy nutné tomu přizpůsobit i modelovou matici.
+Modelová matice je z hlediska své implementace po celý běh programu stejná, je jí ale potřeba přenastavit pro každý mód prohlížení, protože jak ekvidistantní projekce, tak režim rybího oka mapuje texturu odlišným způsobem a je tedy nutné tomu přizpůsobit i modelovou matici.
 
 V případě equirectangulárního prohlížení je vstup programu přímo mapován na kouli bez jakýkoliv úprav dat textury, protože vstupu odpovídá navrženy model. V módu pro rybí oko je nutné nad mapovanými daty sice provést korekci, ta samotná  ale na úpravu modelové matice nemá vliv, hlavním důvodem je posun vstupní projekce rybího oka vůči té equirectangulární o 90\degree
 
 U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dále se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. roli kamery, se pokaždé interakci se vstupním zařízením data mění a je proto nutné její data nahrát do shaderu znova. 
 
-
-
-\subsection{Program}
-Ze zkompilovaných shaderů je nutné vytvořit program tzn. provázat oba shadery do jednoho WebGL programu, aby se mohlo nad nimi dále pracovat. Vytvoření programu se realizuje funkcí \texttt{ createProgram()} a následně se přiloží oba shadery k programu pomocí funkce \texttt{attachShader()}. V další fázi se program slinkuje s \texttt{linkProgram()} a funkcí \texttt{ useProgram()} aktivuje. Výsledný program spolu s přiloženými shadery reprezentuje globální objektová proměnná \texttt{PROG.program}.
+V shaderu již je připravena uniformní proměnná určená pro data matic, tudíž nyní se program \texttt{PROG.program} prováže s těmito proměnnými v shaderech webgl funkcí \\\texttt{getUniformLocation()} a její reference se načte do objektové globální proměnné \\\texttt{PROG.matrices.model.link}.
 
 
 %=========================================================================
@@ -767,7 +767,7 @@ Ze zkompilovaných shaderů je nutné vytvořit program tzn. provázat oba shade
 
 \subsection{Buffery a geometrie}
 
-WebGL funkcí \texttt{createBuffer()} se buffery musí nejprve vytvořit, poté nastavit funkci \texttt{bindBuffer()} jako  aktivni  a poté nahrát data geometrie funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívany tři buffery, a to vertex buferu pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případé modu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů.
+Vytvoření bufferů ve webgl jak již bylo avizováno provedeme funkcí \texttt{createBuffer()}, poté se funkci   \texttt{bindBuffer()}  nastaví buffer jako  aktivní  a  nahraje do něj  data    funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívány tři buffery, a to vertex buffer pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případě módu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů.
 
 
 
