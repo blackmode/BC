@@ -59,7 +59,7 @@ input[type=range]::-moz-range-progress {
         }
 
         #overlay  {
-            background-image: url(../src/img/loader.gif);  
+            background-image: url(../img/loader.gif);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             background-color:  #ddd !important;
@@ -85,7 +85,7 @@ input[type=range]::-moz-range-progress {
         } 
 
         .fullscreen_icon {
-            background-image: url(../src/img/icon_fullscreen.png);  
+            background-image: url(../img/icon_fullscreen.png);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             cursor: pointer;
@@ -96,7 +96,7 @@ input[type=range]::-moz-range-progress {
         }
 
         .play_icon {
-            background-image: url(../src/img/icon_play.png);  
+            background-image: url(../img/icon_play.png);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             cursor: pointer;
@@ -107,7 +107,7 @@ input[type=range]::-moz-range-progress {
             opacity: 0.8;
         }
         .pause_icon {
-            background-image: url(../src/img/icon_pause.png);  
+            background-image: url(../img/icon_pause.png);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             cursor: pointer;
@@ -118,7 +118,7 @@ input[type=range]::-moz-range-progress {
             opacity: 0.8;
         }
         .normalscreen_icon {
-            background-image: url(../src/img/icon_normalscreen.png);  
+            background-image: url(../img/icon_normalscreen.png);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             cursor: pointer;
@@ -130,7 +130,7 @@ input[type=range]::-moz-range-progress {
         }
 
         .sound_icon {
-            background-image: url(../src/img/icon_sound.png);  
+            background-image: url(../img/icon_sound.png);  
             background-repeat: no-repeat !important;
             background-position:  center center   !important ;
             cursor: pointer;
@@ -141,14 +141,15 @@ input[type=range]::-moz-range-progress {
             opacity: 0.8;
         }
 
-        #video_controlls_btn_fullstreen::before {
-            display: block;
-            background-image: url(../src/img/icon_sound.png);  
+        #video_controlls_btn_slider_volume {
+            background-image: url(../img/icon_sound.png);  
             background-repeat: no-repeat !important;
-            background-position:  center center   !important ;
+            background-position:  left center   !important ;
             cursor: pointer;
             border: none;
-        }
+            padding-left: 40px;
+            margin-left: 20px;
+         }
 
 
 

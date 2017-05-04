@@ -292,7 +292,7 @@ SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 
 
 // ovladaci prvky
-createVideoControlls(document.querySelector("canvas").width/2,80, 0.0, 1.0,SETTINGS.input.video ) ;
+createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.95,SETTINGS.input.video ) ;
 
 function initProgram() {
 
@@ -793,6 +793,8 @@ function resize() {
 	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 	createFieldVision(150,150,0.4,1, (SETTINGS.compass.angle ? SETTINGS.compass.angle : 10), 0);
 	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
+	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
+	//createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.95,SETTINGS.input.video ) 
 }
 
 function main() 

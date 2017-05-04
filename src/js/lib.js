@@ -1226,8 +1226,8 @@ function createVideoControlls(width, height, position_x, position_y, video) {
 		video_controlls_btn_slider_volume.style.width =  '15%';
 		video_controlls_btn_slider_volume.style.float = 'left';
 		video_controlls_btn_slider_volume.style.backgroundColor = 'transparent';
-		video_controlls_btn_slider_volume.style.transform = 'rotate(-90deg)';
-		video_controlls_btn_slider_volume.style.webkitTransform = 'rotate(-90deg)';
+		//video_controlls_btn_slider_volume.style.transform = 'rotate(-90deg)';
+		//video_controlls_btn_slider_volume.style.webkitTransform = 'rotate(-90deg)';
  		video_controlls.appendChild(video_controlls_btn_slider_volume);
 	}
 
@@ -1303,17 +1303,20 @@ function createVideoControlls(width, height, position_x, position_y, video) {
  		// nastaveni ikon
 		if (video_controlls_btn_fullstreen.getAttribute('class') == 'fullscreen_icon'){
 			video_controlls_btn_fullstreen.setAttribute('class', 'normalscreen_icon');
-
+			//fullscreen
+			canvas_dom.width =window.innerWidth;
+			canvas_dom.height = window.innerHeight;;
+			gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
+			resize();
 		}
 		else if (video_controlls_btn_fullstreen.getAttribute('class') == 'normalscreen_icon'){
 			video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon');
+			//fullscreen
+			canvas_dom.width =window.innerWidth/1.25;
+			canvas_dom.height = window.innerHeight/1.25;
+			gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
+			resize();
 		}
-
-
-		canvas_dom.width =window.innerWidth;
-		canvas_dom.height = window.innerHeight;;
-		gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
-		resize();
 
 	});
 
