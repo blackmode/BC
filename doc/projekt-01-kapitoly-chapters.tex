@@ -770,13 +770,16 @@ V shaderu již je připravena uniformní proměnná určená pro data matic, tud
 Vytvoření bufferů ve webgl jak již bylo avizováno provedeme funkcí \texttt{createBuffer()}, poté se funkci   \texttt{bindBuffer()}  nastaví buffer jako  aktivní  a  nahraje do něj  data    funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívány tři buffery, a to vertex buffer pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případě módu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů.
 
 
+Objekt \texttt{GEOMETRY} vrací funkce \texttt{\createSphereGeometry}. Vstupními argumenty geometrické funkce jsou počet poledníku a počet rovnoběžek, poloměr koule a příznak použití indexů. První tři se využijí k výpočtu souřadnic, poslední zdali zvolit indexování, či nikoliv. Samotný výpočet bodů probíhá ve dvojici cyklů \texttt{for}. První cyklus prochází rovnoběžky a počítá úhel $\theta$, vnitřní cyklus prochází poledníky a počítá úhel $\varphi$ nutný spolu s úhlem $\theta$ pro výpočet sférického souřadného sytému. Ve vnitřním cyklu vedle bodů geometrie dále počítají normály, textura a indexy.
 
-Objekt \texttt{GEOMETRY} vrací funkce \texttt{\createSphereGeometry}. 
 
-
+Výpočet indexů je oddělen od hlavní výpočetní smyčky, protože musí mít již v poli spočítaná data bodů tj. musí vědět, na která data má odkazovat. Indexy se opět počítají dvojicí cyklů \texttt{for}, kdy vnější smyčka pouze prochází rovnoběžky.Vnitřní smyčka prochází nejen poledníky, ale počítá indexy na pozice bodů.
 
 \subsection{Atributy}
+Stejně jako data matic se musí i data bufferů propojit se shadery. To se provede funkcí \texttt{getAttribLocation()}, která vrací referenci na atribut. Reference atributu bodu geometrie se načte   do globální proměnné \texttt{PROG.attributes.vertex}, pro mapování textury do obdobné proměnné \texttt{PROG.attributes.texture}.
 
+
+ 
 
 
 \subsection{Načítání a vykreslování textur}

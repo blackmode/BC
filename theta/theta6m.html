@@ -388,22 +388,6 @@ function setupProgram()
 	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
 	window.addEventListener('resize', onWindowResize, true);
 
-	SETTINGS.input.video.addEventListener("timeupdate", function() {
- 
- 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
- 		 var slider = document.getElementById(video_controlls_btn_slider_video);
- 		slider.value = value;
-
- 	});
-
-	// nacitani videa
-	SETTINGS.input.video.addEventListener('progress', function() {
-	    var range = 0;
-	    var buffered = SETTINGS.input.video.buffered;
-	    var time = this.currentTime;
-	});
-
-
 
 	// nacteni, zkompilovani a overeni vertext shaderu
 	var str = document.querySelector("#vs").textContent;
