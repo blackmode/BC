@@ -758,7 +758,7 @@ V případě equirectangulárního prohlížení je vstup programu přímo mapov
 
 U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dále se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. roli kamery, se pokaždé interakci se vstupním zařízením data mění a je proto nutné její data nahrát do shaderu znova. 
 
-V shaderu již je připravena uniformní proměnná určená pro data matic, tudíž nyní se program \texttt{PROG.program} prováže s těmito proměnnými v shaderech webgl funkcí \\\texttt{getUniformLocation()} a její reference se načte do objektové globální proměnné \\\texttt{PROG.matrices.model.link}.
+V shaderu již je připravena uniformní proměnná určená pro data matic, tudíž nyní se program \texttt{PROG.program} prováže s těmito proměnnými v shaderech webgl funkcí \\\texttt{getUniformLocation()} a její reference se načte do objektové globální proměnné \\\texttt{PROG.matrices.\textit{<model/view/projection>}.link}, kde \textit{\textbf{model/view/projection}} reprezentují tří reference na modelovou, zobrazovací a projekční (perspektivní) matici.
 
 
 %=========================================================================
@@ -771,11 +771,11 @@ Vytvoření bufferů ve webgl jak již bylo avizováno provedeme funkcí \texttt
 
 
 
-Objekt GEOMETRY vrací funkce \createSphereGeometry. 
+Objekt \texttt{GEOMETRY} vrací funkce \texttt{\createSphereGeometry}. 
 
 
 
-
+\subsection{Atributy}
 
 
 
@@ -799,7 +799,7 @@ Prvek překrývající plátno \texttt{<canvas>}. Vstupními metadaty jsou zadá
 
 Samotná konstrukce kompasu je zasazena do tagu \texttt{<div id="compass-box">}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, který utváří element div s identifikátorem \texttt{<div id="compass">}. Statická část nese informace o odchylce k severu ve stupních, ne které bude ukazovat šipka. Druhá část je střelka, která je vložena jako další div. Střelka se poté otáčí pomoci transformace kaskádových stylů.
 
-\subsection{Pozicování}
+\subsection*{Pozicování}
 Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
 \texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} 
 
