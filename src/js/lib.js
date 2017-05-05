@@ -1066,22 +1066,19 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 			var progress_bar_box = document.getElementById('progress_bar');
 			if (!progress_bar_box)
 			{
-				var progress_bar = document.createElement('progress');
-				progress_bar.setAttribute('id', 'progress_bar');
-				progress_bar.setAttribute('class', 'unique');
-				
-				progress_bar.style.width = '75%';//status_bar_width+'px';
-				progress_bar.style.height = status_bar_height+'px';
-				progress_bar.style.background = '#333';
-				progress_bar.style.float = 'left';
-				status_bar_box.appendChild(progress_bar);
+				progress_bar_box = document.createElement('progress');
 			}
+			
+			progress_bar_box.setAttribute('id', 'progress_bar');
+			progress_bar_box.setAttribute('class', 'unique');
+			
+			progress_bar_box.style.width = '75%';//status_bar_width+'px';
+			progress_bar_box.style.height = status_bar_height+'px';
+			progress_bar_box.style.background = '#333';
+			progress_bar_box.style.float = 'left';
+			status_bar_box.appendChild(progress_bar_box);
+			
 
-			// ujistime se, ze video ma jiz metadata
-			if (video.readyState >= video.HAVE_METADATA) {
-				progress_bar_box = document.getElementById('progress_bar');
-				progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
-			}
 			// ------- progres bar KONEC
 
 			// ------- progres v procentech
@@ -1096,11 +1093,12 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
  				status_bar_box.appendChild(progress_bar_text);
 			}
 
+			// listenery
 			video.addEventListener("timeupdate", function() {
-		 
-		 		var value = (100 / video.duration) * video.currentTime;
+ 		 		var value = (100 / video.duration) * video.currentTime;
 
  		 		progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+ 		 		progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
 
 		 	});
 
