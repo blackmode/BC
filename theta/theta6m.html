@@ -8,7 +8,6 @@
 
  		 <script type="text/javascript" src="../src/js/lib.js"></script>
 		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
 
 	<script id="vs" type="x-shader/x-vertex">
@@ -148,9 +147,7 @@
 
 var gl;
 var GEOMETRY;
-var vide_playing = 0;
-
-
+ 
 /// ------ VSECHNY PROMENNE PRO MYS
 var MOUSE = {
 	down : {
@@ -187,7 +184,6 @@ var KEYBOARD = {
 		y:  0.06,
 	} ,
 };
-
 
 
 /// ------ VSECHNY nastaveni PROGRAMU
@@ -239,6 +235,7 @@ var SETTINGS = {
 	} ,
 	video_controlls : {
 		created: null,
+		keyboard_vide_playing : 0,
 	} ,
 
 
@@ -776,24 +773,24 @@ function onDocumentKeyPress( event ) {
 	if (KEYBOARD.active) 
 	{
 		if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
-			vide_playing = 1;
+			SETTINGS.video_controlls.keyboard_vide_playing = 1;
 			SETTINGS.input.video.play();
 		}
 
 		if (event.keyCode == 101 || event.keyCode == 69) { // e/E
 			SETTINGS.input.video.pause();
-			vide_playing = 0;
+			SETTINGS.video_controlls.keyboard_vide_playing = 0;
 		}
 
 		// start/stop pomoci mezerniku
 		if (event.keyCode === 0 || event.keyCode === 32) {
-			if (!vide_playing ) {
+			if (!SETTINGS.video_controlls.keyboard_vide_playing ) {
 				SETTINGS.input.video.play();
-				vide_playing = 1;
+				SETTINGS.video_controlls.keyboard_vide_playing = 1;
 			}	
-			else if (vide_playing ) {
+			else if (SETTINGS.video_controlls.keyboard_vide_playing ) {
 				SETTINGS.input.video.pause();
-				vide_playing = 0;
+				SETTINGS.video_controlls.keyboard_vide_playing = 0;
 			}
 		}
 
