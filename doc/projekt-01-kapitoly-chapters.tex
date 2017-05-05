@@ -683,7 +683,7 @@ Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{
 \section{Kompas}
 Dalším rozšířením prohlížení jsou údaje o světových stranách díky kompasu. Střelka kompasu se bude pohybovat k severu díky vstupním argumentům, které budou předány přímo do programu. Ukazatel severu se bude měnit na základě rozdílu vůči vstupní pozici, která definuje pozici severu ve scéně. Samotna realizace střelky bude díky obrázku \texttt{svg} a natáčení pomocí změně kaskádových stylů. Změna zobrazení bude udávána ve stupních vůči původní pozici. Samotná transformace zobrazení, resp. otočení střelky budeme realizovat pomocí vlastnosti kaskádových stylů \texttt{transform: rotate(\textbf{\emph{X}}deg)} kde \texttt{\textbf{\emph{X}}} je posuv ve stupních.
 
-\subsection{Výpočet posuvu}
+\subsection{Odchylka střelky}
 Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupní statickou pozici zadanou argumentem programu, která po celou dobu běhu programu nad danými daty zůstane neměnná. Tedy samotná korekce bude reagovat pouze na změnu horizontální osy.
 
 \subsection{Výpočet pozice kompasu v plátně}
@@ -737,7 +737,7 @@ Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je
 
 
 \subsection{Shadery}
-Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné. V našem konkrétním případě  ale pro umístění shaderu využíváme kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader ma svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné, externího souboru popř. využít html značky. V našem konkrétním případě  se pro umístění shaderu využívá kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader mÁ svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
 
 Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech, konkrétně ve vertex shaderu. U projekce se všechny matice  vynásobí aktuálním bodem geometrie, která je do vertex shaderu předána z bufferu, tato operace se opakuje pro každý bod geometrie modelu. Jelikož vertex shader slouží pro propojení webgl programu  a obou shaderů, musí se předat do fragment shaderu textura, jejíž body se automaticky interpolují a předají fragment shaderu. K předání hodnoty slouží proměnná \texttt{varyingTexture}.
 
@@ -779,13 +779,23 @@ Výpočet indexů je oddělen od hlavní výpočetní smyčky, protože musí m�
 Stejně jako data matic se musí i data bufferů propojit se shadery. To se provede funkcí \texttt{getAttribLocation()}, která vrací referenci na atribut. Reference atributu bodu geometrie se načte   do globální proměnné \texttt{PROG.attributes.vertex}, pro mapování textury do obdobné proměnné \texttt{PROG.attributes.texture}.
 
 
- 
+\subsection{Textury}
+Implementace textur je zasazena jak do funkce \texttt{\setupProgram} tak do vykreslovací funkce \texttt{\render}, každá implementace v dané funkci má trochu odlišný charakter, který více rozeberu až v následující kapitole. Textura oproti programu, vyžaduje v našem konkrétním případě širší definici. Je třeba definovat mj. i chování textury při interpolaci.
+
+Samotná textura se vytvoří funkcí \texttt{createTexture()}, která vrací referenci na objekt WebGL textury, s kterým se dále pracuje. Tento objekt si uložíme opět do globální objektové proměnné \texttt{PROG.texture}. Po zisku se reference se textura, stejně u bufferů popř. programu, ještě aktivuje obdobnou funkcí \texttt{ bindTexture()}.
+
+Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}.
 
 
-\subsection{Načítání a vykreslování textur}
- 
- 
+%=========================================================================
+\newpage
+
 \section{Vykreslování a módy prohlížení}
+Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem\footnote{Jak v módu rybího oka tak v ekvidistantním módu} a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
+
+Situaci řeši funkce \updateTexture, která je aktivní pouze v režimu videa.
+
+
 
 \section{Ovládání myší}
 
