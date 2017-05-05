@@ -1096,7 +1096,15 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
  				status_bar_box.appendChild(progress_bar_text);
 			}
 
-			progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+			video.addEventListener("timeupdate", function() {
+		 
+		 		var value = (100 / video.duration) * video.currentTime;
+
+ 		 		progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+
+		 	});
+
+			
 			// ------- progres v procentech, KONEC
 
 			return status_bar_box;

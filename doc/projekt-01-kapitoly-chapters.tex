@@ -10,7 +10,7 @@
 V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotek a~videí. V současné době i~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
 
 
-Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých módech, ve kterých je video interpretováno. Cílem je tedy navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání např. sférického videa v režimu rybího oka specifický program, který by video musel nejprve překonvertovat. To stejné se týká i~panoramatických snímku a~videí v equirectangulárním zobrazení.  
+Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých módech, ve kterých je video interpretováno. Cílem je  navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání specifický program. Zvláště v případě  sférického videa v režimu rybího oka, kdy uživatel nejprve musí video překonvertovat do ekvidistantního zobrazení, aby jej mohl sféricky prohlížet. Díky řešení v následujících kapitolách tato nutnost odpadá. 
 
 
 Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení nejsou k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti zorného pole v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí popřípadě blíže popsat zachycenou scénu.
@@ -40,7 +40,7 @@ Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomu
 
 Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}, v opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
 
-Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Všechny elementy webové stránky jsou interpretovány v DOM jako objekt Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
+Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Všechny elementy webové stránky jsou interpretovány v DOM jako objekt. Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
 
 
 
@@ -50,15 +50,15 @@ Další velice důležitou částí je načítáni videa a jeho ověření, zdal
 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
-	 - nastane v situaci, kdy zdrojové video není dostupné, nebo žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()}, když její návratová hodnota je rovna 0, což odpovídá konstantě \texttt{NETWORK\_EMPTY}
+	 - nastane v situaci, kdy zdrojové video není dostupné, nebo nejsou dostupná žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()} v případě, když její návratová hodnota je rovna \texttt{0}, což odpovídá konstantě \texttt{NETWORK\_EMPTY}.
 	\item \texttt{HAVE\_METADATA} \newline
-		-  základní data o zdroji se podařilo získat a zdroj je tedy považován jako dostupný. Zatím ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V tomto stavu jsou k dispozici jen data popisující přehrávány subjekt, jako délka, šířka, dekódovaní apod. Dochází k vyvolání události \texttt{loadedmetadata}
+		-  základní data o videu se podařilo získat a zdroj je tedy považován jako dostupný. V tomto stavu, ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V aktuálním stavu jsou k dispozici jen data popisující přehrávány subjekt. Jsou načteny údaje videa o jeho délce, šířce, dekódovaní apod. Dochází  také k vyvolání události \texttt{loadedmetadata}.
 	\item \texttt{HAVE\_CURRENT\_DATA }\newline
-		- data pro bezprostřední začátek přehrávání jsou připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání může dostat do stavu \texttt{HAVE\_METADATA}, nebo následující data videa již nejsou k dispozici.
+		- data jsou pro bezprostřední začátek přehrávání již  připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání se může  dostat do stavu \texttt{HAVE\_METADATA}, nebo se také může stát, že  následující data videa již nejsou k dispozici.
 	\item \texttt{HAVE\_FUTURE\_DATA}\newline
 		- data pro přehrávání jsou připravena pro současnou i nadcházející pozici. V případě, že by bylo video dosáhlo takového stavu poprvé, bude vyvolána událost \texttt{canplay}.
 	\item \texttt{HAVE\_ENOUGH\_DATA}\newline
-		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}
+		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}.
 \end{itemize}
 
 Mimo stavy načtení videa jsou tu i události indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.

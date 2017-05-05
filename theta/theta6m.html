@@ -372,6 +372,7 @@ function initProgram() {
 	// inicializace GUI prvku 
 	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 	SETTINGS.field_vision.object = createFieldVision(150,150,0.4,1, 0, 0); 
+	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 	return true;
 }
 
@@ -639,7 +640,7 @@ function render() {
 	// status bar a cas
 	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
 		var elem = document.getElementById("data").innerHTML = 'Čas: '+SETTINGS.input.video.currentTime;
-		createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
+		
 
 
 	}
@@ -853,7 +854,6 @@ function resize() {
 	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 	createFieldVision(150,150,0.4,1, (SETTINGS.compass.angle ? SETTINGS.compass.angle : 10), 0);
 	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
-	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
 
 	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
 }
