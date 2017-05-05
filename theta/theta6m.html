@@ -224,6 +224,7 @@ var SETTINGS = {
 		height:  0.06,
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
+		object: null,
 	} ,
 	compass : {
 		wdith: 0.06,
@@ -231,7 +232,8 @@ var SETTINGS = {
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
 		north: 0.0,
-		angle: 0.0
+		angle: 0.0,
+		object: null,
 	} ,
 	video_controlls : {
 		created: null,
@@ -366,6 +368,10 @@ function initProgram() {
 	PROG.matrices.view.data = createIdentityMatrix4();
 	PROG.matrices.projection.data = createIdentityMatrix4();
 
+
+	// inicializace GUI prvku 
+	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
+	SETTINGS.field_vision.object = createFieldVision(150,150,0.4,1, 0, 0); 
 	return true;
 }
 
@@ -378,9 +384,24 @@ function setupProgram()
 
 	PROG.canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	PROG.canvas.addEventListener("mouseout", onDocumentMouseOut, false);
+	PROG.canvas.addEventListener( 'mouseup',   onDocumentMouseUp,   false );
+	//PROG.canvas.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
+	
+	document.getElementById('video_controlls').addEventListener( 'mouseover',  onDocumentMouseOver,  false );	 
 
-	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	// vyjimku tvori kompas a field vision
+	SETTINGS.compass.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	SETTINGS.compass.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	SETTINGS.compass.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+	SETTINGS.field_vision.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	SETTINGS.field_vision.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+
+
+
+	// kolecko a klavesnice
 	document.addEventListener("keypress", onDocumentKeyPress, false);
 	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
 	window.addEventListener('resize', onWindowResize, true);
@@ -735,6 +756,11 @@ function onDocumentMouseOut( event ) {
 	}
 }
 
+function onDocumentMouseOver( event ) {
+	if (MOUSE.active && !MOUSE.interrupt) {
+		MOUSE.active = false;
+	}
+}
 
 function onDocumentMouseUp( event ) {
 	MOUSE.active = false;

@@ -919,7 +919,7 @@ function createCompass(width, height, position_x, position_y, north_position, an
 		arrow_exists.style.backgroundSize =  compass_width+'px ' + compass_height+ 'px';
 	}
 	
-	return true; 
+	return compass_box; 
 }
 
 // vytvoreni cesty
@@ -1008,7 +1008,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
   		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
  
-		return vision;
+		return field_vision;
  
 	}
 	else {
