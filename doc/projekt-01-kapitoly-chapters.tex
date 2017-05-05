@@ -767,7 +767,7 @@ V shaderu již je připravena uniformní proměnná určená pro data matic, tud
 
 \subsection{Buffery a geometrie}
 
-Vytvoření bufferů ve webgl jak již bylo avizováno provedeme funkcí \texttt{createBuffer()}, poté se funkci   \texttt{bindBuffer()}  nastaví buffer jako  aktivní  a  nahraje do něj  data    funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívány tři buffery, a to vertex buffer pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případě módu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů.
+Vytvoření bufferů ve webgl jak již bylo avizováno provedeme funkcí \texttt{createBuffer()}, poté se funkci   \texttt{bindBuffer()}  nastaví buffer jako  aktivní  a  nahraje do něj  data    funkcí \texttt{bufferData()}. Data geometrie jsou načteny v objektu \texttt{GEOMETRY}, a ze kterého  budeme předávat data bufferům. V naší implementaci jsou využívány tři buffery, a to vertex buffer pro data geometrie modelu, dále texturovací buffer a nakonec index buffer s indexy do pole vertex bufferu, ukazující na body geometrie. V případě módu rybího oka budeme využívat pouze první dva zmíněné. V případě equirectangulárního prohlížení využijeme data všech bufferů. Všechny data se mimo indexů nahrávají na grafickou kartu jako \texttt{Float32Array}.
 
 
 Objekt \texttt{GEOMETRY} vrací funkce \texttt{\createSphereGeometry}. Vstupními argumenty geometrické funkce jsou počet poledníku a počet rovnoběžek, poloměr koule a příznak použití indexů. První tři se využijí k výpočtu souřadnic, poslední zdali zvolit indexování, či nikoliv. Samotný výpočet bodů probíhá ve dvojici cyklů \texttt{for}. První cyklus prochází rovnoběžky a počítá úhel $\theta$, vnitřní cyklus prochází poledníky a počítá úhel $\varphi$ nutný spolu s úhlem $\theta$ pro výpočet sférického souřadného sytému. Ve vnitřním cyklu vedle bodů geometrie dále počítají normály, textura a indexy.
@@ -776,7 +776,7 @@ Objekt \texttt{GEOMETRY} vrací funkce \texttt{\createSphereGeometry}. Vstupním
 Výpočet indexů je oddělen od hlavní výpočetní smyčky, protože musí mít již v poli spočítaná data bodů tj. musí vědět, na která data má odkazovat. Indexy se opět počítají dvojicí cyklů \texttt{for}, kdy vnější smyčka pouze prochází rovnoběžky.Vnitřní smyčka prochází nejen poledníky, ale počítá indexy na pozice bodů.
 
 \subsection{Atributy}
-Stejně jako data matic se musí i data bufferů propojit se shadery. To se provede funkcí \texttt{getAttribLocation()}, která vrací referenci na atribut. Reference atributu bodu geometrie se načte   do globální proměnné \texttt{PROG.attributes.vertex}, pro mapování textury do obdobné proměnné \texttt{PROG.attributes.texture}.
+Stejně jako data matic se musí i data bufferů propojit se shadery. To se provede funkcí \texttt{getAttribLocation()}, která vrací referenci na atribut. Reference na atribut bodů geometrie se načte   do globální proměnné \texttt{PROG.attributes.vertex}, pro mapování textury do obdobné proměnné \texttt{PROG.attributes.texture}.
 
 
 \subsection{Textury}
@@ -793,11 +793,13 @@ Chování textury při zmenšení a zvětšení je konkretizováno funkcí \text
 \section{Vykreslování a módy prohlížení}
 Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem\footnote{Jak v módu rybího oka tak v ekvidistantním módu} a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
 
-Situaci řeši funkce \updateTexture, která je aktivní pouze v režimu videa.
+Situaci řeši funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa.
 
 
 
 \section{Ovládání myší}
+Myš je implementována trojicí funkcí, které fungují nad generovanými javascriptovými událostmi vstupu. Po kliknutí do plátna se myš aktivuje tím, že dojde k události \texttt{mouseDown}, kterou v programu zpracovává funkce \texttt{onDocumentMouseDown()}. Po stisku levého tlačítka myši nad plátnem, se snímání vstupu myši aktivuje z hlediska programu proměnnou \texttt{MOUSE.active} a dále uloží pozice kurzoru myši do globálních proměnných \texttt{MOUSE.down.x} a \texttt{MOUSE.down.y}. Po celou dobu tahu myši v plátně zůstává myš aktivní, dokud není vygenerována událost \texttt{mouseUp}, kterou obsluhuje programová funkce \texttt{onDocumentMouseUp()}. Událost mouseUp funkci myší přeruší tak, že nastaví \texttt{MOUSE.active} na \texttt{false}. Mezi události \texttt{mouseDown} a \texttt{mouseUp} se vykonává hlavní funkce pro práci s myši \texttt{onDocumentMouseMove()}. Je spouštěna události \texttt{mouseMove}, tedy pohybem myši po plátně. Funkce vychází z uloženych hodnot pozice kurrzoru již ve funkci \texttt{onDocumentMouseDown()}, aby zjistila odkud a kam se kurzor myši pohnul.
+
 
 \section{Ovládání klávesnicí}
 Ovládání zajišťuje funkce \texttt{onDocumentKeyPress(event)}. 

@@ -600,10 +600,11 @@ function createVideo( src ) {
 		return false;
 	}
     var video = document.createElement( 'video' );
-    video.loop = true;
+    video.loop = false;
     video.muted = false;
     video.autoplay = false;
     video.preload = 'auto';
+    //video.poster = '../img/icon_play.png';
     video.src = src;
     video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
 	//video.load();
