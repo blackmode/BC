@@ -237,8 +237,7 @@ var SETTINGS = {
 	} ,
 	video_controlls : {
 		created: null,
-		keyboard_vide_playing : 0,
-	} ,
+ 	} ,
 
 
 };
@@ -609,8 +608,10 @@ function updateTexture()
 
 		}
 	}
-
-	return true;
+	else {
+		// pro všechny ostatni případy je true
+		return true;
+	}
 }
 
 
@@ -800,24 +801,24 @@ function onDocumentKeyPress( event ) {
 	if (KEYBOARD.active) 
 	{
 		if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
-			SETTINGS.video_controlls.keyboard_vide_playing = 1;
-			SETTINGS.input.video.play();
+			log('video: play');
+ 			SETTINGS.input.video.play();
 		}
 
 		if (event.keyCode == 101 || event.keyCode == 69) { // e/E
+			log('video: pause');
 			SETTINGS.input.video.pause();
-			SETTINGS.video_controlls.keyboard_vide_playing = 0;
-		}
+ 		}
 
 		// start/stop pomoci mezerniku
 		if (event.keyCode === 0 || event.keyCode === 32) {
-			if (!SETTINGS.video_controlls.keyboard_vide_playing ) {
+			if (SETTINGS.input.video.paused == true) {
+				log('video: play');
+				console.log
 				SETTINGS.input.video.play();
-				SETTINGS.video_controlls.keyboard_vide_playing = 1;
-			}	
-			else if (SETTINGS.video_controlls.keyboard_vide_playing ) {
+			} else {
+				log('video: pause');
 				SETTINGS.input.video.pause();
-				SETTINGS.video_controlls.keyboard_vide_playing = 0;
 			}
 		}
 

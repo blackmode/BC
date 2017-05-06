@@ -524,6 +524,11 @@ function e(object) {
     console.log("___________________ ERROR ENDS ____________________");
 }
 
+// log
+function log(object) {
+	console.log(object);
+}
+
 // checking if file exists by JS and XHR
 // OK
 function checkIfFileExists(url)

@@ -784,7 +784,7 @@ Implementace textur je zasazena jak do funkce \texttt{\setupProgram} tak do vykr
 
 Samotná textura se vytvoří funkcí \texttt{createTexture()}, která vrací referenci na objekt WebGL textury, s kterým se dále pracuje. Tento objekt si uložíme opět do globální objektové proměnné \texttt{PROG.texture}. Po zisku  reference se textura, stejně u bufferů popř. programu, ještě aktivuje obdobnou funkcí \texttt{ bindTexture()}.
 
-Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}, protože dosahuje lepších výsledků než-li \texttt{NEAREST}.
+Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}, protože v našem případě implementace dosahuje lepších výsledků než-li \texttt{NEAREST}.
 
 
 %=========================================================================
