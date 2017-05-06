@@ -793,12 +793,22 @@ Chování textury při zmenšení a zvětšení je konkretizováno funkcí \text
 \section{Vykreslování a módy prohlížení}
 Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem\footnote{Jak v módu rybího oka tak v ekvidistantním módu} a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
 
-Situaci řeši funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa.
+Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa\footnote{Jak rybí oko tak ekvidistantní režim.}. Funkce je volána již před začátkem vykreslování ve funkci \texttt{\render}. Nejprve zjišťuje, zdali je video již načteno pomocí ověření \texttt{video.readyState >= video.HAVE\_CURRENT\_DATA} a pokud ano, tak načte texturu webgl funkcí \texttt{texImage2D()}. Pokud by data načtena neměla a \texttt{readyState} byl menší než \texttt{video.HAVE\_CURRENT\_DATA}, tak vrátí \texttt{false} a zobrazí  v plátně načítání.
 
-
-
+ 
 \section{Ovládání myší}
-Myš je implementována trojicí funkcí, které fungují nad generovanými javascriptovými událostmi vstupu. Po kliknutí do plátna se myš aktivuje tím, že dojde k události \texttt{mouseDown}, kterou v programu zpracovává funkce \texttt{onDocumentMouseDown()}. Po stisku levého tlačítka myši nad plátnem, se snímání vstupu myši aktivuje z hlediska programu proměnnou \texttt{MOUSE.active} a dále uloží pozice kurzoru myši do globálních proměnných \texttt{MOUSE.down.x} a \texttt{MOUSE.down.y}. Po celou dobu tahu myši v plátně zůstává myš aktivní, dokud není vygenerována událost \texttt{mouseUp}, kterou obsluhuje programová funkce \texttt{onDocumentMouseUp()}. Událost mouseUp funkci myší přeruší tak, že nastaví \texttt{MOUSE.active} na \texttt{false}. Mezi události \texttt{mouseDown} a \texttt{mouseUp} se vykonává hlavní funkce pro práci s myši \texttt{onDocumentMouseMove()}. Je spouštěna události \texttt{mouseMove}, tedy pohybem myši po plátně. Funkce vychází z uloženych hodnot pozice kurrzoru již ve funkci \texttt{onDocumentMouseDown()}, aby zjistila odkud a kam se kurzor myši pohnul.
+Myš je implementována trojicí funkcí, které fungují nad generovanými javascriptovými událostmi vstupu. Po kliknutí do plátna se myš aktivuje tím, že dojde k události \texttt{mouseDown}, kterou v programu zpracovává funkce \texttt{onDocumentMouseDown()}. Po stisku levého tlačítka myši nad plátnem, se snímání vstupu myši aktivuje z hlediska programu proměnnou \texttt{MOUSE.active} a dále uloží pozice kurzoru myši do globálních proměnných \texttt{MOUSE.down.x} a \texttt{MOUSE.down.y}. Po celou dobu tahu myši v plátně zůstává myš aktivní, dokud není vygenerována událost \texttt{mouseUp}, kterou obsluhuje programová funkce \texttt{onDocumentMouseUp()}. Událost \texttt{mouseUp} funkci myší přeruší tak, že nastaví \texttt{MOUSE.active} na \texttt{false}. Mezi události \texttt{mouseDown} a \texttt{mouseUp} se vykonává hlavní funkce pro práci s myši \texttt{onDocumentMouseMove()}. Je spouštěna události \texttt{mouseMove}, tedy pohybem myši po plátně. Funkce vychází z uložených hodnot pozice kurzoru již ve funkci \texttt{onDocumentMouseDown()}, aby zjistila odkud a kam se kurzor myši pohnul. 
+
+Pohyb kurzoru po stisku levého tlačítka myši lze tedy tahem měnit horizontální a vertikální pozici pozorovatele scény. Problém s tahem nastává nad elementy, které plátno překrývají. Proto se tato funkce ošetřuje již ve funkci \texttt{\initProgram}, kde se pomocí \\\texttt{addEventListener()} vyberou ty grafické elementy, které může myš překrývat, zbytek je automaticky považován za nepřekryvný - myš nad těmito prvky nebude fungovat, protože \texttt{MOUSE.active} se nastaví na  \texttt{false} a myš tím deaktivuje.
+
+Hloubku zobrazení, neboli přiblížení scény a pozorovatele se provádí kolečkem. Událost \texttt{mouseWheel} zastřešuje funkce \texttt{onDocumentMouseWheel()}, která ji zpracovává. U kolečka nastává problém s interpretací prohlížečů, protože každý prohlížeč ukládá interakci s kolečkem do objektu dané události odlišně a také do jiných proměnných. 
+
+Na základě hodnot se dále určuje směr rotace kolečka a intenzita s jakou hodnoty přibližování a oddalování narůstají. Tento problém je ale vyřešen tak, že intenzitu nárůstu si řídí program sám dle vstupu, pouze se rozlišuje, zdali je hodnota kladná nebo záporná.
+Dále funkce ošetřuje krajní meze pro přibližování a oddalování scény, aby nedošlo k problému při prohlížení.
+ 
+
+%=========================================================================
+\newpage
 
 
 \section{Ovládání klávesnicí}
@@ -829,8 +839,6 @@ Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTM
 
 
 
-Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
-Goniometrie
 
 
 %=========================================================================
@@ -838,6 +846,13 @@ Goniometrie
 
 \chapter{Testování}
 \label{chapter:5}
+
+
+Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
+Goniometrie
+
+
+
 \section{Windows a linux}
 \section{Prohlížeče a kompatibilita}
 
