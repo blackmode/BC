@@ -143,8 +143,8 @@
 		<div id="data"></div>
 	</body>
 
-<script>
 
+<script>
 var gl;
 var GEOMETRY;
  
@@ -237,6 +237,7 @@ var SETTINGS = {
 	} ,
 	video_controlls : {
 		created: null,
+		user_inactive: null
  	} ,
 
 
@@ -398,8 +399,9 @@ function setupProgram()
 	SETTINGS.field_vision.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
-
-
+	// detekce aktivniho/nekativniho oka
+	window.addEventListener('focus', playVideo);
+	window.addEventListener('blur', pauseVideo);
 
 	// kolecko a klavesnice
 	document.addEventListener("keypress", onDocumentKeyPress, false);
@@ -635,6 +637,27 @@ function getCameraPosition() {
 	return PROG.matrices.view.data[14];
 }
 
+// prehravani/zastaveni videoa pri aktivnim/neaktivnim okne
+function pauseVideo() {
+	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
+		if (SETTINGS.input.video.paused == false) {
+			SETTINGS.video_controlls.user_inactive = true;
+			SETTINGS.input.video.pause();
+			document.getElementById('video_controlls_btn_play').setAttribute('class', 'play_icon'); 
+		}
+	}
+}
+
+function playVideo() {
+	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
+		if (SETTINGS.video_controlls.user_inactive == true) {
+			SETTINGS.input.video.play();
+			document.getElementById('video_controlls_btn_play').setAttribute('class', 'pause_icon'); 
+			SETTINGS.video_controlls.user_inactive == false
+		}
+	}
+}
+
 function render() {
 
 	// METADATa PRO VIDEO VIDEO
@@ -857,7 +880,7 @@ function onWindowResize( event ) {
 }
 
 function resize() {
-	createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video);
+	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 	createFieldVision(150,150,0.4,1, (SETTINGS.compass.angle ? SETTINGS.compass.angle : 10), 0);
 	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 
