@@ -800,29 +800,35 @@ function onDocumentMouseMove( event ) {
 function onDocumentKeyPress( event ) {
 	if (KEYBOARD.active) 
 	{
-		if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
-			log('video: play');
- 			SETTINGS.input.video.play();
-		}
-
-		if (event.keyCode == 101 || event.keyCode == 69) { // e/E
-			log('video: pause');
-			SETTINGS.input.video.pause();
- 		}
-
-		// start/stop pomoci mezerniku
-		if (event.keyCode === 0 || event.keyCode === 32) {
-			if (SETTINGS.input.video.paused == true) {
+		// FUNKCE VIDEA
+		if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  
+		{
+			// sputeni videa
+			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
 				log('video: play');
-				console.log
-				SETTINGS.input.video.play();
-			} else {
+	 			SETTINGS.input.video.play();
+			}
+
+			// zastaveni videa
+			if (event.keyCode == 101 || event.keyCode == 69) { // e/E
 				log('video: pause');
 				SETTINGS.input.video.pause();
+	 		}
+
+			// start/stop pomoci mezerniku
+			if (event.keyCode === 0 || event.keyCode === 32) {
+				if (SETTINGS.input.video.paused == true) {
+					log('video: play');
+					SETTINGS.input.video.play();
+				} else {
+					log('video: pause');
+					SETTINGS.input.video.pause();
+				}
 			}
 		}
 
 
+		// pohyb pozorovatele
 		if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
 			MOUSE.move.angle.y += KEYBOARD.sensitivity.x;
 		}
@@ -832,7 +838,6 @@ function onDocumentKeyPress( event ) {
 
 		else if (event.keyCode == 119 ||   event.keyCode == 119-32 ) {  // w/W
 			MOUSE.move.angle.x -=  KEYBOARD.sensitivity.y;
-
 		}
 		else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
 			MOUSE.move.angle.x +=  KEYBOARD.sensitivity.y;
@@ -847,7 +852,7 @@ function onWindowResize( event ) {
 		element_canvas.width = window.innerWidth;
 		element_canvas.height = window.innerHeight;
 		gl.viewport(0, 0, element_canvas.width, element_canvas.height);
-  		setupProgram() ;
+  		resize() ;
 	}
 }
 

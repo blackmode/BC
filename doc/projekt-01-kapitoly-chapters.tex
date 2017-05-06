@@ -797,7 +797,10 @@ Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v reži
 
 
 \texttt{\textbf{Volani funkce \render a vysvetleni indexu a renderivani }}
- 
+
+
+
+
 \section{Ovládání myší}
 Myš je implementována trojicí funkcí, které fungují nad generovanými javascriptovými událostmi vstupu. Po kliknutí do plátna se myš aktivuje tím, že dojde k události \texttt{mouseDown}, kterou v programu zpracovává funkce \texttt{onDocumentMouseDown()}. Po stisku levého tlačítka myši nad plátnem, se snímání vstupu myši aktivuje z hlediska programu proměnnou \texttt{MOUSE.active} a dále uloží pozice kurzoru myši do globálních proměnných \texttt{MOUSE.down.x} a \texttt{MOUSE.down.y}. Po celou dobu tahu myši v plátně zůstává myš aktivní, dokud není vygenerována událost \texttt{mouseUp}, kterou obsluhuje programová funkce \texttt{onDocumentMouseUp()}. Událost \texttt{mouseUp} funkci myší přeruší tak, že nastaví \texttt{MOUSE.active} na \texttt{false}. Mezi události \texttt{mouseDown} a \texttt{mouseUp} se vykonává hlavní funkce pro práci s myši \texttt{onDocumentMouseMove()}. Je spouštěna události \texttt{mouseMove}, tedy pohybem myši po plátně. Funkce vychází z uložených hodnot pozice kurzoru již ve funkci \texttt{onDocumentMouseDown()}, aby zjistila odkud a kam se kurzor myši pohnul. 
 
@@ -814,32 +817,38 @@ Dále funkce ošetřuje krajní meze pro přibližování a oddalování scény,
 
 
 \section{Ovládání klávesnicí}
-Ovládání zajišťuje funkce \texttt{onDocumentKeyPress(event)}. 
+Zpracování všech stisků kláves zajišťuje funkce \texttt{onDocumentKeyPress(event)}. K ověřování stisku programových kláves se využívá vlastnost \texttt{event.\textbf{keyCode}}, do kterého se snímá \texttt{ASCII}\footnote{American Standard Code for Information Interchange.} kód stisknutého tlačítka.
 
+Klávesnice ovládá jak pozorovatele scény, tak i přehrávání videa. Pro ovládání videa jsou vyhrazeny klávesy \keystroke{q} pro spuštění videa, \keystroke{e} pro zastavení a \keystroke{space} kombinující funkci obou předešlých kláves.
+
+Pohyb kamery lze ovládat tlačítky \keystroke{w}, \keystroke{s},  \keystroke{a} a  \keystroke{d}. Stisk tlačítek \keystroke{w} a \keystroke{s} mění pozici kamery po vertikální ose, naproti tomu tlačítka \keystroke{a} a  \keystroke{d} posun v horizontálních směrech. Všechny operace s klávesnicí lze i spolu se zapnutým režimem  \keystroke{capslock}.
 
 
 \section{Grafické rozhraní}
 Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
 
-\subsection{Kompas}
-Prvek překrývající plátno \texttt{<canvas>}. Vstupními metadaty jsou zadány koordinační body severu, popř. jihu. Díky interakcí s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorový úhel, který ovlivňuje odchylku severu, popř. jihu od původní zadané pozice v metadatech.
+\subsection*{Pozicování}
+Pozice všech grafikách prvků na plátně je třeba přizpůsobovat velikosti plátna, např. když dojde k přepnutí na režim celé obrazovky. Pozice jednotlivých prvků je zadána argumenty \texttt{position\_x} a \texttt{position\_y} nabývající hodnot od \texttt{0} do \texttt{1}. Takto zadané hodnoty jsou nezávislé na režimu zobrazení. Stačí tedy nastavit jen hodnoty kaskádových stylů \texttt{left} a \texttt{top} tak, že \texttt{div.style.left} bude roven rozdílu šířky plátna a šířky grafického prvku vynásobená argumentem \texttt{position\_x}, pro vertikální umístění pak nastavení vlastnosti \texttt{div.style.top} jako rozdíl výšky plátna a grafického prvku, vynásobená  hodnotu argumentu \texttt{position\_y}. Při použití odskoku elementu od okraje obrazovky je pozice prvku nastavena na \texttt{absolute}, aby takto vypočítaná pozice měla smysl. 
 
-Samotná konstrukce kompasu je zasazena do tágu \texttt{<div id="compass-box"\,>}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, který utváří element div s identifikátorem \texttt{<div id="compass"\,>} na obrázku \ref{img:kompas_kostra}. Statická část nese informace o odchylce k severu ve stupních, ne které bude ukazovat šipka. 
+%=========================================================================
+\newpage
+
+\subsection{Kompas}
+Prvek překrývající plátno \texttt{<canvas>}. Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Vstupními metadaty je zadán kotevní bod severu. Díky interakci s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorový úhel, který ovlivňuje odchylku severu  od původní zadané pozice.
+
+Samotná konstrukce kompasu je zasazena do tágu \texttt{<div id="compass-box"\,>}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, kterou utváří element div s identifikátorem \texttt{compass}. Statická část, ukázaná  na obrázku \ref{img:kompas_kostra}, nese informace o natočení ve stupních, na které bude ukazovat šipka střelky. 
 
 
 \begin{figure}[h]
 	\label{img:kompas_kostra}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.4\linewidth]{obrazky-figures/kompas_kostra}
+	\includegraphics[scale=1.0,angle=0,width=0.37\linewidth]{obrazky-figures/kompas_kostra}
 	\caption{Kostra kompasu}
 \end{figure}
 
+ 
 
-%=========================================================================
-\newpage
-
-
-Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="compass\_arrow"\,>} do statické části, její podoba je na obrázku \ref{img:kompas_strelka}. Střelka se poté otáčí pomoci transformace kaskádových stylů.
+Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="compass\_arrow"\,>} do statické části, její podoba je demonstrována na obrázku \ref{img:kompas_strelka}. Střelka se  otáčí pomoci transformace kaskádových stylů.
 
 \begin{figure}[h]
 	\label{img:kompas_strelka}
@@ -849,9 +858,7 @@ Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="comp
 \end{figure}
 
 
-\subsubsection*{Pozicování}
-Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Pozice kompasu v plátně je realizována pomocí nastavení hodnot \texttt{div.style.left} a 
-\texttt{div.style.top} v pixelech, kde se bude udávat výsledná hodnota posuvu. Pozici samotnou nastavuje řádek \texttt{div.style.position = 'absolute';}. Posun  od levého okraje obrazovky \texttt{div.style.left} 
+
 
  
 
