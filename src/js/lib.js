@@ -1021,6 +1021,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 function createVideoStatusBar(width, height, position_x, position_y, video) {
 
 	var id = 'video_status_bar';
+	var viewer = document.getElementById("viewer");
 	var video_status_bar = document.getElementById(id);
 	if (!video_status_bar) {
 		w('ERROR: chybi div pro '+id);
@@ -1033,84 +1034,85 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 		return false;
 	}
 
-	if (video_status_bar) 
-	{
-		var status_bar_box = document.getElementById(id+'_id');
-		if (!status_bar_box) 
-		{
-			// neexistoval, tak jej vytvorim
-			var status_bar_width = width;
-			var status_bar_height = height;
-
-			// dynamicke umisteni zadane parametrem
-			var status_bar_left = (canvas_dom.width - status_bar_width)*position_x;
-			var status_bar_top = (canvas_dom.height - status_bar_height)*position_y;
-
-			// stylovani prvku
-			var div = document.createElement('div');
-			div.setAttribute('id', id+'_id');
-			div.style.width = status_bar_width+'px';
-			div.style.height = status_bar_height+'px';
-			div.style.left = status_bar_left+'px';
-			div.style.top = status_bar_top+'px';
-			div.style.backgroundColor  = 'transparent';
-			div.style.opacity  = 0.35;
-			div.style.position = 'absolute';
-			div.style.overflow = 'hidden';
-			div.style.padding = '5px';
-			video_status_bar.appendChild(div);
-		}
-		else {
-
-			// ------- progres bar
-			var progress_bar_box = document.getElementById('progress_bar');
-			if (!progress_bar_box)
-			{
-				progress_bar_box = document.createElement('progress');
-			}
-			
-			progress_bar_box.setAttribute('id', 'progress_bar');
-			progress_bar_box.setAttribute('class', 'unique');
-			
-			progress_bar_box.style.width = '75%';//status_bar_width+'px';
-			progress_bar_box.style.height = status_bar_height+'px';
-			progress_bar_box.style.background = '#333';
-			progress_bar_box.style.float = 'left';
-			status_bar_box.appendChild(progress_bar_box);
-			
-
-			// ------- progres bar KONEC
-
-			// ------- progres v procentech
-			var progress_bar_text = document.getElementById('progress_bar_text');
-			if (!progress_bar_text)
-			{
-				var progress_bar_text = document.createElement('progress_bar_text');
-				progress_bar_text.setAttribute('id', 'progress_bar_text');
-				progress_bar_text.style.width = status_bar_width/2+'px';
-				progress_bar_text.style.height = status_bar_height+'px';
-				progress_bar_text.style.float = 'right';
- 				status_bar_box.appendChild(progress_bar_text);
-			}
-
-			// listenery
-			video.addEventListener("timeupdate", function() {
- 		 		var value = (100 / video.duration) * video.currentTime;
-
- 		 		progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
- 		 		progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
-
-		 	});
-
-			
-			// ------- progres v procentech, KONEC
-
-			return status_bar_box;
-		}
+ 
+	var status_bar_box = document.getElementById(id+'_id');
+	if (!status_bar_box) {
+		status_bar_box = document.createElement('div');
 	}
-	else {
-		w('DIV s ID: compass-box NEEXISTUJE!');
+
+
+	// neexistoval, tak jej vytvorim
+	var status_bar_width = width;
+	var status_bar_height = height;
+
+	// dynamicke umisteni zadane parametrem
+	var status_bar_left = (canvas_dom.width - status_bar_width)*position_x;
+	var status_bar_top = (canvas_dom.height - status_bar_height)*position_y;
+
+	// stylovani prvku
+	status_bar_box.setAttribute('id', id+'_id');
+	status_bar_box.style.width = status_bar_width+'px';
+	status_bar_box.style.height = status_bar_height+'px';
+	status_bar_box.style.left = status_bar_left+'px';
+	status_bar_box.style.top = status_bar_top+'px';
+	status_bar_box.style.backgroundColor  = 'transparent';
+	status_bar_box.style.opacity  = 0.35;
+	status_bar_box.style.position = 'absolute';
+	status_bar_box.style.overflow = 'hidden';
+	status_bar_box.style.marginRight = '5px';
+	status_bar_box.style.margin  = '5px';
+
+
+ 	if (!document.getElementById(id+'_id'))
+		video_status_bar.appendChild(status_bar_box);
+	 
+ 
+
+	// ------- progres bar
+	var progress_bar_box = document.getElementById('progress_bar');
+	if (!progress_bar_box){
+		progress_bar_box = document.createElement('progress');
 	}
+
+	progress_bar_box.setAttribute('id', 'progress_bar');
+	progress_bar_box.setAttribute('class', 'unique');
+	
+	progress_bar_box.style.width = '70%';//status_bar_width+'px';
+	progress_bar_box.style.height = status_bar_height+'px';
+ 	progress_bar_box.style.float = 'left';
+	progress_bar_box.style.opacity = 0.5;
+ 
+ 	if (!document.getElementById('progress_bar'))
+		status_bar_box.appendChild(progress_bar_box);
+	// ------- progres bar KONEC
+
+
+
+	// ------- progres v procentech
+	var progress_bar_text = document.getElementById('progress_bar_text');
+	if (!progress_bar_text){
+		progress_bar_text = document.createElement('div');
+	}
+
+	progress_bar_text.setAttribute('id', 'progress_bar_text');
+	progress_bar_text.style.width = 'auto';
+	progress_bar_text.style.height = (status_bar_height )+'px';
+	progress_bar_text.style.float = 'left';
+ 	progress_bar_text.style.marginLeft = '5%';
+
+
+	if (!document.getElementById('progress_bar_text'))
+		status_bar_box.appendChild(progress_bar_text);
+	
+
+	// listenery
+	video.addEventListener("timeupdate", function() {
+ 		var value = (100 / video.duration) * video.currentTime;
+ 		progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
+ 		progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
+ 	});
+
+		
 }
 
 
