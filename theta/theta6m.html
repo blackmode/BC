@@ -316,9 +316,6 @@ SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
 
 
-// ovladaci prvky
-SETTINGS.video_controlls.object = createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
-
 
 function initProgram() {
 
@@ -375,9 +372,9 @@ function initProgram() {
 	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle);
 	SETTINGS.field_vision.object = createFieldVision(150,150,0.4,1, 0, 0); 
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
-
-
-
+	// ovladaci prvky
+	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
+	
 	return true;
 }
 
@@ -758,7 +755,7 @@ function pauseVideo() {
 		if (SETTINGS.input.video.paused == false) {
 			SETTINGS.video_controlls.user_inactive = true;
 			SETTINGS.input.video.pause();
-			document.getElementById('video_controlls_btn_play').setAttribute('class', 'play_icon'); 
+			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
 		} else {
 			SETTINGS.video_controlls.user_inactive = false;
 		}
@@ -769,7 +766,7 @@ function playVideo() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
 		if (SETTINGS.video_controlls.user_inactive == true && SETTINGS.input.video.paused == true) {
 			SETTINGS.input.video.play();
-			document.getElementById('video_controlls_btn_play').setAttribute('class', 'pause_icon'); 
+			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
 			SETTINGS.video_controlls.user_inactive == false
 		}
 	}
@@ -960,11 +957,11 @@ function onDocumentKeyPress( event ) {
 				if (SETTINGS.input.video.paused == true) {
 					log('video: play');
 					SETTINGS.input.video.play();
-					document.getElementById('video_controlls_btn_play').setAttribute('class', 'pause_icon'); 
+					SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
 				} else {
 					log('video: pause');
 					SETTINGS.input.video.pause();
-					document.getElementById('video_controlls_btn_play').setAttribute('class', 'play_icon'); 
+					SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
 				}
 			}
 		}
