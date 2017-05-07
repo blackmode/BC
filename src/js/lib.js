@@ -64,8 +64,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			var normals_z = z/radius;
 
 			// textury
-			u= longNumber/longitudeBands;
-			v= latNumber/latitudeBands;
+			u= 1-longNumber/longitudeBands;
+			v=  latNumber/latitudeBands;
 
 			// pomocna prepona
 			hypotenuse.push(K);
@@ -1045,6 +1045,10 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 		status_bar_box = document.createElement('div');
 	}
 
+	// obrazky nemaji ovladani videa
+	if (SETTINGS.mode.fisheye.panorama.active  || SETTINGS.mode.equirectangular.panorama.active) {
+		return false;
+	}
 
 	// neexistoval, tak jej vytvorim
 	var status_bar_width = width;
@@ -1175,7 +1179,10 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 		return false;
 	}
 
-
+	// obrazky nemaji ovladani videa
+	if (SETTINGS.mode.fisheye.panorama.active  || SETTINGS.mode.equirectangular.panorama.active) {
+		return false;
+	}
 
 	var video_controlls_width = width;
 	var video_controlls_height = height;
@@ -1346,6 +1353,6 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 
 
 	return  video_controlls;
- 
-
 }
+
+
