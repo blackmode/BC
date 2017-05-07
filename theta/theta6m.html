@@ -561,12 +561,7 @@ function setupProgram()
 
 	// ---- otoceni kamery do pocatecni pozice
 	// PRO equirectangular
-	if (SETTINGS.mode.equirectangular.panorama.active) {
-		rotateZ(PROG.matrices.model.data,   Math.PI/2);
-		rotateX(PROG.matrices.model.data,   3/2*Math.PI);
-		rotateY(PROG.matrices.model.data,   Math.PI/2 );
-	}
-	else if (SETTINGS.mode.equirectangular.video.active) {
+	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.equirectangular.video.active) {
 		rotateZ(PROG.matrices.model.data,   Math.PI/2);
 		rotateX(PROG.matrices.model.data,   3/2*Math.PI);
 		rotateY(PROG.matrices.model.data,   Math.PI/2 );

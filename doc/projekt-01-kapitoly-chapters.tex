@@ -597,7 +597,12 @@ R_{z}=
 0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
+%=========================================================================
+\newpage
+
+
 Matice pro posun objektu po osách \texttt{x},\texttt{y} a \texttt{z}. Přímo vychází z identické matice\footnote{Na hlavní diagonále jsou jedničky, všude jinde nuly.}:
+
 
 $$
 T =
@@ -608,8 +613,7 @@ T =
 \textbf{x} & \textbf{y} & \textbf{z} & 1\\ 
 \end{pmatrix}$$
 
-%=========================================================================
-\newpage
+
 
 Výsledná modelová matice \texttt{\textbf{M}} je tedy dána vztahem:
 $$ M = T \cdot R_{x} \cdot R_{y} \cdot R_{z} \cdot S $$
@@ -628,9 +632,21 @@ Takového efektu docílíme tak, že složku o kterou se chceme posunout, vynás
 
 $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$ 
 
+%=========================================================================
+\newpage
+
+
 \subsection{Perspektivní matice}
 
 Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazení:
+
+
+\begin{figure}[h]
+	\label{img:perspective_matrix}
+	\centering
+	\includegraphics[scale=1.0,angle=0,width=0.4\linewidth]{obrazky-figures/perspective_matrix}
+	\caption{Demonstrace perspektivního zobrazení.}
+\end{figure}
 
 \begin{description}
 		\item[fov] - pole, které definuje zorný úhel
@@ -650,16 +666,16 @@ P =
 \end{pmatrix}
 $$
 
- 
+
+
+%=========================================================================
+\newpage
+
 
 \section{Výpočet projekce}
 Konečný  vztah pro výpočet projekce bude dán pouhým vynásobením spočtených matic v uvedeném pořadí:
 $$P \cdot V \cdot M  $$
 
-
-
-%=========================================================================
-\newpage
 
 \section{Zorný úhel}
 Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Tento úhel se mění na základě přibližování, nebi oddalování scény od pozorovatele. 
