@@ -796,8 +796,7 @@ Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z to
 Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa\footnote{Jak rybí oko tak ekvidistantní režim.}. Funkce je volána již před začátkem vykreslování ve funkci \texttt{\render}. Nejprve zjišťuje, zdali je video již načteno pomocí ověření \texttt{video.readyState >= video.HAVE\_CURRENT\_DATA} a pokud ano, tak načte texturu webgl funkcí \texttt{texImage2D()}. Pokud by data načtena neměla a \texttt{readyState} byl menší než \texttt{video.HAVE\_CURRENT\_DATA}, tak vrátí \texttt{false} a zobrazí  v plátně načítání.
 
 
-\texttt{\textbf{Volani funkce \render a vysvetleni indexu a renderivani }}
-
+Samotné vykreslování se provádí až ve funkci \texttt{\render}. Mimo vykreslení zde ještě dochází k aktualizaci pozice kamery pomocí webgl funkce \texttt{uniformMatrix4fv()} a aktivaci textury, se kterou se bude pracovat. Nejdůležitější částí funkce \texttt{\render} jsou funkce pro vykreslení \texttt{drawArrays()} a \texttt{drawElements()}. Na základě dat, které se budou vykreslovat, se zvolí, jakou funkcí se bude vykreslovat. V případě ekvidistantního módu jak pro panoramata, tak pro videa se použije funkce  \texttt{drawElements()}. Důvodem je ten, že pomocí indexování je vykreslení ekvidistantních dat efektivnější. V případě rybího oka, kdyby se použilo \texttt{drawElements()}, tak by sice bylo možné data věrné interpretovat, ale došlo by k problému se sdílenými body na hranách při mapování textury, tudíž by nedošlo k tak přesnému vykreslení, jako s funkcí \texttt{drawArrays()}.
 
 
 
@@ -811,9 +810,7 @@ Hloubku zobrazení, neboli přiblížení scény a pozorovatele se provádí kol
 Na základě hodnot se dále určuje směr rotace kolečka a intenzita s jakou hodnoty přibližování a oddalování narůstají. Tento problém je ale vyřešen tak, že intenzitu nárůstu si řídí program sám dle vstupu, pouze se rozlišuje, zdali je hodnota kladná nebo záporná.
 Dále funkce ošetřuje krajní meze pro přibližování a oddalování scény, aby nedošlo k problému při prohlížení.
  
-
-%=========================================================================
-\newpage
+ 
 
 
 \section{Ovládání klávesnicí}
@@ -869,7 +866,7 @@ Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTM
 Vedle přímých akcí kontrolovaných uživatelem, jsou tu ještě  automatické operace prováděné nad videem. Jedná se o detekcí aktivního okna při přehrávání, kdy si program sám ověřuje pomocí funkce \texttt{addEventListener()}  pracující nad objektem \texttt{window}, zdali aktuální okno prohlížeče je aktivní. Vše zprostředkovávají události   \texttt{focus} a \texttt{blur}. Událost  \texttt{blur} se spustí ve chvíli, kdy uživatel nemá zobrazené okno s panoramatickým prohlížečem, tato událost bude mít vliv na video jen v případě, kdy se bude video přehrávat a v takové situaci je i pozastaví, dokud se okno opět nezaktivní událostí \texttt{focus}.
 
 \subsection{Zorný úhel}
-
+Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojen s kolečkem myši tak, že změny v zorném úhlu závisí především na přiblíženi popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}.
 
 
 
@@ -879,7 +876,9 @@ Vedle přímých akcí kontrolovaných uživatelem, jsou tu ještě  automatick�
 
 \chapter{Testování}
 \label{chapter:5}
+Výsledný program bylo třeba otestovat z  hlediska kompatibilita webových prohlížečů  s WebGL, nebo s HTML5 až po rozdílnou interpretaci některých vstupních událostí pro periferie počítače. 
 
+Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, který refektuje aktuální počet snímků za sekundu tj.  rychlost překreslování scény grafickou kartou.
 
 Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
 Goniometrie
@@ -888,7 +887,7 @@ Goniometrie
 
 \section{Windows a linux}
 \section{Prohlížeče a kompatibilita}
-
+Podpora porhlížeču HTML5 A WebGL v1.0 a WebGL v2.0
 
 \chapter{Závěr}
 \label{chapter:6}
