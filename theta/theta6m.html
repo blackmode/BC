@@ -237,7 +237,7 @@ var SETTINGS = {
 	} ,
 	video_controlls : {
 		created: null,
-		user_inactive: null
+		user_inactive: false,
  	} ,
 
 
@@ -644,13 +644,15 @@ function pauseVideo() {
 			SETTINGS.video_controlls.user_inactive = true;
 			SETTINGS.input.video.pause();
 			document.getElementById('video_controlls_btn_play').setAttribute('class', 'play_icon'); 
+		} else {
+			SETTINGS.video_controlls.user_inactive = false;
 		}
 	}
 }
 
 function playVideo() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
-		if (SETTINGS.video_controlls.user_inactive == true) {
+		if (SETTINGS.video_controlls.user_inactive == true && SETTINGS.input.video.paused == true) {
 			SETTINGS.input.video.play();
 			document.getElementById('video_controlls_btn_play').setAttribute('class', 'pause_icon'); 
 			SETTINGS.video_controlls.user_inactive == false
