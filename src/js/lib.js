@@ -1272,6 +1272,7 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 		return video_controlls;
 	}
 
+/*
 	// lisnenery
 	video_controlls_btn_play.addEventListener("click", function() {
 		if (video.paused == true) {
@@ -1349,10 +1350,19 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 		}
 
 	});
+*/
+
+	return {
+		controlls: video_controlls,
+		btn: {
+			play: document.getElementById(video_controlls_btn_play_id),
+			slider: document.getElementById(video_controlls_btn_slider_id),
+			volume: document.getElementById(video_controlls_btn_slider_volume_id),
+			fullscreen: document.getElementById(video_controlls_btn_fullstreen_id),
+		},
+	};
 
 
-
-	return  video_controlls;
 }
 
 

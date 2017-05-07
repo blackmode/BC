@@ -16,7 +16,7 @@ Následující práce se věnuje implementaci webového prohlížeče panoramati
 Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení nejsou k dispozici. Např. informace o světových stranách ve vztahu k obrázku, či videu popřípadě údaje o velikosti zorného pole v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné např. k~tomu, aby autor obrázku mohl popsat jeho zajímavé částí popřípadě blíže popsat zachycenou scénu.
 \newline
 
-Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} se budu věnovat nastínění všech použitých technologií nutných pro pochopení problematiky, se kterými se bude pracovat v následujících kapitolách. O návrhu řešení pojednává kapitola \nameref{chapter:3}, na kterou navazuje implementační část \nameref{chapter:4}. Otestování správného návrhu a implementace se zabývá kapitola s názvem \nameref{chapter:5}. V poslední části práce \nameref{chapter:6} jsou prezentovány dosažené výsledky a možnosti dalšího rozšíření.
+Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} se budu věnovat nastínění všech použitých technologií nutných pro pochopení problematiky, se kterými se bude pracovat v následujících kapitolách. O návrhu řešení pojednává kapitola \nameref{chapter:3}, na kterou navazuje implementační část \nameref{chapter:4}. Otestování správného návrhu a implementace se zabývá kapitola  \nameref{chapter:5}. V poslední části práce \nameref{chapter:6} jsou prezentovány dosažené výsledky a možnosti dalšího rozšíření.
 
 
 %=========================================================================
@@ -552,7 +552,7 @@ Součástí již avizované projekce v předchozí kapitole, jsou matice, které
 \subsection{Modelová matice}
 Sem patři rotační matice všech os souřadného systému, dále matice pro změnu měřítka souřadnic a posuvná matice objektu.
 
-Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůči kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Cílem modelové matice je posunout a pootočit zobrazovaným objektem do výchozí pozice promítání. Otáčení apod. operace v reálném čase jsou  doménou zobrazovací matice. Začneme s matici pro změnu měřítka modelu:
+Cílem modelové matice je tedy transformovat body modelu ze středu souřadného systému, vůči kterému byly body geometrie modelu napočítány, do zobrazitelného prostoru, se kterým budeme dále pracovat. Cílem modelové matice je posunout a pootočit zobrazovaným objektem do výchozí pozice promítání. Otáčení a další operace v reálném čase jsou  doménou zobrazovací matice. Začneme s matici pro změnu měřítka modelu:
 
 $$
 S =
@@ -724,7 +724,7 @@ Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení módu 
 
 
 \section{Běh programu}
-Ihned po načtení HTML kostry programu je zavolána hlavní funkce programu \texttt{\main}, která je spuštěna  na základě vyvolání události \texttt{onload()} \footnote{ Událost \texttt{onload()} nastane ihned po načtení webové stránky.} .
+Ihned po načtení HTML kostry programu je zavolána hlavní funkce programu \texttt{\main}, která je spuštěna  na základě vyvolání události \texttt{onLoad} \footnote{ Událost \texttt{onLoad} nastane ihned po načtení webové stránky.} .
 
 Před samotným spuštěním programu je nutné provést některé inicializační operace - nastavení potřebných proměnných pro běh, ověření a ošetření. 
 

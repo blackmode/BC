@@ -317,7 +317,7 @@ SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
 
 
 // ovladaci prvky
-SETTINGS.video_controlls.object = createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 ) ;
+SETTINGS.video_controlls.object = createVideoControlls(document.querySelector("canvas").width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
 
 
 function initProgram() {
@@ -372,7 +372,7 @@ function initProgram() {
 
 
 	// inicializace GUI prvku 
-	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
+	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle);
 	SETTINGS.field_vision.object = createFieldVision(150,150,0.4,1, 0, 0); 
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 
@@ -388,12 +388,17 @@ function setupProgram()
 		return false;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////// 
+	//////////////////////////////////////  LISTENERY   ////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
 	PROG.canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'mouseup',   onDocumentMouseUp,   false );
 	//PROG.canvas.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
 	
-	document.getElementById('video_controlls').addEventListener( 'mouseover',  onDocumentMouseOver,  false );	 
+	// pri prejeti mysi nad prvekm se mys deaktivuje
+	SETTINGS.video_controlls.object.controlls.addEventListener( 'mouseover',  onDocumentMouseOver,  false );	 
 
 	// vyjimku tvori kompas a field vision
 	SETTINGS.compass.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -404,6 +409,94 @@ function setupProgram()
 	SETTINGS.field_vision.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
+
+
+	/// ======================= OVLADANI VIDEA ===========================================
+	// lisnenery
+	SETTINGS.video_controlls.object.btn.play.addEventListener("click", function() {
+
+		if (SETTINGS.input.video.paused == true) {
+			// Play the video
+			SETTINGS.input.video.play();
+
+			// Update the button text to 'Pause'
+ 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
+		} else {
+			// Pause the video
+			SETTINGS.input.video.pause();
+
+			// Update the button text to 'Play'
+ 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+		}
+	});
+
+
+	SETTINGS.input.video.addEventListener("timeupdate", function() {
+ 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
+ 		SETTINGS.video_controlls.object.btn.slider.value = value;
+ 	});
+
+
+	// aktualizace casove osy videa
+	SETTINGS.video_controlls.object.btn.slider.addEventListener("change", function() {
+		var time = (SETTINGS.video_controlls.object.btn.slider.value / 100) *  SETTINGS.input.video.duration ;
+		SETTINGS.input.video.currentTime = time;
+	});
+
+
+	// ovladani posunu videa
+	SETTINGS.video_controlls.object.btn.slider.addEventListener("mousedown", function() {
+		SETTINGS.input.video.pause();
+		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+	});
+
+
+	SETTINGS.video_controlls.object.btn.slider.addEventListener("mouseup", function() {
+		SETTINGS.input.video.play();
+		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
+
+	});
+
+ 
+	// ovladani hlasitosti
+	SETTINGS.video_controlls.object.btn.volume.addEventListener("change", function() {
+		SETTINGS.input.video.volume = SETTINGS.video_controlls.object.btn.volume.value;
+	});
+ 
+
+	// nacitani videa
+	SETTINGS.input.video.addEventListener('progress', function() {
+	    var range = 0;
+	    var buffered = SETTINGS.input.video.buffered;
+	    var time = this.currentTime;
+	});
+
+
+	// fullscreen
+	SETTINGS.video_controlls.object.btn.fullscreen.addEventListener('click', function() {
+ 		// nastaveni ikon
+		if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'fullscreen_icon'){
+			SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'normalscreen_icon');
+			//fullscreen
+			PROG.canvas.width =window.innerWidth;
+			PROG.canvas.height = window.innerHeight;;
+			gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+			resize();
+		}
+		else if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'normalscreen_icon'){
+			SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'fullscreen_icon');
+			//normalscreen
+			PROG.canvas.width = SETTINGS.default.canvas.width;
+			PROG.canvas.height = SETTINGS.default.canvas.height;
+			gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+			resize();
+		}
+	});
+
+	/// ======================= OVLADANI VIDEA, KONEC ===========================================
+
+
+
 	// detekce aktivniho/nekativniho oka
 	window.addEventListener('focus', playVideo);
 	window.addEventListener('blur', pauseVideo);
@@ -413,6 +506,10 @@ function setupProgram()
 	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
 	window.addEventListener('resize', onWindowResize, true);
 
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////  SHADERY  A PROGRAM  ///////////////////////////////////////// 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// nacteni, zkompilovani a overeni vertext shaderu
 	var str = document.querySelector("#vs").textContent;
@@ -448,7 +545,11 @@ function setupProgram()
 	  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
 	  return false;
 	}
-	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////  MATICE   ////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// -------- ZOBRAZOVACI matice
 	// MODEL matrix
 
@@ -510,6 +611,9 @@ function setupProgram()
 	PROG.matrices.projection.link = gl.getUniformLocation(PROG.program, "P_Matrix");
 	gl.uniformMatrix4fv(PROG.matrices.projection.link, false, PROG.matrices.projection.data);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////  ATRIBUTY A SAMPLER   ///////////////////////////////////////// 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// sampler
 	PROG.sampler = gl.getUniformLocation(PROG.program, "sampler");
@@ -529,6 +633,9 @@ function setupProgram()
 	if (PROG.attributes.texture==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
 	gl.enableVertexAttribArray(PROG.attributes.texture);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////  BUFFER   ////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// -------- BUFFERY
 	PROG.buffer.vertex = gl.createBuffer();
@@ -558,6 +665,9 @@ function setupProgram()
 	 //gl.enable(gl.BLEND);
 	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////  TEXTURA   ////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// ----- VYTVORENI TEXTURY
 	PROG.texture = gl.createTexture();
@@ -850,9 +960,11 @@ function onDocumentKeyPress( event ) {
 				if (SETTINGS.input.video.paused == true) {
 					log('video: play');
 					SETTINGS.input.video.play();
+					document.getElementById('video_controlls_btn_play').setAttribute('class', 'pause_icon'); 
 				} else {
 					log('video: pause');
 					SETTINGS.input.video.pause();
+					document.getElementById('video_controlls_btn_play').setAttribute('class', 'play_icon'); 
 				}
 			}
 		}
