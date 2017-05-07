@@ -374,7 +374,7 @@ function initProgram() {
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 	// ovladaci prvky
 	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
-	
+
 	return true;
 }
 
@@ -392,6 +392,12 @@ function setupProgram()
 	PROG.canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'mouseup',   onDocumentMouseUp,   false );
+
+	// dotykoga zařízení
+	PROG.canvas.addEventListener( 'touchmove', onDocumentMouseMove, false );
+	PROG.canvas.addEventListener( 'touchstart', onDocumentMouseDown, false );
+	PROG.canvas.addEventListener( 'touchend',   onDocumentMouseUp,   false );
+
 	//PROG.canvas.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
 	
 	// pri prejeti mysi nad prvekm se mys deaktivuje
@@ -495,8 +501,8 @@ function setupProgram()
 
 
 	// detekce aktivniho/nekativniho oka
-	window.addEventListener('focus', playVideo);
-	window.addEventListener('blur', pauseVideo);
+	window.addEventListener('focus', playVideoWhenInactive);
+	window.addEventListener('blur', pauseVideoWhenInactive);
 
 	// kolecko a klavesnice
 	document.addEventListener("keypress", onDocumentKeyPress, false);
@@ -596,7 +602,7 @@ function setupProgram()
 
 	// perspektivni matice
 	// zorny uhel je 90%, pomer je jasnej
-	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/2.0, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
+	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/1.75, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
 	// ------ nahrani matic do promennych ==============================================================
 	PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "M_Matrix");
@@ -750,7 +756,7 @@ function getCameraPosition() {
 }
 
 // prehravani/zastaveni videoa pri aktivnim/neaktivnim okne
-function pauseVideo() {
+function pauseVideoWhenInactive() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
 		if (SETTINGS.input.video.paused == false) {
 			SETTINGS.video_controlls.user_inactive = true;
@@ -762,7 +768,7 @@ function pauseVideo() {
 	}
 }
 
-function playVideo() {
+function playVideoWhenInactive() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
 		if (SETTINGS.video_controlls.user_inactive == true && SETTINGS.input.video.paused == true) {
 			SETTINGS.input.video.play();
@@ -785,8 +791,10 @@ function render() {
 		
 	// zorny uhel
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
-	var angle =  radToDeg(Math.PI/2)  -(MOUSE.wheel.delta/MOUSE.wheel.deltaMax*65);
-	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
+ 	var angle =  50+(300 - radToDeg(Math.PI/1.75)) *  (1-((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+
+ 	d(((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+ 	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
 	createFieldVision(150,150,0.4,1, (angle ? angle : 10), 0); 
 
 	// kompas
@@ -907,6 +915,12 @@ function onDocumentMouseUp( event ) {
 
 
 function onDocumentMouseDown( event ) {
+	// podpora dotykovyým zařízením
+	if (event.type=='touchstart') {
+		event.pageX = event.changedTouches[0].pageX;
+		event.pageY = event.changedTouches[0].pageY;
+	}
+
 	MOUSE.active = true;
 	MOUSE.down.x = event.pageX;
 	MOUSE.down.y = event.pageY;
@@ -917,6 +931,12 @@ function onDocumentMouseDown( event ) {
 function onDocumentMouseMove( event ) {
 	if (MOUSE.active && !MOUSE.interrupt) 
 	{
+		// podpora dotykovyým zařízením
+		if (event.type=='touchmove') {
+			event.pageX = event.changedTouches[0].pageX;
+			event.pageY = event.changedTouches[0].pageY;
+		}
+
  		// zastavi mys pred vyjetim z canvasu
 		if (event.pageX >= (PROG.canvas.width-10) || event.pageY >= (PROG.canvas.height-10)) {
 			MOUSE.active = false;
@@ -1033,12 +1053,12 @@ SETTINGS.input.video.oncanplaythrough = function() {
 		}
 	});
 */
-/*
+ 
 	 
 	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
 		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
 	},false);
-*/
+ 
 
 
 
