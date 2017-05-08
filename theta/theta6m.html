@@ -225,6 +225,8 @@ var SETTINGS = {
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
 		object: null,
+		angle: 0.0,
+		shift: 0.0,
 	} ,
 	compass : {
 		wdith: 0.06,
@@ -786,11 +788,19 @@ function render() {
 		
 	// zorny uhel
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
- 	var angle =  50+(300 - radToDeg(Math.PI/1.75)) *  (1-((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+	var perspAngle = radToDeg(Math.PI/1.75);
+	var radiusDistance = 2 * SETTINGS.mode.fisheye.video.radius;
+	var wheelDistance = 2 *  MOUSE.wheel.deltaMax;
+	var radWheelDiv = radiusDistance/wheelDistance;
 
- 	d(((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+ 	var angle =  perspAngle + ((360-perspAngle) ) *  radWheelDiv*(1-((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+
+SETTINGS.field_vision.angle = perspAngle;
+
+ 	d(angle);
+ 	
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
-	createFieldVision(150,150,0.4,1, (angle ? angle : 10), 0); 
+	createFieldVision(150,150,0.4,1, (angle ? angle : perspAngle), 0); 
 
 	// kompas
 	var north = 315; // umisteni severu v kompasu
