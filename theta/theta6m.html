@@ -402,10 +402,7 @@ function setupProgram()
 	PROG.canvas.addEventListener( 'touchend',   onDocumentMouseUp,   false );
 
 	//PROG.canvas.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
-	
-	// pri prejeti mysi nad prvekm se mys deaktivuje
-	SETTINGS.video_controlls.object.controlls.addEventListener( 'mouseover',  onDocumentMouseOver,  false );	 
-
+	 
 	// vyjimku tvori kompas a field vision
 	var actions = [
 		'mousemove', 
@@ -439,92 +436,97 @@ function setupProgram()
 		SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
 	*/
 
+	// ovládací prvky videa -> LISTETERY
+	if ((SETTINGS.mode.equirectangular.video.active || SETTINGS.mode.fisheye.video.active)) 
+	{
+			// pri prejeti mysi nad prvekm se mys deaktivuje
+			SETTINGS.video_controlls.object.controlls.addEventListener( 'mouseover',  onDocumentMouseOver,  false );	
 
-	/// ======================= OVLADANI VIDEA ===========================================
-	// lisnenery
-	SETTINGS.video_controlls.object.btn.play.addEventListener("click", function() {
+			/// ======================= OVLADANI VIDEA ===========================================
+			// lisnenery
+			SETTINGS.video_controlls.object.btn.play.addEventListener("click", function() {
 
-		if (SETTINGS.input.video.paused == true) {
-			// Play the video
-			SETTINGS.input.video.play();
+				if (SETTINGS.input.video.paused == true) {
+					// Play the video
+					SETTINGS.input.video.play();
 
-			// Update the button text to 'Pause'
- 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
-		} else {
-			// Pause the video
-			SETTINGS.input.video.pause();
+					// Update the button text to 'Pause'
+		 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
+				} else {
+					// Pause the video
+					SETTINGS.input.video.pause();
 
-			// Update the button text to 'Play'
- 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
-		}
-	});
-
-
-	SETTINGS.input.video.addEventListener("timeupdate", function() {
- 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
- 		SETTINGS.video_controlls.object.btn.slider.value = value;
- 	});
-
-	SETTINGS.input.video.addEventListener("ended", function() {
-		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
- 	});
-
-	// aktualizace casove osy videa
-	SETTINGS.video_controlls.object.btn.slider.addEventListener("change", function() {
-		var time = (SETTINGS.video_controlls.object.btn.slider.value / 100) *  SETTINGS.input.video.duration ;
-		SETTINGS.input.video.currentTime = time;
-	});
+					// Update the button text to 'Play'
+		 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+				}
+			});
 
 
-	// ovladani posunu videa
-	SETTINGS.video_controlls.object.btn.slider.addEventListener("mousedown", function() {
-		SETTINGS.input.video.pause();
-		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
-	});
+			SETTINGS.input.video.addEventListener("timeupdate", function() {
+		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
+		 		SETTINGS.video_controlls.object.btn.slider.value = value;
+		 	});
+
+			SETTINGS.input.video.addEventListener("ended", function() {
+				SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+		 	});
+
+			// aktualizace casove osy videa
+			SETTINGS.video_controlls.object.btn.slider.addEventListener("change", function() {
+				var time = (SETTINGS.video_controlls.object.btn.slider.value / 100) *  SETTINGS.input.video.duration ;
+				SETTINGS.input.video.currentTime = time;
+			});
 
 
-	SETTINGS.video_controlls.object.btn.slider.addEventListener("mouseup", function() {
-		SETTINGS.input.video.play();
-		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
-
-	});
-
- 
-	// ovladani hlasitosti
-	SETTINGS.video_controlls.object.btn.volume.addEventListener("change", function() {
-		SETTINGS.input.video.volume = SETTINGS.video_controlls.object.btn.volume.value;
-	});
- 
-
-	// nacitani videa
-	SETTINGS.input.video.addEventListener('progress', function() {
-	    var range = 0;
-	    var buffered = SETTINGS.input.video.buffered;
-	    var time = this.currentTime;
-	});
+			// ovladani posunu videa
+			SETTINGS.video_controlls.object.btn.slider.addEventListener("mousedown", function() {
+				SETTINGS.input.video.pause();
+				SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+			});
 
 
-	// fullscreen
-	SETTINGS.video_controlls.object.btn.fullscreen.addEventListener('click', function() {
- 		// nastaveni ikon
-		if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'fullscreen_icon'){
-			SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'normalscreen_icon');
-			//fullscreen
-			PROG.canvas.width =window.innerWidth;
-			PROG.canvas.height = window.innerHeight;;
-			gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
-			resize();
-		}
-		else if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'normalscreen_icon'){
-			SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'fullscreen_icon');
-			//normalscreen
-			PROG.canvas.width = SETTINGS.default.canvas.width;
-			PROG.canvas.height = SETTINGS.default.canvas.height;
-			gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
-			resize();
-		}
-	});
+			SETTINGS.video_controlls.object.btn.slider.addEventListener("mouseup", function() {
+				SETTINGS.input.video.play();
+				SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
 
+			});
+
+		 
+			// ovladani hlasitosti
+			SETTINGS.video_controlls.object.btn.volume.addEventListener("change", function() {
+				SETTINGS.input.video.volume = SETTINGS.video_controlls.object.btn.volume.value;
+			});
+		 
+
+			// nacitani videa
+			SETTINGS.input.video.addEventListener('progress', function() {
+			    var range = 0;
+			    var buffered = SETTINGS.input.video.buffered;
+			    var time = this.currentTime;
+			});
+
+
+			// fullscreen
+			SETTINGS.video_controlls.object.btn.fullscreen.addEventListener('click', function() {
+		 		// nastaveni ikon
+				if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'fullscreen_icon'){
+					SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'normalscreen_icon');
+					//fullscreen
+					PROG.canvas.width =window.innerWidth;
+					PROG.canvas.height = window.innerHeight;;
+					gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+					resize();
+				}
+				else if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'normalscreen_icon'){
+					SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'fullscreen_icon');
+					//normalscreen
+					PROG.canvas.width = SETTINGS.default.canvas.width;
+					PROG.canvas.height = SETTINGS.default.canvas.height;
+					gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+					resize();
+				}
+			});
+	}
 	/// ======================= OVLADANI VIDEA, KONEC ===========================================
 
 

@@ -804,9 +804,9 @@ Chování textury při zmenšení a zvětšení je konkretizováno funkcí \text
 \newpage
 
 \section{Vykreslování a módy prohlížení}
-Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem\footnote{Jak v módu rybího oka tak v ekvidistantním módu.} a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
+Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
 
-Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa\footnote{Jak rybí oko tak ekvidistantní režim.}. Funkce je volána již před začátkem vykreslování ve funkci \texttt{\render}. Nejprve zjišťuje, zdali je video již načteno pomocí ověření \texttt{video.readyState >= video.HAVE\_CURRENT\_DATA} a pokud ano, tak načte texturu webgl funkcí \texttt{texImage2D()}. Pokud by data načtena neměla a \texttt{readyState} byl menší než \texttt{video.HAVE\_CURRENT\_DATA}, tak vrátí \texttt{false} a zobrazí  v plátně načítání.
+Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa\footnote{Jak v módu rybího oka tak v ekvidistantním módu.}. Funkce je volána již před začátkem vykreslování ve funkci \texttt{\render}. Nejprve zjišťuje, zdali je video již načteno pomocí ověření \texttt{video.readyState >= video.HAVE\_CURRENT\_DATA} a pokud ano, tak načte texturu webgl funkcí \texttt{texImage2D()}. Pokud by data načtena neměla a \texttt{readyState} byl menší než \texttt{video.HAVE\_CURRENT\_DATA}, tak vrátí \texttt{false} a zobrazí  v plátně načítání.
 
 
 Samotné vykreslování se provádí až ve funkci \texttt{\render}. Mimo vykreslení zde ještě dochází k aktualizaci pozice kamery pomocí webgl funkce \texttt{uniformMatrix4fv()} a aktivaci textury, se kterou se bude pracovat. Nejdůležitější částí funkce \texttt{\render} jsou funkce pro vykreslení \texttt{drawArrays()} a \texttt{drawElements()}. Na základě dat, které se budou vykreslovat, se zvolí, jakou funkcí se bude vykreslovat. V případě ekvidistantního módu jak pro panoramata, tak pro videa se použije funkce  \texttt{drawElements()}. Důvodem je ten, že pomocí indexování je vykreslení ekvidistantních dat efektivnější. V případě rybího oka, kdyby se použilo \texttt{drawElements()}, tak by sice bylo možné data věrné interpretovat, ale došlo by k problému se sdílenými body na hranách při mapování textury, tudíž by nedošlo k tak přesnému vykreslení, jako s funkcí \texttt{drawArrays()}.
@@ -905,16 +905,23 @@ Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, k
 \section*{Prostředí}
 Program byl vyvíjen na platformě operačního systému Windows 8 a hlavním prohlížečem pro vývoj sloužil Chrome. Ověření pak v konečné fázi vývoje programu ještě testováno na operačnímu systému Ubuntu.
 
-Průměrné naměřené  hodnoty  během vývoje programu s běžnou zátěží byla:
-\begin{description}
-	%\centering
-	\item[45-50 fps] - snímků za vteřinu
-	\item[17-18 ms] - doba načtení jednoho snímku
-	\item[12 MB] - paměti
-\end{description}
+Průměrné naměřené hodnoty\footnote{Během vývoje programu s běžnou zátěží.}:
 
+\begin{center}
+	\begin{tabular}{ l | c  } 
+		
+		Frekvence snímků videa & 46 fps   \\ 
+ 		\hline
+		Frekvence snímků panoramatu & 57 fps   \\ 
+		\hline
+		Doba načtení jednoho snímku  & 17 ms \\ 
+ 		\hline
+		Využití paměti & 12  MB   \\ 
+		
+	\end{tabular}
+\end{center}
 
-
+ 
 
 \section{Windows a linux}
 \section{Prohlížeče a kompatibilita}
