@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"play",
+				"playVideo"
+			],
+			[
+				"fu",
+				"fullscreen_icon"
+			],
+			[
+				"int",
+				"interrupt"
+			],
+			[
+				"app",
+				"appendChild"
+			],
+			[
 				"com",
 				"compass"
 			],
@@ -320,10 +336,6 @@
 				"function"
 			],
 			[
-				"fu",
-				"function"
-			],
-			[
 				"tem",
 				"template_pointer"
 			],
@@ -502,31 +514,11 @@
 			[
 				"exp",
 				"explode"
-			],
-			[
-				"auto",
-				"auto_increment"
-			],
-			[
-				"nam",
-				"nameOfHook"
-			],
-			[
-				"strto",
-				"strtolower"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "theta62.html",
-			"settings":
-			{
-				"buffer_size": 16361,
-				"line_ending": "Windows"
-			}
-		},
 		{
 			"file": "theta.html",
 			"settings":
@@ -536,34 +528,34 @@
 			}
 		},
 		{
-			"file": "theta6m.html",
+			"file": "/C/xampp/htdocs/BC/src/css/style.css",
 			"settings":
 			{
-				"buffer_size": 21509,
+				"buffer_size": 4044,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/index.html",
+			"file": "theta6m.html",
 			"settings":
 			{
-				"buffer_size": 999,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/script.js",
-			"settings":
-			{
-				"buffer_size": 2390,
-				"line_ending": "Unix"
+				"buffer_size": 32426,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "/C/xampp/htdocs/BC/src/js/lib.js",
 			"settings":
 			{
-				"buffer_size": 31090,
+				"buffer_size": 38124,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/src/js/Externallib.js",
+			"settings":
+			{
+				"buffer_size": 993,
 				"line_ending": "Windows"
 			}
 		},
@@ -571,7 +563,7 @@
 			"file": "/C/xampp/htdocs/BC/doc/tools/txt/PSANI.txt",
 			"settings":
 			{
-				"buffer_size": 763,
+				"buffer_size": 880,
 				"line_ending": "Windows",
 				"name": "PRAVIDLA PSANI"
 			}
@@ -766,6 +758,14 @@
 	},
 	"file_history":
 	[
+		"/C/xampp/htdocs/BC/theta/theta62.html",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/index.html",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/style.css",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/script.js",
+		"/C/xampp/htdocs/BC/src/js/Externallib.js",
+		"/C/xampp/htdocs/HexaShop-New/themes/default-bootstrap/css/product.css",
+		"/C/xampp/htdocs/BC/theta/text.html",
+		"/C/xampp/htdocs/FashionMalls/themes/theme1/css/layout.css",
 		"/C/xampp/htdocs/BC/theta/GEOM-texture.html",
 		"/C/xampp/htdocs/BC/theta/GEOM.html",
 		"/C/xampp/htdocs/BC/theta/theta52.html",
@@ -791,7 +791,6 @@
 		"/C/xampp/htdocs/BC/theta/theta7.html",
 		"/C/xampp/htdocs/BC/theta/theta-sim-cube.html",
 		"/C/xampp/htdocs/BC/theta/mouse.html",
-		"/C/xampp/htdocs/BC/theta/theta62.html",
 		"/C/xampp/htdocs/BC/theta/theta3.html",
 		"/C/xampp/htdocs/BC/theta/theta4.html",
 		"/C/xampp/htdocs/BC/theta/theta2.html",
@@ -819,7 +818,6 @@
 		"/C/xampp/htdocs/FashionMalls/classes/helper/HelperFormSemantic.php",
 		"/C/xampp/htdocs/FashionMalls/classes/helper/HelperListSemanticModal.php",
 		"/C/xampp/htdocs/BC/src/js/oldLIb.js",
-		"/C/xampp/htdocs/BC/src/js/Externallib.js",
 		"/C/xampp/htdocs/HexaShop-Manager/js/index.js",
 		"/C/xampp/htdocs/HexaShop-Manager/req.php",
 		"/C/xampp/htdocs/BC/theta/theta8.html",
@@ -852,7 +850,6 @@
 		"/C/xampp/htdocs/FashionMalls/classes/adapter/template/TemplateAdapter.php",
 		"/C/xampp/htdocs/FashionMalls/classes/Tab.php",
 		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminAccessController.php",
-		"/C/xampp/htdocs/FashionMalls/themes/theme1/css/layout.css",
 		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/css/admin_layout.css",
 		"/C/xampp/htdocs/FashionMalls/modules/blocktopmenu/views/templates/hook/blocktopmenu.tpl",
 		"/C/xampp/htdocs/FashionMalls/modules/blocklogo/views/templates/hook/blocklogo.tpl",
@@ -888,12 +885,7 @@
 		"/C/xampp/htdocs/FashionMalls/install/SQL/SQL_plugin_file.sql",
 		"/C/xampp/htdocs/FashionMalls/install/SQL/SQL_plugin.sql",
 		"/C/xampp/htdocs/FashionMalls/classes/Dispatcher.php",
-		"/C/Users/HPCZ/Desktop/ims-svoz-odpadu.cpp",
-		"/C/Users/HPCZ/Downloads/06_xsluns01_xpokor63/ims-svoz-odpadu.cpp",
-		"/C/xampp/htdocs/bakalarka/webgl/tutorial/sylvester.js",
-		"/C/xampp/htdocs/bakalarka/webgl/tutorial/sample7/webgl-demo2.js",
-		"/C/xampp/htdocs/bakalarka/webgl/tutorial/sample7/index2.html",
-		"/C/xampp/htdocs/bakalarka/pannellum-old/src/js/pannellum.js"
+		"/C/Users/HPCZ/Desktop/ims-svoz-odpadu.cpp"
 	],
 	"find":
 	{
@@ -908,9 +900,113 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"'mousemove'",
+			"*correction",
+			"d(",
+			"radToDeg(Math.PI/1.75)",
+			"		rotateZ(PROG.matrices.model.data,   Math.PI/2);\n		rotateX(PROG.matrices.model.data,   3/2*Math.PI);\n		rotateY(PROG.matrices.model.data,   Math.PI/2 );",
+			"playVideo",
+			"pauseVideo",
+			"createVideoControlls",
+			"document.getElementById('video_controlls_btn_play')",
+			"onDocumentMouseOut",
+			"onDocumentMouseOver",
+			"canvas_dom",
+			"video.",
+			"video",
+			"video_controlls_btn_fullstreen",
+			"video_controlls_btn_slider_volume.",
+			"video_controlls_btn_slider.",
+			"video_controlls_btn_slider",
+			"video.",
+			"video_controlls_btn_play",
+			"MOUSE.wheel.delta",
+			"sampler",
+			"sampler2D",
+			"sampler",
+			"PROG.canvas",
+			"SETTINGS.mode.fisheye.video.active",
+			"	// obrazky nemaji ovladani videa\n	if (SETTINGS.mode.fisheye.panorama.active  || SETTINGS.mode.equirectangular.panorama.active) {\n		return false;\n	}",
+			"video_controlls",
+			"requestAnimationFrame",
+			"video_controlls_btn_play",
+			"(SETTINGS.mode.equirectangular.video.active || SETTINGS.mode.fisheye.video.active)",
+			"panorama",
+			"innerHTML",
+			"createVideoStatusBar",
+			"createVideoControlls",
+			"keyboard_vide_playing",
+			"createVideoStatusBar",
+			"video_status_bar",
+			"div",
+			"progress_bar",
+			"createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video)",
+			"createVideoStatusBar",
+			"div",
+			"document.getElementById('field_vision')",
+			"document.getElementById('compass-box')",
+			"\"",
+			"compass-box",
+			"PROG.canvas",
+			"onDocumentMouseOut",
+			"\"",
+			"PROG.canvas",
+			"progress_bar",
+			"div",
+			"PROG.texture",
+			"keyboard_vide_playing",
+			"vide_playing",
+			"fragPos",
+			"pos",
+			"SETTINGS.input.video.addEventListene",
+			"	SETTINGS.input.video.addEventListener(\"timeupdate\", function() {\n \n 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;\n 		 var slider = document.getElementById(video_controlls_btn_slider_video);\n 		slider.value = value;\n\n 	});\n\n	// nacitani videa\n	SETTINGS.input.video.addEventListener('progress', function() {\n	    var range = 0;\n	    var buffered = SETTINGS.input.video.buffered;\n	    var time = this.currentTime;\n	});",
+			"longitude_bands",
+			"longitudeBands",
+			"latitudeBands",
+			"PROG.matrices.model.link",
+			"PMatrix",
+			"VMatrix",
+			"M_Matrix",
+			"MMatrix",
+			"fragPos",
+			"PROG.attributes.fragment",
+			"SETTINGS.input.video.",
+			"video.",
+			"video",
+			"video.",
+			"onDocumentMouseOut",
+			"onDocumentMouseUp",
+			"onDocumentMouseOver",
+			"/src",
+			"interrupt",
+			"video_controlls_btn_fullstreen_id",
+			"/10",
+			"normalscreen",
+			"pause",
+			"play",
+			"fullscreen",
+			"video_controlls_btn_fullstreen_id",
+			"video_controlls_btn_slider_volume",
+			"video_controlls_btn_slider_id",
+			"video_controlls_btn_slider",
+			"PROG.canvas",
+			"video_controlls_btn_slider",
+			"1258",
+			"createLoader(",
+			"position",
+			"createLoader(150, 150,",
+			"canvas",
+			"video_controlls_btn_play",
+			"div.",
+			"field_vision",
+			"status_bar",
+			"video_controlls",
+			"\"video_controlls_btn_play\"",
+			"\"video_controlls\"",
+			"field_vision",
 			"createCompass",
 			"createFieldVision",
 			"array",
@@ -934,111 +1030,7 @@
 			"lookAt",
 			"vmatrix",
 			"view",
-			"second",
-			"first",
-			"mat4.scale",
-			"0.0",
-			"270.6",
-			"r",
-			"phi",
-			"y",
-			"-y",
-			" * radius",
-			" ",
-			"textures",
-			"normals",
-			"* radius",
-			"indices",
-			"normalBuffer",
-			"__sp__",
-			"fieldVisionCoord",
-			"getParamByKey(\"fvs\")",
-			"getParamByKey(\"fv\")",
-			"div",
-			"__sp__",
-			"\"",
-			"sp__",
-			"space",
-			", ",
-			"start",
-			"angleInRadians",
-			"degToRad",
-			"field_vision",
-			"100px",
-			"append",
-			"svg_field_vision",
-			".0",
-			"0.7",
-			"fva_tmp",
-			"fv_angle",
-			"GET",
-			"d(",
-			"pmatrix",
-			"vmatrix",
-			"<path id=\"arc1\" fill=\"none\" stroke=\"#A00\" stroke-width=\"100\" d=\"M 82.07106781186548 67.92893218813452 A 10 10 0 0 0 65 75\"></path>",
-			"M 82.07106781186548 67.92893218813452 A 10 10 0 0 0 65 75",
-			"field_vision\" style=\"width: 350px; height: 350px; left: 212px; top: 450px; background-color: red; opacity: 0.6; position: absolute; overflow: hidden;",
-			"centerY",
-			"centerX",
-			"mmatrix",
-			"compass_",
-			"200",
-			"body",
-			"container",
-			"textureCoordData",
-			"normalData",
-			"sampler",
-			"textureBuffer",
-			"texture",
-			"Texture",
-			"texture",
-			"Texture",
-			"texture",
-			"Texture",
-			"texture",
-			"Texture",
-			"texture",
-			"Texture",
-			"texture",
-			"textureCoordData",
-			"varyingTexture",
-			"samplerLoc",
-			"sampler2",
-			"DebugThreeStat",
-			"textures",
-			"video",
-			"texture",
-			"samplerLoc",
-			"0.0",
-			"(2.0)",
-			"0.7",
-			"0.82",
-			"87",
-			"0.8",
-			"1.0",
-			"0.99",
-			"hookDisplayTop",
-			"95",
-			"-0.40",
-			"0.95",
-			"1.3",
-			"*(1.12-0.085)",
-			"*(0.72-0.06)",
-			")*correction",
-			"*correction",
-			"*(0.7",
-			"9",
-			"1.5)",
-			"1.1",
-			"9",
-			"1.3",
-			"*(0.72-0.06)",
-			"(1.12-0.085)",
-			"*correction",
-			"0.085",
-			"32",
-			"3",
-			"//"
+			"second"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1056,40 +1048,11 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "theta62.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 16361,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 6427.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "theta.html",
 					"semi_transient": false,
 					"settings":
@@ -1111,10 +1074,40 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 728.0,
+						"translation.y": 168.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/htdocs/BC/src/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4044,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1074,
+								1074
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 469.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1123,15 +1116,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 21509,
+						"buffer_size": 32426,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								745,
-								745
+								6107,
+								6107
 							]
 						],
 						"settings":
@@ -1140,56 +1133,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 196.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 999,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								97,
-								97
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 58627.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/script.js",
+					"buffer": 3,
+					"file": "/C/xampp/htdocs/BC/src/js/lib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2390,
+						"buffer_size": 38124,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								441,
-								451
+								5883,
+								5883
 							]
 						],
 						"settings":
@@ -1198,56 +1162,57 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2624.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "/C/xampp/htdocs/BC/src/js/lib.js",
+					"buffer": 4,
+					"file": "/C/xampp/htdocs/BC/src/js/Externallib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 31090,
+						"buffer_size": 993,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								23159,
-								23159
+								972,
+								972
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 12298.0,
+						"translation.y": -0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "/C/xampp/htdocs/BC/doc/tools/txt/PSANI.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 763,
+						"buffer_size": 880,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								286,
-								286
+								880,
+								880
 							]
 						],
 						"settings":
@@ -1263,7 +1228,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1288,11 +1253,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 7,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1315,11 +1280,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 8,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1344,11 +1309,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 9,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1373,11 +1338,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 10,
 					"file": "zdroje.txt",
 					"semi_transient": false,
 					"settings":
@@ -1402,11 +1367,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 11,
 					"file": "TO_DO.txt",
 					"semi_transient": false,
 					"settings":
@@ -1430,7 +1395,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -1440,7 +1405,7 @@
 			"sheets":
 			[
 				{
-					"buffer": 13,
+					"buffer": 12,
 					"file": "/C/xampp/htdocs/BC/shaders/vertext/equirectangular.vert",
 					"semi_transient": false,
 					"settings":
@@ -1465,11 +1430,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 13,
 					"file": "/C/xampp/htdocs/BC/shaders/fragment/equirectangular.frag",
 					"semi_transient": false,
 					"settings":
@@ -1492,14 +1457,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 179.0,
+						"translation.y": 921.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 14,
 					"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/index.html",
 					"semi_transient": false,
 					"settings":
@@ -1525,11 +1490,11 @@
 						"translation.y": 492.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 15,
 					"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/panorama.js",
 					"semi_transient": false,
 					"settings":
@@ -1555,11 +1520,11 @@
 						"translation.y": 16249.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 16,
 					"file": "/C/xampp/htdocs/bakalarka/theta/gl-matrix-2.2.1.js",
 					"semi_transient": false,
 					"settings":
@@ -1585,11 +1550,11 @@
 						"translation.y": 43227.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 17,
 					"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson14/index.html",
 					"semi_transient": false,
 					"settings":
@@ -1615,11 +1580,11 @@
 						"translation.y": 60.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 18,
 					"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/webgl-demo.js",
 					"semi_transient": false,
 					"settings":
@@ -1645,11 +1610,11 @@
 						"translation.y": 5352.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 19,
 					"file": "build/three.js",
 					"semi_transient": false,
 					"settings":
@@ -1674,11 +1639,11 @@
 						"translation.y": 49989.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 20,
 					"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson11/index.html",
 					"semi_transient": false,
 					"settings":
@@ -1701,14 +1666,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 281.0,
+						"translation.y": 141.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 21,
 					"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/compass.js",
 					"semi_transient": false,
 					"settings":
@@ -1720,23 +1685,23 @@
 						"selection":
 						[
 							[
-								1804,
-								1885
+								1753,
+								1796
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
-						"translation.x": 0.0,
-						"translation.y": 201.0,
+						"translation.x": 3.0,
+						"translation.y": 411.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 22,
 					"file": "/C/xampp/htdocs/bakalarka/pannellum/src/js/pannellum.js",
 					"semi_transient": false,
 					"settings":
@@ -1762,11 +1727,11 @@
 						"translation.y": 604.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 23,
 					"file": "/C/xampp/htdocs/BC/doc/MicrosoftWord/howto_webgl.txt",
 					"semi_transient": false,
 					"settings":
@@ -1778,8 +1743,8 @@
 						"selection":
 						[
 							[
-								4418,
-								4406
+								9596,
+								9597
 							]
 						],
 						"settings":
@@ -1787,14 +1752,14 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 98.0,
+						"translation.y": 2579.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 24,
 					"file": "/C/xampp/htdocs/bakalarka/webgl/README.md",
 					"semi_transient": false,
 					"settings":
@@ -1818,7 +1783,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 23,
 					"type": "text"
 				}
 			]
@@ -1852,7 +1817,7 @@
 		"cols":
 		[
 			0.0,
-			0.859102308894,
+			0.968334388854,
 			1.0
 		],
 		"rows":

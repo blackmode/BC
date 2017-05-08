@@ -536,10 +536,16 @@ function setupProgram()
 	window.addEventListener('blur', pauseVideoWhenInactive);
 
 	// kolecko a klavesnice
-	document.addEventListener("keypress", onDocumentKeyPress, false);
-	document.addEventListener("mousewheel", onDocumentMouseWheel, false);
-	window.addEventListener('resize', onWindowResize, true);
+	// osetreni nepodporujici udalosti ze strany firefoxu
+	var mouse_wheel_event = "mousewheel";
+	if (/Firefox/i.test(navigator.userAgent)) {
+		mouse_wheel_event = "DOMMouseScroll";
+	}
+	document.addEventListener(mouse_wheel_event, onDocumentMouseWheel, false);
 
+	// klavesnice
+	document.addEventListener("keypress", onDocumentKeyPress, false);
+	window.addEventListener('resize', onWindowResize, true);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////  SHADERY  A PROGRAM  ///////////////////////////////////////// 
@@ -696,6 +702,8 @@ function setupProgram()
 
 	 //gl.enable(gl.BLEND);
 	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+	// prednasobeni alfa kanalu ještě než se nahraje textura -> zrychli to zpracování
+	gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////  TEXTURA   ////////////////////////////////////////////////////
@@ -829,7 +837,7 @@ function render() {
 
 SETTINGS.field_vision.angle = perspAngle;
 
- 	d(angle);
+//d(angle);
 
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
 	createFieldVision(150,150,0.4,1, (angle ? angle : perspAngle), 0); 
@@ -885,7 +893,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
 
 
-function onDocumentMouseWheel( event ) {
+function onDocumentMouseWheel( event ) {d(newDelta);
 	var newDelta = 0;
 	if (event.wheelDeltaY) {
 		// WebKit
@@ -897,8 +905,10 @@ function onDocumentMouseWheel( event ) {
 		}
 		else if (event.detail) {
 		// Firefox
-			newDelta  += event.detail;
+			newDelta  += event.detail * (-1);
 		}
+
+
 
 		// zmenseni maximalniho priblizeni
 		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
