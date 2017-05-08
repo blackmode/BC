@@ -315,7 +315,7 @@ Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi:
 
 Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
 
-Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury , je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
+Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury, je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
 
  
 
@@ -332,11 +332,11 @@ Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy 
 \section{Geometrie}
 Geometrie je potřebná k mapování textury, a to tak, aby daná textura reflektovala scénu co nejvěrněji. Kdybychom pro texturu nevytvářeli geometrii, na kterou se bude mapovat a jednoduše data namapovali do libovolné 2D roviny, dojde k významnému zkreslení pořizované scény.
 
-K vyobrazení geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, …]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve WebGL umíme vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro ten to případ se ve WebGL používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
+K uložení dat geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, … ]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve WebGL jsme schopni vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro tento případ se ve WebGL používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
 
 Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. pořízená data, která budeme zpracovávat jsou zachycena ve sférickém modu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
 
-Kouli so rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 - 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0-180\degree. 
+Kouli si rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 - 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0 - 180\degree. 
 
 Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli - zvýší se hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl tedy nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše snížit počet rovnoběžek a poledníků, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
 
@@ -616,7 +616,7 @@ $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$
 
 
 \subsection{Perspektivní matice}
-Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$ resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole, které pokud bychom se příliš přibližovali , tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se jevil zase blíž. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
+Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$ resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
 
 
 
