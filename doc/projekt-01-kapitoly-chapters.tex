@@ -637,16 +637,23 @@ $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$
 
 
 \subsection{Perspektivní matice}
+Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$ resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole, které pokud bychom se příliš přibližovali , tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se jevil zase blíž. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
 
-Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazení:
 
 
 \begin{figure}[h]
 	\label{img:perspective_matrix}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.4\linewidth]{obrazky-figures/perspective_matrix}
+	\includegraphics[scale=1.0,angle=0,width=0.5\linewidth]{obrazky-figures/perspective_matrix}
 	\caption{Demonstrace perspektivního zobrazení.}
 \end{figure}
+
+Perspektivu demonstruje obrázek \ref{img:perspective_matrix}. Modře vyznačená plocha reprezentuje již avizovaný projekční prostor, který je definován  zorným úhlem a hranicemi. Fialová kružnice značí data textury, která se mapují na vypočítanou geometrii.
+
+%=========================================================================
+\newpage
+
+Jednotlivé vstupní argumenty potřebné pro výpočet perspektivní matice zobrazení:
 
 \begin{description}
 		\item[fov] - pole, které definuje zorný úhel
@@ -655,7 +662,7 @@ Jednotlivé argumenty potřebné pro definování perspektivní matice zobrazen�
 		\item[far] - reprezentuje rovinu, která ořeže tu část modelu, která je příliš daleko pozorovateli
 \end{description}
 
- 
+
 $$
 P =
 \begin{pmatrix} 
@@ -673,9 +680,13 @@ $$
 
 
 \section{Výpočet projekce}
-Konečný  vztah pro výpočet projekce bude dán pouhým vynásobením spočtených matic v uvedeném pořadí:
-$$P \cdot V \cdot M  $$
+Konečný  vztah pro výpočet projekce scény $P_{s}$ bude dán pouhým vynásobením spočtených matic v následujícím pořadí:
+$$ P_{s} = P \cdot V \cdot M  $$
 
+ 
+vypočítaná projekce se poté násobí bodem geometrie $G$. Výsledná pozice bodu ve vertex shaderu má tedy   vztah:
+
+$$ gl\_Position  = P_{s} \cdot G$$
 
 \section{Zorný úhel}
 Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Tento úhel se mění na základě přibližování, nebi oddalování scény od pozorovatele. 
@@ -813,6 +824,8 @@ Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v reži
 
 
 Samotné vykreslování se provádí až ve funkci \texttt{\render}. Mimo vykreslení zde ještě dochází k aktualizaci pozice kamery pomocí webgl funkce \texttt{uniformMatrix4fv()} a aktivaci textury, se kterou se bude pracovat. Nejdůležitější částí funkce \texttt{\render} jsou funkce pro vykreslení \texttt{drawArrays()} a \texttt{drawElements()}. Na základě dat, které se budou vykreslovat, se zvolí, jakou funkcí se bude vykreslovat. V případě ekvidistantního módu jak pro panoramata, tak pro videa se použije funkce  \texttt{drawElements()}. Důvodem je ten, že pomocí indexování je vykreslení ekvidistantních dat efektivnější. V případě rybího oka, kdyby se použilo \texttt{drawElements()}, tak by sice bylo možné data věrné interpretovat, ale došlo by k problému se sdílenými body na hranách při mapování textury, tudíž by nedošlo k tak přesnému vykreslení, jako s funkcí \texttt{drawArrays()}.
+
+Animování scény zajišťuje volání \texttt{window.requestAnimationFrame()}. Jedná se o efektivnější řešení, než-li je tomu u funkce \texttt{setInterval}. Dokáže lepé přizpůsobit výkon při vykreslování, jako např. v situaci, kdy uživatel překlikne na jiné okno, funkce to automaticky rozporná a sníží frekvenci snímkovaní.
 
 
 
