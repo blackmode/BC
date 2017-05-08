@@ -109,8 +109,8 @@
 				}
 
 
-				  //gl_FragColor.a =   0.6;
-			}
+				 //gl_FragColor  =    texture2D(sampler, vec2(mix( varyingTexture.x,varyingTexture.y,   0.50) ));
+ 			}
 
 
 			// korekce barvy
@@ -384,6 +384,7 @@ function setupProgram()
 {
 	if (!initProgram()) {
 		e('FATALNI CHYBA, nepodarilo se inicializovat program');
+		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		return false;
 	}
 
@@ -527,6 +528,7 @@ function setupProgram()
 	var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
 	if (!vertextSucces) {
 		w('nepodařilo se zkompilovat VERTEX_SHADER');
+		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		return false;
 	}
 	
@@ -538,6 +540,7 @@ function setupProgram()
 	var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
 	if (!fragmentSucces) {
 		w('nepodařilo se zkompilovat FRAGMENT_SHADER');
+		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		return false;
 	}
 
@@ -550,6 +553,7 @@ function setupProgram()
 	var programSuccess = gl.getProgramParameter( PROG.program, gl.LINK_STATUS);
 	if ( ! programSuccess) {
 	  var info = gl.getProgramInfoLog(PROG.program);
+	  createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 	  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
 	  return false;
 	}

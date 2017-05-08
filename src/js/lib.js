@@ -193,7 +193,6 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
 					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
 						// nasobenim / delenim se to zvetsuje/zmensuje
-						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
 						if (x == 0 && z == 0 ) {
 							correction = 1.0;
 						}
@@ -205,8 +204,12 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 						if (getParamByKey("correction") == 'false')   
 							correction = 1.0;
 
-						textures[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
-						textures[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+						// korekce souradnic
+						x = x * correction;
+						z = z * correction;
+
+						textures[ i * 2 + 0 ]  = x * ( 270.6 / 1920 ) + ( 475.8 / 1920 )  ; 
+						textures[ i * 2 + 1 ] = z  * ( 270.6  / 1080 )  + ( 480.04 / 1080 ) ;  // posun po X sove ose, tedy : --------- x
 					
 						if (0) {
 						textures[ i * 2 + 0 ]  = 0;
@@ -223,16 +226,19 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 							correction =   Math.acos( -y ) / r   ;
 						}
 
-
 						// DEBUG===================
 						if (getParamByKey("correction") == 'false')   
 							correction = 1.0;
 
+						// korekce souradnic
+						x = x * correction;
+						z = z * correction;
+
 						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
 						// pohyb po vertikalni ose: Y |
-						textures[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *correction      + ( 1441.2 / 1920 );
+						textures[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 )      + ( 1441.2 / 1920 );
 						// pohyb po horizontalni ose: X -----------
-						textures[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *correction  + ( 480.296 / 1080 )  ;
+						textures[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 )  + ( 480.296 / 1080 )  ;
  
 					}
 				}
