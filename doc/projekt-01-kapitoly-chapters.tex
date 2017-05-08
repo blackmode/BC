@@ -818,14 +818,18 @@ Animování scény zajišťuje volání \texttt{window.requestAnimationFrame()}.
 \section{Ovládání myší}
 Myš je implementována trojicí funkcí, které fungují nad generovanými javascriptovými událostmi vstupu. Po kliknutí do plátna se myš aktivuje tím, že dojde k události \texttt{mouseDown}, kterou v programu zpracovává funkce \texttt{onDocumentMouseDown()}. Po stisku levého tlačítka myši nad plátnem, se snímání vstupu myši aktivuje z hlediska programu proměnnou \texttt{MOUSE.active} a dále uloží pozice kurzoru myši do globálních proměnných \texttt{MOUSE.down.x} a \texttt{MOUSE.down.y}. Po celou dobu tahu myši v plátně zůstává myš aktivní, dokud není vygenerována událost \texttt{mouseUp}, kterou obsluhuje programová funkce \texttt{onDocumentMouseUp()}. Událost \texttt{mouseUp} funkci myší přeruší tak, že nastaví \texttt{MOUSE.active} na \texttt{false}. Mezi události \texttt{mouseDown} a \texttt{mouseUp} se vykonává hlavní funkce pro práci s myši \texttt{onDocumentMouseMove()}. Je spouštěna události \texttt{mouseMove}, tedy pohybem myši po plátně. Funkce vychází z uložených hodnot pozice kurzoru již ve funkci \texttt{onDocumentMouseDown()}, aby zjistila odkud a kam se kurzor myši pohnul. 
 
+
 Pohyb kurzoru po stisku levého tlačítka myši lze tedy tahem měnit horizontální a vertikální pozici pozorovatele scény. Problém s tahem nastává nad elementy, které plátno překrývají. Proto se tato funkce ošetřuje již ve funkci \texttt{\initProgram}, kde se pomocí \\\texttt{addEventListener()} vyberou ty grafické elementy, které může myš překrývat, zbytek je automaticky považován za nepřekryvný - myš nad těmito prvky nebude fungovat, protože \texttt{MOUSE.active} se nastaví na  \texttt{false} a myš tím deaktivuje.
 
+
 Hloubku zobrazení, neboli přiblížení scény a pozorovatele se provádí kolečkem. Událost \texttt{mouseWheel} zastřešuje funkce \texttt{onDocumentMouseWheel()}, která ji zpracovává. U kolečka nastává problém s interpretací prohlížečů, protože každý prohlížeč ukládá interakci s kolečkem do objektu dané události odlišně a také do jiných proměnných. 
+
 
 Na základě hodnot se dále určuje směr rotace kolečka a intenzita s jakou hodnoty přibližování a oddalování narůstají. Tento problém je ale vyřešen tak, že intenzitu nárůstu si řídí program sám dle vstupu, pouze se rozlišuje, zdali je hodnota kladná nebo záporná.
 Dále funkce ošetřuje krajní meze pro přibližování a oddalování scény, aby nedošlo k problému při prohlížení.
  
- 
+
+Ovládání myši dále rozšiřuje podpora pro dotyková zařízení. Události generované dotykem jsou velice podobné těm, které se generují pro myš. Díky tomu je možné stávající funkce pro zpracování vstupních dat myši rozšířit o novou vlastnost. Při dotyku obrazovky se vyvolá událost \texttt{touchstart}, kterou obsluhuje funkce \texttt{onDocumentMouseDown()}, tudíž navazuje přímo na její funkcionalitu. Obdobné je to u pohybu, kdy je generovaná událost \texttt{touchmove}, která rozšiřuje funkci \texttt{onDocumentMouseMove()}. Dokončení tahu na plátně zajišťuje událost \texttt{touchend}, která je obdobou uvolnění levéhé tlačítka myši, obě události obsluhuje funkce \texttt{onDocumentMouseUp()}. 
 
 
 \section{Ovládání klávesnicí}
@@ -835,6 +839,8 @@ Klávesnice ovládá jak pozorovatele scény, tak i přehrávání videa. Pro ov
 
 Pohyb kamery lze ovládat tlačítky \keystroke{w}, \keystroke{s},  \keystroke{a} a  \keystroke{d}. Stisk tlačítek \keystroke{w} a \keystroke{s} mění pozici kamery po vertikální ose, naproti tomu tlačítka \keystroke{a} a  \keystroke{d} posun v horizontálních směrech. Všechny operace s klávesnicí lze i spolu se zapnutým režimem  \keystroke{capslock}.
 
+%=========================================================================
+\newpage
 
 \section{Grafické rozhraní}
 Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v elementu jak již bylo nastíněno v předcházejících kapitolách, \texttt{<canvas>} nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků jako je kompas, nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
@@ -842,8 +848,7 @@ Veškeré prvky, které nejsou vykreslovány skrze grafickou kartu, se v element
 \subsection*{Pozicování}
 Pozice všech grafikách prvků na plátně je třeba přizpůsobovat velikosti plátna, např. když dojde k přepnutí na režim celé obrazovky. Pozice jednotlivých prvků je zadána argumenty \texttt{position\_x} a \texttt{position\_y} nabývající hodnot od \texttt{0} do \texttt{1}. Takto zadané hodnoty jsou nezávislé na režimu zobrazení. Stačí tedy nastavit jen hodnoty kaskádových stylů \texttt{left} a \texttt{top} tak, že \texttt{div.style.left} bude roven rozdílu šířky plátna a šířky grafického prvku vynásobená argumentem \texttt{position\_x}, pro vertikální umístění pak nastavení vlastnosti \texttt{div.style.top} jako rozdíl výšky plátna a grafického prvku, vynásobená  hodnotu argumentu \texttt{position\_y}. Při použití odskoku elementu od okraje obrazovky je pozice prvku nastavena na \texttt{absolute}, aby takto vypočítaná pozice měla smysl. 
 
-%=========================================================================
-\newpage
+
 
 \subsection{Kompas}
 Prvek překrývající plátno \texttt{<canvas>}. Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Vstupními metadaty je zadán kotevní bod severu. Díky interakci s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorový úhel, který ovlivňuje odchylku severu  od původní zadané pozice.
@@ -880,14 +885,16 @@ Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTM
 
 Vedle přímých akcí kontrolovaných uživatelem, jsou tu ještě  automatické operace prováděné nad videem. Jedná se o detekcí aktivního okna při přehrávání, kdy si program sám ověřuje pomocí funkce \texttt{addEventListener()}  pracující nad objektem \texttt{window}, zdali aktuální okno prohlížeče je aktivní. Vše zprostředkovávají události   \texttt{focus} a \texttt{blur}. Událost  \texttt{blur} se spustí ve chvíli, kdy uživatel nemá zobrazené okno s panoramatickým prohlížečem, tato událost bude mít vliv na video jen v případě, kdy se bude video přehrávat a v takové situaci je i pozastaví, dokud se okno opět nezaktivní událostí \texttt{focus}.
 
+%=========================================================================
+\newpage
+
 \subsection{Zorný úhel}
 Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojen s kolečkem myši tak, že změny v zorném úhlu závisí především na přiblíženi popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}.
 
 
 
 
-%=========================================================================
-\newpage
+
 
 \chapter{Testování}
 \label{chapter:5}
@@ -906,8 +913,6 @@ Průměrné naměřené  hodnoty  během vývoje programu s běžnou zátěží 
 	\item[12 MB] - paměti
 \end{description}
 
-Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
-Goniometrie
 
 
 
@@ -918,6 +923,15 @@ Podpora porhlížeču HTML5 A WebGL v1.0 a WebGL v2.0
 \chapter{Závěr}
 \label{chapter:6}
 
+\section{zhodnocení  dosažených výsledků s  vyznačeným vlastním přínosem studenta}
+\section{zhodnocení z pohledu dalšího vývoje projektu}
+\section{náměty vycházející ze zkušeností s řešeným projektem}
+\section{návaznosti na právě dokončené projekty}
+
 Závěrečná kapitola obsahuje zhodnocení dosažených výsledků se zvlášť vyznačeným vlastním přínosem studenta. Povinně se zde objeví i zhodnocení z pohledu dalšího vývoje projektu, student uvede náměty vycházející ze zkušeností s řešeným projektem a uvede rovněž návaznosti na právě dokončené projekty.
+
+
+Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
+Goniometrie
 
 %=========================================================================

@@ -407,14 +407,37 @@ function setupProgram()
 	SETTINGS.video_controlls.object.controlls.addEventListener( 'mouseover',  onDocumentMouseOver,  false );	 
 
 	// vyjimku tvori kompas a field vision
-	SETTINGS.compass.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	SETTINGS.compass.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	SETTINGS.compass.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	var actions = [
+		'mousemove', 
+		'mousedown', 
+		'mouseup', 
+		'touchmove', 
+		'touchstart', 
+		'touchend'
+	];
+	var action_functions = [
+		onDocumentMouseMove, 
+		onDocumentMouseDown, 
+		onDocumentMouseUp, 
+		onDocumentMouseMove, 
+		onDocumentMouseDown, 
+		onDocumentMouseUp
+	];
 
-	SETTINGS.field_vision.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	SETTINGS.field_vision.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	for (var i = 0; i < actions.length; i++) {
+		SETTINGS.compass.object.addEventListener( actions[i], action_functions[i], false );
+		SETTINGS.field_vision.object.addEventListener( actions[i], action_functions[i], false );
+	};
 
+	/*
+		SETTINGS.compass.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
+		SETTINGS.compass.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		SETTINGS.compass.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+		SETTINGS.field_vision.object.addEventListener( 'mousemove', onDocumentMouseMove, false );
+		SETTINGS.field_vision.object.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		SETTINGS.field_vision.object.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	*/
 
 
 	/// ======================= OVLADANI VIDEA ===========================================
