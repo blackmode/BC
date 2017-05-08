@@ -441,6 +441,9 @@ function setupProgram()
  		SETTINGS.video_controlls.object.btn.slider.value = value;
  	});
 
+	SETTINGS.input.video.addEventListener("ended", function() {
+		SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+ 	});
 
 	// aktualizace casove osy videa
 	SETTINGS.video_controlls.object.btn.slider.addEventListener("change", function() {
@@ -798,7 +801,7 @@ function render() {
 SETTINGS.field_vision.angle = perspAngle;
 
  	d(angle);
- 	
+
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
 	createFieldVision(150,150,0.4,1, (angle ? angle : perspAngle), 0); 
 

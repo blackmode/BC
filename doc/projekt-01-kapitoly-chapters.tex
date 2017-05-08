@@ -300,47 +300,26 @@ na obrazovku monitoru.
 \newpage
 
 \subsection{Vytvoření a běh programu}
-Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci s WebGL. Funkce by se daly rozdělit na několik částí, nejprve ty, které pracují s shadery, dále ty které vytváří program, v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}.
+Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci s WebGL. Funkce by se daly rozdělit na několik částí, nejprve ty, které pracují s shadery, dále ty které vytváří program, v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobné konečnému automatu, v zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci, v této částí se ale zaměříme na vykreslování, které je třeba více rozebrat, než se vrhneme na samotnou implementaci.
+ 
 
-\begin{description}
-	\item[\texttt{gl.createShader(type)}] - vytvoří objekt shaderu, vstupním argumenty \texttt{type} mohou být \\ \texttt{gl.VERTEX\_SHADER} nebo \texttt{gl.FRAGMENT\_SHADER}
-	
-	\item[\texttt{gl.shaderSource(shader, source)}] - asociuje objekt shaderu \texttt{shader} se zdrojovým kódem samotného shaderu \texttt{source} v textové formě
-	
-	\item[\texttt{gl.compileShader(shader)}] - kompiluje GLSL kód na binární data, vstupním parametrem je objekt shaderu \texttt{shader}
-	
-\end{description}
-
-Následuje práce s programem. Funkce \texttt{gl.createProgram()} vytvoří objekt programu. Poté \texttt{gl.attachShader(program, shader)} - přiloží daný shader k programu.
-Funkce \\ \texttt{gl.linkProgram(program)}, která slinkuje vše dohromady, \texttt{gl.useProgram(program)} - nastaví daný webgl program jako část současného vykreslovacího stavu.
-
-\begin{description}
-	
-	\item[\texttt{gl.getAttribLocation(program, attribute)}] - vrací referenci na atribut v ve vertex shaderu
-	
-	\item[\texttt{gl.enableAttribute(attribute)}] - aktivuje atribut 
-	
-	\item[\texttt{gl.createBuffer()}] - vytvoří nový buffer objekt pro data
-	
-	\item[\texttt{gl.bindBuffer(target, buffer)}] - nastaví vytvořený buffer \texttt{buffer} jako aktivní, parametr \texttt{target} specifikuje data s jakými se bude pracovat
-	
-	\item[\texttt{gl.bufferData(target, srcData, usage)}] - parametr \texttt{target} má stejný význam jako u funkce \texttt{bindBuffer}, \texttt{srcData} určuje data, která se nahrají do bufferu, poslední parametr \texttt{usage} specifikuje způsob využiti uložených dat
-	
-	\item[\texttt{gl.vertexAttribPointer(attrib, size, type, normalized, stride, offset)}] -  \texttt{attrib} prováže atribut programu s aktivním bufferem, \texttt{size} určuje, z kolika prvků se skládají data v bufferu, \texttt{type} spcecifikuje datový typ dat v bufferu, \texttt{normalized} určuje zdali budou hodnoty normalizovány, parametr je typu \texttt{bool}, dále \texttt{stride} udávající zdali budeme nějaké hodnoty přeskakovat, \texttt{offset} odkud budeme data číst.
-	
-	
-\end{description}
-
-Samotné vykreslení uložených data v bufferech se realizuje funkcemi:
+ 
+Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi:
 
 
 \begin{description}
+	\item[\texttt{gl.drawArrays(mode, first, count)}] - vykresluje vstupní data bufferu. Parametr \texttt{mode} určuje, jaké grafické primitivum budem použito pro vykreslení, \texttt{first} určuje odkud se data zažnou upracovávat, \texttt{count} specifikuje počet vykreslovaných hodnot
 	
-	\item[\texttt{gl.drawArrays(mode, first, count)}] - vykresluje vstupní data. Parametr \texttt{mode} určuje, jaké grafické primitivum budem použito pro vykreslení, \texttt{first} určuje odkud se data zažnou upracovávat, \texttt{count} specifikuje počet vykreslovaných hodnot
-	
-	\item[\texttt{gl.drawElements(mode, count, type, offset)}] - stejně jako u \texttt{drawArrays()} určuje vykreslované grafické primitivum, to stejné se týká i parametru \texttt{count}, \texttt{type} definuje typ dat indexů a \texttt{offset} odkud začínáme zpracovávat indexy. HLavním rozdílem vůči funkci \texttt{drawArrays()} je ten, že \texttt{gl.drawElements(...)} nevykresluje body přímo, ale dostává jako vstupní data indexy na jednotlivé body, které vykresluje funkce \texttt{drawArrays()}
-	
+	\item[\texttt{gl.drawElements(mode, count, type, offset)}] - stejně jako u \texttt{drawArrays()} určuje vykreslované grafické primitivum, to stejné se týká i parametru \texttt{count}, \texttt{type} definuje typ dat indexů a \texttt{offset} odkud začínáme zpracovávat indexy. 
 \end{description}
+
+Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
+
+Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury , je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
+
+ 
+
+
 
 %=========================================================================
 \newpage
@@ -907,7 +886,11 @@ Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice v
 \label{chapter:5}
 Výsledný program bylo třeba otestovat z  hlediska kompatibilita webových prohlížečů  s WebGL, nebo s HTML5 až po rozdílnou interpretaci některých vstupních událostí pro periferie počítače. 
 
-Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, který reflektuje aktuální počet snímků za sekundu tj.  rychlost překreslování scény grafickou kartou. Jedná se konkrétně o třídu \texttt{Stats()}, kterou volá funkce \texttt{DebugThreeStat()} uvedené v knihovně pro externí zdrojové kódy.
+Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, který reflektuje aktuální rychlost překreslování scény grafickou kartou. Jedná se konkrétně o třídu \texttt{Stats()}, kterou volá funkce \texttt{DebugThreeStat()} uvedené v knihovně pro externí zdrojové kódy. Vedle měření snímkové frekvence dále disponuje měřením v milisekundách, kolik je zapotřebí času k vykreslení jednoho snímku. Dále velikost alokované paměti v řádech megabajtů.
+
+\section*{Prostředí}
+Program byl vyvíjen na platformě operačního systému Windows 8 a hlavním prohlížečem pro vývoj sloužil Chrome. Ověření pak v konečné fázi vývoje programu ještě testováno na operačnímu systému Ubuntu.
+
 
 Pravidla \cite{Kompendium}. Pravidla \cite{Goniometrie}. 
 Goniometrie
