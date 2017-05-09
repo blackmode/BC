@@ -304,6 +304,11 @@ var PROG = {
 //SETTINGS.input.video =  createVideo("data/R0010014_20161217101030_er.mp4");
 
 
+if (getParamByKey("video"))
+	SETTINGS.input.video =  createVideo(getParamByKey("video"));
+
+
+
 SETTINGS.mode.fisheye.panorama.active 			= false;
 SETTINGS.mode.fisheye.video.active 				= true;
 
@@ -314,8 +319,9 @@ SETTINGS.mode.equirectangular.video.active 		= false;
 
 
  //SETTINGS.input.video = document.getElementById('video');
-SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
+//SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
+//SETTINGS.input.image = createImage("data/p6.jpg"); // p7.jpg / t1.jpg
 
 
 

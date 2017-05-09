@@ -902,51 +902,82 @@ Výsledný program bylo třeba otestovat z  hlediska kompatibilita webových pro
 
 Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, který reflektuje aktuální rychlost překreslování scény grafickou kartou. Jedná se konkrétně o třídu \texttt{Stats()}, kterou volá funkce \texttt{DebugThreeStat()} uvedené v knihovně pro externí zdrojové kódy. Vedle měření snímkové frekvence dále disponuje měřením v milisekundách, kolik je zapotřebí času k vykreslení jednoho snímku. Dále velikost alokované paměti v řádech megabajtů.
 
-\section*{Prostředí}
-Program byl vyvíjen na platformě operačního systému Windows 8 a hlavním prohlížečem pro vývoj sloužil Chrome. Ověření pak v konečné fázi vývoje programu ještě testováno na operačnímu systému Ubuntu.
 
-Průměrné naměřené hodnoty\footnote{Během vývoje programu s běžnou zátěží.}:
+Program byl vyvíjen na platformě operačního systému Windows 8 s procesorem Intel Core i7 2.4 GHz a GPU Nvidia GT 630m 2GB. Rozlišení LCD displeje $1920 \cdot 1080$px. 
 
-\begin{center}
-	\begin{tabular}{ l | c  } 
-		
-		Frekvence snímků videa & 46 fps   \\ 
- 		\hline
-		Frekvence snímků panoramatu & 57 fps   \\ 
-		\hline
-		Doba načtení jednoho snímku  & 17 ms \\ 
- 		\hline
-		Využití paměti & 12  MB   \\ 
-		
-	\end{tabular}
-\end{center}
+Hlavním prohlížečem pro vývoj sloužil Google Chrome. V přůběhu vývoje byl program také testován v prohlížečích Opera a Firefox. Ověření pak v konečné fázi vývoje programu ještě testováno na operačnímu systému Ubuntu.
 
-Srovnání v přehrávání videa různými prohlížeči:
+Vstupní data, s kterými probíhaly veškeré testy, byly pořízeny sférickou kamerou Ricoh Theta S.
+
+Průměrné naměřené hodnoty při přehrávání dvou minutového videa v režimu celé obrazovky\footnote{V režimu rybího oka.} v různých prohlížečích: 
 
 \begin{center}
 	\begin{tabular}{ l | c| c| c  } 
 		& Firefox & Opera  & Chrome   \\ 
  		\hline
-		Frekvence snímků videa & 46 fps & 18 fps & 60 fps    \\ 
+		Frekvence snímků videa & 28,5 fps & 13,1 fps & 40,3 fps    \\ 
 		\hline
-		Doba načtení jednoho snímku  & 21 ms & 55 ms & 17 ms  \\ 
+		Doba načtení jednoho snímku  & 35 ms & 76 ms & 24 ms  \\ 
 		\hline
 		Využití paměti & 12  MB & 10  MB & 12  MB   \\ 
 		
 	\end{tabular}
 \end{center}
 
-\section{Windows a linux}
-\section{Prohlížeče a kompatibilita}
-Podpora porhlížeču HTML5 A WebGL v1.0 a WebGL v2.0
+Testování vykreslování panoramat o rozlišení $1920 \cdot 1080$px v režimu celé obrazovky po dobu jedné minuty:
+
+\begin{center}
+	\begin{tabular}{ l | c| c| c  } 
+		& Firefox & Opera  & Chrome   \\ 
+		\hline
+		Frekvence snímků obrázku & 41,2 fps & 41.5 fps & 44 fps    \\ 
+		\hline
+		Doba načtení jednoho snímku  & 24,2 ms & 24,09 ms & 22,72 ms  \\ 
+		\hline
+		Využití paměti & 10  MB & 10  MB & 10  MB   \\ 
+		
+	\end{tabular}
+\end{center}
+
+%=========================================================================
+\newpage
+
+Stejný test pro panorama, ale po vypnutí režimu celé obrazovky\footnote{Zmenšené plátno mělo při testování velikost $1100 \cdot 700$px.}:
+
+\begin{center}
+	\begin{tabular}{ l | c| c| c  } 
+		& Firefox & Opera  & Chrome   \\ 
+		\hline
+		Frekvence snímků videa & 49,6 fps & 17,3 fps & 59,9 fps    \\ 
+		\hline
+		Frekvence snímků obrázku & 59,1 fps & 58,5 fps & 59,6 fps    \\ 
+		
+	\end{tabular}
+\end{center}
+
+
+
+\section*{Shrnutí testování}
+Jak lze vidět, ve všech testech Opera velice ztrácí, zejména v přehrávání videa, kdy video nebylo při přehrávaní vůbec plynulé, a to ani po vypnutí režimu celé obrazovky. Naproti tomu prohlížení sférického videa v prohlížeči Firefox bylo znatelně plynulejší a ve všech módech prohlížení si vedl obstojně. Nejlépe ale vše fungovalo v prohlížeči Chrome, kde bylo přehrávání a prohlížení ve všech módech vždy plynulé. 
+
+
+ 
+
 
 \chapter{Závěr}
 \label{chapter:6}
 
 \section{zhodnocení  dosažených výsledků s  vyznačeným vlastním přínosem studenta}
-\section{zhodnocení z pohledu dalšího vývoje projektu}
+Účelem práce bylo implementovat prohlížeč ve WebGL, který je schopen přehrát sférická videa v různých režimech. Hlavně tedy v režimu, který by v jiných prohlížečích byl velice zkreslen, protože by nepodporoval režim rybího oka. Implementovaný prohlížeč je schopen tento režim zvládnout bez pomocí externích konvertorů popř. konvertorů, které dává k dispozici přímo výrobce 360 stupňové kamery. Díky programu tedy již externí konvertor není potřeba a výstup z kamery lze prohlížet okamžitě po natočení.
+
+
 \section{náměty vycházející ze zkušeností s řešeným projektem}
 \section{návaznosti na právě dokončené projekty}
+
+\section{zhodnocení z pohledu dalšího vývoje projektu}
+
+
+
 
 Závěrečná kapitola obsahuje zhodnocení dosažených výsledků se zvlášť vyznačeným vlastním přínosem studenta. Povinně se zde objeví i zhodnocení z pohledu dalšího vývoje projektu, student uvede náměty vycházející ze zkušeností s řešeným projektem a uvede rovněž návaznosti na právě dokončené projekty.
 
