@@ -48,7 +48,7 @@
 		// clamp(u,v) => vraci stredni hodnotu mezi dvema vstupnimi hodnotami 
 
 		void main(void) {
-			 gl_FragColor = texture2D(sampler, varyingTexture);
+			 gl_FragColor =  texture2D(sampler, varyingTexture);
 
 		 /*
 
@@ -139,6 +139,7 @@
 			<div id="video_status_bar"></div>
 			<div id="video_controlls"></div>
 			<div id="overlay"></div>
+			<div id="info_screen"></div>
 		</div>
 		<div id="data"></div>
 	</body>
@@ -220,7 +221,7 @@ var SETTINGS = {
 		image:  null,
 	} ,
 	field_vision : {
-		wdith: 0.06,
+		width: 0.06,
 		height:  0.06,
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
@@ -229,7 +230,7 @@ var SETTINGS = {
 		shift: 0.0,
 	} ,
 	compass : {
-		wdith: 0.06,
+		width: 0.06,
 		height:  0.06,
 		canvas_position_x:  0.06,
 		canvas_position_y:  0.06,
@@ -243,7 +244,10 @@ var SETTINGS = {
 		object: null,
 
  	} ,
-
+	info_screen : {
+		width: 300,
+		height:  150,
+ 	} ,
 
 };
 
@@ -341,13 +345,15 @@ function initProgram() {
 	PROG.canvas = document.querySelector("canvas");
 	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
 	if (!gl) {
-		w('Webgl se nepodarilo inicializovat...');
+		e('Webgl se nepodarilo inicializovat...');
+		createInfoScreen("Webgl se nepodarilo inicializovat...", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 
 	// kontrola vstupnic dat
 	if ((SETTINGS.mode.equirectangular.video.active || SETTINGS.mode.fisheye.video.active) && !SETTINGS.input.video) {
 		e('video se nepdarilo nacist!');
+		createInfoScreen("video se nepdarilo nacist!", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 	
@@ -390,7 +396,8 @@ function setupProgram()
 {
 	if (!initProgram()) {
 		e('FATALNI CHYBA, nepodarilo se inicializovat program');
-		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
+		createLoader(150, 150, 0.5, 0.5, 1, 1258) 
+		createInfoScreen("FATALNI CHYBA, nepodarilo se inicializovat program", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 
@@ -565,7 +572,8 @@ function setupProgram()
 	var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
 	if (!vertextSucces) {
 		w('nepodařilo se zkompilovat VERTEX_SHADER');
-		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
+		createInfoScreen("nepodařilo se zkompilovat VERTEX SHADER", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
+		//createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		return false;
 	}
 	
@@ -577,6 +585,7 @@ function setupProgram()
 	var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
 	if (!fragmentSucces) {
 		w('nepodařilo se zkompilovat FRAGMENT_SHADER');
+		createInfoScreen("nepodařilo se zkompilovat FRAGMENT SHADER", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 		return false;
 	}
@@ -592,6 +601,7 @@ function setupProgram()
 	  var info = gl.getProgramInfoLog(PROG.program);
 	  createLoader(150, 150, 0.5, 0.5, 1, 1258) ;
 	  w ('nepodařilo se zkompilovat WebGL PROG. \n\n' + info);
+	  createInfoScreen("nepodařilo se zkompilovat WebGL PROG", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 	  return false;
 	}
 

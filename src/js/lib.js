@@ -1156,6 +1156,49 @@ function createLoader(width, height, position_x, position_y, active, delay)
 }
 
 
+function createInfoScreen(log, width, height) 
+{
+	var viewer = document.getElementById("viewer");
+	if (!viewer) {
+		e('DIV s ID: viewer NEEXISTUJE!');
+		return false
+	}
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		e('Neexistuje TAG <canvas>!');
+		return false;
+	}
+	var info_screen = document.getElementById('info_screen');
+	if (!info_screen) {
+		e('DIV s ID: info_screen NEEXISTUJE!');
+		return false;
+	}
+	var info_screen_width = width;
+	var info_screen_height = height;
+
+	// dynamicke umisteni zadane parametrem
+	info_screen_left = (canvas_dom.width - info_screen_width)*0.5;
+	info_screen_top = (canvas_dom.height - info_screen_height)*0.5;
+
+	// nastylovani a umsiteni boxu
+	var fontWeight = 35;
+	info_screen.style.padding = '10px';
+	info_screen.style.marginTop = (info_screen_height-fontWeight)/2;
+	info_screen.style.marginBottom = (info_screen_height-fontWeight)/2;
+	info_screen.style.width = info_screen_width+'px';
+	info_screen.style.height = 'auto';
+	info_screen.style.left = info_screen_left+'px';
+	info_screen.style.top = info_screen_top+'px';
+	info_screen.style.backgroundColor  = 'red'; // transparent
+	info_screen.style.fontSize = fontWeight+'px';
+	info_screen.style.textAlign = 'center';
+	//info_screen.style.border  = '1px solid black';
+	info_screen.style.position = 'absolute';
+	info_screen.style.overflow = 'hidden';
+
+	info_screen.innerHTML = log;
+}
+
 
 function createVideoControlls(width, height, position_x, position_y, video, update) {
 
