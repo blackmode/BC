@@ -221,10 +221,10 @@ var SETTINGS = {
 		image:  null,
 	} ,
 	field_vision : {
-		width: 0.06,
-		height:  0.06,
-		canvas_position_x:  0.06,
-		canvas_position_y:  0.06,
+		width: 150,
+		height:  150,
+		canvas_position_x:  0.8,
+		canvas_position_y:  1.0,
 		object: null,
 		angle: 0.0,
 		shift: 0.0,
@@ -384,7 +384,17 @@ function initProgram() {
 
 	// inicializace GUI prvku 
 	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle);
-	SETTINGS.field_vision.object = createFieldVision(150,150,0.4,1, 0, 0); 
+	// zorne pole
+	SETTINGS.field_vision.object = createFieldVision(
+		SETTINGS.field_vision.width, 
+		SETTINGS.field_vision.height, 
+		SETTINGS.field_vision.canvas_position_x, 
+		SETTINGS.field_vision.canvas_position_y, 
+		SETTINGS.field_vision.angle, 
+		SETTINGS.field_vision.shift
+	); 
+
+
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 	// ovladaci prvky
 	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
@@ -853,12 +863,12 @@ function render() {
 
  	var angle =  perspAngle + ((360-perspAngle) ) *  radWheelDiv*(1-((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
 
-SETTINGS.field_vision.angle = perspAngle;
+SETTINGS.field_vision.angle = angle;
 
 //d(angle);
 
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
-	createFieldVision(150,150,0.4,1, (angle ? angle : perspAngle), 0); 
+
 
 	// kompas
 	var north = 315; // umisteni severu v kompasu
@@ -914,48 +924,60 @@ window.requestAnimationFrame = window.requestAnimationFrame
 function onDocumentMouseWheel( event ) {
 	var newDelta = 0;
 	if (event.wheelDeltaY) {
-		// WebKit
-		newDelta +=event.wheelDeltaY;
-		}
-		else if (event.wheelDelta) {
-		// Opera / Explorer 9
-		newDelta += event.wheelDelta;
-		}
-		else if (event.detail) {
-		// Firefox
-			newDelta  += event.detail * (-1);
-		}
+	// WebKit
+	newDelta +=event.wheelDeltaY;
+	}
+	else if (event.wheelDelta) {
+	// Opera / Explorer 9
+	newDelta += event.wheelDelta;
+	}
+	else if (event.detail) {
+	// Firefox
+		newDelta  += event.detail * (-1);
+	}
 
 
 
-		// zmenseni maximalniho priblizeni
-		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+	// zmenseni maximalniho priblizeni
+	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 
-		// meze kolecka
-		MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
-		MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
+	// meze kolecka
+	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
+	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
 
-		// osetreni mezi kolecka
-		if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
-		{
-			if (newDelta>0) 
-			{ 	
-				// je pozitivni
+	// osetreni mezi kolecka
+	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
+	{
+		if (newDelta>0) 
+		{ 	
+			// je pozitivni
 
-				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-			}
-			else {
-				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-			}
+			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 		}
 		else {
-			if (MOUSE.wheel.delta>0) {
-				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-			}
-			else {
-				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-			}
+			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
 		}
+	}
+	else {
+		if (MOUSE.wheel.delta>0) {
+			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+		}
+		else {
+			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+		}
+	}
+
+	// aktualizace zorneho pole
+ 	createFieldVision(
+ 		SETTINGS.field_vision.width, 
+ 		SETTINGS.field_vision.height, 
+ 		SETTINGS.field_vision.canvas_position_x, 
+ 		SETTINGS.field_vision.canvas_position_y,  
+ 		SETTINGS.field_vision.angle, 
+ 		SETTINGS.field_vision.shift
+ 	);
+
+
 }
 
 
@@ -1117,7 +1139,14 @@ function onWindowResize( event ) {
 
 function resize() {
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
-	createFieldVision(150,150,0.4,1, (SETTINGS.compass.angle ? SETTINGS.compass.angle : 10), 0);
+ 	createFieldVision(
+ 		SETTINGS.field_vision.width, 
+ 		SETTINGS.field_vision.height, 
+ 		SETTINGS.field_vision.canvas_position_x, 
+ 		SETTINGS.field_vision.canvas_position_y,  
+ 		SETTINGS.field_vision.angle, 
+ 		SETTINGS.field_vision.shift
+ 	);
 	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 
 	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
