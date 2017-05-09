@@ -942,6 +942,14 @@ function fieldVisionCoord(x, y, radius, startAngle, endAngle){
     var largeArcFlag = ((endAngle-startAngle) > 180) ? '1' : '0';
     var _SP_ = " ";
 
+    if (isNaN(startPoint.x) || 
+    	isNaN(startPoint.y) || 
+    	isNaN(radius) || 
+    	isNaN(endPoint.x) || 
+    	isNaN(endPoint.y)) {
+    	return false;
+    }
+
     // vytvoreni cesty SVG
     return   [
         "M" 				+_SP_+ 
@@ -1007,15 +1015,18 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 
 		var posun_koleckem_tmp = (180 - posun_koleckem)/2; // pro kazdou stranu
 		var posun_mysi =   parseInt(Math.abs(mouse_angle));//parseInt(getParamByKey("fvs") ? getParamByKey("fvs") : 0);
- 
+
 		var uhel_zacatku_zorneho_pole = (0-posun_mysi)+posun_koleckem_tmp;
 		var uhel_konce_zorneho_pole = (180-posun_mysi)-posun_koleckem_tmp;
+		// osetreni
+		if (isNaN(uhel_zacatku_zorneho_pole) || isNaN(uhel_konce_zorneho_pole)) {
+			return false;
+		}
 
 		var stred_x = parseInt(width/2);
 		var stred_y = parseInt(height/2);
 		var velikost = 0.75; // v procentech
 		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
-
   		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
  

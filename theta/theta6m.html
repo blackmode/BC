@@ -129,7 +129,7 @@
 	  </video>  -->
  
 		<div id="viewer" style="position:relative ">
-			<canvas id="glcanvas" width="1100" height="700"></canvas>
+			<canvas id="glcanvas" width="1000" height="700"></canvas>
 			<div id="compass-box"></div>
 			<div id="field_vision">
 				<svg>
@@ -558,6 +558,7 @@ function setupProgram()
 
 	// klavesnice
 	document.addEventListener("keypress", onDocumentKeyPress, false);
+	//document.addEventListener("keydown", onDocumentKeyPress, false);
 	window.addEventListener('resize', onWindowResize, true);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -720,6 +721,7 @@ function setupProgram()
 	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	// prednasobeni alfa kanalu ještě než se nahraje textura -> zrychli to zpracování
 	gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+	//gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////  TEXTURA   ////////////////////////////////////////////////////
@@ -909,7 +911,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
 
 
-function onDocumentMouseWheel( event ) {d(newDelta);
+function onDocumentMouseWheel( event ) {
 	var newDelta = 0;
 	if (event.wheelDeltaY) {
 		// WebKit
@@ -1063,6 +1065,41 @@ function onDocumentKeyPress( event ) {
 		}
 		else if (event.keyCode == 115 ||    event.keyCode == 115-32) {  //	s/S
 			MOUSE.move.angle.x +=  KEYBOARD.sensitivity.y;
+		}
+
+
+		// osetreni mezi kolecka
+		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+ 		if (event.keyCode == 43 ) {//	+
+ 			if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
+			{
+				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+			}
+			else 
+			{
+				if (MOUSE.wheel.delta>0) {
+					MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+				}
+				else {
+					MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+				}
+			}
+		}
+		
+		if (event.keyCode == 45  ) {//	-
+ 			if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
+			{
+				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+			}
+			else 
+			{
+				if (MOUSE.wheel.delta>0) {
+					MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+				}
+				else {
+					MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+				}
+			}
 		}
 	}
 }
