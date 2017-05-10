@@ -976,8 +976,9 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 		e('Neexistuje TAG <canvas>!');
 		return false;
 	}
-	var field_vision_width = width;
-	var field_vision_height = height;
+	var field_vision_stroke = 30;
+	var field_vision_width = width+field_vision_stroke/2;
+	var field_vision_height = height+field_vision_stroke/2;
 
 	// dynamicke umisteni zadane parametrem
 	var field_vision_left = (canvas_dom.width - field_vision_width)*position_x;
@@ -1004,9 +1005,9 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
  
   		//nastaveni SVG path
 		var vision = document.getElementById("svg_path");
-		vision.setAttribute("stroke-width", '30');
-		vision.setAttribute('stroke', '#069')
-		vision.setAttribute('fill', 'none')
+		vision.setAttribute("stroke-width", field_vision_stroke);
+		vision.setAttribute('stroke', '#F69');
+		vision.setAttribute('fill', 'none');
 		vision.style.opacity = 0.7;
 		vision.style.backgroundColor = 'transparent';
 
@@ -1025,7 +1026,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 
 		var stred_x = parseInt(width/2);
 		var stred_y = parseInt(height/2);
-		var velikost = 0.75; // v procentech
+		var velikost = 0.65; // v procentech
 		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
   		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
