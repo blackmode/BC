@@ -974,7 +974,7 @@ function onDocumentMouseWheel( event ) {
 	// meze kolecka
 	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
 	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
-
+d(MOUSE.wheel.delta);
 	// osetreni mezi kolecka
 	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
 	{

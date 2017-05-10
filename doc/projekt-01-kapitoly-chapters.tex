@@ -661,10 +661,6 @@ $$
 
 
 
-%=========================================================================
-\newpage
-
-
 \section{Výpočet projekce}
 Konečný  vztah pro výpočet projekce scény $P_{s}$ bude dán pouhým vynásobením spočtených matic v následujícím pořadí:
 $$ P_{s} = P \cdot V \cdot M  $$
@@ -674,8 +670,21 @@ vypočítaná projekce se poté násobí bodem geometrie $G$. Výsledná pozice 
 
 $$ gl\_Position  = P_{s} \cdot G$$
 
+%=========================================================================
+\newpage
+
 \section{Zorný úhel}
 Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Tento úhel se mění na základě přibližování, nebi oddalování scény od pozorovatele. 
+
+
+\subsection{Vztah perspektivy a pozorovatele}
+\begin{figure}[h]
+	\label{img:field_vision_implementation}
+	\centering
+	\includegraphics[scale=1.0,angle=0,width=0.45\linewidth]{obrazky-figures/field_vision_implementation}
+	\caption{Textura s korekcí krajních bodů.}
+\end{figure}
+
 
 \subsection{Návrh prvku}
 K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, přoč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
@@ -686,7 +695,9 @@ Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{
  $$ x = r\cdot\cos(\theta) $$ 
  $$ y = r\cdot\sin(\theta) $$  
 
- 
+
+
+
 
 
 %=========================================================================

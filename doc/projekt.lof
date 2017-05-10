@@ -1,0 +1,21 @@
+\select@language {czech}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Uk\IeC {\'a}zka interpolace hodnot mezi vertex a fragment shaderem.}}{12}{figure.2.1}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces V\IeC {\'y}po\IeC {\v c}et jednotliv\IeC {\'y}ch bod\IeC {\r u} geometrie}}{17}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Koule vyobrazena pomoc\IeC {\'\i } \IeC {\v c}ar}}{19}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Mapov\IeC {\'a}n\IeC {\'\i } textury}}{20}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Implementace index\IeC {\r u}}}{21}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Textura vych\IeC {\'a}zej\IeC {\'\i }c\IeC {\'\i } z p\IeC {\v r}edpo\IeC {\v c}\IeC {\'\i }tan\IeC {\'y}ch dat. Bez korekce.}}{22}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Textura s korekc\IeC {\'\i } krajn\IeC {\'\i }ch bod\IeC {\r u}.}}{23}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Demonstrace perspektivn\IeC {\'\i }ho zobrazen\IeC {\'\i }.}}{26}{figure.3.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Textura s korekc\IeC {\'\i } krajn\IeC {\'\i }ch bod\IeC {\r u}.}}{28}{figure.3.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kostra kompasu}}{36}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces St\IeC {\v r}elka kompasu}}{37}{figure.4.2}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsfinish 
