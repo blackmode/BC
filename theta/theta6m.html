@@ -221,20 +221,20 @@ var SETTINGS = {
 		image:  null,
 	} ,
 	field_vision : {
-		width: 150,
-		height:  150,
-		canvas_position_x:  0.8,
+		width: 200,
+		height:  200,
+		canvas_position_x:  0.85,
 		canvas_position_y:  1.0,
 		object: null,
 		angle: 0.0,
 		shift: 0.0,
 	} ,
 	compass : {
-		width: 0.06,
-		height:  0.06,
-		canvas_position_x:  0.06,
-		canvas_position_y:  0.06,
-		north: 0.0,
+		width: 180,
+		height:  180,
+		canvas_position_x:  0.6,
+		canvas_position_y:  1.0,
+		north: 315, // umisteni severu v kompasu
 		angle: 0.0,
 		object: null,
 	} ,
@@ -383,7 +383,15 @@ function initProgram() {
 
 
 	// inicializace GUI prvku 
-	SETTINGS.compass.object = createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle);
+	SETTINGS.compass.object = createCompass(
+		SETTINGS.compass.width, 
+		SETTINGS.compass.height, 
+		SETTINGS.compass.canvas_position_x, 
+		SETTINGS.compass.canvas_position_y, 
+		SETTINGS.compass.north, 
+		SETTINGS.compass.angle
+	);
+
 	// zorne pole
 	SETTINGS.field_vision.object = createFieldVision(
 		SETTINGS.field_vision.width, 
@@ -868,10 +876,9 @@ var add =  2*MOUSE.wheel.sensitivity;
 
 
  	var angle =  perspAngle*add+((360-perspAngle) ) * ((delta/prum)+(((prum-delta)-delta)/prum))* (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
-d(angle);
-
+ 
  	/*
-	*	RESENI:
+	*	RESENI zorneho uhlu:
 	*
 	*	uhel nabyva hodnot: 0° - (360°-a), kde a = uhel perspektivniho zobrazeni
 	*	velikost  polomeru koule, ktera se zmensuje koleckem, je dana promennou: radius, takze prumer: d = 2*radius; // radius v zakladu je 7
@@ -882,21 +889,23 @@ d(angle);
  	*/
 
 
-
-
-
-SETTINGS.field_vision.angle = angle;
+	SETTINGS.field_vision.angle = angle;
 
  
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
 
 
 	// kompas
-	var north = 315; // umisteni severu v kompasu
-	SETTINGS.compass.north = 315;
 	SETTINGS.compass.angle = shift;
-	 createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 
+	SETTINGS.compass.object = createCompass(
+		SETTINGS.compass.width, 
+		SETTINGS.compass.height, 
+		SETTINGS.compass.canvas_position_x, 
+		SETTINGS.compass.canvas_position_y, 
+		SETTINGS.compass.north, 
+		SETTINGS.compass.angle
+	);
 
 	// aktualizace textury
 	if (updateTexture()) 
@@ -1160,6 +1169,8 @@ function onWindowResize( event ) {
 
 function resize() {
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
+	
+	// zonry uhel
  	createFieldVision(
  		SETTINGS.field_vision.width, 
  		SETTINGS.field_vision.height, 
@@ -1168,8 +1179,16 @@ function resize() {
  		SETTINGS.field_vision.angle, 
  		SETTINGS.field_vision.shift
  	);
-	createCompass(180,180, 0.6, 0.95, SETTINGS.compass.north, SETTINGS.compass.angle) ;
 
+ 	// kompas
+	SETTINGS.compass.object = createCompass(
+		SETTINGS.compass.width, 
+		SETTINGS.compass.height, 
+		SETTINGS.compass.canvas_position_x, 
+		SETTINGS.compass.canvas_position_y, 
+		SETTINGS.compass.north, 
+		SETTINGS.compass.angle
+	);
 	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
 }
 
