@@ -5,9 +5,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../src/css/style.css">
-
- 		 <script type="text/javascript" src="../src/js/lib.js"></script>
-		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
+		<link rel="shortcut icon" href="../src/img/favicon.ico" type="image/x-icon" />
+		<script type="text/javascript" src="../src/js/lib.js"></script>
+		<script type="text/javascript" src="../src/js/Externallib.js"></script>
 	</head>
 
 	<script id="vs" type="x-shader/x-vertex">
@@ -861,12 +861,33 @@ function render() {
 	var wheelDistance = 2 *  MOUSE.wheel.deltaMax;
 	var radWheelDiv = radiusDistance/wheelDistance;
 
- 	var angle =  perspAngle + ((360-perspAngle) ) *  radWheelDiv*(1-((MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2)));
+var prum = 2*SETTINGS.mode.fisheye.video.radius;
+var delta = (2*SETTINGS.mode.fisheye.video.radius - (2*SETTINGS.mode.fisheye.video.radius/MOUSE.wheel.reduction))/2;
+ 
+var add =  2*MOUSE.wheel.sensitivity;
+
+
+ 	var angle =  perspAngle*add+((360-perspAngle) ) * ((delta/prum)+(((prum-delta)-delta)/prum))* (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
+d(angle);
+
+ 	/*
+	*	RESENI:
+	*
+	*	uhel nabyva hodnot: 0° - (360°-a), kde a = uhel perspektivniho zobrazeni
+	*	velikost  polomeru koule, ktera se zmensuje koleckem, je dana promennou: radius, takze prumer: d = 2*radius; // radius v zakladu je 7
+	*
+	*	pohyb kamery tedy bude napriklad na intervalu: (0, 14) maximalne: <2,12>, takze pohyb kamery v rozmezi <0,1> tj 0-100% musi byt ponizen o orez!!!
+	*
+	*
+ 	*/
+
+
+
+
 
 SETTINGS.field_vision.angle = angle;
 
-//d(angle);
-
+ 
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
 
 
