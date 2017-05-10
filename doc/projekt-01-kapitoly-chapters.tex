@@ -7,7 +7,7 @@
 \chapter{Úvod}
 \label{chapter:1}
 
-V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotek a~videí. V současné době i~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
+V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotografií a~videí. V současné době i~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s ``klasickými''  přehrávači, popř. prohlížeči videí, nebo fotografií. Díky sférickým 360 stupňovým kamerám, je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se ale nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dát, je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
 
 
 Následující práce se věnuje implementaci webového prohlížeče panoramatických snímku a videí v různých módech, ve kterých je video interpretováno. Cílem je  navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání specifický program. Zvláště v případě  sférického videa v režimu rybího oka, kdy uživatel nejprve musí video překonvertovat do ekvidistantního zobrazení, aby jej mohl sféricky prohlížet. Díky řešení v následujících kapitolách tato nutnost odpadá. 
@@ -324,7 +324,7 @@ Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Ve
 %=========================================================================
 \newpage
 
-\chapter{Návrh klíčových částí}
+\chapter{Návrh klíčových částí prohlížeče}
 \label{chapter:3}
 Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy implementace prohlížeče. Snaží se navrhnout ty nejefektivnější způsoby řešení daných problémů a v případě, že tomu tak v konkrétním případě není, snaží se tyto  kroky návrhu jasně odůvodnit, proč jsou  daným způsobem takto řešeny.
 
@@ -350,7 +350,7 @@ Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních 
 \begin{figure}[h]
 	\label{img:2}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.8\linewidth]{obrazky-figures/geometry}
+	\includegraphics[scale=1.0,angle=0,width=0.6\linewidth]{obrazky-figures/geometry}
 	\caption{Výpočet jednotlivých bodů geometrie}
 	\label{fig:geom}
 \end{figure}
@@ -415,7 +415,7 @@ Vzniklé těleso vyobrazené pomocí čar\footnote{Použito grafické primitivum
 \begin{figure}[h]
 	\label{img:3}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.7\linewidth]{obrazky-figures/vertex}
+	\includegraphics[scale=1.0,angle=0,width=0.55\linewidth]{obrazky-figures/vertex}
 	\caption{Koule vyobrazena pomocí čar}
 	\label{fig:geom2}
 \end{figure}
@@ -437,7 +437,7 @@ Znázornění demonstruje obrázek \ref{img:grid}. Souřadnici \texttt{\textbf{u
 \begin{figure}[h]
 	\label{img:grid}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.4\linewidth]{obrazky-figures/grid}
+	\includegraphics[scale=1.0,angle=0,width=0.35\linewidth]{obrazky-figures/grid}
 	\caption{Mapování textury}
 \end{figure}
 
@@ -630,7 +630,7 @@ Poslední častí projekce je perspektivní matice, díky které budeme realizov
 \begin{figure}[h]
 	\label{img:perspective_matrix}
 	\centering
-	\includegraphics[scale=1.0,angle=0,width=0.5\linewidth]{obrazky-figures/perspective_matrix}
+	\includegraphics[scale=1.0,angle=0,width=0.45\linewidth]{obrazky-figures/perspective_matrix}
 	\caption{Demonstrace perspektivního zobrazení.}
 \end{figure}
 
@@ -980,7 +980,7 @@ Jak lze vidět, ve všech testech Opera velice ztrácí, zejména v přehráván
 
 
 \section{zhodnocení z pohledu dalšího vývoje projektu}
-Vylepšení programu by mohlo přijít spolu s novou verzí WebGL, která v době implementace této práce ještě nebyla oficiálně vydána. Nová verze disponuje širší škálou možností a otevírá nové možnosti, jak program vylepšit a optimalizovat. Projekt jako takový má velký potenciál, jak již bylo avizování v úvodu práce, v současné době je trendem  rozšiřování možnosti prohlížení. Dalším vylepšením by mohla být přidána širší podpora zařízení, jako např. ty, které disponují více kamerami, aby pokryli lépe celou sféru, zde by byla velice zajímaví implementace, kdy  by si musela poradit s více záběry a mapovat je na jeden sférický model. Popřípadě přidat automatické rozeznávání objektu na kaměře, apod.
+Vylepšení programu by mohlo přijít spolu s novou verzí WebGL, která v době implementace této práce ještě nebyla oficiálně vydána. Nová verze disponuje širší škálou možností a otevírá nové možnosti, jak program vylepšit a optimalizovat. Projekt jako takový má velký potenciál, jak již bylo uvedeno v úvodu práce, v současné době je trendem  rozšiřování možnosti prohlížení. Dalším vylepšením by mohla být přidána širší podpora zařízení, jako např. ty, které disponují více kamerami, aby pokryly lépe celou sféru, zde by byla velice zajímaví implementace, kdy  by si musela poradit s více záběry a mapovat je na jeden sférický model. Popřípadě přidat automatické rozeznávání objektu na kaměře, apod.
 
 %=========================================================================
 \newpage
