@@ -260,7 +260,6 @@ var SETTINGS = {
 
 };
 
-200,50,1.0,1.0
 
 
 /// ------ VSECHNY promenne PROGRAMU
@@ -423,7 +422,7 @@ function initProgram() {
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 
 	// ovladaci prvky
-	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95 )  ;
+	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,75, 0.0, 1.0 )  ;
 
 
 	// obecne ovladaci prvky panoramatu
@@ -1281,7 +1280,7 @@ function resize() {
 		SETTINGS.compass.north, 
 		SETTINGS.compass.angle
 	);
-	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9) ;
+	createVideoControlls(PROG.canvas.width/2,75, 0.0, 1.0 )  ;
 
 	// obecne ovladaci prvky panoramatu
 	SETTINGS.panorama_controlls.object = createPanoramaControlls(

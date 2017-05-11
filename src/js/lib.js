@@ -1268,7 +1268,7 @@ function createVideoControlls(width, height, position_x, position_y) {
 	// tlacitko PLAY
 	var video_controlls_btn_play = document.getElementById(video_controlls_btn_play_id);
 	if (!video_controlls_btn_play) {
-		video_controlls_btn_play = document.createElement('div');
+		video_controlls_btn_play = document.createElement('button');
 		video_controlls_btn_play.setAttribute('id', 'video_controlls_btn_play');
 		video_controlls_btn_play.setAttribute('class', 'play_icon'); 
 		//video_controlls_btn_play.style.left = video_controlls_btn_play.style.top = 'inherit';
@@ -1396,7 +1396,7 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 	// fulstreen
 	var panorama_controlls_btn_fullstreen = document.getElementById(panorama_controlls_btn_fullstreen_id);
 	if (!panorama_controlls_btn_fullstreen) {
-		panorama_controlls_btn_fullstreen = document.createElement('button');
+		panorama_controlls_btn_fullstreen = document.createElement('div');
 		panorama_controlls_btn_fullstreen.setAttribute('id', panorama_controlls_btn_fullstreen_id);
 		panorama_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon'); 
 		panorama_controlls_btn_fullstreen.style.height = 'inherit';
@@ -1407,7 +1407,7 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 
 	var panorama_controlls_btn_zoom_plus = document.getElementById(panorama_controlls_btn_zoom_plus_id);
 	if (!panorama_controlls_btn_zoom_plus) {
-		panorama_controlls_btn_zoom_plus = document.createElement('button');
+		panorama_controlls_btn_zoom_plus = document.createElement('div');
 		panorama_controlls_btn_zoom_plus.setAttribute('id', panorama_controlls_btn_zoom_plus_id);
 		panorama_controlls_btn_zoom_plus.setAttribute('class', 'zoom_plus_icon'); 
 		panorama_controlls_btn_zoom_plus.style.height = 'inherit';
@@ -1418,7 +1418,7 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 
 	var panorama_controlls_btn_zoom_minus = document.getElementById(panorama_controlls_btn_zoom_minus_id);
 	if (!panorama_controlls_btn_zoom_minus) {
-		panorama_controlls_btn_zoom_minus = document.createElement('button');
+		panorama_controlls_btn_zoom_minus = document.createElement('div');
 		panorama_controlls_btn_zoom_minus.setAttribute('id', panorama_controlls_btn_zoom_minus_id);
 		panorama_controlls_btn_zoom_minus.setAttribute('class', 'zoom_minus_icon'); 
 		panorama_controlls_btn_zoom_minus.style.height = 'inherit';
