@@ -326,8 +326,7 @@ SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
 
 
-
-
+ 
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
 SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
@@ -413,7 +412,7 @@ function initProgram() {
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 
 	// ovladaci prvky
-	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
+	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95 )  ;
 
 	// obecne ovladaci prvky videa
 	SETTINGS.panorama_controlls.object = createPanoramaControlls(250,50,1.0,1.0);
@@ -555,12 +554,17 @@ function setupProgram()
 			});
 		 
 
+			// zapnout/vypnout zvuk
 			SETTINGS.video_controlls.object.btn.volume.addEventListener("click", function() {
-console.log('muteee');
+				if (SETTINGS.input.video.muted) {
+					SETTINGS.input.video.muted = false;
+					SETTINGS.video_controlls.object.btn.volume.setAttribute('class', 'volume_on_icon'); 
+				}
+				else if (!SETTINGS.input.video.muted) {
+					SETTINGS.input.video.muted = true;
+					SETTINGS.video_controlls.object.btn.volume.setAttribute('class', 'volume_off_icon'); 
+				}
 			});
-
- 
-
 	}
 	/// ======================= OVLADANI VIDEA, KONEC ===========================================
 
@@ -1087,6 +1091,9 @@ function onDocumentMouseMove( event ) {
 
 
 function zoom_plus() {
+	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
+	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
 	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
 	{
 		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
@@ -1103,6 +1110,10 @@ function zoom_plus() {
 }
 
 function zoom_minus() {
+	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
+	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
+	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
+
 	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
 	{
 		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
@@ -1217,7 +1228,7 @@ function resize() {
 		SETTINGS.compass.north, 
 		SETTINGS.compass.angle
 	);
-	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9, SETTINGS.input.video, 1 ) ;
+	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9) ;
 }
 
 function main() 

@@ -1212,7 +1212,7 @@ function createInfoScreen(log, width, height)
 }
 
 
-function createVideoControlls(width, height, position_x, position_y, video, update) {
+function createVideoControlls(width, height, position_x, position_y) {
 
 	// ID
 	var video_controlls_id  = "video_controlls";
@@ -1328,93 +1328,6 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
  		video_controlls.appendChild(video_controlls_btn_slider_volume);
 	}
 
-
-
-
-	// je nutne rozlisit, zdali jde o aktualizaci pozice html elemtnu, nebo o udalost vyvalanou listnerem -> jinak by doslo k chybe
-	if (update) {
-		return video_controlls;
-	}
-
-/*
-	// lisnenery
-	video_controlls_btn_play.addEventListener("click", function() {
-		if (video.paused == true) {
-			// Play the video
-			video.play();
-
-			// Update the button text to 'Pause'
- 			video_controlls_btn_play.setAttribute('class', 'pause_icon'); 
-		} else {
-			// Pause the video
-			video.pause();
-
-			// Update the button text to 'Play'
- 			video_controlls_btn_play.setAttribute('class', 'play_icon'); 
-		}
-	});
-
-	video.addEventListener("timeupdate", function() {
- 
- 		var value = (100 / video.duration) * video.currentTime;
-
- 		video_controlls_btn_slider.value = value;
-
- 	});
-
-	// aktualizace casove osy videa
-	video_controlls_btn_slider.addEventListener("change", function() {
-		var time = (video_controlls_btn_slider.value / 100) *  video.duration ;
-		video.currentTime = time;
-	});
-
-	// ovladani posunu videa
-	video_controlls_btn_slider.addEventListener("mousedown", function() {
-		video.pause();
-
-	});
-
-	video_controlls_btn_slider.addEventListener("mouseup", function() {
-		video.play();
-		video_controlls_btn_play.setAttribute('class', 'pause_icon'); 
-
-	});
-
- 
-	// ovladani hlasitosti
-	video_controlls_btn_slider_volume.addEventListener("change", function() {
-		video.volume = video_controlls_btn_slider_volume.value;
-	});
- 
-	// nacitani videa
-	video.addEventListener('progress', function() {
-	    var range = 0;
-	    var buffered = video.buffered;
-	    var time = this.currentTime;
-	});
-
-	video_controlls_btn_fullstreen.addEventListener('click', function() {
- 
- 		// nastaveni ikon
-		if (video_controlls_btn_fullstreen.getAttribute('class') == 'fullscreen_icon'){
-			video_controlls_btn_fullstreen.setAttribute('class', 'normalscreen_icon');
-			//fullscreen
-			canvas_dom.width =window.innerWidth;
-			canvas_dom.height = window.innerHeight;;
-			gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
-			resize();
-		}
-		else if (video_controlls_btn_fullstreen.getAttribute('class') == 'normalscreen_icon'){
-			video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon');
-			//normalscreen
-			canvas_dom.width = SETTINGS.default.canvas.width;
-			canvas_dom.height = SETTINGS.default.canvas.height;
-			gl.viewport(0, 0, canvas_dom.width, canvas_dom.height);
-			resize();
-		}
-
-	});
-*/
 
 	return {
 		controlls: video_controlls,
