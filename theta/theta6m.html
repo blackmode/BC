@@ -864,7 +864,12 @@ function render() {
 		
 	// zorny uhel
 	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
-	var perspAngle = radToDeg(Math.PI/1.75);
+	var perspAngle = radToDeg(Math.PI/1.75); // uhel kamery, je dan staticky
+	var maxAngleNotInView = perspAngle * 2;	// pocita se ze stredu
+
+
+
+
 	var radiusDistance = 2 * SETTINGS.mode.fisheye.video.radius;
 	var wheelDistance = 2 *  MOUSE.wheel.deltaMax;
 	var radWheelDiv = radiusDistance/wheelDistance;
@@ -876,7 +881,9 @@ var add =  2*MOUSE.wheel.sensitivity;
 
 
  	var angle =  perspAngle*add+((360-perspAngle) ) * ((delta/prum)+(((prum-delta)-delta)/prum))* (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
- 
+ 	var m = (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
+  	angle =  (0.2*maxAngleNotInView)+maxAngleNotInView *     m*0.8   ;
+//d(angle);
  	/*
 	*	RESENI zorneho uhlu:
 	*

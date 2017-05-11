@@ -530,7 +530,7 @@ Proměnná \texttt{r} označuje poloměr koule, resp. kružnice ve 2D. Obrázek 
 
 
 \section{Návrh projekce}
-Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsme schopni projekci zrealizovat - kdy v perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
+Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsme schopni projekci zrealizovat. V perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
 
 
 
@@ -549,8 +549,11 @@ S =
 0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
+Dalšími operacemi je otočení kolem os \texttt{x}, \texttt{y} a \texttt{z}. Jedná se o typ shodného zobrazení, při kterém se těleso otočí o tzv. \textit{úhel otočení} kolem pevného bodu. \cite{Kompendium}
+\newline
 
-Matice rotace kolem osy x:
+
+Matice rotace kolem osy \texttt{x}:
 
 $$
 R_{x}=
@@ -561,7 +564,7 @@ R_{x}=
 	0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
-Matice rotace kolem osy y:
+Matice rotace kolem osy \texttt{y}:
 
 $$
 R_{y}=
@@ -572,7 +575,7 @@ R_{y}=
 0 & 0 & 0 & 1\\ 
 \end{pmatrix}$$
 
-Matice rotace kolem osy z:
+Matice rotace kolem osy \texttt{z}:
 
 $$
 R_{z}=
@@ -587,7 +590,7 @@ R_{z}=
 \newpage
 
 
-Matice pro posun objektu po osách \texttt{x},\texttt{y} a \texttt{z}. Přímo vychází z identické matice\footnote{Na hlavní diagonále jsou jedničky, všude jinde nuly.}:
+Translační matice posunu objektu po osách \texttt{x},\texttt{y} a \texttt{z}\footnote{Druhou variantou matice je prohození \texttt{x},\texttt{y} a \texttt{z}  namísto nul ve čtvrtém sloupci prvního až třetího řádku.}. Přímo vychází z identické matice\footnote{Obsahuje na hlavní diagonále pouze jedničky. Všechny ostatní hodnoty jsou nulové.}:
 
 
 $$
@@ -674,10 +677,19 @@ $$ gl\_Position  = P_{s} \cdot G$$
 \newpage
 
 \section{Zorný úhel}
-Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Tento úhel se mění na základě přibližování, nebi oddalování scény od pozorovatele. 
+Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Jeho hodnota se mění na základě přibližování nebo oddalování scény od pozorovatele. 
 
 
 \subsection{Vztah perspektivy a pozorovatele}
+Základem pro výpočet zorného úhlu je perspektivní matice - přesněji argument \texttt{\textit{fov}}, který značí již výše zmíněné horizontální zorné pole. Celý výpočet bude  založen na axiomu o středovém úhlu, pro který platí, že je dvojnásobkem úhlu středového.\cite{planimetrie} 
+
+Jedinou neznámou je v takovém případě právě středový úhel, který bude reprezentovat velikost zorného pole.
+
+K odvození zorného úhlu na základě přiblížení scény je nutné spočítat \textbf{extrémy úhlů}. Na obrázku \ref{img:field_vision_implementation} tyto extrémy značí modrý a žlutý bod. Pokud vypočteme úhel pro každý z daných bodů, lze jej pak díky poměru přiblížení scény již snáze dopočítat. Na obrázku níže lze vidět kružnice \texttt{\textit{m}} a \texttt{\textit{t}}. Vnější fialová kružnice \texttt{\textit{t}} značí texturu, zelená čárkovaná  s označením \texttt{\textit{m}} zase maximální meze přiblížení. Z obrázku lze pozorovat, že $fov = \alpha$, tudíž zorný uhel ve žlutém dolním extrému $E_{l}$ je roven: $$ E_{l} = 2 \cdot \alpha \cdot M_{l} $$
+
+kde $M_{l}$ je zmenšení, aby extrém ležel na kružnici \texttt{\textit{m}}. Pro modrý extrém $E_{h}$ potom bude platit vztah\footnote{Kdyby $M_{h}$ nebyl definován, tak by extrém $E_{h}$ byl roven \texttt{0}\degree a pozorovatel by byl na hranici scény.}: $$ E_{h} = \alpha \cdot M_{h} $$
+
+
 \begin{figure}[h]
 	\label{img:field_vision_implementation}
 	\centering
@@ -686,8 +698,13 @@ Zorný úhel je grafický prvek, který udává informace o aktuálním zorném 
 \end{figure}
 
 
+
+
+%=========================================================================
+\newpage
+
 \subsection{Návrh prvku}
-K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, přoč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
+K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, proč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
 
 Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na sférické souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možní spočítat přeponu. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
 
