@@ -333,7 +333,12 @@ SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("data/p6.jpg"); // p7.jpg / t1.jpg
 
 
-
+/**
+ * Nastavuje potřebné proměnné programu, inicializuje webgl apod
+ *
+ *  v přpadě , že se vše povede vrací true a program pokračuje
+ * @returns bool
+ */
 function initProgram() {
 
 	// nastaveni modu geometrie
@@ -418,12 +423,20 @@ function initProgram() {
 	SETTINGS.panorama_controlls.object = createPanoramaControlls(250,50,1.0,1.0);
 
 
-
-
-
 	return true;
 }
 
+
+
+/**
+ * Zde se děje všecho nastavení programu
+ *
+ * 1.) nastavuje buffery
+ * 2.) aktivuje JS listenery vsech vstupu
+ * 3.) pripravy shader a projekci
+ * 4.) vytvori/zpracuje texturu
+ * @returns bool
+ */
 function setupProgram() 
 {
 	if (!initProgram()) {
@@ -895,6 +908,13 @@ function playVideoWhenInactive() {
 	}
 }
 
+
+/**
+ * Vykreslovací funkce volána pomocí requestAnimationFrame(), čímž vytváří animační smyčku
+ *
+ * 1.) nahrava data matic do paměti
+ * 2.) renderuje pomoci drawArray/drawElement podle vstupniho modu
+ */
 function render() {
 	// METADATa PRO VIDEO VIDEO
 	// status bar a cas
@@ -960,6 +980,11 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
 
 
+/**
+ * Olvadání kolečkem
+ *
+ * Mimo kolečka zastřešuje take zorny uhel
+ */
 function onDocumentMouseWheel( event ) {
 	var newDelta = 0;
 	if (event.wheelDeltaY) {
@@ -1063,6 +1088,11 @@ function onDocumentMouseDown( event ) {
 	return false;
 }
 
+/**
+ * Pohyb mysi
+ *
+ * Jakmile je mys aktivni, a bude sniman vstup, zacne nacitat dat do globalni obj. promenne
+ */
 function onDocumentMouseMove( event ) {
 	if (MOUSE.active && !MOUSE.interrupt) 
 	{
@@ -1089,7 +1119,11 @@ function onDocumentMouseMove( event ) {
 }
 
 
-
+/**
+ * Pribložení scény
+ *
+ *  Mění globální obj. proměnnou pro kolečko
+ */
 function zoom_plus() {
 	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
@@ -1109,6 +1143,11 @@ function zoom_plus() {
 	}
 }
 
+/**
+ * Oddálení scény
+ *
+ *  Mění globální obj. proměnnou pro kolečko
+ */
 function zoom_minus() {
 	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
@@ -1129,11 +1168,14 @@ function zoom_minus() {
 	}
 }
 
+
+
+/**
+ * Obstarává zpracování vstupu klavesnice
+ *
+ *  Mění globální obj. proměnnou pro klávesnici
+ */
 function onDocumentKeyPress( event ) {
-
-
-
-
 	if (KEYBOARD.active) 
 	{
 		// FUNKCE VIDEA
@@ -1231,6 +1273,10 @@ function resize() {
 	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9) ;
 }
 
+/**
+ * Hlavní funkce
+ *
+ */
 function main() 
 {
 	if (!SETTINGS.input.video)  return false;
