@@ -1219,7 +1219,7 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 	var video_controlls_btn_play_id  = "video_controlls_btn_play";
 	var video_controlls_btn_slider_id = 'video_controlls_btn_slider_video';
 	var video_controlls_btn_slider_volume_id = 'video_controlls_btn_slider_volume';
-	var video_controlls_btn_fullstreen_id = 'video_controlls_btn_fullstreen';
+	var video_controlls_btn_volume_on_id = 'video_controlls_btn_volume_on';
 
 	// overeni existence potrebnych divu kostry
 	var viewer = document.getElementById("viewer");
@@ -1295,6 +1295,19 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 		video_controlls.appendChild(video_controlls_btn_slider);
 	}
 
+
+	var video_controlls_btn_volume_on = document.getElementById(video_controlls_btn_volume_on_id);
+	if (!video_controlls_btn_volume_on) {
+		video_controlls_btn_volume_on = document.createElement('input');
+		video_controlls_btn_volume_on.setAttribute('id', video_controlls_btn_volume_on_id);
+		video_controlls_btn_volume_on.setAttribute('class', 'volume_on_icon'); 
+		video_controlls_btn_volume_on.style.height = 'inherit';
+		video_controlls_btn_volume_on.style.width =  '50px';
+		video_controlls_btn_volume_on.style.float = 'left';
+		video_controlls_btn_volume_on.style.backgroundColor  = 'transparent'; // transparent
+ 		video_controlls.appendChild(video_controlls_btn_volume_on);
+	}
+
 	// ovladani hlasitosti
 	var video_controlls_btn_slider_volume = document.getElementById(video_controlls_btn_slider_volume_id);
 	if (!video_controlls_btn_slider_volume) {
@@ -1315,18 +1328,8 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
  		video_controlls.appendChild(video_controlls_btn_slider_volume);
 	}
 
-	// fulstreen
-	var video_controlls_btn_fullstreen = document.getElementById(video_controlls_btn_fullstreen_id);
-	if (!video_controlls_btn_fullstreen) {
-		video_controlls_btn_fullstreen = document.createElement('input');
-		video_controlls_btn_fullstreen.setAttribute('id', video_controlls_btn_fullstreen_id);
-		video_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon'); 
-		video_controlls_btn_fullstreen.style.height = 'inherit';
-		video_controlls_btn_fullstreen.style.width =  '15%';
-		video_controlls_btn_fullstreen.style.float = 'left';
-		video_controlls_btn_fullstreen.style.backgroundColor  = 'transparent'; // transparent
- 		video_controlls.appendChild(video_controlls_btn_fullstreen);
-	}
+
+
 
 	// je nutne rozlisit, zdali jde o aktualizaci pozice html elemtnu, nebo o udalost vyvalanou listnerem -> jinak by doslo k chybe
 	if (update) {
@@ -1418,8 +1421,9 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 		btn: {
 			play: document.getElementById(video_controlls_btn_play_id),
 			slider: document.getElementById(video_controlls_btn_slider_id),
-			volume: document.getElementById(video_controlls_btn_slider_volume_id),
-			fullscreen: document.getElementById(video_controlls_btn_fullstreen_id),
+			volume_slider: document.getElementById(video_controlls_btn_slider_volume_id),
+			volume: document.getElementById(video_controlls_btn_volume_on_id),
+			//fullscreen: document.getElementById(video_controlls_btn_fullstreen_id),
 		},
 	};
 
@@ -1427,3 +1431,102 @@ function createVideoControlls(width, height, position_x, position_y, video, upda
 }
 
 
+function createPanoramaControlls(width, height, position_x, position_y) {
+
+	// ID
+	var panorama_controlls_id  = "panorama_controlls";
+	var panorama_controlls_btn_fullstreen_id = 'panorama_controlls_btn_fullstreen';
+	var panorama_controlls_btn_zoom_plus_id = 'panorama_controlls_btn_zoom_plus';
+	var panorama_controlls_btn_zoom_minus_id = 'panorama_controlls_btn_zoom_minus';
+
+	// overeni existence potrebnych divu kostry
+	var viewer = document.getElementById("viewer");
+	if (!viewer) {
+		e('DIV s ID: viewer NEEXISTUJE!');
+		return false
+	}
+
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		e('Neexistuje TAG <canvas>!');
+		return false;
+	}
+
+	var panorama_controlls = document.getElementById(panorama_controlls_id);
+	if (!panorama_controlls) {
+		e('DIV s ID: panorama_controlls NEEXISTUJE!');
+		return false;
+	}
+
+
+	var panorama_controlls_width = width;
+	var panorama_controlls_height = height;
+
+	// dynamicke umisteni zadane parametrem
+	panorama_controlls_left = (canvas_dom.width - panorama_controlls_width)*position_x;
+	panorama_controlls_top = (canvas_dom.height - panorama_controlls_height)*position_y;
+
+
+	// nastylovani a umsiteni boxu
+	panorama_controlls.style.width = panorama_controlls_width+'px';
+	panorama_controlls.style.height = panorama_controlls_height+'px';
+	panorama_controlls.style.left = panorama_controlls_left+'px';
+	panorama_controlls.style.top = panorama_controlls_top+'px';
+	panorama_controlls.style.backgroundColor  = 'transparent'; // transparent
+	panorama_controlls.style.opacity  = 1.0;
+	//panorama_controlls.style.border  = '1px solid black';
+	panorama_controlls.style.position = 'absolute';
+	panorama_controlls.style.overflow = 'hidden';
+
+ 	var panorama_controlls_btn_zoom_minus_id = 'panorama_controlls_btn_zoom_minus';
+
+	// fulstreen
+	var panorama_controlls_btn_fullstreen = document.getElementById(panorama_controlls_btn_fullstreen_id);
+	if (!panorama_controlls_btn_fullstreen) {
+		panorama_controlls_btn_fullstreen = document.createElement('input');
+		panorama_controlls_btn_fullstreen.setAttribute('id', panorama_controlls_btn_fullstreen_id);
+		panorama_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon'); 
+		panorama_controlls_btn_fullstreen.style.height = 'inherit';
+		panorama_controlls_btn_fullstreen.style.width =  '15%';
+		panorama_controlls_btn_fullstreen.style.float = 'left';
+		panorama_controlls_btn_fullstreen.style.backgroundColor  = 'transparent'; // transparent
+ 		panorama_controlls.appendChild(panorama_controlls_btn_fullstreen);
+	}
+
+	var panorama_controlls_btn_zoom_plus = document.getElementById(panorama_controlls_btn_zoom_plus_id);
+	if (!panorama_controlls_btn_zoom_plus) {
+		panorama_controlls_btn_zoom_plus = document.createElement('input');
+		panorama_controlls_btn_zoom_plus.setAttribute('id', panorama_controlls_btn_zoom_plus_id);
+		panorama_controlls_btn_zoom_plus.setAttribute('class', 'zoom_plus_icon'); 
+		panorama_controlls_btn_zoom_plus.style.height = 'inherit';
+		panorama_controlls_btn_zoom_plus.style.width =  '15%';
+		panorama_controlls_btn_zoom_plus.style.float = 'left';
+		panorama_controlls_btn_zoom_plus.style.backgroundColor  = 'transparent'; // transparent
+ 		panorama_controlls.appendChild(panorama_controlls_btn_zoom_plus);
+	}
+
+	var panorama_controlls_btn_zoom_minus = document.getElementById(panorama_controlls_btn_zoom_minus_id);
+	if (!panorama_controlls_btn_zoom_minus) {
+		panorama_controlls_btn_zoom_minus = document.createElement('input');
+		panorama_controlls_btn_zoom_minus.setAttribute('id', panorama_controlls_btn_zoom_minus_id);
+		panorama_controlls_btn_zoom_minus.setAttribute('class', 'zoom_minus_icon'); 
+		panorama_controlls_btn_zoom_minus.style.height = 'inherit';
+		panorama_controlls_btn_zoom_minus.style.width =  '15%';
+		panorama_controlls_btn_zoom_minus.style.float = 'left';
+		panorama_controlls_btn_zoom_minus.style.backgroundColor  = 'transparent'; // transparent
+ 		panorama_controlls.appendChild(panorama_controlls_btn_zoom_minus);
+	}
+
+
+
+	return {
+		controlls: panorama_controlls,
+		btn: {
+			zoom_plus: document.getElementById(panorama_controlls_btn_zoom_plus_id),
+			zoom_minus: document.getElementById(panorama_controlls_btn_zoom_minus_id),
+ 			fullscreen: document.getElementById(panorama_controlls_btn_fullstreen_id),
+		},
+	};
+
+
+}

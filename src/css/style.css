@@ -51,9 +51,9 @@ input[type=range]::-moz-range-progress {
             overflow-x: hidden;
         }
 
-body::-webkit-scrollbar { 
-    display: none; 
-}
+        body::-webkit-scrollbar { 
+            display: none; 
+        }
 
 
          .unique:before {
@@ -93,16 +93,7 @@ body::-webkit-scrollbar {
             overflow: hidden;
         } 
 
-        .fullscreen_icon {
-            background-image: url(../img/icon_fullscreen.png);  
-            background-repeat: no-repeat !important;
-            background-position:  center center   !important ;
-            cursor: pointer;
-            border: none;
-        }
-        .fullscreen_icon:hover {
-            opacity: 0.8;
-        }
+/************************************ VIDEO BUTTONS ******************************************/
 
         .play_icon {
             background-image: url(../img/icon_play.png);  
@@ -126,17 +117,7 @@ body::-webkit-scrollbar {
         .pause_icon:hover {
             opacity: 0.8;
         }
-        .normalscreen_icon {
-            background-image: url(../img/icon_normalscreen.png);  
-            background-repeat: no-repeat !important;
-            background-position:  center center   !important ;
-            cursor: pointer;
-            border: none;
-        }
 
-        .normalscreen_icon:hover {
-            opacity: 0.8;
-        }
 
         .sound_icon {
             background-image: url(../img/icon_sound.png);  
@@ -151,19 +132,96 @@ body::-webkit-scrollbar {
         }
 
         #video_controlls_btn_slider_volume {
+           /* background-image: url(../img/icon_sound.png);  */
+            background-repeat: no-repeat !important;
+            background-position:  left center   !important ;
+            cursor: pointer;
+            border: none;
+            margin-left: 20px;
+         }
+
+
+/************************************ PROGRAM BUTTONS ******************************************/
+         #panorama_controlls_btn_fullstreen {
+            width: 100px;
+
+         }
+
+        .fullscreen_icon {
+            background-image: url(../img/icon_fullscreen.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+            opacity: 0.654;
+        }
+        .fullscreen_icon:hover {
+            opacity: 1.0;
+        }
+
+
+        .normalscreen_icon {
+            background-image: url(../img/icon_normalscreen.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+            opacity: 0.654;
+        }
+
+        .normalscreen_icon:hover {
+            opacity: 1.0;
+        }
+
+
+
+
+        .zoom_plus_icon {
+            background-image: url(../img/icon_controlls_zoom_plus.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+            border: 0px solid black;
+            opacity: 0.654;
+        }
+        .zoom_plus_icon:hover {
+            opacity: 1.0;
+        }
+
+
+
+        .zoom_minus_icon {
+            background-image: url(../img/icon_controlls_zoom_minus.png);  
+            background-repeat: no-repeat !important;
+            background-position:  center center   !important ;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+            border: 0px solid black;
+            opacity: 0.654;
+
+        }
+
+        .zoom_minus_icon:hover {
+            opacity: 1.0;
+        }
+
+        .volume_on_icon {
             background-image: url(../img/icon_sound.png);  
             background-repeat: no-repeat !important;
             background-position:  left center   !important ;
             cursor: pointer;
             border: none;
-            padding-left: 40px;
-            margin-left: 20px;
          }
-
-
-
-
-
-
-
-
+         
+        .volume_off_icon {
+            background-image: url(../img/icon_sound_mute.png);  
+            background-repeat: no-repeat !important;
+            background-position:  left center   !important ;
+            cursor: pointer;
+            border: none;
+         }

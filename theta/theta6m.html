@@ -138,6 +138,7 @@
 			</div>
 			<div id="video_status_bar"></div>
 			<div id="video_controlls"></div>
+			<div id="panorama_controlls"></div>
 			<div id="overlay"></div>
 			<div id="info_screen"></div>
 		</div>
@@ -241,6 +242,10 @@ var SETTINGS = {
 	video_controlls : {
 		created: null,
 		user_inactive: false,
+		object: null,
+
+ 	} ,
+	panorama_controlls : {
 		object: null,
 
  	} ,
@@ -410,6 +415,13 @@ function initProgram() {
 	// ovladaci prvky
 	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
 
+	// obecne ovladaci prvky videa
+	SETTINGS.panorama_controlls.object = createPanoramaControlls(250,50,1.0,1.0);
+
+
+
+
+
 	return true;
 }
 
@@ -496,6 +508,7 @@ function setupProgram()
 			});
 
 
+			//////// =============== primo nad videem =====================
 			SETTINGS.input.video.addEventListener("timeupdate", function() {
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
@@ -505,6 +518,16 @@ function setupProgram()
 				SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
 		 	});
 
+
+			// nacitani videa
+			SETTINGS.input.video.addEventListener('progress', function() {
+			    var range = 0;
+			    var buffered = SETTINGS.input.video.buffered;
+			    var time = this.currentTime;
+			});
+
+
+			//// ================================= PROGRAMOVE TLACITKA A SLIDERY ===== 
 			// aktualizace casove osy videa
 			SETTINGS.video_controlls.object.btn.slider.addEventListener("change", function() {
 				var time = (SETTINGS.video_controlls.object.btn.slider.value / 100) *  SETTINGS.input.video.duration ;
@@ -527,41 +550,55 @@ function setupProgram()
 
 		 
 			// ovladani hlasitosti
-			SETTINGS.video_controlls.object.btn.volume.addEventListener("change", function() {
-				SETTINGS.input.video.volume = SETTINGS.video_controlls.object.btn.volume.value;
+			SETTINGS.video_controlls.object.btn.volume_slider.addEventListener("change", function() {
+				SETTINGS.input.video.volume = SETTINGS.video_controlls.object.btn.volume_slider.value;
 			});
 		 
 
-			// nacitani videa
-			SETTINGS.input.video.addEventListener('progress', function() {
-			    var range = 0;
-			    var buffered = SETTINGS.input.video.buffered;
-			    var time = this.currentTime;
+			SETTINGS.video_controlls.object.btn.volume.addEventListener("click", function() {
+console.log('muteee');
 			});
 
+ 
 
-			// fullscreen
-			SETTINGS.video_controlls.object.btn.fullscreen.addEventListener('click', function() {
-		 		// nastaveni ikon
-				if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'fullscreen_icon'){
-					SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'normalscreen_icon');
-					//fullscreen
-					PROG.canvas.width =window.innerWidth;
-					PROG.canvas.height = window.innerHeight;;
-					gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
-					resize();
-				}
-				else if (SETTINGS.video_controlls.object.btn.fullscreen.getAttribute('class') == 'normalscreen_icon'){
-					SETTINGS.video_controlls.object.btn.fullscreen.setAttribute('class', 'fullscreen_icon');
-					//normalscreen
-					PROG.canvas.width = SETTINGS.default.canvas.width;
-					PROG.canvas.height = SETTINGS.default.canvas.height;
-					gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
-					resize();
-				}
-			});
 	}
 	/// ======================= OVLADANI VIDEA, KONEC ===========================================
+
+	/// ======================= OVLADANI PANORAMATU, zacatek ===========================================
+
+		// fullscreen
+		SETTINGS.panorama_controlls.object.btn.fullscreen.addEventListener('click', function() {
+	 		// nastaveni ikon
+			if (SETTINGS.panorama_controlls.object.btn.fullscreen.getAttribute('class') == 'fullscreen_icon'){
+				SETTINGS.panorama_controlls.object.btn.fullscreen.setAttribute('class', 'normalscreen_icon');
+				//fullscreen
+				PROG.canvas.width =window.innerWidth;
+				PROG.canvas.height = window.innerHeight;;
+				gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+				resize();
+			}
+			else if (SETTINGS.panorama_controlls.object.btn.fullscreen.getAttribute('class') == 'normalscreen_icon'){
+				SETTINGS.panorama_controlls.object.btn.fullscreen.setAttribute('class', 'fullscreen_icon');
+				//normalscreen
+				PROG.canvas.width = SETTINGS.default.canvas.width;
+				PROG.canvas.height = SETTINGS.default.canvas.height;
+				gl.viewport(0, 0, PROG.canvas.width, PROG.canvas.height);
+				resize();
+			}
+		});
+
+
+		// zoom_plus
+		SETTINGS.panorama_controlls.object.btn.zoom_plus.addEventListener('click', function() {
+			zoom_plus();
+ 		});
+
+		// zoom_minus
+		SETTINGS.panorama_controlls.object.btn.zoom_minus.addEventListener('click', function() {
+			zoom_minus()
+
+		});
+	/// ======================= OVLADANI PANORAMATU, KONEC ===========================================
 
 
 
@@ -855,21 +892,13 @@ function playVideoWhenInactive() {
 }
 
 function render() {
-
 	// METADATa PRO VIDEO VIDEO
 	// status bar a cas
 	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
 		var elem = document.getElementById("data").innerHTML = 'Čas: '+SETTINGS.input.video.currentTime;
-		
-
-
 	}
 		
-
-
- 
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
-
 
 	// kompas
 	SETTINGS.compass.angle = shift;
@@ -942,36 +971,20 @@ function onDocumentMouseWheel( event ) {
 		newDelta  += event.detail * (-1);
 	}
 
-
-
-	// zmenseni maximalniho priblizeni
-	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
-
 	// meze kolecka
+	var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
 	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
 	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
 
-	// osetreni mezi kolecka
-	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
-	{
-		if (newDelta>0) 
-		{ 	
-			// je pozitivni
-
-			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-		}
-		else {
-			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-		}
+	// je pozitivni
+	if (newDelta>0) 
+	{ 	
+		zoom_plus();
 	}
 	else {
-		if (MOUSE.wheel.delta>0) {
-			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-		}
-		else {
-			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-		}
+		zoom_minus();
 	}
+
 
 
   	/*
@@ -1072,7 +1085,44 @@ function onDocumentMouseMove( event ) {
 }
 
 
+
+function zoom_plus() {
+	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
+	{
+		MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+	}
+	else 
+	{
+		if (MOUSE.wheel.delta>0) {
+			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+		}
+		else {
+			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+		}
+	}
+}
+
+function zoom_minus() {
+	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
+	{
+		MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+	}
+	else 
+	{
+		if (MOUSE.wheel.delta>0) {
+			MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
+		}
+		else {
+			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
+		}
+	}
+}
+
 function onDocumentKeyPress( event ) {
+
+
+
+
 	if (KEYBOARD.active) 
 	{
 		// FUNKCE VIDEA
@@ -1121,38 +1171,15 @@ function onDocumentKeyPress( event ) {
 		}
 
 
+
 		// osetreni mezi kolecka
 		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
  		if (event.keyCode == 43 ) {//	+
- 			if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
-			{
-				MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-			}
-			else 
-			{
-				if (MOUSE.wheel.delta>0) {
-					MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-				}
-				else {
-					MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-				}
-			}
+ 			zoom_plus()
 		}
 		
 		if (event.keyCode == 45  ) {//	-
- 			if (Math.abs(MOUSE.wheel.delta) < (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction) 
-			{
-				MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-			}
-			else 
-			{
-				if (MOUSE.wheel.delta>0) {
-					MOUSE.wheel.delta-=MOUSE.wheel.sensitivity;
-				}
-				else {
-					MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
-				}
-			}
+			zoom_minus()
 		}
 	}
 }
