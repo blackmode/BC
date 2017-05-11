@@ -247,6 +247,10 @@ var SETTINGS = {
  	} ,
 	panorama_controlls : {
 		object: null,
+		width: 200,
+		height:  50,
+		canvas_position_x:  1.0,
+		canvas_position_y:  1.0,
 
  	} ,
 	info_screen : {
@@ -256,6 +260,7 @@ var SETTINGS = {
 
 };
 
+200,50,1.0,1.0
 
 
 /// ------ VSECHNY promenne PROGRAMU
@@ -369,6 +374,7 @@ function initProgram() {
 	
 	if ((SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) && !SETTINGS.input.image) {
 		e('panorama se nepdarilo nacist!');
+		createInfoScreen("panorama se nepdarilo nacist!", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 
@@ -419,9 +425,14 @@ function initProgram() {
 	// ovladaci prvky
 	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95 )  ;
 
-	// obecne ovladaci prvky videa
-	SETTINGS.panorama_controlls.object = createPanoramaControlls(200,50,1.0,1.0);
 
+	// obecne ovladaci prvky panoramatu
+	SETTINGS.panorama_controlls.object = createPanoramaControlls(
+		SETTINGS.panorama_controlls.width, 
+		SETTINGS.panorama_controlls.height, 
+		SETTINGS.panorama_controlls.canvas_position_x, 
+		SETTINGS.panorama_controlls.canvas_position_y,
+	);
 
 	return true;
 }
@@ -1271,6 +1282,14 @@ function resize() {
 		SETTINGS.compass.angle
 	);
 	createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.9) ;
+
+	// obecne ovladaci prvky panoramatu
+	SETTINGS.panorama_controlls.object = createPanoramaControlls(
+		SETTINGS.panorama_controlls.width, 
+		SETTINGS.panorama_controlls.height, 
+		SETTINGS.panorama_controlls.canvas_position_x, 
+		SETTINGS.panorama_controlls.canvas_position_y,
+	);
 }
 
 /**
