@@ -291,6 +291,7 @@ var PROG = {
 		projection : {
 			link: null,
 			data: null,
+			fov: null,
 		} ,
 	} ,
 
@@ -380,7 +381,7 @@ function initProgram() {
 	PROG.matrices.model.data = createIdentityMatrix4();
 	PROG.matrices.view.data = createIdentityMatrix4();
 	PROG.matrices.projection.data = createIdentityMatrix4();
-
+	PROG.matrices.projection.fov = Math.PI/1.75;
 
 	// inicializace GUI prvku 
 	SETTINGS.compass.object = createCompass(
@@ -672,7 +673,7 @@ function setupProgram()
 
 	// perspektivni matice
 	// zorny uhel je 90%, pomer je jasnej
-	PROG.matrices.projection.data = createPerspectiveMatrix(Math.PI/1.75, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
+	PROG.matrices.projection.data = createPerspectiveMatrix(PROG.matrices.projection.fov, PROG.canvas.width/PROG.canvas.height, 0.1, 100);
 
 	// ------ nahrani matic do promennych ==============================================================
 	PROG.matrices.model.link = gl.getUniformLocation(PROG.program, "M_Matrix");
@@ -862,41 +863,7 @@ function render() {
 
 	}
 		
-	// zorny uhel
-	//createFieldVision(150,150,0.4,1, -parseInt(160-MOUSE.wheel.delta *80), 0.0/*MOUSE.move.angle.y*57*/); 
-	var perspAngle = radToDeg(Math.PI/1.75); // uhel kamery, je dan staticky
-	var maxAngleNotInView = perspAngle * 2;	// pocita se ze stredu
 
-
-
-
-	var radiusDistance = 2 * SETTINGS.mode.fisheye.video.radius;
-	var wheelDistance = 2 *  MOUSE.wheel.deltaMax;
-	var radWheelDiv = radiusDistance/wheelDistance;
-
-var prum = 2*SETTINGS.mode.fisheye.video.radius;
-var delta = (2*SETTINGS.mode.fisheye.video.radius - (2*SETTINGS.mode.fisheye.video.radius/MOUSE.wheel.reduction))/2;
- 
-var add =  2*MOUSE.wheel.sensitivity;
-
-
- 	var angle =  perspAngle*add+((360-perspAngle) ) * ((delta/prum)+(((prum-delta)-delta)/prum))* (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
- 	var m = (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
-  	angle =  (0.2*maxAngleNotInView)+maxAngleNotInView *     m*0.8   ;
-//d(angle);
- 	/*
-	*	RESENI zorneho uhlu:
-	*
-	*	uhel nabyva hodnot: 0° - (360°-a), kde a = uhel perspektivniho zobrazeni
-	*	velikost  polomeru koule, ktera se zmensuje koleckem, je dana promennou: radius, takze prumer: d = 2*radius; // radius v zakladu je 7
-	*
-	*	pohyb kamery tedy bude napriklad na intervalu: (0, 14) maximalne: <2,12>, takze pohyb kamery v rozmezi <0,1> tj 0-100% musi byt ponizen o orez!!!
-	*
-	*
- 	*/
-
-
-	SETTINGS.field_vision.angle = angle;
 
  
  	var shift = (MOUSE.move.angle.y * (180/Math.PI))%360 ;
@@ -981,7 +948,7 @@ function onDocumentMouseWheel( event ) {
 	// meze kolecka
 	MOUSE.wheel.deltaMax = (SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction;
 	MOUSE.wheel.deltaMin = -MOUSE.wheel.deltaMax;
-d(MOUSE.wheel.delta);
+
 	// osetreni mezi kolecka
 	if (Math.abs(MOUSE.wheel.delta) < MOUSE.wheel.deltaMax) 
 	{
@@ -1003,6 +970,31 @@ d(MOUSE.wheel.delta);
 			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 		}
 	}
+
+
+  	/*
+	*	RESENI zorneho uhlu:
+	*
+	*	uhel nabyva hodnot: 0° - (360°-a), kde a = uhel perspektivniho zobrazeni
+	*	velikost  polomeru koule, ktera se zmensuje koleckem, je dana promennou: radius, takze prumer: d = 2*radius; // radius v zakladu je 7
+	*
+	*	pohyb kamery tedy bude napriklad na intervalu: (0, 14) maximalne: <2,12>, takze pohyb kamery v rozmezi <0,1> tj 0-100% musi byt ponizen o orez!!!
+	*
+	*
+ 	*/
+
+	// zorny uhel
+	var perspAngle = radToDeg(PROG.matrices.projection.fov); // uhel kamery, je dan staticky
+	var maxAngleNotInView = perspAngle * 2;	// pocita se ze stredu
+
+
+	var radiusDistance = 2*SETTINGS.mode.fisheye.video.radius; radiusDistance
+ 	var delta = (radiusDistance - ((radiusDistance)/MOUSE.wheel.reduction))/2;
+	 
+
+ 	var mouse_move = (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
+  	SETTINGS.field_vision.angle =  (delta/10*maxAngleNotInView) + maxAngleNotInView*mouse_move*(1-delta/10);
+
 
 	// aktualizace zorneho pole
  	createFieldVision(
