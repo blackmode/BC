@@ -217,7 +217,7 @@ input[type=range]::-moz-range-progress {
             cursor: pointer;
             border: none;
          }
-         
+
         .volume_off_icon {
             background-image: url(../img/icon_sound_mute.png);  
             background-repeat: no-repeat !important;
@@ -225,3 +225,11 @@ input[type=range]::-moz-range-progress {
             cursor: pointer;
             border: none;
          }
+
+
+        .normalscreen_icon,
+        .fullscreen_icon,
+        .zoom_plus_icon,
+        .zoom_minus_icon {
+            width: 50px !important;
+        }

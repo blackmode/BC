@@ -1400,7 +1400,6 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 		panorama_controlls_btn_fullstreen.setAttribute('id', panorama_controlls_btn_fullstreen_id);
 		panorama_controlls_btn_fullstreen.setAttribute('class', 'fullscreen_icon'); 
 		panorama_controlls_btn_fullstreen.style.height = 'inherit';
-		panorama_controlls_btn_fullstreen.style.width =  '15%';
 		panorama_controlls_btn_fullstreen.style.float = 'left';
 		panorama_controlls_btn_fullstreen.style.backgroundColor  = 'transparent'; // transparent
  		panorama_controlls.appendChild(panorama_controlls_btn_fullstreen);
@@ -1412,7 +1411,6 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 		panorama_controlls_btn_zoom_plus.setAttribute('id', panorama_controlls_btn_zoom_plus_id);
 		panorama_controlls_btn_zoom_plus.setAttribute('class', 'zoom_plus_icon'); 
 		panorama_controlls_btn_zoom_plus.style.height = 'inherit';
-		panorama_controlls_btn_zoom_plus.style.width =  '15%';
 		panorama_controlls_btn_zoom_plus.style.float = 'left';
 		panorama_controlls_btn_zoom_plus.style.backgroundColor  = 'transparent'; // transparent
  		panorama_controlls.appendChild(panorama_controlls_btn_zoom_plus);
@@ -1424,7 +1422,6 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 		panorama_controlls_btn_zoom_minus.setAttribute('id', panorama_controlls_btn_zoom_minus_id);
 		panorama_controlls_btn_zoom_minus.setAttribute('class', 'zoom_minus_icon'); 
 		panorama_controlls_btn_zoom_minus.style.height = 'inherit';
-		panorama_controlls_btn_zoom_minus.style.width =  '15%';
 		panorama_controlls_btn_zoom_minus.style.float = 'left';
 		panorama_controlls_btn_zoom_minus.style.backgroundColor  = 'transparent'; // transparent
  		panorama_controlls.appendChild(panorama_controlls_btn_zoom_minus);
