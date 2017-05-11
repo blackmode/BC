@@ -183,6 +183,16 @@
        apply_no_weight="true"
        apply_with_weight="true"
        only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect12728-4-9"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -192,8 +202,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="160.93821"
-     inkscape:cy="873.75816"
+     inkscape:cx="71.529638"
+     inkscape:cy="912.07194"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -329,12 +339,6 @@
          y="105.02584"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Vijaya;-inkscape-font-specification:Vijaya;fill:#000000;fill-opacity:1;stroke-width:0.15201031">α</tspan></text>
     <circle
-       style="opacity:1;fill:#3d68cc;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.34699999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="path13718"
-       cx="70.123436"
-       cy="22.328835"
-       r="1.8432291" />
-    <circle
        style="opacity:1;fill:#fbf311;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.34699999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path13718-7"
        cx="69.982292"
@@ -362,5 +366,45 @@
          x="97.148788"
          y="95.234962"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Vijaya;-inkscape-font-specification:Vijaya;fill:#00be00;fill-opacity:1;stroke-width:0.26458332;">m</tspan></text>
+    <path
+       transform="matrix(0.17159344,0,0,0.17159344,57.971367,10.678104)"
+       sodipodi:type="inkscape:offset"
+       inkscape:radius="0"
+       inkscape:original="M 120.32227 16.185547 C 103.58197 32.926406 86.841045 49.667333 70.099609 66.408203 L 120.32227 16.185547 z "
+       style="fill:none;stroke:#000000;stroke-width:1.4744153;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.4744153,4.4232459;stroke-dashoffset:0;stroke-opacity:1"
+       id="path10808-7-5"
+       d="M 120.32227,16.185547 C 103.58197,32.926406 86.841045,49.667333 70.099609,66.408203 Z" />
+    <path
+       transform="matrix(0,-0.17159344,0.17159344,0,58.604788,34.101949)"
+       sodipodi:type="inkscape:offset"
+       inkscape:radius="0"
+       inkscape:original="M 120.32227 16.185547 C 103.58197 32.926406 86.841045 49.667333 70.099609 66.408203 L 120.32227 16.185547 z "
+       style="fill:none;stroke:#000000;stroke-width:1.4744153;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.4744153, 4.4232459;stroke-dashoffset:0;stroke-opacity:1"
+       id="path10808-7-5-0"
+       d="M 120.32227,16.185547 C 103.58197,32.926406 86.841045,49.667333 70.099609,66.408203 Z" />
+    <circle
+       style="opacity:1;fill:#3d68cc;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.34700003;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path13718-9"
+       cx="70.131119"
+       cy="22.031769"
+       r="1.8432291" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.31400001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.314, 0.942;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 75.29991,16.96454 c -1.68981,-1.683149 -3.379622,-3.3663 -5.098736,-3.333668 -1.719114,0.03263 -3.467443,1.78096 -5.215678,3.529193"
+       id="path12726-1-2"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect12728-4-9"
+       inkscape:original-d="m 75.29991,16.96454 c -1.689901,-1.683057 -3.379713,-3.366209 -5.069434,-5.049451 -1.748416,1.748415 -3.496743,3.496745 -5.24498,5.244976" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.08041239px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15201031;"
+       x="68.739983"
+       y="18.91828"
+       id="text12804-8-1"><tspan
+         sodipodi:role="line"
+         id="tspan12802-2-9"
+         x="68.739983"
+         y="18.91828"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Vijaya;-inkscape-font-specification:Vijaya;fill:#000000;fill-opacity:1;stroke-width:0.15201031;">α</tspan></text>
   </g>
 </svg>
