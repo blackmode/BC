@@ -394,6 +394,7 @@ function initProgram() {
 	);
 
 	// zorne pole
+	SETTINGS.field_vision.angle = radToDeg(PROG.matrices.projection.fov)*1.2;
 	SETTINGS.field_vision.object = createFieldVision(
 		SETTINGS.field_vision.width, 
 		SETTINGS.field_vision.height, 
@@ -405,6 +406,7 @@ function initProgram() {
 
 
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
+
 	// ovladaci prvky
 	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,90, 0.0, 0.95, SETTINGS.input.video, 0 )  ;
 
@@ -975,7 +977,7 @@ function onDocumentMouseWheel( event ) {
   	/*
 	*	RESENI zorneho uhlu:
 	*
-	*	uhel nabyva hodnot: 0° - (360°-a), kde a = uhel perspektivniho zobrazeni
+	*	uhel nabyva hodnot: 0° - (2*a), kde a = uhel perspektivniho zobrazeni
 	*	velikost  polomeru koule, ktera se zmensuje koleckem, je dana promennou: radius, takze prumer: d = 2*radius; // radius v zakladu je 7
 	*
 	*	pohyb kamery tedy bude napriklad na intervalu: (0, 14) maximalne: <2,12>, takze pohyb kamery v rozmezi <0,1> tj 0-100% musi byt ponizen o orez!!!

@@ -57,6 +57,13 @@ Samotné vykreslení uložených data v bufferech se realizuje funkcemi:
 	
 	\end{description}
 
+\begin{description}
+	\item[\texttt{gl.drawArrays(mode, first, count)}] - vykresluje vstupní data bufferu. Parametr \texttt{mode} určuje, jaké grafické primitivum budem použito pro vykreslení, \texttt{first} určuje odkud se data zažnou upracovávat, \texttt{count} specifikuje počet vykreslovaných hodnot
+	
+	\item[\texttt{gl.drawElements(mode, count, type, offset)}] - stejně jako u \texttt{drawArrays()} určuje vykreslované grafické primitivum, to stejné se týká i parametru \texttt{count}, \texttt{type} definuje typ dat indexů a \texttt{offset} odkud začínáme zpracovávat indexy. 
+\end{description}
+
+
 \newpage
 
 \chapter{Jak pracovat s touto šablonou}

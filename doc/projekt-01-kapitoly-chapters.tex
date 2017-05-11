@@ -300,20 +300,9 @@ na obrazovku monitoru.
 \newpage
 
 \subsection{Vytvoření a běh programu}
-Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci s WebGL. Funkce by se daly rozdělit na několik částí, nejprve ty, které pracují s shadery, dále ty které vytváří program, v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobné konečnému automatu, v zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci, v této částí se ale zaměříme na vykreslování, které je třeba více rozebrat, než se vrhneme na samotnou implementaci.
- 
+Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci v javascriptovém API. Funkce by se daly rozdělit na několik částí. Nejprve ty, které pracují s shadery, dále ty které vytváří program, v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobné konečnému automatu, v zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci, v této částí se ale zaměříme na vykreslování, které je třeba více popsat, než se vrhneme na samotnou implementaci. 
 
- 
-Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi:
-
-
-\begin{description}
-	\item[\texttt{gl.drawArrays(mode, first, count)}] - vykresluje vstupní data bufferu. Parametr \texttt{mode} určuje, jaké grafické primitivum budem použito pro vykreslení, \texttt{first} určuje odkud se data zažnou upracovávat, \texttt{count} specifikuje počet vykreslovaných hodnot
-	
-	\item[\texttt{gl.drawElements(mode, count, type, offset)}] - stejně jako u \texttt{drawArrays()} určuje vykreslované grafické primitivum, to stejné se týká i parametru \texttt{count}, \texttt{type} definuje typ dat indexů a \texttt{offset} odkud začínáme zpracovávat indexy. 
-\end{description}
-
-Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
+Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi \texttt{drawArrays()} nebo \texttt{drawElements()}. Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
 
 Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury, je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
 
