@@ -24,35 +24,35 @@ Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} 
 
 \chapter{Webové technologie prohlížeče}
 \label{chapter:2}
-Následující kapitola pojednává o technologiích, které samotný prohlížeč používá a jsou tedy nezbytné v následujících kapitolách, zejména v části \nameref{chapter:4}, kde se s nimi přímo pracuje.
+Následující kapitola pojednává o technologiích, které samotný prohlížeč používá a jsou tedy nezbytné v dalších kapitolách, zejména v části \nameref{chapter:4}, kde se s nimi přímo pracuje.
 
 
 \section{HTML5}
 
-Jazyk HTML (HyperText Markup Language) je značkovací jazyk určený pro popis webových stránek. Vychází z univerzálního značkovacího jazyka SGML (Standard Generalized Markup Language). V současné době aktuální verzi  jazyka HTML je jeho již pátá verze -  HTML5. Nová verze HTML přináší zásadní vylepšení, nové funkce a možnosti, které jsou nezbytné pro návrh a implementaci webového prohlížeče. 
+Jazyk HTML (HyperText Markup Language) je značkovací jazyk určený pro popis webových stránek. Vychází z univerzálního značkovacího jazyka SGML (Standard Generalized Markup Language). V současné době aktuální verzí  jazyka HTML je jeho již pátá verze -  HTML5. Nová verze HTML přináší zásadní vylepšení, nové funkce a možnosti, které jsou nezbytné pro návrh a implementaci webového prohlížeče. 
 
-Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio a video, v neposlední řádě také plátno canvas sloužící pro práci s grafikou.
+Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio a video, v neposlední řadě také plátno canvas sloužící pro práci s grafikou.
 
 
 
 \subsection{Video}
 Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5.
 
-Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}, v opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
+Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}. V opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
 
 Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Všechny elementy webové stránky jsou interpretovány v DOM jako objekt. Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že pomocí objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
 
 
 
 \subsubsection{Stavy načítání a přehrávání videa}
-Další velice důležitou částí je načítáni videa a jeho ověření, zdali  je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState} \cite{html5}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od \texttt{0} do \texttt{4} a dle hodnot rozlišujeme:
+Další velice důležitou částí je načítáni videa a jeho ověření, zda je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState} \cite{html5}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od \texttt{0} do \texttt{4} a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
 	 - nastane v situaci, kdy zdrojové video není dostupné, nebo nejsou dostupná žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()} v případě, když její návratová hodnota je rovna \texttt{0}, což odpovídá konstantě \texttt{NETWORK\_EMPTY}.
 	\item \texttt{HAVE\_METADATA} \newline
-		-  základní data o videu se podařilo získat a zdroj je tedy považován jako dostupný. V tomto stavu, ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V aktuálním stavu jsou k dispozici jen data popisující přehrávány subjekt. Jsou načteny údaje videa o jeho délce, šířce, dekódovaní apod. Dochází  také k vyvolání události \texttt{loadedmetadata}.
+		-  základní data o videu se podařilo získat a zdroj je tedy považován jako dostupný. V tomto stavu ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V aktuálním stavu jsou k dispozici jen data popisující přehrávaný subjekt. Jsou načteny údaje videa o jeho délce, šířce, dekódovaní apod. Dochází  také k vyvolání události \texttt{loadedmetadata}.\cite{html5}
 	\item \texttt{HAVE\_CURRENT\_DATA }\newline
 		- data jsou pro bezprostřední začátek přehrávání již  připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání se může  dostat do stavu \texttt{HAVE\_METADATA}, nebo se také může stát, že  následující data videa již nejsou k dispozici.
 	\item \texttt{HAVE\_FUTURE\_DATA}\newline
