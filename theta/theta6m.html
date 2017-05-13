@@ -215,6 +215,7 @@ var SETTINGS = {
 		canvas : {
 			width: null,
 			height:  null,
+			resize: null,
 		} ,
 	} ,
 	input : {
@@ -1250,11 +1251,18 @@ function onDocumentKeyPress( event ) {
 function onWindowResize( event ) {
 
 	var element_canvas = document.querySelector("canvas");
-	if (element_canvas ) { // blocked
-		element_canvas.width = window.innerWidth;
-		element_canvas.height = window.innerHeight;
-		gl.viewport(0, 0, element_canvas.width, element_canvas.height);
-  		resize() ;
+	if (element_canvas ) 
+	{ // blocked
+		if (
+			(window.innerWidth < element_canvas.width || window.innerHeight < element_canvas.height) || 
+			(window.innerWidth >= element_canvas.width && SETTINGS.default.canvas.resize)) 
+		{
+			element_canvas.width = window.innerWidth;
+			element_canvas.height = window.innerHeight;
+			gl.viewport(0, 0, element_canvas.width, element_canvas.height);
+	  		resize() ;
+	  		SETTINGS.default.canvas.resize = true;
+		}
 	}
 }
 
