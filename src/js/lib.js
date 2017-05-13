@@ -1030,7 +1030,31 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 		var polomer = stred_x > stred_y ?  parseInt(height/2 * velikost) : parseInt(width/2 * velikost);
   		vision.setAttribute("d", fieldVisionCoord(stred_x, stred_y, polomer, uhel_zacatku_zorneho_pole, uhel_konce_zorneho_pole));
  
- 
+  		// zobrazení textového uhlu
+  		var field_vision_text_angle_width_height = 30;
+		field_vision_left = (canvas_dom.width - field_vision_text_angle_width_height)*position_x;
+		field_vision_top = (canvas_dom.height - field_vision_text_angle_width_height)*position_y;
+
+ 		var field_vision_text_angle = document.getElementById("field_vision_text_angle");
+ 		if (!field_vision_text_angle) {
+ 			field_vision_text_angle = document.createElement('div');
+ 			field_vision_text_angle.setAttribute('id', 'field_vision_text_angle');
+ 		}
+ 		field_vision_text_angle.style.width = field_vision_text_angle_width_height+'px';
+		field_vision_text_angle.style.height = field_vision_text_angle_width_height+'px';
+		field_vision_text_angle.style.left = field_vision_left+'px';
+		field_vision_text_angle.style.top = field_vision_top+'px';
+		field_vision_text_angle.style.backgroundColor  = 'red'; // transparent
+		field_vision_text_angle.style.opacity  = 1.0;
+		//field_vision_text_angle.style.border  = '1px solid black';
+		field_vision_text_angle.style.position = 'absolute';
+		field_vision_text_angle.style.overflow = 'hidden';
+		field_vision_text_angle.innerHTML = wheel_angle;
+
+ 		if (!document.getElementById("field_vision_text_angle")) {
+  			field_vision.appendChild(field_vision_text_angle);
+ 		}
+
 		return field_vision;
  
 	}
