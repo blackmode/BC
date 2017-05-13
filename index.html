@@ -4,10 +4,10 @@
 		<title>BC - panorama viewer</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="../src/css/style.css">
-		<link rel="shortcut icon" href="../src/img/favicon.ico" type="image/x-icon" />
-		<script type="text/javascript" src="../src/js/lib.js"></script>
-		<script type="text/javascript" src="../src/js/Externallib.js"></script>
+ 		<link rel="stylesheet" href="src/css/style2.css">
+		<link rel="shortcut icon" href="src/img/favicon.ico" type="image/x-icon" />
+		<script type="text/javascript" src="src/js/lib.js"></script>
+		<script type="text/javascript" src="src/js/Externallib.js"></script>
 	</head>
 
 	<script id="vs" type="x-shader/x-vertex">
@@ -117,8 +117,7 @@
 			if (varyingTexture.x< 0.5      ) {
 				 // gl_FragColor.a =   0.988;
 			}
-			//gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);
-		}
+ 		}
 	</script>
 
 
@@ -316,7 +315,7 @@ var PROG = {
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 
- SETTINGS.input.video =  createVideo("data/new/R0010083.mp4");
+ SETTINGS.input.video =  createVideo("theta/data/new/R0010083.mp4");
 //SETTINGS.input.video =  createVideo("data/R0010014_20161217101030_er.mp4");
 
 
@@ -325,8 +324,8 @@ if (getParamByKey("video"))
 
 
 
-SETTINGS.mode.fisheye.panorama.active 			= false;
-SETTINGS.mode.fisheye.video.active 				= true;
+SETTINGS.mode.fisheye.panorama.active 			= true;
+SETTINGS.mode.fisheye.video.active 				= false;
 
 SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
@@ -335,7 +334,7 @@ SETTINGS.mode.equirectangular.video.active 		= false;
  
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("data/p7.jpg"); // p7.jpg / t1.jpg
-SETTINGS.input.image = createImage("data/t1.jpg"); // p7.jpg / t1.jpg
+SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("data/p6.jpg"); // p7.jpg / t1.jpg
 
 
@@ -471,7 +470,8 @@ function setupProgram()
 	PROG.canvas.addEventListener( 'touchstart', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'touchend',   onDocumentMouseUp,   false );
 
-	//PROG.canvas.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
+	// osetreni moznosti najeti do okna prohlizece (doslo by k chybe mysi)
+	document.addEventListener( 'mouseout',  onDocumentMouseOut,  false );	// vsechny operace se provadi jen nad canvasem
 	 
 	// vyjimku tvori kompas a field vision
 	var actions = [
@@ -1124,6 +1124,19 @@ function onDocumentMouseMove( event ) {
 		MOUSE.move.y = (event.pageY - MOUSE.down.y)*2*Math.PI/PROG.canvas.height;
 		MOUSE.move.angle.y+= MOUSE.move.x;
 		MOUSE.move.angle.x+=MOUSE.move.y;
+
+
+		MOUSE.move.angle.y = MOUSE.move.angle.y % (Math.PI*2);
+		MOUSE.move.angle.x	= MOUSE.move.angle.x % (Math.PI*2);
+
+		// osetreni pohybu vic jak +-90 pro vertikalni osu
+		if (MOUSE.move.angle.x  >= Math.PI/2) {
+			MOUSE.move.angle.x = Math.PI/2 - MOUSE.move.x;
+		}
+		else if (MOUSE.move.angle.x  <= -Math.PI/2) {
+			MOUSE.move.angle.x = -Math.PI/2 + MOUSE.move.x;
+		}
+
 		MOUSE.down.x = event.pageX; 
 		MOUSE.down.y = event.pageY;
 		event.preventDefault();

@@ -895,6 +895,7 @@ function createCompass(width, height, position_x, position_y, north_position, an
 	}
 
 	compass.setAttribute('id', compass_id);
+	compass.setAttribute('class', 'compass_bg');
 	compass.style.width = compass_width+'px';
 	compass.style.height = compass_height+'px';
 	compass.style.left = compass_left+'px';
@@ -914,6 +915,7 @@ function createCompass(width, height, position_x, position_y, north_position, an
 
 	var arrow = document.createElement('div');
 	arrow.setAttribute('id', compass_arrow_id);
+	arrow.setAttribute('class', 'compass_arrow');
 	arrow.style.width = compass_width+'px';
 	arrow.style.height = compass_height+'px';
 	arrow.style.backgroundImage   = 'url('+compas_arrow_bg+')';
