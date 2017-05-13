@@ -44,31 +44,38 @@ Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutn
 
 
 
-\subsubsection{Stavy načítání a přehrávání videa}
+\subsection{Stavy načítání a přehrávání videa}
 Další velice důležitou částí je načítáni videa a jeho ověření, zda je již video připraveno k přehrání. K ověření dostupnosti videa lze použít jeden ze síťových stavů elementu pomocí stavového atributu \texttt{networkState}, popřípadě přímo zjišťovat připravenost videa pomocí atributu \texttt{readyState} \cite{html5}, vracející jeden z následujících stavů, podle kterých se můžeme dále při přehrávání řídit a přizpůsobit tomu běh programu. Jednotlivé konstanty nabývají hodnot od \texttt{0} do \texttt{4} a dle hodnot rozlišujeme:
 
 
 \begin{itemize}
 	\item \texttt{HAVE\_NOTHING } (ekvivalentní hodnotě 0) \newline
 	 - nastane v situaci, kdy zdrojové video není dostupné, nebo nejsou dostupná žádná data pro aktuální přehrávanou pozici \newline - koresponduje také s návratovou hodnotou síťové metody \texttt{networkState()} v případě, když její návratová hodnota je rovna \texttt{0}, což odpovídá konstantě \texttt{NETWORK\_EMPTY}.
+	
 	\item \texttt{HAVE\_METADATA} \newline
 		-  základní data o videu se podařilo získat a zdroj je tedy považován jako dostupný. V tomto stavu ale ještě není dostatek dat, aby bylo možné začít s přehráváním. V aktuálním stavu jsou k dispozici jen data popisující přehrávaný subjekt. Jsou načteny údaje videa o jeho délce, šířce, dekódovaní apod. Dochází  také k vyvolání události \texttt{loadedmetadata}.\cite{html5}
+	
 	\item \texttt{HAVE\_CURRENT\_DATA }\newline
 		- data jsou pro bezprostřední začátek přehrávání již  připravena, ale video ještě není načteno dál za tuto pozici. Přehrávání se může  dostat do stavu \texttt{HAVE\_METADATA}, nebo se také může stát, že  následující data videa již nejsou k dispozici.
+	
 	\item \texttt{HAVE\_FUTURE\_DATA}\newline
-		- data pro přehrávání jsou připravena pro současnou i nadcházející pozici. V případě, že by bylo video dosáhlo takového stavu poprvé, bude vyvolána událost \texttt{canplay}.
+		- data pro přehrávání jsou připravena pro současnou i nadcházející pozici. V případě, že by video dosáhlo takového stavu poprvé, bude vyvolána událost \texttt{canplay}.
+		
 	\item \texttt{HAVE\_ENOUGH\_DATA}\newline
-		- data připravena pro aktuální a nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}.
+		- data jsou připravena pro aktuální i nadcházející pozice pro plynulé přehrání. Dochází k vyvolání události \texttt{canplaythrough}.
 \end{itemize}
 
-Mimo stavy načtení videa jsou tu i události indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu např. pro tvorbu vlastního specifického ovládání videa, nebo pro zahrnutí interakce s myší.
+Mimo stavy načtení videa jsou tu i události indikující, co přesně se právě děje s videem po jeho načtení. Tyto stavy se hodí k dotazování elementu \texttt{<video>} pomocí DOMu pro tvorbu vlastního specifického ovládání videa nebo pro zahrnutí interakce s myší.
 
 
 
 \begin{itemize}
-	\item \texttt{playing} - video se aktuálně přehrává, atribut \texttt{paused} je nastaven na \texttt{false}	
-	\item \texttt{waiting} - přehrávání videa je pozastaveno, protože následující data videa nejsou k dispozici, webový prohlížeč ale očekává, že v vzápětí dostane
+	\item \texttt{playing} - video se aktuálně přehrává. Atribut \texttt{paused} je nastaven na \texttt{false}.	
+	
+	\item \texttt{waiting} - přehrávání videa je pozastaveno, protože následující data videa nejsou k dispozici, webový prohlížeč ale očekává, že je v vzápětí dostane.
+	
 	\item \texttt{ended} - přehrávání videa doběhlo nakonec
+	
 	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosáhnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}.
 	
 \end{itemize}
@@ -76,7 +83,7 @@ Mimo stavy načtení videa jsou tu i události indikující, co přesně se prá
 %=========================================================================
 \newpage
 
-\subsubsection{Atributy videa}
+\subsection{Atributy videa}
 Důležité atributy pro manipulaci s videem a nastavením.
 
 
@@ -86,7 +93,7 @@ Důležité atributy pro manipulaci s videem a nastavením.
 	
 	\item[autoplay] - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky jakmile je vše připraveno. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}.	
 	
-	\item[poster]  - Slouží k vystihnutí obsahu daného videa. Ještě než začne samotné přehrávání, je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, HTML automaticky zvolí jeden z prvních neprázdných rámců.
+	\item[poster]  - Slouží k vystihnutí obsahu daného videa ještě než začne samotné přehrávání. Je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, tak HTML automaticky zvolí jeden z prvních neprázdných rámců.
 	
 	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku. Tato operace se provádí v nekonečné smyčce.
 
@@ -100,21 +107,23 @@ Důležité atributy pro manipulaci s videem a nastavením.
  	
  	\item[preload]  - tímto říkáme, jakou část videa by měl webový prohlížeč načíst ihned po načtení stránky. Tento atribut nabývá jednou ze tří hodnot:
 	 	\begin{itemize}
-	 		\item \texttt{none} - nebude načítat nic, výhodné v případě, kdy je potřeba minimalizovat vytížení pásma	 		
+	 		\item \texttt{none} - nebude načítat nic. Výhodné v případě, kdy je potřeba minimalizovat vytížení pásma.	 		
 	 		\item \texttt{metadata} - načte pouze metadata daného videa - základní údaje o jeho délce apod.
-	 		\item \texttt{auto} - sám zvolí, co přesně udělá 
+	 		\item \texttt{auto} - sám zvolí, co přesně udělá.
 	 	\end{itemize}
 \end{description}
 
 %=========================================================================
 \newpage
 
-\subsubsection{Metody videa}
+\subsection{Metody videa}
 Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, tak jsou tedy nutné metody k ovlivnění jeho atributů, aby bylo možné s přehráváním videa manipulovat.
 
 \begin{description}
-	\item[\texttt{play()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{false}, pokud video již skončilo, začne je přehrávat od začátku.
-	\item[\texttt{pause()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{true}, tím dojde k pozastavení videa
+	\item[\texttt{play()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{false}. Pokud video již skončilo, začne je přehrávat od začátku.
+	
+	\item[\texttt{pause()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{true}, čímž dojde k pozastavení videa.
+	
 	\item[\texttt{canplaytype()}] - metoda sloužící k ověření, zdali webový prohlížeč dokáže video daného typu přehrát. Metoda vrací jednu z následujících hodnot:
 	 	\begin{itemize}		
 			\item \texttt{""} - pokud by metoda vrátila prázdný řetězec, video prohlížeč nedokáže přehrát.
@@ -123,15 +132,15 @@ Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, 
 		\end{itemize}
 	\item[\texttt{load()}] - všechny data videa se načtou znovu, čímž dojde ke zrušení všech akcí a současných dat, které byly doposud staženy a načteny. Poté se vše zavolá a načte znovu následujícím způsobem:
 	 	\begin{enumerate}
-			\item Nejprve dojde k inicializaci, kdy \texttt{readyState} je nastaven na \texttt{HAVE\_NOTHING} a  nastaví i příslušný síťový atribut \texttt{networkState} na \texttt{0}, \texttt{seeking} je nastaven na \texttt{false}, \texttt{paused} je nastaven na \texttt{true}, vše ostatní je prázdné, nebo nula	
+			\item Nejprve dojde k inicializaci, kdy \texttt{readyState} je nastaven na \texttt{HAVE\_NOTHING}. Stejnou hodnotu bude mít i síťový atribut \texttt{networkState}. \texttt{Seeking} je nastaven na \texttt{false}, \texttt{paused}  na \texttt{true} a vše ostatní je prázdné nebo nula.	
 			
-			\item vybere se zdroj z atributu \texttt{src} nebo \texttt{<source>}, dále je vyvolána událost \texttt{loadstart} a dochází ke stažení metadat videa
+			\item Vybere se zdroj z atributu \texttt{src} nebo \texttt{<source>}, dále je vyvolána událost \texttt{loadstart} a dochází ke stažení metadat videa
 			
-			\item jakmile jsou metadata stažena, nastaví se zakladní vlastnosti videa - šířka, výška, délka a \texttt{readyState} je nastaven na \texttt{HAVE\_METADATA} a spolu s tím je vyvolána událost \texttt{loadedmetadata}
+			\item Po stažení metadat se nastaví základní vlastnosti videa - šířka, výška, délka a \texttt{readyState} je změněn na hodnotu \texttt{HAVE\_METADATA}. Spolu s tím je vyvolána událost \texttt{loadedmetadata}.
 			
-			\item Jakmile je \texttt{readyState} větší nebo roven \texttt{HAVE\_FUTURE\_DATA} je vyvolána událost \texttt{canplay} a \texttt{loadeddata}
+			\item Jakmile je \texttt{readyState} větší nebo roven \texttt{HAVE\_FUTURE\_DATA}, tak je vyvolána událost \texttt{canplay} a \texttt{loadeddata}.
 			
-			\item dojde ke spuštění přehrávání. Je vyvolána událost \texttt{play} a \texttt{playing}, atribut \texttt{paused} nastaven na \texttt{false}
+			\item Dojde ke spuštění přehrávání. Je vyvolána událost \texttt{play} a \texttt{playing}, atribut \texttt{paused} nastaven na \texttt{false}.
 		\end{enumerate}
 \end{description}
 
@@ -141,24 +150,30 @@ Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, 
 
 \subsection{Plátno}
 
-Jak již bylo avizováno výše, plátno, neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů, herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu. Plátno je párový  element, přesto se mezi párové tágy zdánlivě nic nevykresluje, celý obsah je skryt. Takový obsah se nazývá tzv. \textit{fallback content} a je zobrazen v případě chyby, nebo prohlížečům, které tento element HTML5 nepodporují.
+Jak již bylo avizováno výše, plátno neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů, herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu. Plátno je párový  element, přesto se mezi párové tágy zdánlivě nic nevykresluje, celý obsah je skryt. Takový obsah se nazývá tzv. \textit{fallback content} a je zobrazen v případě chyby nebo prohlížečům, které tento element HTML5 nepodporují.
 
-Plátno je bezpochyby nejdůležítější částí pro realizaci celé práce. Bude pro vyobrazení používat především \texttt{<video>}, z kterého bude číst data a využije tedy element video jak zdroj. Díky DOM pak dokážeme s objektem snadno manipulovat. Díky elementu \texttt{<canvas>} jsme tedy schopni získat kontext Javascriptového API - WebGl a díky němu schopni pracovat na úrovni grafické karty.
+Plátno je bezpochyby nejdůležitější částí pro realizaci celé práce. Pro  vyobrazení grafických dat bude používat především HTML element \texttt{<video>}, z kterého bude data číst. Využije ho tedy jako zdroj. Pomocí DOM pak dokážeme s objektem snadno manipulovat. 
 
-\subsubsection{Atributy plátna}
-Canvas má pouze dva atributy a těmi jsou \texttt{width} a \texttt{height} pro nastaveni šířky a výšky plátna. Je možné nastavit výšku a šířku pomocí kaskádových stylů, avšak tato možnost není doporučována, protože by mohlo dojít k nežádoucí deformaci obsahu. Při změně velikosti bitmapy pomocí atributů dojde pouze ke změně velikosti dané bitmapy, změna kaskádovými styly ale změní velikost obsahu celé bitmapy a tím tedy dojde ke zkreslení.
+Díky elementu \texttt{<canvas>} jsme schopni získat kontext Javascriptového API - WebGL a tak mít možnost  pracovat na úrovni grafické karty.
 
-\subsubsection{Použití a práce s plátnem}
-Použit plátno lze pomocí rozhraní \texttt{HTMLCanvasElement}, které slouží pro přístup k jeho vlastnostem a metodám. Přístup k objektu \texttt{HTMLCanvasElement} lze pomoci standardní javascriptové metody \texttt{getElementById()} v případě, že je v tágu \texttt{<canvas>} nastaven atribut \texttt{id}, nebo lze objekt získat pomocí metody \texttt{querySelector("canvas")}.
+
+\subsubsection*{Atributy plátna}
+Plátno má pouze dva atributy a těmi jsou \texttt{width} a \texttt{height} pro nastaveni šířky a výšky elementu \texttt{<canvas>}. Je možné nastavit rozměry pomocí kaskádových stylů, avšak tato možnost není doporučována, protože by mohlo dojít k nežádoucí deformaci obsahu. Při změně velikosti bitmapy pomocí atributů dojde pouze ke změně velikosti dané bitmapy, změna kaskádovými styly ale změní velikost obsahu celé bitmapy a tím tedy dojde ke zkreslení.
+
+
+\subsubsection*{Použití a práce s plátnem}
+Použit plátno lze pomocí rozhraní \texttt{HTMLCanvasElement}, které slouží pro přístup k jeho vlastnostem a metodám. Přístup k objektu \texttt{HTMLCanvasElement} lze pomoci standardní javascriptové metody \texttt{getElementById()} v případě, že je v tágu \texttt{<canvas>} nastaven atribut \texttt{id} nebo lze objekt získat pomocí metody \texttt{querySelector("canvas")}.
 
 Po získání objektu plátna lze dále s elementem manipulovat pomocí dvou metod (počet volání dané metody vrátí pokaždé ten stejný objekt):
 	 	\begin{itemize}		
-			\item \texttt{ toDataURL([type[,quality]])} \cite{html5}\newline
-			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude navrácen výsledný typ obrázku. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Výsledná adresa URL bude vrácena jako řetězec.
+			\item \texttt{ toDataURL([type[,quality]])} \newline
+			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude navrácen výsledný typ obrázku. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Výsledná adresa URL bude vrácena jako řetězec. \cite{html5}
+			
 			\item \texttt{getContext(contextId[, ... ])}\newline
 			 - metoda vrací referenci na daný objekt aplikačního rozhraní, díky kterému bude možné kreslit na plátno. Pokud by kontext pro daný argument nebyl podporován prohlížečem, návratová hodnota bude \texttt{null}. Typ aplikačního rozhraní je vybrán na základě argumentu metody:
 			 \begin{itemize}
-			 	\item  \texttt{\textbf{"2d"}} - vrací objektové rozhraní \texttt{CanvasRenderingContext2D}, kterí slouží pro kreslení grafických primitiv.
+			 	\item  \texttt{\textbf{"2d"}} - vrací objektové rozhraní \texttt{CanvasRenderingContext2D}, který slouží pro kreslení grafických primitiv.
+			 	
 			 	\item \texttt{\textbf{"webgl"}} - pokud tuto funkci prohlížeč podporuje, bude navrácen objekt \newline \texttt{WebGLRenderingContext}. 
 			 \end{itemize}
 		 
@@ -177,23 +192,24 @@ SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zaž
 Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření křivky, která může být dále vyplněna barvou, nebo může sloužit k vytvoření ořezové cesty apod. Dále může mít nastaveny atributy specifikující vykreslování obrysů, nastavení stylů a tříd, nebo nastavení kalkulace délky cest. Mezi takové atributy patří:
 
 \begin{description}
-	\item[d]  - tento atribut nese informace o cestě, resp. data k vyrekslení obrysu, který poté můžeme vyplnit konkrétní barvou, popř. jej využít k dalším podobným účelům víz výše. Data atributu se skládají z následujících částí:
+	\item[d]  - tento atribut nese informace o cestě, resp. data k vykreslení obrysu, která poté můžeme vyplnit konkrétní barvou, popř. je využít k dalším podobným účelům viz výše. Data atributu se skládají z následujících částí:
+	
 	\begin{itemize}
 		\item \texttt{\textbf{M}}/\texttt{\textbf{m}} (\textit{moveto}) její syntaxe: \texttt{\textbf{M x y}} nebo \texttt{\textbf{m x y}} - realizuje posun na danou dvojice souřadnic \texttt{(x, y)} bez kreslení. Velké písmeno \texttt{M} značí, že souřadnice budou absolutní. Malé písmeno \texttt{m} indikuje, že budou souřadnice relativní\footnote{Velikost písmen má stejný význam u všech příkazů.}. Tuto vlastnost je velice výhodné používat pro všechny cesty, jinak by vždy následující čára začínala na konci té předchozí.\\
 		
 		\item \texttt{\textbf{Z}}/\texttt{\textbf{z}} (\textit{closepath}) - tento příkaz je bez parametrů a slouží k uzavření cest, tedy spojení posledního bodu s prvním bodem vykreslovaných cest.\\
 		
-		\item \texttt{\textbf{L}}/\texttt{\textbf{l}} (\textit{lineto}) - tento příkaz již kreslí čáru, jeho syntaxe je  stejná jako u příkazu \textit{moveto} tj \texttt{L/l x,y}\\
+		\item \texttt{\textbf{L}}/\texttt{\textbf{l}} (\textit{lineto}) - tento příkaz již kreslí čáru. Jeho syntaxe je  stejná jako u příkazu \textit{moveto} tj. \texttt{L/l x,y}.\\
 		
-		\item \texttt{\textbf{H}}/\texttt{\textbf{h}} (\textit{horizontal lineto}) - kreslí horizontální čáru z bodu (cp\textbf{x}, cp\textbf{y}) to (\textbf{x}, cp\textbf{y}), argument příkazu je pouze souřadnice \texttt{x}\\
+		\item \texttt{\textbf{H}}/\texttt{\textbf{h}} (\textit{horizontal lineto}) - kreslí horizontální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do (\textbf{x}, cp\textbf{y}), argument příkazu je pouze souřadnice \texttt{x}.\\
 		
-		\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) to (cp\textbf{x}, \textbf{y}), argument příkazu je pouze souřadnice \texttt{y}\\
+		\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do bodu (cp\textbf{x}, \textbf{y}), argumentem příkazu je pouze souřadnice \texttt{y}.\\
 		
-		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}) popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu
+		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}) popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu.
 	\end{itemize}
 
 
-	\item[fill]  - vyplní křivku zadanou argumentem \texttt{d} libovolnou barvou
+	\item[fill]  - vyplní křivku zadanou argumentem \texttt{d} libovolnou barvou.
 \end{description}
 
 
@@ -203,31 +219,33 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 \newpage
 
 \section{GLSL}
-\textbf{GLSL} (Open\textbf{GL} \textbf{S}hading \textbf{L}anguage) - jedná se o jazyk pro psaní shaderů \footnote{Jedná se o programy řídící vykreslování na grafické kartě.}. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v jazyku C, každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. V hlavní funkci programu jsou vyhrazeny proměnné se speciálním významem, jako např. \texttt{gl\_Position}, kterou nastavujeme  pozici vrcholu ve vertex shaderu, nebo \texttt{gl\_FragColor} pro nastavení barvy ve fragment shaderu.
+\textbf{GLSL} (Open\textbf{GL} \textbf{S}hading \textbf{L}anguage) - jedná se o jazyk pro psaní shaderů \footnote{Jedná se o programy řídící vykreslování na grafické kartě.}. Jazyk vychází z jazyka C a také proto je mu svojí syntaxí velice podobný. Základní konstrukce každého programu je v zásadě úplně stejná jako v programovacím jazyce C. Každý program musí obsahovat hlavní funkcí \texttt{main()} bez jakýkoliv parametrů a návratových hodnot. V hlavní funkci programu jsou vyhrazeny proměnné se speciálním významem, jako např. \texttt{gl\_Position}, kterou nastavujeme  pozici vrcholu ve vertex shaderu nebo \texttt{gl\_FragColor} pro nastavení barvy ve fragment shaderu.
 
 \subsection{Vertext shader}
-Jedná se o program v jazyce GLSL, který je pro prováděn pro každý vstupní vrchol zadané geometrie. 
+Jedná se o program v jazyce GLSL, který je prováděn pro každý vstupní vrchol zadané geometrie. 
 
-Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y}, \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
+Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y} a \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
 
 Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates.} \cite{opengl}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
 
 \subsection{Fragment shader}
-Je program - označovaný taktéž jako \textit{pixel shader}, který je volán pro každý pixel vykreslované scény. Jeho úkolem je výpočet barvy každého pixelu a díky tomu lze s takto získanou barvou  dále pracovat. Barva je získána jako čtyřsložkový vektor, první tří složky tvoří paletu RGB, poslední čtvrtá složka tvoří $\alpha$ kanál \footnote{Složka pixelu udávající jeho průhlednost.}. V případě vykreslování složitějších objektů umožňuje GLSL automaticky body geometrie interpolovat, tedy automaticky získat pixel dané geometrie, aniž by musel být každý samostatně definován. Ukázka interpolace je demonstrována na obrázku \ref{img:1}.
+Je program - označovaný taktéž jako \textit{pixel shader}, který je volán pro každý pixel vykreslované scény. Jeho úkolem je výpočet barvy každého pixelu a díky tomu lze s takto získanou barvou  dále pracovat. Barva je získána jako čtyř-složkový vektor. První tří složky tvoří paletu RGB, poslední čtvrtá složka tvoří $\alpha$ kanál \footnote{Složka pixelu udávající jeho průhlednost.}. V případě vykreslování složitějších objektů umožňuje GLSL automaticky body geometrie interpolovat, tedy automaticky získat pixel dané geometrie, aniž by musel být každý samostatně definován. Ukázka interpolace je demonstrována na obrázku \ref{img:1}.
 
 %=========================================================================
 \newpage
 
 
 \subsection{Typy proměnných}
-Předávání hodnot v globálních proměnných může probíhat za pomocí třech datových typu, těmi jsou:
+Předávání hodnot v globálních proměnných může probíhat za pomocí třech datových typů, kterými jsou:
 \begin{description}
 	\item[\texttt{uniform}]  
-	- uchovává hodnoty, které jsou konstantní po celou dobu běhu programu. Využívá se např. pro data transformačních matic apod.	
+	- uchovává hodnoty, které jsou během jednoho vykreslení neměnné. Využívá se např. pro data transformačních matic apod.	
+	
 	\item[\texttt{attribute}] 
 	- 	jedná se o vstupní data vertex shaderu, která mění svoje hodnoty pro každý vrchol. 
+	
 	\item[\texttt{varying}] 
-	- tento datový typ slouží k předávání hodnot z vertex shaderu do fragment shaderu. Pomocí něj se provádí výše avizovaná interpolace, viz. obr. \ref{img:1} 
+	- tento datový typ slouží k předávání hodnot z vertex shaderu do fragment shaderu. Pomocí něj se provádí výše avizovaná interpolace viz. obr. \ref{img:1}.
 
 \end{description}
 
@@ -249,7 +267,7 @@ Předávání hodnot v globálních proměnných může probíhat za pomocí tř
 \newpage
 
 \section{WebGL}
-WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče \cite{mozilla}. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven, nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod.. Zpracování všech dat i samotný běh programu je z hlediska implementace velice podobný konečnému automatu. 
+WebGL (\textbf{Web} \textbf{G}raphics \textbf{L}ibrary) je javascriptové aplikační rozhraní, které slouží pro nativní vykreslování 2D a 3D interaktivní grafiky přímo z webového prohlížeče \cite{mozilla}. K samotnému běhu WebGL není potřeba žádných dodatečných knihoven nebo zásuvných modulů, protože je v tomto ohledu využívána přímo grafická karta. Program WebGL se v zásadě skládá z více jazyků, přičemž každý mů svůj vlastní účel a je nutné je používat dohromady. Jedním z nich je javascript, druhý je jazyk GLSL. V jazyce GLSL jsou napsány dva programy - vertex shader a fragment shader. Oba programy kompiluje ovladač grafické karty do kódu, který je poté vykonáván přímo na grafické kartě. Vertex shader i fragment shader mohou být předávány jako řetězce, takže manipulace s nimi je díky tomu značně zjednodušena. Velkou výhodou WebGL je integrace s DOM tudíž od automatické správy pamětí přes zpracování událostí až po jednoduché načítání bitmapy přímo v prostředí prohlížeče apod. Zpracování všech dat i samotný běh programu je z hlediska implementace velice podobný konečnému automatu. 
 
 K samotnému vykreslení je použit již výše zmíněný element HTML5 \texttt{<canvas>}, ze kterého se získá WebGL kontext.
 
@@ -258,11 +276,11 @@ V současné době je oficiálně vydána verze WebGL 1.0, která je založeno n
 
 
 \subsection{Vykreslování primitiv}
-K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě věci - vrcholy přepočítané do tzv. \textit{clipspace} a jemu přiřazené odpovídající barvy. Jak pro vrcholy tak pro barvy slouží jiný GLSL shader. K vyobrazení objektu používá WebGL tří základní primitiva - vykreslení samotných bodů, čar nebo trojúhelníku. Vše funguje tak, že zadaný bod, kterému budeme chtít přiřadit barvu, se načte do odpovídající speciální globální proměnné ve vertex shaderu, tam se daná hodnota přepočítá do intervalu \texttt{<-1,1>} pro všechny jeho osy a vzniklá hodnota se uloží na grafické kartě. Počet bodu záleží na primitivu, které vykreslujeme. Pokud se tedy jedná o bod, stačí pouze jeden bod ve vertex shaderu, pokud se jedna o čáru tak dvě popř. trojúhelník, tak trojice bodů. GPU\footnote{Graphic Processing Unit - grafický procesor} poté zjistí, které pixely korespondují s vykreslovaným primitivem a pro každý takový pixel zavolá fragment shader. 
+K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě věci - vrcholy přepočítané do tzv. \textit{clipspace} a jemu přiřazené odpovídající barvy. Jak pro vrcholy, tak pro barvy slouží jiný GLSL shader. K vyobrazení objektu používá WebGL tří základní primitiva - vykreslení samotných bodů, čar nebo trojúhelníku. Vše funguje tak, že zadaný bod, kterému budeme chtít přiřadit barvu, se načte do odpovídající speciální globální proměnné ve vertex shaderu, kde se daná hodnota přepočítá do intervalu \texttt{<-1,1>} pro všechny jeho osy a vzniklá hodnota se uloží na grafické kartě. Počet bodu záleží na primitivu, které vykreslujeme. Pokud se tedy jedná o primitivum bodu, stačí pouze jeden bod ve vertex shaderu. V případě linky to bude dvojice bodů a u trojúhelníku trojice. GPU\footnote{Graphic Processing Unit - grafický procesor} poté zjistí, které pixely korespondují s vykreslovaným primitivem a pro každý takový pixel zavolá fragment shader. 
 
 
 \subsection{Vyrovnávací paměť}
-Buffery resp. vyrovnávací paměti jsou rychle přístupné paměti na grafické kartě. V bufferech jsou  uloženy potřebné data k vykreslování grafických objektů jako např. body geometrie, normály, mapování textur apod. Data jsou poté snadno dále předávány GLSL shaderům, které s nimi pracují.
+Buffery resp. vyrovnávací paměti jsou rychle přístupné paměti na grafické kartě. V bufferech jsou  uloženy potřebná data k vykreslování grafických objektů jako např. body geometrie, normály, mapování textur aj. Data jsou poté dále předávány GLSL shaderům, které s nimi pracují.
 
 
 %=========================================================================
@@ -275,12 +293,12 @@ Ortografická projekce využívá skutečné velikosti objektu. Scéna je reprez
 
 Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude jevit jako menší, protože jeho pozice je středem této projekce. Dalším příkladem bychom mohli uvést koleje, které se v dálce jeví, jakoby se sbíhaly v jednu jedinou apod.
   
-Pokud bychom chtěl vykreslit nějaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře apod. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat apod., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
+Pokud bychom chtěl vykreslit nějaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře aj. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat atd., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
 \subsection{Homogenní souřadnice}
-Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka a spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.\cite{WebGLbeg}
+Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka. Spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.\cite{WebGLbeg}
 
-Perspektivním dělením - vydělením souřadnic \texttt{(x, y, z)} perspektivní složkou \texttt{w}, lze získat normalizované hodnoty bodu zpět do trojrozměrného souřadného systému. Platí zde ale, že perspektivní složka nesmí být nulová. 
+Perspektivním dělením, tedy vydělením souřadnic \texttt{(x, y, z)} perspektivní složkou \texttt{w}, lze získat normalizované hodnoty bodu zpět do trojrozměrného souřadného systému. Platí zde ale, že perspektivní složka nesmí být nulová. 
 
 Samotná perspektivní složka funguje v homogenních souřadnicích jako změna měřítka daného bodu geometrie.
 
@@ -290,7 +308,7 @@ Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje defi
 Jedná se o matici, kterou držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
 
 \subsection{View matrix}
-Díky teto transformační matici realizujeme již avizovanou ``roli kamery'' , kdy simulujeme vzájemná vztah scény a pozorovatele.
+Díky takové transformační matici realizujeme již avizovanou \uv{roli kamery}, kdy simulujeme vzájemný vztah scény a pozorovatele.
 
 \subsection{Perspective matrix}
 Stará se o perspektivní zkreslení scény. Tato transformace rozhoduje o tom, jak velké zorné pole bude vykresleno a mapováno 
@@ -300,11 +318,11 @@ na obrazovku monitoru.
 \newpage
 
 \subsection{Vytvoření a běh programu}
-Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci v javascriptovém API. Funkce by se daly rozdělit na několik částí. Nejprve ty, které pracují s shadery, dále ty které vytváří program, v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobné konečnému automatu, v zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci, v této částí se ale zaměříme na vykreslování, které je třeba více popsat, než se vrhneme na samotnou implementaci. 
+Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci v javascriptovém API. Funkce by se daly rozdělit na několik částí. Nejprve ty, které pracují s shadery, dále ty které vytváří program a v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobná konečnému automatu. V zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci. V této částí se ale zaměříme na vykreslování, které je třeba více popsat, než se vrhneme na samotnou implementaci. 
 
 Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi \texttt{drawArrays()} nebo \texttt{drawElements()}. Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
 
-Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury, je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
+Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
 
  
 

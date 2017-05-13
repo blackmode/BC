@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"rad",
+				"radToDeg"
+			],
+			[
 				"is",
 				"isNaN"
 			],
@@ -78,10 +86,6 @@
 			[
 				"va",
 				"validation"
-			],
-			[
-				"mar",
-				"margin"
 			],
 			[
 				"Z",
@@ -510,10 +514,6 @@
 			[
 				"setter",
 				"setter_keys"
-			],
-			[
-				"exp",
-				"explode"
 			]
 		]
 	},
@@ -531,7 +531,7 @@
 			"file": "/C/xampp/htdocs/BC/src/css/style.css",
 			"settings":
 			{
-				"buffer_size": 4044,
+				"buffer_size": 6029,
 				"line_ending": "Windows"
 			}
 		},
@@ -539,7 +539,7 @@
 			"file": "theta6m.html",
 			"settings":
 			{
-				"buffer_size": 36385,
+				"buffer_size": 39263,
 				"line_ending": "Windows"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "/C/xampp/htdocs/BC/src/js/lib.js",
 			"settings":
 			{
-				"buffer_size": 39893,
+				"buffer_size": 41656,
 				"line_ending": "Windows"
 			}
 		},
@@ -758,6 +758,7 @@
 	},
 	"file_history":
 	[
+		"/C/xampp/htdocs/BC/theta/mouse2.html",
 		"/C/xampp/htdocs/BC/theta/theta62.html",
 		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/index.html",
 		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/style.css",
@@ -884,8 +885,7 @@
 		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/login_controller.html",
 		"/C/xampp/htdocs/FashionMalls/install/SQL/SQL_plugin_file.sql",
 		"/C/xampp/htdocs/FashionMalls/install/SQL/SQL_plugin.sql",
-		"/C/xampp/htdocs/FashionMalls/classes/Dispatcher.php",
-		"/C/Users/HPCZ/Desktop/ims-svoz-odpadu.cpp"
+		"/C/xampp/htdocs/FashionMalls/classes/Dispatcher.php"
 	],
 	"find":
 	{
@@ -903,6 +903,76 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"createVideoControlls",
+			"panorama_controlls",
+			"field_vision",
+			"panorama_controlls",
+			"15%",
+			"input",
+			"MOUSE.wheel.delta",
+			"createVideoControlls",
+			"video",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider_volume_id",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider_volume",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider",
+			"video_controlls_btn_slider_volume_id",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_volume_on_id",
+			"video_controlls_btn_volume_off",
+			"video_controlls_btn_fullstreen",
+			"(SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction",
+			"minus",
+			"fullscreen",
+			"panorama_controlls",
+			"video_controlls",
+			"0.8",
+			"opacity",
+			"plus",
+			"panorama_controlls_btn_zoom_plus",
+			"panorama_controlls_btn_minus",
+			"panorama_controlls_btn_plus",
+			"panorama_controlls_btn_fullstreen",
+			"panorama_controlls_btn_fullstreen_id",
+			"fullstreen",
+			"panorama_controlls",
+			"video_controlls",
+			"MOUSE.move.angle.y",
+			"dX",
+			"AMORTIZATION",
+			"dt",
+			"drag",
+			"time",
+			"AMORTIZATION",
+			"createVideoControlls",
+			"m",
+			"perspAngle",
+			"maxAngleNotInView",
+			"radiusDistance",
+			"wheelDistance",
+			"prum",
+			"add",
+			"maxAngleNotInView",
+			"perspAngle",
+			"2*SETTINGS.mode.fisheye.video.radius",
+			"radiusDistance",
+			"reduction",
+			"maxAngleNotInView",
+			"perspAngle",
+			"maxAngleNotInView",
+			"perspAngle",
+			"add",
+			"prum",
+			"2*SETTINGS.mode.fisheye.video.radius",
+			"SETTINGS.mode.fisheye.video.radius",
+			"radiusDistance",
+			"radWheelDiv",
+			"Math.PI/1.75",
+			"//",
+			"createPoint",
+			"status_bar_box",
 			"createCompass",
 			"0.06",
 			"createCompass",
@@ -960,77 +1030,7 @@
 			"createVideoStatusBar",
 			"video_status_bar",
 			"div",
-			"progress_bar",
-			"createVideoStatusBar(170, 30, 0.8, 1, SETTINGS.input.video)",
-			"createVideoStatusBar",
-			"div",
-			"document.getElementById('field_vision')",
-			"document.getElementById('compass-box')",
-			"\"",
-			"compass-box",
-			"PROG.canvas",
-			"onDocumentMouseOut",
-			"\"",
-			"PROG.canvas",
-			"progress_bar",
-			"div",
-			"PROG.texture",
-			"keyboard_vide_playing",
-			"vide_playing",
-			"fragPos",
-			"pos",
-			"SETTINGS.input.video.addEventListene",
-			"	SETTINGS.input.video.addEventListener(\"timeupdate\", function() {\n \n 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;\n 		 var slider = document.getElementById(video_controlls_btn_slider_video);\n 		slider.value = value;\n\n 	});\n\n	// nacitani videa\n	SETTINGS.input.video.addEventListener('progress', function() {\n	    var range = 0;\n	    var buffered = SETTINGS.input.video.buffered;\n	    var time = this.currentTime;\n	});",
-			"longitude_bands",
-			"longitudeBands",
-			"latitudeBands",
-			"PROG.matrices.model.link",
-			"PMatrix",
-			"VMatrix",
-			"M_Matrix",
-			"MMatrix",
-			"fragPos",
-			"PROG.attributes.fragment",
-			"SETTINGS.input.video.",
-			"video.",
-			"video",
-			"video.",
-			"onDocumentMouseOut",
-			"onDocumentMouseUp",
-			"onDocumentMouseOver",
-			"/src",
-			"interrupt",
-			"video_controlls_btn_fullstreen_id",
-			"/10",
-			"normalscreen",
-			"pause",
-			"play",
-			"fullscreen",
-			"video_controlls_btn_fullstreen_id",
-			"video_controlls_btn_slider_volume",
-			"video_controlls_btn_slider_id",
-			"video_controlls_btn_slider",
-			"PROG.canvas",
-			"video_controlls_btn_slider",
-			"1258",
-			"createLoader(",
-			"position",
-			"createLoader(150, 150,",
-			"canvas",
-			"video_controlls_btn_play",
-			"div.",
-			"field_vision",
-			"status_bar",
-			"video_controlls",
-			"\"video_controlls_btn_play\"",
-			"\"video_controlls\"",
-			"field_vision",
-			"createCompass",
-			"createFieldVision",
-			"array",
-			"(north_position + angle)",
-			"setupProgram",
-			"checkIfFileExists"
+			"progress_bar"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1077,7 +1077,7 @@
 						"translation.y": 168.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1086,15 +1086,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4044,
+						"buffer_size": 6029,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1074,
-								1074
+								5602,
+								5602
 							]
 						],
 						"settings":
@@ -1104,10 +1104,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 469.0,
+						"translation.y": 2574.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1116,19 +1116,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 36385,
+						"buffer_size": 39263,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4876,
-								4879
-							],
-							[
-								4892,
-								4895
+								38393,
+								38393
 							]
 						],
 						"settings":
@@ -1137,7 +1133,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 462.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1149,15 +1145,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 39893,
+						"buffer_size": 41656,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25338,
-								25338
+								40894,
+								40894
 							]
 						],
 						"settings":
@@ -1166,7 +1162,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 19771.0,
+						"translation.y": 18436.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -1199,7 +1195,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1228,7 +1224,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1257,7 +1253,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -1284,7 +1280,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -1313,7 +1309,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -1342,7 +1338,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -1371,7 +1367,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -1399,13 +1395,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1434,7 +1430,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -1464,7 +1460,7 @@
 						"translation.y": 921.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1491,10 +1487,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 492.0,
+						"translation.y": 156.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1524,7 +1520,7 @@
 						"translation.y": 16249.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1540,8 +1536,8 @@
 						"selection":
 						[
 							[
-								81183,
-								81191
+								79926,
+								79926
 							]
 						],
 						"settings":
@@ -1551,10 +1547,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 43227.0,
+						"translation.y": 43101.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1584,7 +1580,7 @@
 						"translation.y": 60.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -1643,7 +1639,7 @@
 						"translation.y": 49989.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1673,7 +1669,7 @@
 						"translation.y": 141.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1701,7 +1697,7 @@
 						"translation.y": 411.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -1759,7 +1755,7 @@
 						"translation.y": 2579.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -1821,7 +1817,7 @@
 		"cols":
 		[
 			0.0,
-			0.968334388854,
+			0.780313555521,
 			1.0
 		],
 		"rows":
