@@ -7,13 +7,13 @@
 \chapter{Úvod}
 \label{chapter:1}
 
-V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotografií a~videí. I~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s \uv{klasickými} přehrávači, popř. prohlížeči videí nebo fotografií. Díky sférickým 360 stupňovým kamerám je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se však nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dat je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
+V současné době se technologie ve všech odvětvích stále posouvá a~není tomu jinak ani u~prohlížení fotografií a~videí. I~takto nahrané informace pomocí digitálních zařízení je trend dále posouvat a~zvyšovat tak zážitek ze zaznamenané události. Díky tomuto trendu si už nevystačíme s \uv{klasickými} přehrávači, popř. prohlížeči videí nebo fotografií. Díky sférickým 360 stupňovým kamerám je dnes možné zaznamenat video o~srovnatelné velikosti jako u dnes běžného telefonu, ale s~mnohem větším objemem informací, které se však nedají srozumitelně přehrát v~klasických přehrávačích. Ruku v ruce se sdílením takových dat je velice výhodné takový prohlížeč nabídnout jako webovou verzi, aby i~jiní uživatelé mohli svá takto natočená videa přehrávat, popř. sdílet. Důkazem toho je rozmach multimediálního obsahu na internetu, kdy samotný jazyk HTML pro prezentaci webových stránek dříve nenabízel přímou podporu videí, což se změnilo příchodem nové verze HTML5. Některé portály jako např. Youtube již dnes začíná nasazovat do svého prohlížení videí jeho rozšířené sférické verze, což tedy potvrzuje tento trend. Tato práce má za cíl takové prohlížení posunout ještě dál.
 
 
 Následující práce se věnuje implementaci webového prohlížeče panoramatických snímků a videí v různých módech, ve kterých je video interpretováno. Cílem je  navrhnout a zrealizovat řešení, aby uživatel po natočení videa dále nepotřeboval k přehrání specifický program. Zvláště v případě  sférického videa v režimu rybího oka, kdy uživatel nejprve musí video překonvertovat do ekvidistantního zobrazení, aby jej mohl sféricky prohlížet. Díky řešení v následujících kapitolách tato nutnost odpadá. 
 
 
-Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení nejsou k dispozici. Např. informace o světových stranách ve vztahu k obrázku či videu, popřípadě údaje o velikosti zorného pole v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné například k~tomu, aby autor obrázku mohl popsat jeho zajímavé části popřípadě blíže popsat zachycenou scénu.
+Další inovací v prohlížení videí je přidání některých dat, které v běžném prohlížení nejsou k dispozici. Například informace o světových stranách ve vztahu k obrázku či videu, popřípadě údaje o velikosti zorného pole v daném kontextu prohlížení až po dodatečná metadata v~panoramatických obrázcích, které jsou vhodné například k~tomu, aby autor obrázku mohl popsat jeho zajímavé části nebo blíže popsat zachycenou scénu a její okolnosti.
 \newline
 
 Samotná práce je členěna do šesti částí. V kapitole \nameref{chapter:2} se budu věnovat nastínění všech použitých technologií nutných pro pochopení problematiky, se kterými se bude pracovat v následujících kapitolách. O návrhu řešení pojednává kapitola \nameref{chapter:3}, na kterou navazuje implementační část \nameref{chapter:4}. Otestování správného návrhu a implementace se zabývá kapitola  \nameref{chapter:5}. V poslední části práce \nameref{chapter:6} jsou prezentovány dosažené výsledky a možnosti dalšího rozšíření.
@@ -205,7 +205,7 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 		
 		\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do bodu (cp\textbf{x}, \textbf{y}), argumentem příkazu je pouze souřadnice \texttt{y}.\\
 		
-		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}) popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu.
+		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}), popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu.
 	\end{itemize}
 
 
@@ -224,7 +224,7 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 \subsection{Vertext shader}
 Jedná se o program v jazyce GLSL, který je prováděn pro každý vstupní vrchol zadané geometrie. 
 
-Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y} a \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
+Každá souřadnice vrcholu je dále přepočítána do tzv. \textit{clipspace}, což je souřadný systém pro vykreslování do plátna. V případě, že by některé souřadnice byly mimo hranice souřadného systému, budou oříznuty a vykreslovat se nebudou. Hranice \textit{clipspace} jsou definovány pro každou ze souřadnic \texttt{x},\texttt{y} a \texttt{z} intervalem \texttt{<-1,1>}. Vertex shader může sám ovlivnit souřadnice vrcholů, textur, popř. normálových vektorů a barev. Při zpracování vrcholů není známa topologie zpracovávaného objektu, protože nejsou dostupné informace o sousedících vrcholech. 
 
 Poslední operací vertex shaderu před samotným vykreslením je převod do NDC\footnote{Normalized Device Coordinates.} \cite{opengl}. Rozdílné operační systémy mají rozdílné způsoby reprezentace grafických objektů. Zabránit těmto rozdílným  intepretacím v praxi znamená, že se souřadnice \texttt{x}, \texttt{y} a \texttt{z} vydělí homogenní souřadnici.
 
@@ -496,7 +496,7 @@ Základní mapování textury lze pozorovat na obr. \ref{img:grid}. Takové mapo
 Korekci využijeme především k tomu, aby se nám textura mapovala přesněji v oblasti švu, tedy přesně v polovině tělesa. Důvodem je ten, že pokud bychom korekci textury neudělali, okraje by byly rozostřené  a v oblasti švu data hůře čitelná.  Samotná korekce nemá na funkci prohlížení žádný vliv.
 S korekcí se mapuje textura daleko přesněji, resp. okraje hemisféry. Na obrázku \ref{img:texture_without_correction} si lze povšimnout ukázky dat textury ještě před provedením korekce krajních bodů.
 
-Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic již ty spočítané pro normály\footnote{V našem případě hodnota souřadnice vrcholu podělená průměrem tělesa.} popř. vrcholy geometrie.
+Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic již ty spočítané pro normály\footnote{V našem případě hodnota souřadnice vrcholu podělená průměrem tělesa.}, popř. vrcholy geometrie.
 
 Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně. Hlavně tedy u bodů, které odpovídají těm v oblasti švu. V tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
 
@@ -634,7 +634,7 @@ $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$
 
 
 \subsection{Perspektivní matice}
-Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$, resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
+Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$, resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
 
 
 
@@ -645,7 +645,7 @@ Poslední častí projekce je perspektivní matice, díky které budeme realizov
 	\caption{Demonstrace perspektivního zobrazení.}
 \end{figure}
 
-Perspektivu demonstruje obrázek \ref{img:perspective_matrix}. Modře vyznačená plocha reprezentuje již avizovaný projekční prostor, který je definován  zorným úhlem a hranicemi. Fialová kružnice značí data textury, která se mapují na vypočítanou geometrii.
+Perspektivu demonstruje obrázek \ref{img:perspective_matrix}. Modře vyznačená plocha reprezentuje již zmíněný projekční prostor, který je definován  zorným úhlem a hranicemi. Fialová kružnice značí data textury, která se mapují na vypočítanou geometrii.
 
 %=========================================================================
 \newpage
@@ -677,7 +677,7 @@ Konečný  vztah pro výpočet projekce scény $P_{s}$ bude dán pouhým vynáso
 $$ P_{s} = P \cdot V \cdot M  $$
 
  
-vypočítaná projekce se poté násobí bodem geometrie $G$. Výsledná pozice bodu ve vertex shaderu má tedy   vztah:
+vypočítaná projekce se poté násobí bodem geometrie $G$. Výsledná pozice bodu ve vertex shaderu má proto   vztah:
 
 $$ gl\_Position  = P_{s} \cdot G$$
 
@@ -685,7 +685,7 @@ $$ gl\_Position  = P_{s} \cdot G$$
 \newpage
 
 \section{Zorný úhel}
-Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli zobrazovací matice. Jeho hodnota se mění na základě přibližování nebo oddalování scény od pozorovatele. 
+Zorný úhel je grafický prvek, který udává informace o aktuálním zorném poli  perspektivní matice ve vztahu k zobrazovací matici. Jeho hodnota se mění na základě přibližování nebo oddalování scény od pozorovatele. 
 
 
 \subsection{Vztah perspektivy a pozorovatele}
@@ -710,9 +710,9 @@ kde $M_{l}$ je zmenšení, aby extrém ležel na kružnici \texttt{\textit{m}}. 
 \newpage
 
 \subsection{Návrh prvku}
-K vyobrazení prvku budeme potřebovat vektor svg zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude reprezentovat zorný úhel. Důvodem, proč pro vyobrazení samotné není využita samotná křivka vyplněná barvou je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje tak, že z ní není zjevný zorný úhel.
+K realizaci prvku budeme potřebovat vektor \textbf{svg} zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude znázorňovat zorný úhel. Důvodem, proč pro vyobrazení  není využita samotná křivka vyplněná barvou, je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje způsobem, že z ní zorný úhel není zjevný.
 
-Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na sférické souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možní spočítat přeponu. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
+Vstupními argumenty je pozice prvku ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na polární souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možné spočítat přeponu. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
 
 
  $$ x = r\cdot\cos(\theta) $$ 
@@ -728,18 +728,18 @@ Vstupními argumenty je pozice prvku pomoci ve dvojrozměrném prostoru \texttt{
 
 
 \section{Kompas}
-Dalším rozšířením prohlížení jsou údaje o světových stranách díky kompasu. Střelka kompasu se bude pohybovat k severu díky vstupním argumentům, které budou předány přímo do programu. Ukazatel severu se bude měnit na základě rozdílu vůči vstupní pozici, která definuje pozici severu ve scéně. Samotna realizace střelky bude díky obrázku \texttt{svg} a natáčení pomocí změně kaskádových stylů. Změna zobrazení bude udávána ve stupních vůči původní pozici. Samotná transformace zobrazení, resp. otočení střelky budeme realizovat pomocí vlastnosti kaskádových stylů \texttt{transform: rotate(\textbf{\emph{X}}deg)} kde \texttt{\textbf{\emph{X}}} je posuv ve stupních.
+Dalším rozšířením prohlížení jsou údaje o světových stranách díky kompasu. Střelka kompasu se bude pohybovat k severu díky vstupním argumentům, které budou předány přímo do programu. Ukazatel severu se bude měnit na základě rozdílu vůči vstupní pozici, která definuje pozici severu ve scéně. Střelka bude realizována obrázkem, a její natočení pomocí změny kaskádových stylů, která bude udávána ve stupních vůči původní pozici. Samotná transformace zobrazení, resp. otočení střelky budeme realizovat pomocí vlastnosti kaskádových stylů \texttt{transform: rotate(\textbf{\emph{X}}deg)} kde \texttt{\textbf{\emph{X}}} je posuv ve stupních.
 
 \subsection{Odchylka střelky}
-Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupní statickou pozici zadanou argumentem programu, která po celou dobu běhu programu nad danými daty zůstane neměnná. Tedy samotná korekce bude reagovat pouze na změnu horizontální osy.
+Korekce kompasu bude daná úhlem, který svírá střed zorného pole se vstupní statickou pozici zadanou argumentem programu. Statická pozice zůstává po celou dobu běhu programu neměnná. Samotná korekce bude reagovat pouze na změnu horizontální osy.
 
 \subsection{Výpočet pozice kompasu v plátně}
-Výsledné zobrazení kompasu, resp. jeho pozice je přímo závislá na rozměrech elementu \texttt{<canvas>}, je to z toho důvodu, že prvek plátno překrývá. Samotný výpočet a následné korekce změnou šířky plátna, popř. využítí režimu celé obraziocky vyžaduje přepočítání pozice, která je definována vztahem:
+Výsledné zobrazení kompasu, resp. jeho pozice, je přímo závislá na rozměrech elementu \texttt{<canvas>}. Je to z toho důvodu, že prvek plátno překrývá. Samotný výpočet a následné korekce změnou šířky plátna, popř. využití režimu celé obrazovky vyžaduje přepočítání pozice, která je definována vztahem:
 
 $$ \left( Canvas_{width} - Compass_{width}\right) \cdot x  $$
 $$ \left( Canvas_{height} - Compass_{height}\right) \cdot y  $$
 
-kde $Canvas_{width}$ a $Canvas_{height}$ jsou vstupní argumenty kompasu udávající velikost prvku. Naproti tomu  $x$ a $y$ souřadnice nabývající hodnot od $0-1$, která definuje pozici v plátně nezávisle na rozlišení.
+kde $Canvas_{width}$ a $Canvas_{height}$ jsou vstupní argumenty kompasu udávající velikost prvku. Naproti tomu  $x$ a $y$ souřadnice nabývající hodnot od $0$ do $1$, která definuje pozici v plátně nezávisle na rozlišení.
 
 %\section{Metadata}
 %\section{Blending}
@@ -747,7 +747,7 @@ kde $Canvas_{width}$ a $Canvas_{height}$ jsou vstupní argumenty kompasu udávaj
 
 \chapter{Implementace panoramatického prohlížeče}
 \label{chapter:4}
-V této kapitole rozeberu implementaci programu  spolu s  problémy, které bylo nutné v průběhu implementace řešit. Program se skládá z jazyka HTML5, ve kterém je nastíněna výchozí kostra, nad kterou pracuje veškerá funkcionalita. Jádro je napsáno v jazyce Javascript bez použití frameworků  a  shadery, které jsou implementovány v jazyce GLSL. 
+V této kapitole rozeberu implementaci programu  spolu s  problémy, které bylo nutné v průběhu implementace řešit. Program se skládá z jazyka HTML5, ve kterém je nastíněna výchozí kostra, nad kterou pracuje veškerá funkcionalita. Jádro je napsáno v jazyce Javascript bez použití frameworků  a  dále shadery, které jsou implementovány v jazyce GLSL. 
 
 
 \section{Stavy a data programu}
@@ -756,8 +756,8 @@ Jelikož samotná implementace ve WebGL vyžaduje k realizaci problematiky více
 Každá důležitá část implementace má svůj vlastní objekt proměnných, které se k dané problematice vztahují, včetně všech nutných interních stavů.
 
 \subsection{Myš a klávesnice}
-Veškeré interakce s myší se z hlediska datové částí promítají do objektové proměnné \texttt{MOUSE}, která udržuje data o pohybu pozorovatele ve scéně po vertikální a horizontální ose otáčení, včetně hloubky posuvu - tedy přibližování scény pomocí kolečka. Většina udržovaných dat v proměnné \texttt{MOUSE} pochází z objektu \texttt{MouseEvent} popř. \texttt{WheelEvent}. Objekty poté díky Javascriptové metodě \texttt{addEventListener()} uchovávají aktuální hodnoty vstupu odkud se čtou.
-Dalším objektem je klávesnice realizována pomocí objektové proměnné \texttt{KEYBOARD}, která udržuje pouze základní informace, zdali je aktivní popř. jaká citlivost pohybu pozorovatele ve scéně pomocí klávesnice má být. Veškeré interakce s klávesnici jsou dále realizovány pomocí čtení z objektu \texttt{KeyboardEvent}, do které se načítají údaje o stisku kláves, tudíž na rozdíl od myši není třeba tyto data uchovávat, protože klávesnice je závislá pouze na aktuálním stavu. 
+Veškeré interakce s myší se z hlediska datové částí promítají do objektové proměnné \texttt{MOUSE}, která udržuje data o pohybu pozorovatele ve scéně po vertikální a horizontální ose otáčení, včetně hloubky posuvu - tedy přibližování scény pomocí kolečka. Většina udržovaných dat v proměnné \texttt{MOUSE} pochází z objektu \texttt{MouseEvent}, popř. \texttt{WheelEvent}. Objekty poté díky Javascriptové metodě \texttt{addEventListener()} uchovávají aktuální hodnoty vstupu odkud se čtou.
+Dalším objektem je klávesnice realizována pomocí objektové proměnné \texttt{KEYBOARD}, která udržuje pouze základní informace, zdali je aktivní, popř. jaká citlivost pohybu pozorovatele ve scéně pomocí klávesnice má být. Veškeré interakce s klávesnici jsou dále realizovány pomocí čtení z objektu \texttt{KeyboardEvent}, do které se načítají údaje o stisku kláves, tudíž na rozdíl od myši není třeba tyto data uchovávat, protože klávesnice je závislá pouze na aktuálním stavu. 
 
 %=========================================================================
 \newpage
@@ -784,7 +784,7 @@ Pokud  \texttt{\setupProgram} proběhne v pořádku a  data jsou připravena, je
 
 
 \subsection{Shadery}
-Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné, externího souboru popř. využít html značky. V našem konkrétním případě  se pro umístění shaderu využívá kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader mÁ svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
+Veškeré operace se shadery v zásadě probíhají ve funkci \texttt{\setupProgram}. Samotný kód vertex a fragment shaderu se předává jako textová řetězec, tudíž jej můžeme uložit do proměnné, externího souboru, popř. využít html značky. V našem konkrétním případě  se pro umístění shaderu využívá kód mezi HTML značkami. Důvodem je ten, že na zpracování programu to nemá vůbec žádný vliv  a  kód je daleko lépe editovatelný. Každý shader mÁ svoje specifické označení, pro fragment shader je nastaven v tágu \texttt{<script>} atribut \texttt{type} na \texttt{x-shader/x-fragment}, ve vertex shaderu potom \texttt{x-shader/x-vertex}.
 
 Výpočty transformačních matic se počítají v hlavním programu, ale přímé operace s nimi až v shaderech, konkrétně ve vertex shaderu. U projekce se všechny matice  vynásobí aktuálním bodem geometrie, která je do vertex shaderu předána z bufferu, tato operace se opakuje pro každý bod geometrie modelu. Jelikož vertex shader slouží pro propojení webgl programu  a obou shaderů, musí se předat do fragment shaderu textura, jejíž body se automaticky interpolují a předají fragment shaderu. K předání hodnoty slouží proměnná \texttt{varyingTexture}.
 
@@ -829,7 +829,7 @@ Stejně jako data matic se musí i data bufferů propojit se shadery. To se prov
 \subsection{Textury}
 Implementace textur je zasazena jak do funkce \texttt{\setupProgram} tak do vykreslovací funkce \texttt{\render}, každá implementace v dané funkci má trochu odlišný charakter, který více rozeberu až v následující kapitole. Textura oproti programu, vyžaduje v našem konkrétním případě širší definici. Je třeba definovat mj. i chování textury při interpolaci.
 
-Samotná textura se vytvoří funkcí \texttt{createTexture()}, která vrací referenci na objekt WebGL textury, s kterým se dále pracuje. Tento objekt si uložíme opět do globální objektové proměnné \texttt{PROG.texture}. Po zisku  reference se textura, stejně u bufferů popř. programu, ještě aktivuje obdobnou funkcí \texttt{ bindTexture()}.
+Samotná textura se vytvoří funkcí \texttt{createTexture()}, která vrací referenci na objekt WebGL textury, s kterým se dále pracuje. Tento objekt si uložíme opět do globální objektové proměnné \texttt{PROG.texture}. Po zisku  reference se textura, stejně u bufferů , popř. programu, ještě aktivuje obdobnou funkcí \texttt{ bindTexture()}.
 
 Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}, protože v našem případě implementace dosahuje lepších výsledků než-li \texttt{NEAREST}.
 
@@ -925,7 +925,7 @@ Vedle přímých akcí kontrolovaných uživatelem, jsou tu ještě  automatick�
 \newpage
 
 \subsection{Zorný úhel}
-Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojen s kolečkem myši tak, že změny v zorném úhlu závisí především na přiblíženi popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}.
+Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojen s kolečkem myši tak, že změny v zorném úhlu závisí především na přiblíženi, popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}.
 
 \texttt{<part:2:doplnit>}
 
@@ -1006,7 +1006,7 @@ Jak lze vidět, ve všech testech Opera velice ztrácí, zejména v přehráván
 \label{chapter:6}
 
 \section{zhodnocení  dosažených výsledků s  vyznačeným vlastním přínosem studenta}
-Účelem práce bylo implementovat prohlížeč ve WebGL, který je schopen přehrát sférická videa v různých režimech. Hlavně tedy v režimu, který by v jiných prohlížečích byl velice zkreslen, protože by nepodporoval režim rybího oka. Implementovaný prohlížeč je schopen tento režim zvládnout bez pomocí externích konvertorů popř. konvertorů, které dává k dispozici přímo výrobce 360 stupňové kamery. Díky programu tedy již externí konvertor není potřeba a výstup z kamery lze prohlížet okamžitě po natočení.
+Účelem práce bylo implementovat prohlížeč ve WebGL, který je schopen přehrát sférická videa v různých režimech. Hlavně tedy v režimu, který by v jiných prohlížečích byl velice zkreslen, protože by nepodporoval režim rybího oka. Implementovaný prohlížeč je schopen tento režim zvládnout bez pomocí externích programů, popř. konvertorů, které dává k dispozici přímo výrobce 360 stupňové kamery. Díky programu tedy již externí konvertor není potřeba a výstup z kamery lze prohlížet okamžitě po natočení.
 
 
 \section{náměty(zdroje inspirace) vycházející ze zkušeností s řešeným projektem}
