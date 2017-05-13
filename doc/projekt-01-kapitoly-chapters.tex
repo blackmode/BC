@@ -880,17 +880,17 @@ Přiblížení a oddálení scény se provádí klávesami \keystroke{+} a \keys
 \newpage
 
 \section{Grafické rozhraní}
-Veškeré prvky, které nejsou přímo renderovány grafickou kartou se v elementu \texttt{<canvas>}, jak již bylo nastíněno v předcházejících kapitolách,  nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm. Realizaci samotných prvků, jako je kompas nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
+Veškeré prvky, které nejsou přímo renderovány grafickou kartou se v elementu \texttt{<canvas>}, jak již bylo nastíněno v předcházejících kapitolách,  nezobrazí z důvodu, že je vše skryto. Jen v případě, že by prohlížeč nepodporoval plátno, zobrazí co je v něm uvnitř HTML značek. Realizaci samotných prvků, jako je kompas nebo zorný úhel až po ovládací prvky videa, bude třeba realizovat za pomocí kaskádových stylů, kdy pomocí dynamického pozicování budeme všechny prvky zobrazovat překryvem plátna.
 
 \subsection*{Pozicování}
-Pozice všech grafikách prvků na plátně je třeba přizpůsobovat velikosti plátna, např. když dojde k přepnutí na režim celé obrazovky. Pozice jednotlivých prvků je zadána argumenty \texttt{position\_x} a \texttt{position\_y} nabývající hodnot od \texttt{0} do \texttt{1}. Takto zadané hodnoty jsou nezávislé na režimu zobrazení. Stačí tedy nastavit jen hodnoty kaskádových stylů \texttt{left} a \texttt{top} tak, že \texttt{div.style.left} bude roven rozdílu šířky plátna a šířky grafického prvku vynásobená argumentem \texttt{position\_x}, pro vertikální umístění pak nastavení vlastnosti \texttt{div.style.top} jako rozdíl výšky plátna a grafického prvku, vynásobená  hodnotu argumentu \texttt{position\_y}. Při použití odskoku elementu od okraje obrazovky je pozice prvku nastavena na \texttt{absolute}, aby takto vypočítaná pozice měla smysl. 
+Pozice všech grafikách prvků na plátně je třeba přizpůsobovat velikosti plátna, např. když dojde k přepnutí na režim celé obrazovky. Pozice jednotlivých prvků je zadána argumenty \texttt{position\_x} a \texttt{position\_y} nabývající hodnot od \texttt{0} do \texttt{1}. Takto zadané hodnoty jsou nezávislé na režimu zobrazení. Stačí tedy nastavit jen hodnoty kaskádových stylů \texttt{left} a \texttt{top} tak, že \texttt{div.style.left} bude roven rozdílu šířky plátna a šířky grafického prvku vynásobená argumentem \texttt{position\_x}. Pro vertikální umístění pak nastavení vlastnosti \texttt{div.style.top} jako rozdíl výšky plátna a grafického prvku vynásobená  hodnotu argumentu \texttt{position\_y}. Při použití odskoku elementu od okraje obrazovky je pozice prvku nastavena na \texttt{absolute}, aby takto vypočítaná pozice měla smysl. 
 
 
 
 \subsection{Kompas}
 Prvek překrývající plátno \texttt{<canvas>}. Vytvoření samotného kompasu realizuje funkce: \\\texttt{\createCompassFull}.\\ Argument \texttt{width} udává šířku kompasu, argument \texttt{height} zase jeho výšku. Vstupními metadaty je zadán kotevní bod severu. Díky interakci s myší - tedy násobení zobrazovací transformační maticí realizujeme pohyb pozorovatele, čímž se mění prostorový úhel, který ovlivňuje odchylku severu  od původní zadané pozice.
 
-Samotná konstrukce kompasu je zasazena do tágu \texttt{<div id="compass-box"\,>}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, kterou utváří element div s identifikátorem \texttt{compass}. Statická část, ukázaná  na obrázku \ref{img:kompas_kostra}, nese informace o natočení ve stupních, na které bude ukazovat šipka střelky. 
+Samotná konstrukce kompasu je zasazena do tágu \texttt{<div id="compass-box"\,>}. Funkce, která nahraje data do kontejneru kompasu se nazývá \texttt{\createCompass}. Kompas se skládá ze dvou částí, první je statická část, kterou utváří element div s identifikátorem \texttt{compass}. Statická část ukázaná  na obrázku \ref{img:kompas_kostra} nese informace o natočení ve stupních, na které bude ukazovat šipka střelky. 
 
 
 \begin{figure}[h]
@@ -902,7 +902,7 @@ Samotná konstrukce kompasu je zasazena do tágu \texttt{<div id="compass-box"\,
 
  
 
-Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="compass\_arrow"\,>} do statické části, její podoba je demonstrována na obrázku \ref{img:kompas_strelka}. Střelka se  otáčí pomoci transformace kaskádových stylů.
+Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="compass\_arrow"\,>} do statické části. Její podoba je demonstrována na obrázku \ref{img:kompas_strelka}. Střelka se  otáčí pomoci transformace kaskádových stylů.
 
 \begin{figure}[h]
 	\label{img:kompas_strelka}
@@ -918,9 +918,9 @@ Druhá část kompasu je střelka, která je vložena jako \texttt{<div id="comp
 
 
 \subsection{Ovládací panel videa}
-Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTML. Celá kostra s atributem \texttt{id=viewer} obsahuje i plátno, které překrývají \texttt{<canvas>}. Při změně velikosti plátna musíme pozice prvků vždy přepočítat. Veškeré operace nad ovládacími prvky zastřešuje funkce \texttt{\createVideoControlls}, kde probíhá i přepočet pozice ovládacích prvků. Jedním ze vstupních argumentů funkce je objekt videa, který je již před-načten do objektové proměnné \texttt{SETTINGS.input.video}. Důvodem jen ten, že  nad objektem funguje celá řada vyvolávaných událostí. Pomocí funkce \texttt{addEventListener()} zde dochází, podobně jako v inicializační části, k vykonávání všech základních operací s videem na základě událostí. Veškeré typy jsou vyvolány interakcí uživatele, řízeni časové osy a dotazování se na množství načtených dat videa, je generovány automaticky. Tlačítko \texttt{fullscreen} pro zobrazení videa na celou šířku obrazovky, potřebuje přizpůsobit plátno tak, aby nedošlo k deformaci dat, čehož dosáhneme zavoláním funkce \texttt{gl.viewport()}. Ještě je třeba ale uchovávat informace o původní velikosti plátna \texttt{<canvas>}, abychom se mohli z režimu celé obrazovky vrátit. Tyto data jsou uchovány rovněž v objektové proměnné.
+Ovládací prvky videa jsou vytvářeny pomocí DOM a přidávány do kostry HTML. Celá kostra s atributem \texttt{id=viewer} obsahuje i plátno \texttt{<canvas>}, které se ovládacími prvky překrývá. Při změně velikosti plátna musíme pozice prvků vždy přepočítat. Veškeré operace nad ovládacími prvky zastřešuje funkce \texttt{\createVideoControlls}, kde probíhá i přepočet pozice ovládacích prvků. Jedním ze vstupních argumentů funkce je objekt videa, který je již před-načten do objektové proměnné \texttt{SETTINGS.input.video}. Důvodem jen ten, že  nad objektem funguje celá řada vyvolávaných událostí. Pomocí funkce \texttt{addEventListener()} zde dochází, podobně jako v inicializační části, k vykonávání všech základních operací s videem na základě událostí. Veškeré typy jsou vyvolány interakcí uživatele. Řízeni časové osy a dotazování se na množství načtených dat videa je generováno automaticky. Tlačítko \texttt{fullscreen}, pro zobrazení videa na celou šířku obrazovky, potřebuje přizpůsobit plátno tak, aby nedošlo k deformaci dat, čehož dosáhneme zavoláním funkce \texttt{gl.viewport()}. Ještě je třeba ale uchovávat informace o původní velikosti plátna \texttt{<canvas>}, abychom se mohli z režimu celé obrazovky vrátit. Tyto data jsou uchovány rovněž v objektové proměnné.
 
-Vedle přímých akcí kontrolovaných uživatelem, jsou tu ještě  automatické operace prováděné nad videem. Jedná se o detekcí aktivního okna při přehrávání, kdy si program sám ověřuje pomocí funkce \texttt{addEventListener()}  pracující nad objektem \texttt{window}, zdali aktuální okno prohlížeče je aktivní. Vše zprostředkovávají události   \texttt{focus} a \texttt{blur}. Událost  \texttt{blur} se spustí ve chvíli, kdy uživatel nemá zobrazené okno s panoramatickým prohlížečem, tato událost bude mít vliv na video jen v případě, kdy se bude video přehrávat a v takové situaci je i pozastaví, dokud se okno opět nezaktivní událostí \texttt{focus}.
+Vedle přímých akcí kontrolovaných uživatelem jsou tu ještě  automatické operace prováděné nad videem. Jedná se o detekcí aktivního okna při přehrávání, kdy si program sám ověřuje pomocí funkce \texttt{addEventListener()}  pracující nad objektem \texttt{window}, zda aktuální okno prohlížeče je aktivní. Vše zprostředkovávají události   \texttt{focus} a \texttt{blur}. Událost  \texttt{blur} se spustí ve chvíli, kdy uživatel nemá zobrazené okno s panoramatickým prohlížečem. Tato událost bude mít vliv na video jen v případě, kdy se bude video přehrávat a v takové situaci je i pozastaví, dokud se okno opět nezaktivní událostí \texttt{focus}.
 
 %=========================================================================
 \newpage
@@ -935,7 +935,7 @@ Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice v
 
 \chapter{Testování}
 \label{chapter:5}
-Výsledný program bylo třeba otestovat z  hlediska kompatibilita webových prohlížečů  s WebGL, nebo s HTML5 až po rozdílnou interpretaci některých vstupních událostí pro periferie počítače. 
+Výsledný program bylo třeba otestovat z  hlediska kompatibilita webových prohlížečů  s WebGL nebo s HTML5, až po rozdílnou interpretaci některých vstupních událostí pro periferie počítače. 
 
 Pro testování byl využit jednoduchý nástroj frameworku \texttt{three.js}, který reflektuje aktuální rychlost překreslování scény grafickou kartou. Jedná se konkrétně o třídu \texttt{Stats()}, kterou volá funkce \texttt{DebugThreeStat()} uvedené v knihovně pro externí zdrojové kódy. Vedle měření snímkové frekvence dále disponuje měřením v milisekundách, kolik je zapotřebí času k vykreslení jednoho snímku. Dále velikost alokované paměti v řádech megabajtů.
 
@@ -997,7 +997,7 @@ Stejný test pro panorama a video, ale po vypnutí režimu celé obrazovky\footn
 \texttt{<uziv:test>}
 
 \section*{Shrnutí testování}
-Jak lze vidět, ve všech testech Opera velice ztrácí, zejména v přehrávání videa, kdy video nebylo při přehrávaní vůbec plynulé, a to ani po vypnutí režimu celé obrazovky. Naproti tomu prohlížení sférického videa v prohlížeči Firefox bylo znatelně plynulejší a ve všech módech prohlížení si vedl obstojně. Nejlépe ale vše fungovalo v prohlížeči Chrome, kde bylo přehrávání a prohlížení ve všech módech vždy plynulé. 
+Jak již lze pozorovat, ve všech testech Opera velice ztrácí, zejména v přehrávání videa, kdy video nebylo při přehrávaní vůbec plynulé, a to ani po vypnutí režimu celé obrazovky. Naproti tomu prohlížení sférického videa v prohlížeči Firefox bylo znatelně plynulejší a ve všech módech prohlížení si vedl obstojně. Nejlépe ale vše fungovalo v prohlížeči Chrome, kde bylo přehrávání a prohlížení ve všech módech vždy plynulé. 
 
 \texttt{<uziv:test:sourhn>}
  
