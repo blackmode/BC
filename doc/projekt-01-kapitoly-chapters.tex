@@ -280,7 +280,7 @@ K vykreslení nějakého grafického prvku jsou potřeba v zásadě jen dvě vě
 
 
 \subsection{Vyrovnávací paměť}
-Buffery resp. vyrovnávací paměti jsou rychle přístupné paměti na grafické kartě. V bufferech jsou  uloženy potřebná data k vykreslování grafických objektů jako např. body geometrie, normály, mapování textur aj. Data jsou poté dále předávány GLSL shaderům, které s nimi pracují.
+Buffery, resp. vyrovnávací paměti jsou rychle přístupné paměti na grafické kartě. V bufferech jsou  uloženy potřebná data k vykreslování grafických objektů jako např. body geometrie, normály, mapování textur aj. Data jsou poté dále předávány GLSL shaderům, které s nimi pracují.
 
 
 %=========================================================================
@@ -339,20 +339,20 @@ Kapitola nastiňuje, jakým způsobem jsou řešeny nejzásadnější problémy 
 \section{Geometrie}
 Geometrie je potřebná k mapování textury, a to tak, aby daná textura reflektovala scénu co nejvěrněji. Kdybychom pro texturu nevytvářeli geometrii, na kterou se bude mapovat a jednoduše data namapovali do libovolné 2D roviny, dojde k významnému zkreslení pořizované scény.
 
-K uložení dat geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic, tedy formátu \texttt{[x1,y1,z1, x2,y2,z2, … ]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve WebGL jsme schopni vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro tento případ se ve WebGL používá vykreslení pomocí trojúhelníku, jako základní vykreslované primitivum plochy.
+K uložení dat geometrie budeme využívat klasické pole, kde každý bod bude tvořen třemi rozměry v kartézské soustavě souřadnic o formátu \texttt{[x1,y1,z1, x2,y2,z2, … ]}, které utváří jednotlivé body v 3D prostoru. Body pak mezi sebou tvoří prostor, na který budou texturovací data  mapovaná. Ve WebGL jsme schopni vykreslit jednotlivé body, čáry – tedy spojnice jednotlivých bodů, nebo trojúhelníky. V našem případě bude potřeba vykreslit texturu jako plochu, na kterou se bude vše mapovat. Pro tento případ se ve WebGL používá renderování pomocí trojúhelníků jako základní vykreslované primitivum plochy.
 
-Geometrickým tělesem pro mapování bude zvolena koule, protože scéna resp. pořízená data, která budeme zpracovávat jsou zachycena ve sférickém modu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
+Geometrickým tělesem pro mapování bude zvolena koule, protože scéna, resp. pořízená data, která budeme zpracovávat, jsou zachycena ve sférickém módu a mapováním na kouli je dosažena nejvěrnější reprezentace scény.
 
-Kouli si rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 - 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0 - 180\degree. 
+Kouli si rozdělíme na poledníky a rovnoběžky. Poledníkem je v tomto případě myšlena spojnice severního a jižního pólu, kde úhel z počátku kartézské soustavy souřadnic mezi jednotlivými poledníky nabývá hodnot od 0 do 360\degree. Rovnoběžkou je myšlena kružnice  rovnoběžná se vzájemně sousedícími a svírající úhel s počátkem souřadnic od 0 do 180\degree. 
 
-Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli - zvýší se hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl tedy nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše snížit počet rovnoběžek a poledníků, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
+Je třeba tedy nejprve stanovit počet poledníků a rovnoběžek a z takových hodnot bude dále vypočítán úhel. Na základě úhlu budeme schopni přesně definovat bod v trojrozměrné rovině. Čím větší počet rovnoběžek a poledníků, tím bude geometrie věrněji aproximovat kouli. Zároveň se ale zvýší hustota bodů v bufferech a tím bude i samotné vykreslení náročnější. Proto je ideální kompromis mezi jemností bodů a rychlosti načítání s téměř stejným výsledkem. Tato vlastnost by se nám hodila hlavně tedy v případech, kdy bychom měli vykreslit rozmanitý geometrický objekt se spoustou detailních sekvencí. V našem případě tento rozdíl nepůjde okem rozeznat, takže skrze efektivitu je výhodné spíše snížit počet rovnoběžek a poledníků, čímž dosáhneme pozitivního efektu na samotnou rychlost programu.
 
 
 \subsection{Sférický souřadný systém}
 
-Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky, tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Na obrázku \ref{fig:geom} označujeme tento úhel jako $\theta$. Provedením této operaci pro všechny horizontální obvodové kružnice, vypočítáme všechny svírané úhly s počátkem souřadnic. 
+Každá rovnoběžka má po svém obvodu průsečíky s jednotlivými poledníky. Tyto průsečíky jsou naše body geometrie, které budou nahrány do bufferů. Jelikož každá rovnoběžka nabývá úhlu od 0 do 180\degree,  resp. $0-\pi$, tak tento úhel můžeme podělit počtem rovnoběžek a vynásobit aktuální rovnoběžkou, čímž získáme svíraný úhel s počátkem souřadnic. Na obrázku \ref{fig:geom} označujeme tento úhel jako $\theta$. Provedením této operaci pro všechny horizontální obvodové kružnice vypočítáme všechny svírané úhly s počátkem souřadnic. 
 
-Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních čar svírajících jej s počátkem souřadnic. Na obrázku \ref{fig:geom} je vyznačen jako $\varphi$. Jak jsem již nastínil výše, $\varphi$ nabývá hodnot od 0 do 360\degree resp. $0-2\pi$. Vytyčený úhel mezi jednotlivými čarami jsme schopni spočítat tak, že jej podělíme počtem vertikálních čar a vynásobíme aktuálním poledníkem. Takto získáme rovnoměrné rozložení bodů na celé rovnoběžce. Provedením  operace pro všechny rovnoběžky již bude geometrie koule z hlediska úhlů kompletní.
+Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních čar svírajících jej s počátkem souřadnic. Na obrázku \ref{fig:geom} je vyznačen jako $\varphi$. Jak jsem již nastínil výše, $\varphi$ nabývá hodnot od 0 do 360\degree, resp. $0-2\pi$. Vytyčený úhel mezi jednotlivými čarami jsme schopni spočítat tak, že jej podělíme počtem vertikálních čar a vynásobíme aktuálním poledníkem. Takto získáme rovnoměrné rozložení bodů na celé rovnoběžce. Provedením  operace pro všechny rovnoběžky již bude geometrie koule z hlediska úhlů kompletní.
 
 \begin{figure}[h]
 	\label{img:2}
@@ -362,18 +362,18 @@ Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních 
 	\label{fig:geom}
 \end{figure}
  
-Na základě vypočtených úhlů, je možné již spočítat jednotlivé složky kartézské soustavy souřadnic \texttt{[x,y,z]} každému bodu, čímž dojde ke kompletní aproximaci tělesa.
+Na základě vypočtených úhlů je možné již spočítat jednotlivé složky kartézské soustavy souřadnic \texttt{[x,y,z]} každému bodu, čímž dojde ke kompletní aproximaci tělesa.
 
 %=========================================================================
 \newpage
 
-K výpočtu využijeme goniometrické funkce  a vztahy v pravoúhlém trojúhelníku. Jelikož $ \cos (\varphi) $ je dána poměrem délky přilehlé odvěsny a přeponou \cite{Goniometrie}, tak souřadnici \texttt{\textit{x}} definujeme vtahem:
+K výpočtu využijeme goniometrické funkce  a vztahy v pravoúhlém trojúhelníku. Jelikož $ \cos (\varphi) $ je dána poměrem délky přilehlé odvěsny a přeponou, tak souřadnici \texttt{\textit{x}} definujeme vtahem \cite{Goniometrie}:
  
 \begin{equation}
  \cos (\varphi) = \frac{x}{K}  \Rightarrow x = \cos (\varphi) \cdot K
 \end{equation}
 \\
-Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup xKy$, ale odvěsnou v $\bigtriangleup zrK$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony \cite{Goniometrie} mají vztah:
+Ze vzniklého vztahu jasně vidíme, že je třeba dopočítat přeponu \textit{K} v trojúhelníku  o stranách $\arrowvert xKy\arrowvert$, kterou ale odvodíme vztahem odvěsny \textit{K} v trojúhelníku $\arrowvert zrK\arrowvert$. Mezi odvěsnou \texttt{K}\footnote{Z obrázku \ref{fig:geom} je patrné, že je přeponou v $\bigtriangleup xKy$, ale odvěsnou v $\bigtriangleup zrK$} a protilehlou přeponou \textit{r} platí, že délka odvěsny protilehlé k úhlu $\varphi$ a délka přepony mají vztah \cite{Goniometrie}:
 \\
 \begin{equation}
 \label{math:K}
@@ -432,14 +432,14 @@ Vzniklé těleso vyobrazené pomocí čar\footnote{Použito grafické primitivum
 Data textury se počítají oproti vrcholům zcela odlišně. Všechny body textur jsou v současné stabilní verzi WebGL pouze dvojrozměrné, tudíž souřadnice \texttt{z} nebudeme potřebovat.
 Počet bodů textury bude přímo záviset na počtu rovnoběžek a poledníků.
 
-Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bodů textury tak, že pro každou rovnoběžku se spočítají všechny poledníky. Celkový počet bodů textury bude tedy: \textit{počet\_rovnoběžek $\cdot$ počet\_poledníků}.
+Od zvoleného počtu rovnoběžek a poledníků se bude dále odvíjet počet bodů textury tak, že pro každou rovnoběžku se spočítají všechny poledníky. Celkový počet bodů textury bude roven: \textit{počet\_rovnoběžek $\cdot$ počet\_poledníků}.
 
 %=========================================================================
 \newpage
 
-Pro lepší představu mapovaní textury můžeme jak poledníky, tak rovnoběžky znázornit ve dvourozměrném prostoru, kde jednotlivé průsečíky tvoří body textury, přičemž horizontální čáry prezentují souřadnici s označením \texttt{\textbf{u}}. Vertikální čáry zase souřadnici \texttt{\textbf{v}}. 
+Pro lepší představu mapovaní textury můžeme jak poledníky, tak rovnoběžky znázornit ve dvourozměrném prostoru, kde jednotlivé průsečíky tvoří body textury. Horizontální čáry prezentují souřadnici s označením \texttt{\textbf{u}}. Vertikální čáry zase souřadnici \texttt{\textbf{v}}. 
 
-Znázornění demonstruje obrázek \ref{img:grid}. Souřadnici \texttt{\textbf{u}} spočteme vydělením \textit{k}-tého poledníku celkovým počtem poledníků. Souřadnici \texttt{\textbf{v}} vydělením \textit{k}-té rovnoběžky celkovým počtem rovnoběžek.
+Znázornění demonstruje obrázek \ref{img:grid}. Souřadnici \texttt{\textbf{u}} spočteme vydělením \textit{k}-tého poledníku celkovým počtem poledníků. Souřadnici \texttt{\textbf{v}} zase vydělením \textit{k}-té rovnoběžky celkovým počtem rovnoběžek.
 
 \begin{figure}[h]
 	\label{img:grid}
@@ -457,7 +457,7 @@ kde \texttt{t} je texturovací funkce, která načte data fragmentu, \texttt{s} 
 
 
 \subsection{Indexy}
-Zavádění indexů se vyplatí tehdy, pokud chceme vykreslování objektu zefektivnit z hlediska vykreslování jednotlivých bodů. V případě, že se při vykreslování nepoužívá index buffer, tak se pro každé vykreslované primitivum načítá adekvátní počet vrcholů. Potíž nastává v situaci, kdy je vrcholy společný. Dojde k tomu, že souřadnice vrcholu jednoho bodu bude v paměti vícekrát a bude volán pro každé primitivum zvlášť. Díky indexům je pro danou geometrii zmíněn sdílený bod právě jednou, v index bufferu je tento bod zmíněn vícekrát, ale odpovídá mu právě jeden bod geometrie. Díky tomuto odkazování se nám sníží počet vykreslovaných bodů. Indexování se používá spolu s funkcí \texttt{drawElements()} a pro účely implementace bude využita pro zrychlení načítání ekvidistantního zobrazení textur.
+Zavádění indexů se vyplatí tehdy, pokud chceme vykreslování objektu zefektivnit z hlediska vykreslování jednotlivých bodů. V případě, že se při vykreslování nepoužívá index buffer, tak se pro každé vykreslované primitivum načítá adekvátní počet vrcholů. Potíž nastává v situaci, kdy je vrcholy společný. Dojde k tomu, že souřadnice vrcholu jednoho bodu bude v paměti vícekrát a bude volán pro každé primitivum zvlášť. Díky indexům je pro danou geometrii zmíněn sdílený bod právě jednou. V index bufferu je tento bod zmíněn vícekrát, ale odpovídá mu právě jeden bod geometrie. Díky tomuto odkazování se nám sníží počet vykreslovaných bodů. Indexování se používá spolu s funkcí \texttt{drawElements()} a pro účely implementace bude využita pro zrychlení načítání ekvidistantního zobrazení textur.
 
 %=========================================================================
 \newpage
@@ -476,13 +476,13 @@ Rovnoběžky a poledníky využijeme i v této části. Jak lze z obrázku \ref{
 
 Je tedy jasně patrné, že čtverec budeme vykreslovat trojúhelníky $ABC$ a $ADC$. Horizontální přímky protínající body \textit{A}, \textit{B} a \textit{D}, \textit{C}   jsou rovnoběžky, po kterých se budeme při výpočtu bodů posouvat. Naproti tomu body \textit{A},\textit{D} a \textit{B}, \textit{C} prochází poledníky, díky kterým budeme při výpočtu realizovat vertikální posuv.
 
-Samotné zpracování indexů tedy probíhá tak, že pro každou rovnoběžku procházíme její průsečíky s danými poledníky, do index bufferu uložíme pro každé grafické primitivum trojici bodů, což tedy v praxi znamená šestici bodů pro každý čtverec sítě, kde se budou vždy dva body opakovat.
+Samotné zpracování indexů tedy probíhá tak, že pro každou rovnoběžku procházíme její průsečíky s danými poledníky. Do index bufferu uložíme pro každé grafické primitivum trojici bodů, což tedy v praxi znamená šestici bodů pro každý čtverec sítě, kde se budou vždy dva body opakovat.
 
 %=========================================================================
 \newpage
 
 \section{Korekce textur}
-Základní mapování textury lze pozorovat na obr. \ref{img:grid}, takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro mód rybího oka je situace složitější, protože vstupní textura není v equirectangulárním modu a naším úkolem je udělat korekci textury tak, aby se textura namapovala na kouli co nejpřesněji.
+Základní mapování textury lze pozorovat na obr. \ref{img:grid}. Takové mapování lze využít u equirectangulárního prohlížení, kde samotná vstupní textura má jíž vše potřebné a není tedy již potřeba nic upravovat - samotná ekvidistantní projekce již je převod tělesa trojrozměrného zobrazení do 2D, proto přímo koreluje s daty textury. Pro režim rybího oka je situace složitější, protože vstupní textura není v equirectangulárním módu, a naším úkolem je udělat korekci textury tak, aby se textura namapovala na kouli co nejpřesněji.
 
 
 \begin{figure}[h]
@@ -498,14 +498,15 @@ S korekcí se mapuje textura daleko přesněji, resp. okraje hemisféry. Na obr�
 
 Pro výpočet korekce můžeme využít jako počáteční hodnoty souřadnic již ty spočítané pro normály\footnote{V našem případě hodnota souřadnice vrcholu podělená průměrem tělesa.} popř. vrcholy geometrie.
 
-Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně, tedy hlavně u bodů, které odpovídají bodům v oblasti švu, v tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
+Již před-počítané hodnoty je ale nutné ještě upravit, protože jsou počítány pro trojrozměrný prostor a my pro texturu potřebujeme pouze dva rozměry. Úpravou je v tomto smyslu myšleno to, že velikost poloměru  kružnice se bude měnit rovnoměrně. Hlavně tedy u bodů, které odpovídají těm v oblasti švu. V tomto místě dochází k největšímu zhuštění bodů, což má za následek již avizované neúměrné roztažení a deformaci textury.
+
 %=========================================================================
 \newpage
 
 
 
 
-Je-li  souřadnice \textit{\textbf{\axisY}} definována rovnicí \ref{math:\axisY} a souřadnice \textit{\textbf{\axisZ}} vztahem \ref{math:\axisZ}, tak korekce textury bude realizována vynásobením  vertikální a horizontální souřadnice funkcí \textit{\textbf{arccos(\axisY)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{\axisX{}}}, resp. výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic. V opačném případě bychom nemohli mapovat obě sféry, protože by se nám spojily do jedné tj. body by se překrývaly - důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice, by se bod zobrazil až  \uv{za} vyobrazeným bodem na obrazovce\footnote{Z pohledu na těleso ve 3D.}. \\
+Je-li  souřadnice \textit{\textbf{\axisY}} definována rovnicí \ref{math:\axisY} a souřadnice \textit{\textbf{\axisZ}} vztahem \ref{math:\axisZ}, tak korekce textury bude realizována vynásobením  vertikální a horizontální souřadnice funkcí \textit{\textbf{arccos(\axisY)}}. Každá hemisféra koule bude mít odlišnou modifikaci souřadnice \texttt{\textbf{\axisX{}}}, protože výpočet každé hemisféry probíhá v jiném kvadrantu kartézské soustavy souřadnic. V opačném případě bychom nemohli mapovat obě sféry z důvodu, že by se nám spojily do jedné tj. body by se překrývaly. Důvod je zřejmý, data z kterých korekce vychází jsou počítány pro celou kouli a nerespektováním změny souřadnice by se bod zobrazil až  \uv{za} vyobrazeným bodem na obrazovce\footnote{Z pohledu na těleso ve 3D.}. \\
 
 Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{v}} spočítáme následujícím způsobem:
 
@@ -516,7 +517,7 @@ Horizontální a vertikální souřadnici \texttt{\textbf{u}} a \texttt{\textbf{
 	\item Pro levou hemisféru bude platit následující vztah:\\
 		    $$u =  \axisX{} \cdot \frac{\arccos(\axisY{})}{r} \wedge v =  \axisZ{} \cdot \frac{\arccos(\axisY{})}{r}$$   
 		   
-	\item Pravá hemisféra je difinována vztahem:\\
+	\item Pravá hemisféra je definována vztahem:\\
 			$$u =  -\axisX{} \cdot \frac{\arccos(\axisY{})}{r}\wedge v =  \axisZ{} \cdot \frac{\arccos(\axisY{})}{r} $$ 
  
 \end{itemize}
@@ -537,7 +538,7 @@ Proměnná \texttt{r} označuje poloměr koule, resp. kružnice ve 2D. Obrázek 
 
 
 \section{Návrh projekce}
-Součástí již avizované projekce v předchozí kapitole, jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, matice posuvu, změny měřítka apod. Díky těmto maticím jsme schopni projekci zrealizovat. V perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec popř. obdélník. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
+Součástí již zmíněné projekce v předchozí kapitole jsou matice, které modelovou, zobrazovací a projekční matici utváří. Mezi ně patří např. rotační matice po osách \texttt{x},\texttt{y} a \texttt{z}, dále matice posuvu, změny měřítka aj. Díky maticím jsme schopni projekci zrealizovat. V perspektivním pojetí vyváříme frustrum\footnote{V ortografickém zobrazení by to byl kvádr/krychle.}, resp. komolý jehlan, kdy stěny tvoří lichoběžník a obě podstavy čtverec. Veškeré vykreslovaná data, která neleží v komolém jehlanu jsou ořezány  a nebudou vykreslena. 
 
 
 
@@ -614,17 +615,17 @@ T =
 Výsledná modelová matice \texttt{\textbf{M}} je tedy dána vztahem:
 $$ M = T \cdot R_{x} \cdot R_{y} \cdot R_{z} \cdot S $$
 
-Při násobení původní matice rotační maticemi hrají  velkou roli také znaménka. Jelikož v implementační části budeme používat interakce s myší a tím měnit náhled pozorovatele resp. kamery na náš model, bude třeba zvolit směr posuvu zorného pole kamery. 
+Při násobení původní matice rotačními maticemi hrají  velkou roli také znaménka. Jelikož v implementační části budeme používat interakce s myší a tím měnit náhled pozorovatele, resp. kamery na náš model, bude třeba zvolit směr posuvu zorného pole kamery. 
 
 Vlastnosti prohození znamének využijeme právě u  rotace $R_{x}$ a $R_{y}$, které reprezentují pohyb myši.  
 
 
 \subsection{Zobrazovací matice}
-Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V našem konkrétním případě budeme view matrix používat k napodobeni pohybu kamery snímající objekt, jak je tomu v reálném světě. 
+Jedná se o matici, která kontroluje způsob, jakým se na objekt díváme. V našem konkrétním případě budeme zobrazovací matici používat k napodobení pohybu kamery snímající objekt, jak je tomu v reálném světě. 
 
-Prostor objektu, který jsme pomocí modelové matice transformovali do zobrazitelného prostoru musíme nyní převést do prostoru, který bude relativní vzhledem k pohledu pozorovatele.
+Prostor objektu, který jsme pomocí modelové matice transformovali do zobrazitelného prostoru, musíme nyní převést do prostoru, který bude relativní vzhledem k pohledu pozorovatele.
 
-Takového efektu docílíme tak, že složku o kterou se chceme posunout, vynásobíme opačnou hodnotou modelu ve scéně. Výsledný vztah pro výpočet zobrazovací matice tedy je:
+Takového efektu docílíme tak, že složku o kterou se chceme posunout vynásobíme opačnou hodnotou modelu ve scéně. Výsledný vztah pro výpočet zobrazovací matice tedy je \cite{WebGLbeg}:
 
 $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$ 
 
@@ -633,7 +634,7 @@ $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$
 
 
 \subsection{Perspektivní matice}
-Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$ resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
+Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel, neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$, resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty, by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
 
 
 
@@ -733,7 +734,7 @@ Dalším rozšířením prohlížení jsou údaje o světových stranách díky 
 Korekce kompasu bude daná úhlem, který svírá střed zorného pole a vstupní statickou pozici zadanou argumentem programu, která po celou dobu běhu programu nad danými daty zůstane neměnná. Tedy samotná korekce bude reagovat pouze na změnu horizontální osy.
 
 \subsection{Výpočet pozice kompasu v plátně}
-Výsledné zobrazení kompasu resp. jeho pozice je přímo závislá na rozměrech elementu \texttt{<canvas>}, je to z toho důvodu, že prvek plátno překrývá. Samotný výpočet a následné korekce změnou šířky plátna, popř. využítí režimu celé obraziocky vyžaduje přepočítání pozice, která je definována vztahem:
+Výsledné zobrazení kompasu, resp. jeho pozice je přímo závislá na rozměrech elementu \texttt{<canvas>}, je to z toho důvodu, že prvek plátno překrývá. Samotný výpočet a následné korekce změnou šířky plátna, popř. využítí režimu celé obraziocky vyžaduje přepočítání pozice, která je definována vztahem:
 
 $$ \left( Canvas_{width} - Compass_{width}\right) \cdot x  $$
 $$ \left( Canvas_{height} - Compass_{height}\right) \cdot y  $$
@@ -766,7 +767,7 @@ Obdobným způsobem, jak je již nastíněno výše, jsou uchovávány proměnn�
 
 Odděleně od programu je vytvořen objekt geometrie, který počítá a vytváří všechna data spojených s geometrií a mapováním textury pro nahrání na GPU. Objekt vytváří funkce \texttt{\createSphereGeometry}.
 
-Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení módu programu resp. formát dat, které bude program vyobrazovat. Dále informace pro nastavení a inicializaci grafických prvků.
+Objektová proměnná \texttt{SETTINGS} uchovává informace o nastavení módu programu, resp. formát dat, které bude program vyobrazovat. Dále informace pro nastavení a inicializaci grafických prvků.
 
 
 \section{Běh programu}
@@ -794,7 +795,7 @@ Kódy shaderů se nakonec musí propojit s WebGL, kde se jako první použije fu
 Načtené a zkompilované shadery nejsou v globální objektové proměnné uloženy, protože se jako takové v programu využívají jen ve funkci \texttt{\setupProgram}.
 
 \subsection{Program}
-Ze zkompilovaných shaderů se vytvoří program resp.se oba shadery provážou  do jednoho WebGL programu, aby se mohlo nad nimi dále pracovat. Vytvoření programu se realizuje funkcí \texttt{ createProgram()} a následně se přiloží oba shadery k programu pomocí funkce \texttt{attachShader()}. V další fázi se program slinkuje s \texttt{linkProgram()} a funkcí \texttt{ useProgram()} aktivuje. Výsledný program spolu s přiloženými shadery reprezentuje globální objektová proměnná \texttt{PROG.program}.
+Ze zkompilovaných shaderů se vytvoří program, resp.se oba shadery provážou  do jednoho WebGL programu, aby se mohlo nad nimi dále pracovat. Vytvoření programu se realizuje funkcí \texttt{ createProgram()} a následně se přiloží oba shadery k programu pomocí funkce \texttt{attachShader()}. V další fázi se program slinkuje s \texttt{linkProgram()} a funkcí \texttt{ useProgram()} aktivuje. Výsledný program spolu s přiloženými shadery reprezentuje globální objektová proměnná \texttt{PROG.program}.
 
 
 \subsection{Transformační matice}
@@ -802,7 +803,7 @@ Modelová matice je z hlediska své implementace po celý běh programu stejná,
 
 V případě equirectangulárního prohlížení je vstup programu přímo mapován na kouli bez jakýkoliv úprav dat textury, protože vstupu odpovídá navrženy model. V módu pro rybí oko je nutné nad mapovanými daty sice provést korekci, ta samotná  ale na úpravu modelové matice nemá vliv, hlavním důvodem je posun vstupní projekce rybího oka vůči té equirectangulární o 90\degree
 
-U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dále se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně resp. roli kamery, se pokaždé interakci se vstupním zařízením data mění a je proto nutné její data nahrát do shaderu znova. 
+U perspektivní matice je situace obdobná jako u modelové matice. V \texttt{\setupProgram} se pouze vytvoří a nahraje do shaderu, dále se v programu již nemění. Naproti tomu zobrazovací matice, která plni roli pozorovatele ve scéně, resp. roli kamery, se pokaždé interakci se vstupním zařízením data mění a je proto nutné její data nahrát do shaderu znova. 
 
 V shaderu již je připravena uniformní proměnná určená pro data matic, tudíž nyní se program \texttt{PROG.program} prováže s těmito proměnnými v shaderech webgl funkcí \\\texttt{getUniformLocation()} a její reference se načte do objektové globální proměnné \\\texttt{PROG.matrices.\textit{<model/view/projection>}.link}, kde \textit{\textbf{model/view/projection}} reprezentují tří reference na modelovou, zobrazovací a projekční (perspektivní) matici.
 
@@ -837,7 +838,7 @@ Chování textury při zmenšení a zvětšení je konkretizováno funkcí \text
 \newpage
 
 \section{Vykreslování a módy prohlížení}
-Nutnost uvádět texturu resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
+Nutnost uvádět texturu, resp. její nastavení ve více funkcích pramení z toho důvodu, že je rozdíl ve vykreslované frekvenci mezi panoramatem a videem. Textura panoramatu je pro každý snímek stejná, potřebuje pouze aktualizovat pozici pozorovatele vůči textuře. V případě videa je situace komplikovanější, textura jako taková se pro každý snímek mění, zároveň ale musí být ještě promítnuta aktualizace pozice pozorovatele vůči měnící se textuře. 
 
 Situaci řeší funkce \texttt{\updateTexture}, která je aktivní pouze v režimu videa\footnote{Jak v módu rybího oka tak v ekvidistantním módu.}. Funkce je volána již před začátkem vykreslování ve funkci \texttt{\render}. Nejprve zjišťuje, zdali je video již načteno pomocí ověření \texttt{video.readyState >= video.HAVE\_CURRENT\_DATA} a pokud ano, tak načte texturu webgl funkcí \texttt{texImage2D()}. Pokud by data načtena neměla a \texttt{readyState} byl menší než \texttt{video.HAVE\_CURRENT\_DATA}, tak vrátí \texttt{false} a zobrazí  v plátně načítání.
 
