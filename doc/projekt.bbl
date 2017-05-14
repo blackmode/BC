@@ -46,6 +46,10 @@ OpenGL: {\it WebGL - Web APIs | MDN}. 2016-2017, [Online].
 POMYKALOVÁ, E.: \emph{Matematika pro gymnázia: planimetrie}. Prometheus,
   2000, ISBN 80-7196-174-4.
 
+\bibitem{zdrojak}
+Žára, O.: {\it Začínáme s WebGL}. 2016-2017, [Online].
+\newline\urlprefix\url{https://www.zdrojak.cz/}
+
 \bibitem{webglFUND}
 Tavares, G.: {\it WebGL Fundamentals}. 2016-2017, [Online].
 \newline\urlprefix\url{https://webglfundamentals.org/}
