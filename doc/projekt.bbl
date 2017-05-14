@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,8 +9,12 @@
 \providecommand{\eprint}[2][]{\url{#2}}
 
 \bibitem{WebGLbeg}
-Diego~Cantor, B.~J.: \emph{WebGL Beginner's Guide}. Packt Publishing, 2012,
-  ISBN 9781849691734.
+Diego~Cantor, B.~J.: \emph{WebGL Beginner's Guide}. Packt Publishing Ltd.,
+  2012, ISBN 978-1-84969-172-7.
+
+\bibitem{HTML5aCSS3}
+Elizabeth~Castro, B.~H.: \emph{HTML5 a CSS3}. Computer Press, 2012, ISBN
+  978-80-251-3733-8.
 
 \bibitem{mozilla}
 Foundation, M.: {\it WebGL - Web APIs | MDN}. 2016-2017, [Online].
@@ -26,6 +30,10 @@ Katka Maria~Delventhal, M.~K., Alfred~Kissner: \emph{Kompendium matematiky:
   operací po vyšší matematiku}. Euromedia Group k.s - Knižní klub v edici
   Universum, 2004, ISBN 80-242-1227-7.
 
+\bibitem{geometrie}
+Milan~Kočandrle, L.~B.: \emph{Matematika pro gymnázia: Analytická
+  geometrie}. Prometheus, 2010, ISBN 978-80-7196-390-5.
+
 \bibitem{Goniometrie}
 ODVÁRKO, O.: \emph{Matematika pro gymnázia: Goniometrie}. Prometheus, 2009,
   ISBN 978-80-7196-359-2.
@@ -37,6 +45,10 @@ OpenGL: {\it WebGL - Web APIs | MDN}. 2016-2017, [Online].
 \bibitem{planimetrie}
 POMYKALOVÁ, E.: \emph{Matematika pro gymnázia: planimetrie}. Prometheus,
   2000, ISBN 80-7196-174-4.
+
+\bibitem{webglFUND}
+Tavares, G.: {\it WebGL Fundamentals}. 2016-2017, [Online].
+\newline\urlprefix\url{https://webglfundamentals.org/}
 
 \bibitem{html5}
 W3C: {\it HTML5}. 2016-2017, [Online].

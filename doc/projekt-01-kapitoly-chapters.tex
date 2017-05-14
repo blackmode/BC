@@ -31,12 +31,12 @@ Následující kapitola pojednává o technologiích, které samotný prohlíže
 
 Jazyk HTML (HyperText Markup Language) je značkovací jazyk určený pro popis webových stránek. Vychází z univerzálního značkovacího jazyka SGML (Standard Generalized Markup Language). V současné době aktuální verzí  jazyka HTML je jeho již pátá verze -  HTML5. Nová verze HTML přináší zásadní vylepšení, nové funkce a možnosti, které jsou nezbytné pro návrh a implementaci webového prohlížeče. 
 
-Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio a video, v neposlední řadě také plátno canvas sloužící pro práci s grafikou.
+Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio a video, v neposlední řadě také plátno \texttt{<canvas>} sloužící pro práci s grafikou.
 
 
 
 \subsection{Video}
-Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5.
+Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5. \cite{HTML5aCSS3}
 
 Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}. V opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
 
@@ -634,7 +634,7 @@ $$ V = T \cdot R_{x} \cdot R_{y} \cdot R_{z} $$
 
 
 \subsection{Perspektivní matice}
-Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$, resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
+Poslední častí projekce je perspektivní matice, díky které budeme realizovat zkreslení scény. Mezi vstupní parametry patří úhel neboli zorné pole. Čím by bylo zorné pole blíže hodnotě $\pi$, resp. \texttt{180\degree}, tím by se předmět v zorném poli jevil dál od pozorovatele. \cite{webglFUND} Hodnota \texttt{180\degree} je krajní hodnota zorného pole. Pokud bychom se jí příliš přibližovali, tak by se nám projekční prostor více a více zmenšoval, až by se objekt jevil nekonečně daleko a tedy se vůbec nezobrazil, protože v přímém úhlu je projekční plocha nulová.  Naopak zmenšováním hodnoty by se objekt jevil zase blíže. Zorné pole budeme označovat jako \texttt{\textit{fov}}. Bližší hranici projekčního prostoru jako \texttt{\textit{near}}, vzdálenější hranici jako \texttt{\textit{far}}.
 
 
 
@@ -712,7 +712,7 @@ kde $M_{l}$ je zmenšení, aby extrém ležel na kružnici \texttt{\textit{m}}. 
 \subsection{Návrh prvku}
 K realizaci prvku budeme potřebovat vektor \textbf{svg} zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude znázorňovat zorný úhel. Důvodem, proč pro vyobrazení  není využita samotná křivka vyplněná barvou, je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje způsobem, že z ní zorný úhel není zjevný.
 
-Vstupními argumenty je pozice prvku ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na polární souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možné spočítat přeponu. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
+Vstupními argumenty je pozice prvku ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na polární souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možné spočítat přeponu. \cite{geometrie} Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
 
 
  $$ x = r\cdot\cos(\theta) $$ 
