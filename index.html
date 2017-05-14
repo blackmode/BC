@@ -985,11 +985,6 @@ function render() {
 	requestAnimationFrame(render);
 }
 
-window.requestAnimationFrame = window.requestAnimationFrame 
-	|| window.mozRequestAnimationFrame
-	|| window.webkitRequestAnimationFrame
-	|| function(cb) { setTimeout(cb, 1000/60); };
-
 
 
 /**
