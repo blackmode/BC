@@ -1,6 +1,6 @@
 %=========================================================================
 % (c) Michal Bidlo, Bohuslav Křena, 2008
-\setcounter{secnumdepth}{4} % cislovani nadpisu do hloubky
+%\setcounter{secnumdepth}{4} % cislovani nadpisu do hloubky
 
 
 
@@ -996,10 +996,15 @@ Stejný test pro panorama a video, ale po vypnutí režimu celé obrazovky\footn
 \end{center}
 
 \section*{Uživatelské testování}
+Testování probíhalo na uživatelích různých věkových skupin, kterým byl program spuštěn a bylo testování jejich chování a interakce s panoramatickým prohlížečem. Důraz byl kladen na rychlost seznámení se s uživatelským rozhraním a způsobem ovládání.
+
 \texttt{<uziv:test>}
 
 \section*{Shrnutí testování}
 Jak již lze pozorovat, ve všech testech Opera velice ztrácí, zejména v přehrávání videa, kdy video nebylo při přehrávaní vůbec plynulé, a to ani po vypnutí režimu celé obrazovky. Naproti tomu prohlížení sférického videa v prohlížeči Firefox bylo znatelně plynulejší a ve všech módech prohlížení si vedl obstojně. Nejlépe ale vše fungovalo v prohlížeči Chrome, kde bylo přehrávání a prohlížení ve všech módech vždy plynulé. 
+
+Z hlediska uživatelského testování vyšlo najevo, že se uživatelé nejrychleji z grafických prvků seznámili se zorným úhlem. Ovládání pomocí myši nejevilo zjevné problémy hlavně u mladších uživatelů. Celkově program působil na respondenty příjemným dojmem a některé jejich návrhy a připomínky budou sloužit jako námět na zlepšení v budoucím vývoji.
+
 
 \texttt{<uziv:test:sourhn>}
  
@@ -1019,6 +1024,8 @@ Jak již lze pozorovat, ve všech testech Opera velice ztrácí, zejména v pře
 \section{zhodnocení z pohledu dalšího vývoje projektu}
 Vylepšení programu by mohlo přijít spolu s novou verzí WebGL, která v době implementace této práce ještě nebyla oficiálně vydána. Nová verze disponuje širší škálou možností a otevírá nové možnosti, jak program vylepšit a optimalizovat. Projekt jako takový má velký potenciál, jak již bylo uvedeno v úvodu práce, v současné době je trendem  rozšiřování možnosti prohlížení. Dalším vylepšením by mohla být přidána širší podpora zařízení, jako např. ty, které disponují více kamerami, aby pokryly lépe celou sféru, zde by byla velice zajímaví implementace, kdy  by si musela poradit s více záběry a mapovat je na jeden sférický model. Popřípadě přidat automatické rozeznávání objektu na kaměře, apod.
 
+Z hlediska dalšího vývoje je velice výhodná implementace bez přítomností frameworků, které práci s WebGL zastřešují. Důvod je zřejmý, není třeba v takové problematice používat všechny funkce, čímž se velikost programu jako takového zmenší a kód bude přehlednější.
+ 
 %=========================================================================
 \newpage
 
