@@ -1006,24 +1006,26 @@ Mezi základní úkony patřilo ovládání pozorovatele ve scéně pomocí myš
 \section*{Shrnutí testování}
 Jak již lze pozorovat, ve všech testech Opera velice ztrácí, zejména v přehrávání videa, kdy video nebylo při přehrávaní vůbec plynulé, a to ani po vypnutí režimu celé obrazovky. Naproti tomu prohlížení sférického videa v prohlížeči Firefox bylo znatelně plynulejší a ve všech módech prohlížení si vedl obstojně. Nejlépe ale vše fungovalo v prohlížeči Chrome, kde bylo přehrávání a prohlížení ve všech módech vždy plynulé. 
 
-Z hlediska uživatelského testování vyšlo najevo, že se uživatelé nejrychleji z grafických prvků seznámili se zorným úhlem, kdy interakce pomocí myši korelovala odpovídajícím způsobem se scénou. Ovládání pomocí myši nejevilo zjevné problémy hlavně u mladších uživatelů. Celkově program působil na respondenty příjemným dojmem a některé jejich návrhy, popř. připomínky budou sloužit jako námět v budoucím vývoji.
+Z hlediska uživatelského testování vyšlo najevo, že se uživatelé nejrychleji z grafických prvků seznámili se zorným úhlem, kdy interakce pomocí myši korelovala odpovídajícím způsobem se scénou. Ovládání pomocí myši nejevilo zjevné problémy hlavně u mladších uživatelů. Velice zajímavé bylo zjištění, kdy někteří uživatelé v režimu rybího oka vůbec nezaznamenali šev, který rozděluje obě hemisféry. Celkově program působil na uživatele příjemným dojmem a některé jejich návrhy, popř. připomínky budou sloužit jako námět v budoucím vývoji. 
  
 \chapter{Závěr}
 \label{chapter:6}
 
-\section{zhodnocení  dosažených výsledků s  vyznačeným vlastním přínosem studenta}
-Účelem práce bylo implementovat prohlížeč ve WebGL, který je schopen přehrát sférická videa v různých režimech. Hlavně tedy v režimu, který by v jiných prohlížečích byl velice zkreslen, protože by nepodporoval režim rybího oka. Implementovaný prohlížeč je schopen tento režim zvládnout bez pomocí externích programů, popř. konvertorů, které dává k dispozici přímo výrobce 360 stupňové kamery. Díky programu tedy již externí konvertor není potřeba a výstup z kamery lze prohlížet okamžitě po natočení.
+Účelem práce bylo implementovat prohlížeč ve WebGL, který je schopen přehrát sférická videa v různých režimech. Důraz byl kladen hlavně tedy na režim rybího oka, který by v jiných prohlížečích byl bez úpravy dat externím programem velice zkreslen nebo zcela nezobrazitelný, protože by nepodporoval režim rybího oka. Implementovaný prohlížeč je schopen tento režim zvládnout bez pomocí externích konvertorů, který dává k dispozici i sám výrobce sférické kamery. Díky implementovanému prohlížeči již tedy není externí konvertor potřebný a výstup z kamery lze prohlížet okamžitě po natočení. Vedle takového režimu prohlížeč disponuje grafickými prvky, jako je kompas, zorný úhel aj., které prohlížení dále rozšiřují. Mezi další nesporné výhody prohlížeče patří, že není použit žádný framework, který by práci s WebGL zastřešoval.
 
 
-\section{náměty(zdroje inspirace) vycházející ze zkušeností s řešeným projektem}
-\section{návaznosti na právě dokončené projekty}
+Zásadní vylepšení by mohlo přijít spolu s novou verzí WebGL, která  disponuje širší škálou funkcionality a otevírá nové možnosti, jak program vylepšit a optimalizovat. Zejména by tato funkcionalita mohla vyřešit problém švu, který vzniká v režimu rybího oka při spojení hemisfér. Jedná se o problém, který se za stávající specifikace WebGL nepovedlo vyřešit, nýbrž pouze zmenšit jeho dopad na přijatelnou úroveň. Díky tomuto problému bylo taktéž odpovězeno na otázku, proč výrobce používá konvertor.  Projekt jako takový má velký potenciál, jak již bylo uvedeno v úvodu práce, protože v současné době je trendem  rozšiřování možnosti prohlížení. Dalším vylepšením by mohla být širší podpora zařízení, jako např. ty, které disponují více kamerami, aby pokryly lépe celou sféru. Zde by byla velice zajímaví implementace, kdy  by si musela poradit s více záběry a mapovat je na jeden sférický model.
 
-
-\section{zhodnocení z pohledu dalšího vývoje projektu}
-Vylepšení programu by mohlo přijít spolu s novou verzí WebGL, která v době implementace této práce ještě nebyla oficiálně vydána. Nová verze disponuje širší škálou možností a otevírá nové možnosti, jak program vylepšit a optimalizovat. Projekt jako takový má velký potenciál, jak již bylo uvedeno v úvodu práce, v současné době je trendem  rozšiřování možnosti prohlížení. Dalším vylepšením by mohla být přidána širší podpora zařízení, jako např. ty, které disponují více kamerami, aby pokryly lépe celou sféru, zde by byla velice zajímaví implementace, kdy  by si musela poradit s více záběry a mapovat je na jeden sférický model. Popřípadě přidat automatické rozeznávání objektu na kameře, apod.
-
-Z hlediska dalšího vývoje je velice výhodná implementace bez přítomností frameworků, které práci s WebGL zastřešují. Důvod je zřejmý, není třeba v takové problematice používat všechny funkce, čímž se velikost programu jako takového zmenší a kód bude přehlednější.
+Některé nápady na další vylepšení programu již bohužel nebyla naplněna
+Cíle zadání práce se tedy podařilo naplnit, bohužel některá řešení a možnosti zlepšení, které jsem dostal zrealizuji až nad rámec práce, což by mohlo velice zpříjemnit prohlížení.
  
+ 
+
+
+Osnova:\\
+1.) co bylo cilem a co jsem udelal, co se povedlo, a zdali jsem plsplnil zadani\\
+2.) co by se dalo udelat dal, jako vylepseni apod\\
+3.) zminit, zena tom budu pracovat dal, protoze me to zacalo bavit a zvazuju i koupi kamery
 
 
 %=========================================================================
