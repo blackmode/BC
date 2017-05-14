@@ -205,7 +205,7 @@ Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření 
 		
 		\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do bodu (cp\textbf{x}, \textbf{y}), argumentem příkazu je pouze souřadnice \texttt{y}.\\
 		
-		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}), popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu.
+		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}), popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu. \cite{svg}
 	\end{itemize}
 
 
@@ -926,9 +926,11 @@ Vedle přímých akcí kontrolovaných uživatelem jsou tu ještě  automatické
 \newpage
 
 \subsection{Zorný úhel}
-Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojen s kolečkem myši tak, že změny v zorném úhlu závisí především na přiblíženi, popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}.
+Zorný úhel implementuje funkce \texttt{\createFieldVision}. Výpočet pozice včetně její změny pobíhá stejným způsobem jako u kompasu. HTML element div je v kostře umístěn pod \texttt{id} s názvem  \texttt{field\_vision}. Velikost zorného úhlu je propojena s kolečkem myši tak, že změny zorného úhlu závisí především na přiblíženi, popř. oddálení scény v proměnné \texttt{MOUSE.wheel.delta}. 
 
-\texttt{<part:2:doplnit>}
+Jakmile je do funkce předán argument s velikostí zorného úhlu, tak se pomocí DOM nastaví spolu s  pomocnými vlastnostmi boxu \texttt{field\_vision}, také atribut \texttt{d} v elementu \texttt{<path>}. Celou cestu potřebnou k vykreslení cesty vrací funkce \texttt{fieldVisionCoord()}. Výpočet převodu z polární  do kartézské soustavy souřadnic  se stará operace \texttt{polarToCartesian()}.
+
+Interakce s kolečkem musíme zrealizovat tak, aby při přiblížení scény byl nárůst zorného úhlu rovnoměrný. Konkrétního efektu lze docílit tak, že si zvolíme startovní a cílový úhel, kdy interval mezi nimi je již naše zorné pole. Funkce \texttt{fieldVisionCoord()} proto volá operaci \texttt{polarToCartesian()} hned dvakrát, protože na základě zorného úhlu potřebuje znát oba body v kartézské soustavě souřadnic jak pro začátek, tak konec rozsahu. Jakmile máme oba body spočteny, je možné již sestavit výslednou cestu \texttt{<path>} pro element \texttt{<svg>}. Cesta se bude skládat ze dvou vektorových argumentů pro kreslení křivek. Argument \texttt{M} bude obsahovat hodnotu \texttt{startPoint.x} a \texttt{startPoint.y}, která definuje začátek zorného úhlu. Následuje křivka pomocí argumentu \texttt{A} s příznaky a  koncovým bodem \texttt{(endPoint.x, endPoint.y)}. Definovaná cesta je poté vrácena do funkce \texttt{\createFieldVision} jako prosté pole.
 
 
 
