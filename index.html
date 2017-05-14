@@ -465,7 +465,7 @@ function setupProgram()
 	PROG.canvas.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'mouseup',   onDocumentMouseUp,   false );
 
-	// dotykoga zařízení
+	// dotykova zařízení
 	PROG.canvas.addEventListener( 'touchmove', onDocumentMouseMove, false );
 	PROG.canvas.addEventListener( 'touchstart', onDocumentMouseDown, false );
 	PROG.canvas.addEventListener( 'touchend',   onDocumentMouseUp,   false );
@@ -1070,8 +1070,13 @@ function onDocumentMouseWheel( event ) {
 // v pripade ze mys najede na nejaky html prvek, protoze je platno prekryto, bude sestale snimat mys -> problem nastane v momente kdy mysi pri tahu vyjedeme z canvasu
 // nedojde tak k preruseni funkce mysi a po navratu do canvasu staůe funguje snimani a nacitani mysi, coz pusobi rusive
 function onDocumentMouseOut( event ) {
-	if (MOUSE.active && !MOUSE.interrupt) {
-		MOUSE.active = false;
+ 	if (MOUSE.active && !MOUSE.interrupt) {
+	    checkEvent = event ? event : window.event;
+	    var who = checkEvent.relatedTarget || checkEvent.toElement;
+	    if (who.nodeName == "HTML" || !who ) {
+	        MOUSE.active = false;
+	        d('mys opustila okno');
+	    }
 	}
 }
 
