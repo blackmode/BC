@@ -244,7 +244,10 @@ var SETTINGS = {
 		created: null,
 		user_inactive: false,
 		object: null,
-
+		width: null,
+		height:  75,
+		canvas_position_x:  0.0,
+		canvas_position_y:  1.0,
  	} ,
 	panorama_controlls : {
 		object: null,
@@ -343,7 +346,16 @@ SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
 
 
- 
+var path = window.location.pathname;
+var page = path.split("/").pop();
+  var fileName = location.href.split("/").slice(-1); 
+
+
+
+
+
+
+ d(getCurrentProgramFilename());
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("theta/data/p6.jpg"); // p7.jpg / t1.jpg
@@ -434,8 +446,16 @@ function initProgram() {
 
 	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
 
+
+
 	// ovladaci prvky
-	SETTINGS.video_controlls.object = createVideoControlls(PROG.canvas.width/2,75, 0.0, 1.0 )  ;
+	SETTINGS.video_controlls.width = PROG.canvas.width/2;
+	SETTINGS.video_controlls.object = createVideoControlls(
+		SETTINGS.video_controlls.width,
+		SETTINGS.video_controlls.height, 
+		SETTINGS.video_controlls.canvas_position_x, 
+		SETTINGS.video_controlls.canvas_position_y 
+	) ;
 
 
 	// obecne ovladaci prvky panoramatu
@@ -1346,7 +1366,14 @@ function resize() {
 		SETTINGS.compass.north, 
 		SETTINGS.compass.angle
 	);
-	createVideoControlls(PROG.canvas.width/2,75, 0.0, 1.0 )  ;
+
+	// ovladaci prvky videa
+	SETTINGS.video_controlls.object = createVideoControlls(
+		SETTINGS.video_controlls.width,
+		SETTINGS.video_controlls.height, 
+		SETTINGS.video_controlls.canvas_position_x, 
+		SETTINGS.video_controlls.canvas_position_y 
+	) ;
 
 	// obecne ovladaci prvky panoramatu
 	SETTINGS.panorama_controlls.object = createPanoramaControlls(
@@ -1359,7 +1386,7 @@ function resize() {
 	// nastaveni nastrojoveho okna 
 	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
 
-	
+
 }
 
 /**

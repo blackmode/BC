@@ -648,6 +648,28 @@ function createImage( src ) {
 }
 
 
+// vrati nazev aktualniho spousteciho sosuboru
+function getCurrentProgramFilename() {
+	var path = window.location.pathname;
+	var page = path.split("/").pop();
+	if (!page) {
+		if (checkIfFileExists('index.html')) {
+			return 'index.html';
+		}
+		else if (checkIfFileExists('index.htm')) {
+			return 'index.htm';
+		}
+		else if (checkIfFileExists('default.htm')) {
+			return 'default.htm';
+		}
+		else if (checkIfFileExists('default.html')) {
+			return 'default.html';
+		}
+	}
+	return page;
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  MATICOVÉ OPERACE    ////////////////////////////////////////////////////
