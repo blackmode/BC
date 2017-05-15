@@ -25,6 +25,10 @@ Elizabeth~Castro, B.~H.: \emph{HTML5 a CSS3}. Computer Press, 2012, ISBN
 Foundation, M.: {\it WebGL - Web APIs | MDN}. 2016-2017, [Online].
 \newline\urlprefix\url{https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API}
 
+\bibitem{khronosWIKI}
+Group, K.: {\it OpenGL Wiki}. 2016-2017, [Online].
+\newline\urlprefix\url{https://www.khronos.org/opengl/wiki/}
+
 \bibitem{svg}
 Group, W. S.~W.: {\it SCALABLE VECTOR GRAPHICS (SVG)}. 2016-2017, [Online].
 \newline\urlprefix\url{https://www.w3.org/Graphics/SVG/}
