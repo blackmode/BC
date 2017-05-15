@@ -149,6 +149,21 @@ input[type=range]::-moz-range-progress {
             margin-left: 20px;
          }
 
+        .volume_on_icon {
+            background-image: url(../img/icon_sound.png);  
+            background-repeat: no-repeat !important;
+            background-position:  left center   !important ;
+            cursor: pointer;
+            border: none;
+         }
+
+        .volume_off_icon {
+            background-image: url(../img/icon_sound_mute.png);  
+            background-repeat: no-repeat !important;
+            background-position:  left center   !important ;
+            cursor: pointer;
+            border: none;
+         }
 
 /************************************ PROGRAM BUTTONS ******************************************/
          #panorama_controlls_btn_fullstreen {
@@ -219,23 +234,24 @@ input[type=range]::-moz-range-progress {
             opacity: 1.0;
         }
 
-        .volume_on_icon {
-            background-image: url(../img/icon_sound.png);  
+
+
+        .settings_icon {
+            background-image: url(../img/icon_settings.png);  
             background-repeat: no-repeat !important;
             background-position:  left center   !important ;
             cursor: pointer;
             border: none;
+            margin-left: 10px;
+            opacity: 0.654;
          }
 
-        .volume_off_icon {
-            background-image: url(../img/icon_sound_mute.png);  
-            background-repeat: no-repeat !important;
-            background-position:  left center   !important ;
-            cursor: pointer;
-            border: none;
-         }
+        .settings_icon:hover {
+            opacity: 1.0;
+        }
 
-
+        
+        .settings_icon,
         .normalscreen_icon,
         .fullscreen_icon,
         .zoom_plus_icon,

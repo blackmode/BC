@@ -1352,6 +1352,7 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 	var panorama_controlls_btn_fullstreen_id = 'panorama_controlls_btn_fullstreen';
 	var panorama_controlls_btn_zoom_plus_id = 'panorama_controlls_btn_zoom_plus';
 	var panorama_controlls_btn_zoom_minus_id = 'panorama_controlls_btn_zoom_minus';
+	var panorama_controlls_btn_settings_id = 'panorama_controlls_btn_settings';
 
 	// overeni existence potrebnych divu kostry
 	var viewer = document.getElementById("viewer");
@@ -1428,7 +1429,16 @@ function createPanoramaControlls(width, height, position_x, position_y) {
  		panorama_controlls.appendChild(panorama_controlls_btn_zoom_minus);
 	}
 
-
+	var panorama_controlls_btn_settings = document.getElementById(panorama_controlls_btn_settings_id);
+	if (!panorama_controlls_btn_settings) {
+		panorama_controlls_btn_settings = document.createElement('div');
+		panorama_controlls_btn_settings.setAttribute('id', panorama_controlls_btn_settings_id);
+		panorama_controlls_btn_settings.setAttribute('class', 'settings_icon'); 
+		panorama_controlls_btn_settings.style.height = 'inherit';
+		panorama_controlls_btn_settings.style.float = 'left';
+		panorama_controlls_btn_settings.style.backgroundColor  = 'transparent'; // transparent
+ 		panorama_controlls.appendChild(panorama_controlls_btn_settings);
+	}
 
 	return {
 		controlls: panorama_controlls,
@@ -1436,6 +1446,7 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 			zoom_plus: document.getElementById(panorama_controlls_btn_zoom_plus_id),
 			zoom_minus: document.getElementById(panorama_controlls_btn_zoom_minus_id),
  			fullscreen: document.getElementById(panorama_controlls_btn_fullstreen_id),
+ 			settings: document.getElementById(panorama_controlls_btn_settings_id),
 		},
 	};
 

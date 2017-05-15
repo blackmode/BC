@@ -3,28 +3,6 @@ function DebugThreeStat() {
 }
 DebugThreeStat();
 
-function ellipticalDiscToSquare( u,  v)
-{
-    var u2 = u * u;
-    var v2 = v * v;
-    var twosqrt2 = 2.0 * Math.sqrt(2.0);
-    var subtermx = 2.0 + u2 - v2;
-    var subtermy = 2.0 - u2 + v2;
-    var termx1 = subtermx + u * twosqrt2;
-    var termx2 = subtermx - u * twosqrt2;
-    var termy1 = subtermy + v * twosqrt2;
-    var termy2 = subtermy - v * twosqrt2;
-    x = 0.5 * Math.sqrt(termx1) - 0.5 * Math.sqrt(termx2);
-    y = 0.5 * Math.sqrt(termy1) - 0.5 * Math.sqrt(termy2);
-
-	return {
-		x: x,
-		y: y,
-	}; 
-
-    
-}
-
 // autorem funkce server: http://www.javascriptkit.com/javatutors/requestanimationframe.shtml
 window.requestAnimationFrame = window.requestAnimationFrame
     || window.mozRequestAnimationFrame

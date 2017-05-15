@@ -248,7 +248,7 @@ var SETTINGS = {
  	} ,
 	panorama_controlls : {
 		object: null,
-		width: 200,
+		width: 260,
 		height:  50,
 		canvas_position_x:  1.0,
 		canvas_position_y:  1.0,
@@ -491,9 +491,11 @@ function setupProgram()
 		onDocumentMouseUp
 	];
 
+	// pridani vyjimek
 	for (var i = 0; i < actions.length; i++) {
 		SETTINGS.compass.object.addEventListener( actions[i], action_functions[i], false );
 		SETTINGS.field_vision.object.addEventListener( actions[i], action_functions[i], false );
+		SETTINGS.panorama_controlls.object.controlls.addEventListener( actions[i], action_functions[i], false );
 	};
 
 	/*
