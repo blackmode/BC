@@ -243,13 +243,13 @@ Je program - označovaný taktéž jako \textit{pixel shader}, který je volán 
 Předávání hodnot v globálních proměnných může probíhat za pomocí třech datových typů, kterými jsou:
 \begin{description}
 	\item[\texttt{uniform}]  
-	- uchovává hodnoty, které jsou během jednoho vykreslení neměnné. Využívá se např. pro data transformačních matic apod.	
+	- uchovává hodnoty, které jsou během jednoho vykreslení neměnné. \cite{WebGLbeg} Využívá se např. pro data transformačních matic apod.	
 	
 	\item[\texttt{attribute}] 
-	- 	jedná se o vstupní data vertex shaderu, která mění svoje hodnoty pro každý vrchol. 
+	- 	jedná se o vstupní data vertex shaderu, která mění svoje hodnoty pro každý vrchol. Atributy jsou použitelné pouze uvnitř vertex shaderu  \cite{WebGLbeg}.
 	
 	\item[\texttt{varying}] 
-	- tento datový typ slouží k předávání hodnot z vertex shaderu do fragment shaderu. Pomocí něj se provádí výše avizovaná interpolace viz. obr. \ref{img:1}.
+	- tento datový typ slouží k předávání hodnot z vertex shaderu do fragment shaderu. \cite{WebGLbeg} Pomocí něj se provádí výše avizovaná interpolace viz. obr. \ref{img:1}.
 
 \end{description}
 
