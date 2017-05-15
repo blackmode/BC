@@ -8,6 +8,11 @@
 \providecommand{\selectlanguage}[1]{\relax}
 \providecommand{\eprint}[2][]{\url{#2}}
 
+\bibitem{PaulBourke}
+Bourke, P.: {\it Miscellaneous transformations and projections}. 1992,
+  [Online].
+\newline\urlprefix\url{http://paulbourke.net/geometry/transformationprojection/}
+
 \bibitem{WebGLbeg}
 Diego~Cantor, B.~J.: \emph{WebGL Beginner's Guide}. Packt Publishing Ltd.,
   2012, ISBN 978-1-84969-172-7.
@@ -42,6 +47,10 @@ ODVÁRKO, O.: \emph{Matematika pro gymnázia: Goniometrie}. Prometheus, 2009,
 OpenGL: {\it WebGL - Web APIs | MDN}. 2016-2017, [Online].
 \newline\urlprefix\url{http://open.gl}
 
+\bibitem{HTML5_CZNIC}
+Pilgrim, M.: \emph{Ponořme se do HTML5}. CZ.NIC, z. s. p. o., 2011, ISBN
+  978-80-905802-6-8.
+
 \bibitem{planimetrie}
 POMYKALOVÁ, E.: \emph{Matematika pro gymnázia: planimetrie}. Prometheus,
   2000, ISBN 80-7196-174-4.
@@ -50,12 +59,12 @@ POMYKALOVÁ, E.: \emph{Matematika pro gymnázia: planimetrie}. Prometheus,
 Žára, O.: {\it Začínáme s WebGL}. 2016-2017, [Online].
 \newline\urlprefix\url{https://www.zdrojak.cz/}
 
+\bibitem{html5}
+Robin Berjon~(W3C), E.~O., Travis~Leithead: {\it HTML5}. 2016-2017, [Online].
+\newline\urlprefix\url{https://dev.w3.org/html5/spec-author-view/}
+
 \bibitem{webglFUND}
 Tavares, G.: {\it WebGL Fundamentals}. 2016-2017, [Online].
 \newline\urlprefix\url{https://webglfundamentals.org/}
-
-\bibitem{html5}
-W3C: {\it HTML5}. 2016-2017, [Online].
-\newline\urlprefix\url{https://dev.w3.org/html5/spec-author-view/}
 
 \end{thebibliography}

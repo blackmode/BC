@@ -36,9 +36,9 @@ Pro návrh samotného programu je nezbytná podpora multimédií – tedy audio 
 
 
 \subsection{Video}
-Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5. \cite{HTML5aCSS3}
+Dříve nebylo možné do webových stránek vložit video tak jako dnes. K tomuto účelu bylo využíváno různých zásuvných modulů třetích stran a do webových stránek se video vkládalo např. jako objekt. \cite{HTML5_CZNIC} Nejvíce rozšířeným přehrávačem videí a tedy jakási náhrada za podporu videí, kterou tehdy HTML nemělo, se v širším spektru stal Adobe Flash, který funkci přehrávače plní v menší míře až doposud, avšak je již zastíněn efektivnějším řešením, a to právě HTML5. \cite{HTML5aCSS3}
 
-Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video. V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}. V opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
+Nový prvek v HTML5 vytvořený k tomuto účelu je \texttt{<video>}. Byl navržen tak, aby mohl být použit bez detekčních skriptů na stránce. V elementu videa je možné nastavit více souborů s videem a dle podpory si daný prohlížeč vybere jim podporované video.  V případě, že by prohlížeč prvek videa nepodporoval, bude jej ignorovat. \cite{HTML5_CZNIC} Nastavení více zdrojů videa s odlišnými kodeky lze pomocí elementu \texttt{<source>} uvnitř páru elementů \texttt{<video>...</video>}. Jakmile prohlížeč narazí na \texttt{<video>}, podívá se, zdali je přítomen atribut \texttt{src}. V opačném případě začne procházet jeden element \texttt{<source>} po druhém a bude hledat právě takový, který umí přehrát.
 
 Aby bylo možné ovládat video dynamicky pomocí kláves nebo myší, bude nutné využít DOM (Document Object Model). Jedná se o stromovou strukturu dokumentu, kterou si prohlížeč sestavuje po načtení webové stránky. Všechny elementy webové stránky jsou interpretovány v DOM jako objekt. Některé značky se v DOM vytvoří, aniž by byly ve zdrojovém kódu zapsány. Obecně platí, že prostřednictvím objektového modelu je díky javascriptu možné tuto stromovou strukturu dále upravovat a rozšiřovat. 
 
@@ -76,7 +76,7 @@ Mimo stavy načtení videa jsou tu i události indikující, co přesně se prá
 	
 	\item \texttt{ended} - přehrávání videa doběhlo nakonec
 	
-	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosáhnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}.
+	\item \texttt{canplaythrough} - tato událost říká, že je možné video přehrát až do konce bez nutnosti video zastavit k dalšímu načítání. Tohoto stavu může dosáhnout jen v případě, že stavový atribut \texttt{readyState} je roven \texttt{HAVE\_ENOUGH\_DATA}. \cite{html5}
 	
 \end{itemize}
 
@@ -93,7 +93,7 @@ Důležité atributy pro manipulaci s videem a nastavením.
 	
 	\item[autoplay] - jedná se atribut typu \texttt{bool}. V případě, že je \texttt{true}, spustí se přehrávání média automaticky jakmile je vše připraveno. Uvedení názvu atributu do elementu samotného je již dostačující informace o tom, co se bude dít s videem. Tedy bude tato hodnota typu \texttt{bool} považována jako \texttt{true}, jinak \texttt{false}.	
 	
-	\item[poster]  - Slouží k vystihnutí obsahu daného videa ještě než začne samotné přehrávání. Je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, tak HTML automaticky zvolí jeden z prvních neprázdných rámců.
+	\item[poster]  - Slouží k vystihnutí obsahu daného videa ještě než začne samotné přehrávání. Je možné jako první snímek videa zvolit obrázek zadaný cestou. V~případe, že tento atribut nebude vyplněn, tak HTML automaticky zvolí jeden z prvních neprázdných rámců. \cite{HTML5aCSS3}
 	
 	\item[loop]  - jedná se atribut typu \texttt{bool}, který začne po dosažení konce videa s přehráváním videa opět od začátku. Tato operace se provádí v nekonečné smyčce.
 
@@ -109,7 +109,7 @@ Důležité atributy pro manipulaci s videem a nastavením.
 	 	\begin{itemize}
 	 		\item \texttt{none} - nebude načítat nic. Výhodné v případě, kdy je potřeba minimalizovat vytížení pásma.	 		
 	 		\item \texttt{metadata} - načte pouze metadata daného videa - základní údaje o jeho délce apod.
-	 		\item \texttt{auto} - sám zvolí, co přesně udělá.
+	 		\item \texttt{auto} - sám zvolí, co přesně udělá. \cite{HTML5aCSS3}
 	 	\end{itemize}
 \end{description}
 
@@ -124,12 +124,12 @@ Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, 
 	
 	\item[\texttt{pause()}] - metoda sloužící k nastavení atributu \texttt{paused} na \texttt{true}, čímž dojde k pozastavení videa.
 	
-	\item[\texttt{canplaytype()}] - metoda sloužící k ověření, zdali webový prohlížeč dokáže video daného typu přehrát. Metoda vrací jednu z následujících hodnot:
+	\item[\texttt{canplaytype()}] - metoda sloužící k ověření, zdali webový prohlížeč dokáže video daného typu přehrát. Metoda vrací jednu z následujících hodnot \cite{html5}:
 	 	\begin{itemize}		
 			\item \texttt{""} - pokud by metoda vrátila prázdný řetězec, video prohlížeč nedokáže přehrát.
 			\item \texttt{maybe} - prohlížeč si není zcela jist, zdali dokáže formát přehrát.
 			\item \texttt{probably} - daný formát videa dokáže prohlížeč přehrát s vysokou pravděpodobností.
-		\end{itemize}
+		\end{itemize} 
 	\item[\texttt{load()}] - všechny data videa se načtou znovu, čímž dojde ke zrušení všech akcí a současných dat, které byly doposud staženy a načteny. Poté se vše zavolá a načte znovu následujícím způsobem:
 	 	\begin{enumerate}
 			\item Nejprve dojde k inicializaci, kdy \texttt{readyState} je nastaven na \texttt{HAVE\_NOTHING}. Stejnou hodnotu bude mít i síťový atribut \texttt{networkState}. \texttt{Seeking} je nastaven na \texttt{false}, \texttt{paused}  na \texttt{true} a vše ostatní je prázdné nebo nula.	
@@ -150,9 +150,9 @@ Jelikož pomocí DOM je možné upravovat vlastnosti elementu \texttt{<video>}, 
 
 \subsection{Plátno}
 
-Jak již bylo avizováno výše, plátno neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů, herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu. Plátno je párový  element, přesto se mezi párové tágy zdánlivě nic nevykresluje, celý obsah je skryt. Takový obsah se nazývá tzv. \textit{fallback content} a je zobrazen v případě chyby nebo prohlížečům, které tento element HTML5 nepodporují.
+Jak již bylo avizováno výše, plátno neboli element \texttt{<canvas>} slouží v HTML5 pro vykreslení grafů, herní grafiky, obrazů bitmap apod. Díky elementu \texttt{<canvas>} lze vykreslovat i náročnější grafické objekty za pomocí WebGl. \cite{HTML5_CZNIC} V HTML5 slouží tedy především k vykreslení 2D prvků pomocí Javascriptu. Plátno je párový  element, přesto se mezi párové tágy zdánlivě nic nevykresluje, celý obsah je skryt. Takový obsah se nazývá tzv. \textit{fallback content} a je zobrazen v případě chyby nebo prohlížečům, které tento element HTML5 nepodporují.
 
-Plátno je bezpochyby nejdůležitější částí pro realizaci celé práce. Pro  vyobrazení grafických dat bude používat především HTML element \texttt{<video>}, z kterého bude data číst. Využije ho tedy jako zdroj. Pomocí DOM pak dokážeme s objektem snadno manipulovat. 
+Plátno je bezpochyby nejdůležitější částí pro realizaci celé práce. Pro  vyobrazení grafických dat bude používat především HTML element \texttt{<video>}, z kterého bude data číst. Využije ho tedy jako zdroj. \cite{HTML5aCSS3} Pomocí DOM pak dokážeme s objektem snadno manipulovat. 
 
 Díky elementu \texttt{<canvas>} jsme schopni získat kontext Javascriptového API - WebGL a tak mít možnost  pracovat na úrovni grafické karty.
 
@@ -174,7 +174,7 @@ Po získání objektu plátna lze dále s elementem manipulovat prostřednictví
 			 \begin{itemize}
 			 	\item  \texttt{\textbf{"2d"}} - vrací objektové rozhraní \texttt{CanvasRenderingContext2D}, který slouží pro kreslení grafických primitiv.
 			 	
-			 	\item \texttt{\textbf{"webgl"}} - pokud tuto funkci prohlížeč podporuje, bude navrácen objekt \newline \texttt{WebGLRenderingContext}. 
+			 	\item \texttt{\textbf{"webgl"}} - pokud tuto funkci prohlížeč podporuje, bude navrácen objekt \newline \texttt{WebGLRenderingContext}. \cite{html5} 
 			 \end{itemize}
 		 
  
@@ -185,7 +185,7 @@ Po získání objektu plátna lze dále s elementem manipulovat prostřednictví
 
 
 \subsection{Vektory}
-SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zažitý standard. Doposud ale nebylo možné kód \texttt{svg} vkládat přímo do HTML. Změna přišla až s HTML5. SVG vychází z jazyka XML (e\textbf{X}tensible \textbf{M}arkup \textbf{L}anguage)\footnote{obecný značkovací jazyk pro serializaci dat.}. Mezi jeho nesporné výhody patří velikost, přenositelnost a nezávislost na rozlišení aj. Do HTML se vkládá pomocí elementu \texttt{<svg>}, který má zpravidla dále zanořené elementy, které reflektují jeho obsah. Mezi takové vnořené elementy patří take tág \texttt{<path>}.
+SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zažitý standard. Doposud ale nebylo možné kód \texttt{svg} vkládat přímo do HTML. Změna přišla až s HTML5. SVG vychází z jazyka XML (e\textbf{X}tensible \textbf{M}arkup \textbf{L}anguage)\footnote{obecný značkovací jazyk pro serializaci dat.} \cite{HTML5aCSS3}.  Mezi jeho nesporné výhody patří velikost, přenositelnost a nezávislost na rozlišení aj. Do HTML se vkládá pomocí elementu \texttt{<svg>}, který má zpravidla dále zanořené elementy, které reflektují jeho obsah. Mezi takové vnořené elementy patří take tág \texttt{<path>}.
 
 
 \subsubsection{Element path}
@@ -293,7 +293,7 @@ Ortografická projekce využívá skutečné velikosti objektu. Scéna je reprez
 
 Perspektivní projekce zkresluje velikost objektů způsobem, jak je tomu v reálném světě. Čím je objekt dál od pozorovatele, tím se bude jevit jako menší, protože jeho pozice je středem této projekce. Dalším příkladem bychom mohli uvést koleje, které se v dálce jeví, jakoby se sbíhaly v jednu jedinou apod.
   
-Pokud bychom chtěl vykreslit nějaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře aj. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat atd., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
+Pokud bychom chtěl vykreslit nějaký 3D objekt, bude potřeba mít v bufferech informace o vrcholech, normálách, textuře aj. Tyto data bychom zároveň museli neustále aktualizovat a nahrávat zpět do paměti, aby bylo možné s daným 3D objektem jakkoli manipulovat, posouvat atd., aby nedocházelo k neustálému přepisování hodnot v paměti na GPU. \cite{zdrojak} Veškeré změny zrealizujeme transformačními maticemi, kterými se bude geometrie objektu v paměti násobit, aniž by data v paměti byla jakkoli změněna.
 
 \subsection{Homogenní souřadnice}
 Homogenní souřadnice je tvořena čtyřmi prvky - \texttt{x}, \texttt{y}, \texttt{z} a \texttt{w}. První tři složky tvoří souřadnice euklidovského prostoru, poslední prvek \texttt{w} je perspektivní složka. Spolu se souřadnicemi \texttt{x}, \texttt{y}, \texttt{z} tvoří projekční prostor.\cite{WebGLbeg}
@@ -305,7 +305,7 @@ Samotná perspektivní složka funguje v homogenních souřadnicích jako změna
 Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje definovat body do nekonečna, resp. nekonečnou délku vektoru, což ve standardním trojrozměrném prostoru možné není. Tato situace nastává v případě, kdy je složka rovna nule.
 
 \subsection{Model matrix}
-Jedná se o matici, kterou držíme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu.
+Jedná se o matici, kterou uchováváme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu ve scéně.  
 
 \subsection{View matrix}
 Díky takové transformační matici realizujeme již avizovanou \uv{roli kamery}, kdy simulujeme vzájemný vztah scény a pozorovatele.
@@ -617,7 +617,11 @@ $$ M = T \cdot R_{x} \cdot R_{y} \cdot R_{z} \cdot S $$
 
 Při násobení původní matice rotačními maticemi hrají  velkou roli také znaménka. Jelikož v implementační části budeme používat interakce s myší a tím měnit náhled pozorovatele, resp. kamery na náš model, bude třeba zvolit směr posuvu zorného pole kamery. 
 
+Mimo znamének bude také záležet na pořadí násobení matic, kdy jejich prohozením dostaneme pokaždé jiný výsledek. \cite{PaulBourke} Tato vlastnost se promítne zejména ve výpočtu konečné pozice v prostoru.
+
 Vlastnosti prohození znamének využijeme právě u  rotace $R_{x}$ a $R_{y}$, které reprezentují pohyb myši.  
+
+
 
 
 \subsection{Zobrazovací matice}
