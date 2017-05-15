@@ -51,6 +51,10 @@ Milan~Kočandrle, L.~B.: \emph{Matematika pro gymnázia: Analytická
 ODVÁRKO, O.: \emph{Matematika pro gymnázia: Goniometrie}. Prometheus, 2009,
   ISBN 978-80-7196-359-2.
 
+\bibitem{indexTUT}
+Opengl-tutorial.org: {\it The principle of indexing}. 2016-2017, [Online].
+\newline\urlprefix\url{http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/}
+
 \bibitem{opengl}
 Overvoorde, A.: {\it OpenGL}. 2016-2017, [Online].
 \newline\urlprefix\url{http://open.gl/}

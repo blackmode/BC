@@ -304,7 +304,7 @@ Perspektivním dělením, tedy vydělením souřadnic \texttt{(x, y, z)} perspek
 
 Samotná perspektivní složka funguje v homogenních souřadnicích jako změna měřítka daného bodu geometrie.
 
-Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje definovat body do nekonečna, resp. nekonečnou délku vektoru, což ve standardním trojrozměrném prostoru možné není. Tato situace nastává v případě, kdy je složka rovna nule.
+Jednou z dalších vlastností homogenní souřadnice je ta, že umožňuje definovat body do nekonečna, resp. nekonečnou délku vektoru, což ve standardním trojrozměrném prostoru možné není. Tato situace nastává v případě, kdy je složka rovna nule. \cite{WebGLbeg}
 
 \subsection{Model matrix}
 Jedná se o matici, kterou uchováváme pro každý vykreslovaný objekt. Stará se o úpravu tvaru, natočení a posuvu objektu ve scéně.  
@@ -320,11 +320,11 @@ na obrazovku monitoru. \cite{zdrojak}
 \newpage
 
 \subsection{Vytvoření a běh programu}
-Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci v javascriptovém API. Funkce by se daly rozdělit na několik částí. Nejprve ty, které pracují s shadery, dále ty které vytváří program a v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny funkce WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. Práce s funkcemi WebGL je velice podobná konečnému automatu. V zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci. V této částí se ale zaměříme na vykreslování, které je třeba více popsat, než se vrhneme na samotnou implementaci. 
+Po vytvoření kontextu \texttt{webgl} je již možné využívat funkce pro práci v javascriptovém API. Funkce by se daly rozdělit na několik částí. Nejprve ty, které pracují s shadery, dále ty které vytváří program a v neposlední řadě funkce pro prací s buffery a vykreslením dat. Všechny operace WebGL pracují nad vytvořeným kontextem plátna\footnote{Vytvořený WebGL kontext budeme označovat jako \texttt{gl}}. V zásadě jde pouze o volání funkcí s danými parametry, které mění kontext pro specifické účely. WebGL disponuje celou řadou funkcí, které využijeme dále v implementaci. V této částí se ale zaměříme na vykreslování, které je třeba více popsat, než se vrhneme na samotnou implementaci. 
 
-Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi \texttt{drawArrays()} nebo \texttt{drawElements()}. Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum.
+Po nahrání dat do bufferů se vykreslení uložených data realizuje funkcemi \texttt{drawArrays()} nebo \texttt{drawElements()}. Hlavní rozdíl mezi funkcemi je ten, že \texttt{drawArrays()} vykresluje přímo data geometrie tak,  jak byla spočítána a vložena do vertex bufferu. Samotné body prostoru, tak jak jsou definovány, jsou uvedeny vícekrát pro každé sousedící primitivum. 
 
-Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů, čímž data geometrie zmenší. 
+Funkce \texttt{drawElements()} pracuje s takovými daty odlišným způsobem. Vedle bufferů potřebných k vykreslení geometrie a mapování textury je zaveden nový buffer tzv. index buffer, který disponuje odkazy na jednotlivé body do bufferu geometrie a zavádí sdílení bodů \cite{indexTUT}, čímž data geometrie zmenší. 
 
  
 
@@ -365,6 +365,13 @@ Dále je nutné vypočítat svíraný úhel všech poledníků - vertikálních 
 \end{figure}
  
 Na základě vypočtených úhlů je možné již spočítat jednotlivé složky kartézské soustavy souřadnic \texttt{[x,y,z]} každému bodu, čímž dojde ke kompletní aproximaci tělesa.
+
+Důkazem aproximace je analytický vztah pro výpočet kulové plochy, kdy sféra je množina všech bodů v prostoru, které mají od jejího středu danou pevnou vzdálenost, resp. poloměr. Takový vztah se poté dá vyjádřit jako \cite{geometrie}: 
+$$ (x-m)^{2} + (y-n)^{2} + (z-p)^{2} = r^{2} $$
+
+kde $(m,n,p)$ označuje souřadnice středu sféry.
+
+
 
 %=========================================================================
 \newpage
@@ -695,7 +702,7 @@ Zorný úhel je grafický prvek, který udává informace o aktuálním zorném 
 
 
 \subsection{Vztah perspektivy a pozorovatele}
-Základem pro výpočet zorného úhlu je perspektivní matice - přesněji argument \texttt{\textit{fov}}, který značí již výše zmíněné horizontální zorné pole. Celý výpočet bude  založen na axiomu o středovém úhlu, pro který platí, že je dvojnásobkem úhlu středového.\cite{planimetrie} 
+Základem pro výpočet zorného úhlu je perspektivní matice - přesněji argument \texttt{\textit{fov}}, který značí již výše zmíněné horizontální zorné pole. Celý výpočet bude  založen na axiomu o středovém úhlu, pro který platí, že středový úhel je dvojnásobkem úhlu obvodového za předpokladu, že oba přísluší témuž oblouku. \cite{planimetrie} 
 
 Jedinou neznámou je v takovém případě právě středový úhel, který bude reprezentovat velikost zorného pole.
 
@@ -718,7 +725,7 @@ kde $M_{l}$ je zmenšení, aby extrém ležel na kružnici \texttt{\textit{m}}. 
 \subsection{Návrh prvku}
 K realizaci prvku budeme potřebovat vektor \textbf{svg} zobrazující přímý úhel. Reprezentován bude tvarem polokoule, u které se využije vlastnosti tahu. Ve vektorové grafice se jedná o nastavení atributu \texttt{stroke-width}, který bude znázorňovat zorný úhel. Důvodem, proč pro vyobrazení  není využita samotná křivka vyplněná barvou, je ten, že pokud se přenastaví úhel zobrazení, tak se křivka zdeformuje způsobem, že z ní zorný úhel není zjevný.
 
-Vstupními argumenty je pozice prvku ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na polární souřadnice. K samotnému výpočtu dostačuje Pythagorova věta, kdy pomocí bodu \texttt{(x,y)} jsou známy hodnoty odvěsen a je možné spočítat přeponu. \cite{geometrie} Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
+Vstupními argumenty je pozice prvku ve dvojrozměrném prostoru \texttt{(x,y)} a průměr kruhu. Dále je potřeba přepočítat tyto souřadnice dvojrozměrného prostoru na polární souřadnice. K samotnému výpočtu dostačuje goniometrický vztah pro pravoúhlý trojúhelník, kdy pomocí úhlu $\theta$ a přepony lze dopočítat odvěsny. Takto odvodíme vztahy \\pro \texttt{x} a \texttt{y}.
 
 
  $$ x = r\cdot\cos(\theta) $$ 
@@ -838,7 +845,7 @@ Implementace textur je zasazena jak do funkce \texttt{\setupProgram}, tak do vyk
 
 Samotná textura se vytvoří funkcí \texttt{createTexture()}, která vrací referenci na objekt WebGL textury, s kterým se dále pracuje. Tento objekt si uložíme opět do globální objektové proměnné \texttt{PROG.texture}. Po zisku  reference se textura, stejně jako u bufferů a programu, aktivuje obdobnou funkcí \texttt{ bindTexture()}.
 
-Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}, protože v našem případě implementace dosahuje lepších výsledků než-li \texttt{NEAREST}.
+Aby textura byla nezávislá na rozlišení, tak je nutné ošetřit případ, kdy by byla menší nebo větší než aktuální rozlišení. K tomuto účelu použijeme texturovací filtr. \cite{opengl} Chování textury při zmenšení a zvětšení je konkretizováno funkcí \texttt{texParameteri()}, která je nastavena na \texttt{LINEAR}, protože v našem případě implementace dosahuje lepších výsledků než-li \texttt{NEAREST}. Důvod je zřejmý, lineární filtr vrací vážený průměr všech čtyř okolních pixelů bodu souřadnice. \cite{opengl} Naproti tomu filtr \texttt{NEAREST} vrací pouze pixel, který je neblíže taková souřadnici. 
 
 
 %=========================================================================
