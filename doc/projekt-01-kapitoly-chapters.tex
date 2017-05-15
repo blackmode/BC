@@ -164,7 +164,7 @@ Plátno má pouze dva atributy a těmi jsou \texttt{width} a \texttt{height} pro
 \subsubsection*{Použití a práce s plátnem}
 Použit plátno lze prostřednictvím rozhraní \texttt{HTMLCanvasElement}, které slouží pro přístup k jeho vlastnostem a metodám. Přístup k objektu \texttt{HTMLCanvasElement} lze pomocí standardní javascriptové metody \texttt{getElementById()} v případě, že je v tágu \texttt{<canvas>} nastaven atribut \texttt{id} nebo lze objekt získat pomocí metody \texttt{querySelector("canvas")}.
 
-Po získání objektu plátna lze dále s elementem manipulovat prostřednictvím dvou metod (počet volání dané metody vrátí pokaždé ten stejný objekt):
+Po získání objektu plátna lze dále s elementem manipulovat prostřednictvím dvou metod\footnote{Počet volání dané metody vrátí pokaždé ten stejný objekt.}:
 	 	\begin{itemize}		
 			\item \texttt{ toDataURL([type[,quality]])} \newline
 			 - vrací URL adresu aktuálního obrázku v elementu \texttt{<canvas>}. Metoda může a nemusí mít nějaké argumenty. První argument, v případě že je zadán, rozhoduje jaký bude navrácen výsledný typ obrázku. Pokud nezadáme žádný argument, tak jako výchozí formát obrázku bude automaticky zvolen \textit{image/png}. Výsledná adresa URL bude vrácena jako řetězec. \cite{html5}
@@ -192,24 +192,28 @@ SVG (Scalable Vector Graphics) - škálovatelná vektorová grafika je již zaž
 Generický element \texttt{<path>} slouží ve vektorové grafice k vytvoření křivky, která může být dále vyplněna barvou, nebo může sloužit k vytvoření ořezové cesty apod. Dále může mít nastaveny atributy specifikující vykreslování obrysů, nastavení stylů a tříd, nebo nastavení kalkulace délky cest. Mezi takové atributy patří:
 
 \begin{description}
-	\item[d]  - tento atribut nese informace o cestě, resp. data k vykreslení obrysu, která poté můžeme vyplnit konkrétní barvou, popř. je využít k dalším podobným účelům viz výše. Data atributu se skládají z následujících částí:
+	\item[d]  - tento atribut nese informace o cestě, resp. data k vykreslení obrysu, která poté můžeme vyplnit konkrétní barvou, popř. je využít k dalším podobným účelům viz výše. Data atributu se skládají z následujících částí\footnote{K atributům se vrátíme v implementační části}:
 	
 	\begin{itemize}
 		\item \texttt{\textbf{M}}/\texttt{\textbf{m}} (\textit{moveto}) její syntaxe: \texttt{\textbf{M x y}} nebo \texttt{\textbf{m x y}} - realizuje posun na danou dvojice souřadnic \texttt{(x, y)} bez kreslení. Velké písmeno \texttt{M} značí, že souřadnice budou absolutní. Malé písmeno \texttt{m} indikuje, že budou souřadnice relativní\footnote{Velikost písmen má stejný význam u všech příkazů.}. Tuto vlastnost je velice výhodné používat pro všechny cesty, jinak by vždy následující čára začínala na konci té předchozí.\\
 		
-		\item \texttt{\textbf{Z}}/\texttt{\textbf{z}} (\textit{closepath}) - tento příkaz je bez parametrů a slouží k uzavření cest, tedy spojení posledního bodu s prvním bodem vykreslovaných cest.\\
+		%\item \texttt{\textbf{Z}}/\texttt{\textbf{z}} (\textit{closepath}) - tento příkaz je bez parametrů a slouží k uzavření cest, tedy spojení posledního bodu s prvním bodem vykreslovaných cest.\\
 		
-		\item \texttt{\textbf{L}}/\texttt{\textbf{l}} (\textit{lineto}) - tento příkaz již kreslí čáru. Jeho syntaxe je  stejná jako u příkazu \textit{moveto} tj. \texttt{L/l x,y}.\\
+		%\item \texttt{\textbf{L}}/\texttt{\textbf{l}} (\textit{lineto}) - tento příkaz již kreslí čáru. Jeho syntaxe je  stejná jako u příkazu \textit{moveto} tj. \texttt{L/l x,y}.\\
 		
-		\item \texttt{\textbf{H}}/\texttt{\textbf{h}} (\textit{horizontal lineto}) - kreslí horizontální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do (\textbf{x}, cp\textbf{y}), argument příkazu je pouze souřadnice \texttt{x}.\\
+		%\item \texttt{\textbf{H}}/\texttt{\textbf{h}} (\textit{horizontal lineto}) - kreslí horizontální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do (\textbf{x}, cp\textbf{y}), argument příkazu je pouze souřadnice \texttt{x}.\\
 		
-		\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do bodu (cp\textbf{x}, \textbf{y}), argumentem příkazu je pouze souřadnice \texttt{y}.\\
+		%\item \texttt{\textbf{V}}/\texttt{\textbf{v}} (\textit{vertical lineto}) - kreslí vertikální čáru z bodu (cp\textbf{x}, cp\textbf{y}) do bodu (cp\textbf{x}, \textbf{y}), argumentem příkazu je pouze souřadnice \texttt{y}.\\
 		
 		\item \texttt{\textbf{A}}/\texttt{\textbf{a}} (\textit{elliptical arc}) - parametry:  \textit{{\small (rx ry x-axis-rotation large-arc-flag sweep-flag x y)}} \\ kde \texttt{rx} značí první poloměr elipsy, \texttt{ry} druhý poloměr, \texttt{x-axis-rotation} rotace kolem osy x, příznak \texttt{large-arc-flag} značí, zdali bude oblouk krátký (hodnota \texttt{0}), popř. dlouhý (hodnota \texttt{1}), dále argument \texttt{sweep-flag} příznak značící oblouk proti směru/po směru (\texttt{0}/\texttt{1}), \texttt{x} a \texttt{y} souřadnice koncového bodu. \cite{svg}
 	\end{itemize}
 
 
-	\item[fill]  - vyplní křivku zadanou argumentem \texttt{d} libovolnou barvou.
+	\item[fill]  - vyplní křivku  libovolnou barvou.
+	
+	\item[stroke-width]  - budeme jej využívá k nastavení šířky tahu. V implementační části bude plnit funkci zorného pole.
+	
+	\item[stroke]  - slouží k nastavení barvy tahu.
 \end{description}
 
 
