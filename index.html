@@ -248,7 +248,14 @@ var SETTINGS = {
 		height:  75,
 		canvas_position_x:  0.0,
 		canvas_position_y:  1.0,
- 	} ,
+ 	},
+	video_status_bar : {
+		object: null,
+		width: 170,
+		height:  20,
+		canvas_position_x:  1.0,
+		canvas_position_y:  0.0,
+ 	},
 	panorama_controlls : {
 		object: null,
 		width: 260,
@@ -362,6 +369,65 @@ var page = path.split("/").pop();
 //SETTINGS.input.image = createImage("theta/data/p7.jpg"); // p7.jpg / t1.jpg
 
 
+
+/**
+ *	Nastavuje a aktualizuje potřebné objektoveo proměnné programu,
+ *
+ *  v případě , že se vše povede vrací true a program pokračuje
+ *
+ */
+function updateObjectVariables() {
+
+	// inicializace GUI prvku 
+	SETTINGS.compass.object = createCompass(
+		SETTINGS.compass.width, 
+		SETTINGS.compass.height, 
+		SETTINGS.compass.canvas_position_x, 
+		SETTINGS.compass.canvas_position_y, 
+		SETTINGS.compass.north, 
+		SETTINGS.compass.angle
+	);
+
+	// zorne pole
+	SETTINGS.field_vision.object = createFieldVision(
+		SETTINGS.field_vision.width, 
+		SETTINGS.field_vision.height, 
+		SETTINGS.field_vision.canvas_position_x, 
+		SETTINGS.field_vision.canvas_position_y, 
+		SETTINGS.field_vision.angle, 
+		SETTINGS.field_vision.shift
+	); 
+
+	// ovladaci prvky
+	SETTINGS.video_controlls.object = createVideoControlls(
+		SETTINGS.video_controlls.width,
+		SETTINGS.video_controlls.height, 
+		SETTINGS.video_controlls.canvas_position_x, 
+		SETTINGS.video_controlls.canvas_position_y 
+	) ;
+
+	// obecne ovladaci prvky panoramatu
+	SETTINGS.panorama_controlls.object = createPanoramaControlls(
+		SETTINGS.panorama_controlls.width, 
+		SETTINGS.panorama_controlls.height, 
+		SETTINGS.panorama_controlls.canvas_position_x, 
+		SETTINGS.panorama_controlls.canvas_position_y,
+	);
+	
+	// videostatus bar
+	SETTINGS.video_status_bar.object = createVideoStatusBar(
+		SETTINGS.video_status_bar.width,
+		SETTINGS.video_status_bar.height,
+		SETTINGS.video_status_bar.canvas_position_x,
+		SETTINGS.video_status_bar.canvas_position_y,
+		SETTINGS.input.video
+	);
+
+	// nastaveni nastrojoveho okna 
+	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
+}
+
+
 /**
  * Nastavuje potřebné proměnné programu, inicializuje webgl apod
  *
@@ -422,56 +488,21 @@ function initProgram() {
 	PROG.matrices.projection.data = createIdentityMatrix4();
 	PROG.matrices.projection.fov = Math.PI/1.75;
 
-	// inicializace GUI prvku 
-	SETTINGS.compass.object = createCompass(
-		SETTINGS.compass.width, 
-		SETTINGS.compass.height, 
-		SETTINGS.compass.canvas_position_x, 
-		SETTINGS.compass.canvas_position_y, 
-		SETTINGS.compass.north, 
-		SETTINGS.compass.angle
-	);
 
 	// zorne pole
 	SETTINGS.field_vision.angle = radToDeg(PROG.matrices.projection.fov)*1.2;
-	SETTINGS.field_vision.object = createFieldVision(
-		SETTINGS.field_vision.width, 
-		SETTINGS.field_vision.height, 
-		SETTINGS.field_vision.canvas_position_x, 
-		SETTINGS.field_vision.canvas_position_y, 
-		SETTINGS.field_vision.angle, 
-		SETTINGS.field_vision.shift
-	); 
-
-
-	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
-
-
 
 	// ovladaci prvky
 	SETTINGS.video_controlls.width = PROG.canvas.width/2;
-	SETTINGS.video_controlls.object = createVideoControlls(
-		SETTINGS.video_controlls.width,
-		SETTINGS.video_controlls.height, 
-		SETTINGS.video_controlls.canvas_position_x, 
-		SETTINGS.video_controlls.canvas_position_y 
-	) ;
 
-
-	// obecne ovladaci prvky panoramatu
-	SETTINGS.panorama_controlls.object = createPanoramaControlls(
-		SETTINGS.panorama_controlls.width, 
-		SETTINGS.panorama_controlls.height, 
-		SETTINGS.panorama_controlls.canvas_position_x, 
-		SETTINGS.panorama_controlls.canvas_position_y,
-	);
-
-
-	// nastaveni nastrojoveho okna 
-	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
+	// aktualizace obj. promennaych
+	updateObjectVariables();
 
 	return true;
 }
+
+
+
 
 
 // funkce pro zobrazeni nastrojoveho okna
@@ -1345,48 +1376,7 @@ function onWindowResize( event ) {
 }
 
 function resize() {
-	createVideoStatusBar(170, 20, 1.0, 0.0, SETTINGS.input.video);
-	
-	// zonry uhel
- 	createFieldVision(
- 		SETTINGS.field_vision.width, 
- 		SETTINGS.field_vision.height, 
- 		SETTINGS.field_vision.canvas_position_x, 
- 		SETTINGS.field_vision.canvas_position_y,  
- 		SETTINGS.field_vision.angle, 
- 		SETTINGS.field_vision.shift
- 	);
-
- 	// kompas
-	SETTINGS.compass.object = createCompass(
-		SETTINGS.compass.width, 
-		SETTINGS.compass.height, 
-		SETTINGS.compass.canvas_position_x, 
-		SETTINGS.compass.canvas_position_y, 
-		SETTINGS.compass.north, 
-		SETTINGS.compass.angle
-	);
-
-	// ovladaci prvky videa
-	SETTINGS.video_controlls.object = createVideoControlls(
-		SETTINGS.video_controlls.width,
-		SETTINGS.video_controlls.height, 
-		SETTINGS.video_controlls.canvas_position_x, 
-		SETTINGS.video_controlls.canvas_position_y 
-	) ;
-
-	// obecne ovladaci prvky panoramatu
-	SETTINGS.panorama_controlls.object = createPanoramaControlls(
-		SETTINGS.panorama_controlls.width, 
-		SETTINGS.panorama_controlls.height, 
-		SETTINGS.panorama_controlls.canvas_position_x, 
-		SETTINGS.panorama_controlls.canvas_position_y,
-	);
-
-	// nastaveni nastrojoveho okna 
-	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
-
-
+	updateObjectVariables();
 }
 
 /**
