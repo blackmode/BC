@@ -2,6 +2,9 @@
     "video": {
         "fisheye": {
             "src" : "video1.mp4",
+            "compass" : {
+                "angle" : 215,
+            },
             "titles": [
                 {
                     "time": 5,

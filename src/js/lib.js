@@ -1452,3 +1452,68 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 
 
 }
+
+
+function createWindowSettings(width, height, position_x, position_y, active) {
+
+	// ID
+	var panorama_controlls_id  = "panorama_controlls";
+
+	// overeni existence potrebnych divu kostry
+	var viewer = document.getElementById("viewer");
+	if (!viewer) {
+		e('DIV s ID: viewer NEEXISTUJE!');
+		return false
+	}
+
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		e('Neexistuje TAG <canvas>!');
+		return false;
+	}
+
+	var panorama_controlls = document.getElementById(panorama_controlls_id);
+	if (!panorama_controlls) {
+		e('DIV s ID: panorama_controlls NEEXISTUJE!');
+		return false;
+	}
+
+
+	var panorama_controlls_width = width;
+	var panorama_controlls_height = height;
+
+	// dynamicke umisteni zadane parametrem
+	panorama_controlls_left = (canvas_dom.width - panorama_controlls_width)*position_x;
+	panorama_controlls_top = (canvas_dom.height - panorama_controlls_height)*position_y;
+
+	// fulstreen
+	var panorama_controlls_window_settings = document.getElementById("panorama_controlls_window_settings");
+	if (!panorama_controlls_window_settings) {
+		panorama_controlls_window_settings = document.createElement('div');
+		panorama_controlls_window_settings.setAttribute('id', "panorama_controlls_window_settings");
+ 		viewer.appendChild(panorama_controlls_window_settings);;
+	}
+
+	// nastylovani a umsiteni boxu
+	panorama_controlls_window_settings.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings.style.height = panorama_controlls_height+'px';
+	panorama_controlls_window_settings.style.left = panorama_controlls_left+'px';
+	panorama_controlls_window_settings.style.top = panorama_controlls_top+'px';
+	panorama_controlls_window_settings.style.backgroundColor  = 'red'; // transparent
+	panorama_controlls_window_settings.style.opacity  = 1.0;
+	//panorama_controlls_window_settings.style.border  = '1px solid black';
+	panorama_controlls_window_settings.style.position = 'absolute';
+	panorama_controlls_window_settings.style.overflow = 'hidden';
+
+	if (active) {
+		panorama_controlls_window_settings.style.display = 'block'; 
+	}
+	else {
+		panorama_controlls_window_settings.style.display = 'none';
+	}
+
+
+	return panorama_controlls_window_settings;
+
+
+}

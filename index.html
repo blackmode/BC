@@ -252,7 +252,16 @@ var SETTINGS = {
 		height:  50,
 		canvas_position_x:  1.0,
 		canvas_position_y:  1.0,
-
+		btn: {
+			settings: {
+				object: null,
+				show_window: false,
+				width: 150,
+				height:  300,
+				canvas_position_x:  1.0,
+				canvas_position_y:  0.2,
+			}
+		}
  	} ,
 	info_screen : {
 		width: 300,
@@ -317,6 +326,9 @@ var PROG = {
 
  SETTINGS.input.video =  createVideo("theta/data/new/R0010083.mp4");
 //SETTINGS.input.video =  createVideo("data/R0010014_20161217101030_er.mp4");
+
+
+
 
 
 if (getParamByKey("video"))
@@ -434,8 +446,28 @@ function initProgram() {
 		SETTINGS.panorama_controlls.canvas_position_y,
 	);
 
+
+	// nastaveni nastrojoveho okna 
+	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
+
 	return true;
 }
+
+
+// funkce pro zobrazeni nastrojoveho okna
+function settings_window(active) {
+	SETTINGS.panorama_controlls.btn.settings.show_window = active;
+
+	// volani a aktualizace objektove promenne
+	SETTINGS.panorama_controlls.btn.settings.object = createWindowSettings(
+		SETTINGS.panorama_controlls.btn.settings.width, 
+		SETTINGS.panorama_controlls.btn.settings.height, 
+		SETTINGS.panorama_controlls.btn.settings.canvas_position_x, 
+		SETTINGS.panorama_controlls.btn.settings.canvas_position_y, 
+		SETTINGS.panorama_controlls.btn.settings.show_window,
+	);
+}
+
 
 
 
@@ -629,6 +661,16 @@ function setupProgram()
 			zoom_minus()
 
 		});
+
+		// settings
+		SETTINGS.panorama_controlls.object.btn.settings.addEventListener('click', function() {
+ 			// nastaveni nastrojoveho okna 
+			if (SETTINGS.panorama_controlls.btn.settings.show_window) settings_window(0);
+			else  settings_window(1);
+		});
+
+
+
 	/// ======================= OVLADANI PANORAMATU, KONEC ===========================================
 
 
@@ -1313,6 +1355,11 @@ function resize() {
 		SETTINGS.panorama_controlls.canvas_position_x, 
 		SETTINGS.panorama_controlls.canvas_position_y,
 	);
+
+	// nastaveni nastrojoveho okna 
+	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
+
+	
 }
 
 /**
