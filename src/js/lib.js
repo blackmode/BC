@@ -554,6 +554,20 @@ function checkIfFileExists(url)
 }
 
 
+function isFileExists(url)
+{
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+
+    if (http.status!=404) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 /*
 	HAVE_NOTHING		0	No information is available about the media resource.
 	HAVE_METADATA		1	Enough of the media resource has been retrieved that the metadata attributes are initialized. Seeking will no longer raise an exception.
@@ -606,7 +620,7 @@ function initArray( length) {
 }
 
 function createVideo( src ) {
-	if (!checkIfFileExists(src)) {
+	if (!isFileExists(src)) {
 		w('Zdrojove video neexistuje');
 		return false;
 	}
@@ -653,16 +667,16 @@ function getCurrentProgramFilename() {
 	var path = window.location.pathname;
 	var page = path.split("/").pop();
 	if (!page) {
-		if (checkIfFileExists('index.html')) {
+		if (isFileExists('index.html')) {
 			return 'index.html';
 		}
-		else if (checkIfFileExists('index.htm')) {
+		else if (isFileExists('index.htm')) {
 			return 'index.htm';
 		}
-		else if (checkIfFileExists('default.htm')) {
+		else if (isFileExists('default.htm')) {
 			return 'default.htm';
 		}
-		else if (checkIfFileExists('default.html')) {
+		else if (isFileExists('default.html')) {
 			return 'default.html';
 		}
 	}
@@ -1064,7 +1078,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
 }
 
 
-function createVideoStatusBar(width, height, position_x, position_y, video) {
+function createVideoStatusBar(width, height, position_x, position_y) {
 
 	var id = 'video_status_bar';
 	var viewer = document.getElementById("viewer");
@@ -1155,14 +1169,10 @@ function createVideoStatusBar(width, height, position_x, position_y, video) {
 		status_bar_box.appendChild(progress_bar_text);
 	
 
-	// listenery
-	video.addEventListener("timeupdate", function() {
- 		var value = (100 / video.duration) * video.currentTime;
- 		progress_bar_text.innerHTML = '<div>'+Math.round(video.currentTime/video.duration*100)+' %</div>';
- 		progress_bar_box.setAttribute('value', ''+video.currentTime/video.duration+'');
- 	});
-
-		
+	return {
+		text: progress_bar_text,
+		box: progress_bar_box,
+	};
 }
 
 

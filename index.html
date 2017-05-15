@@ -353,20 +353,63 @@ SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
 
 
-var path = window.location.pathname;
-var page = path.split("/").pop();
-  var fileName = location.href.split("/").slice(-1); 
 
 
-
-
-
-
- d(getCurrentProgramFilename());
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("theta/data/p6.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("theta/data/p7.jpg"); // p7.jpg / t1.jpg
+
+
+
+function checkJSONfile() {
+	var current_file_name = getCurrentProgramFilename().split('.')[0];
+	var dest_json_file = current_file_name+'.json';
+
+
+	var request = new XMLHttpRequest();
+	request.open("GET", dest_json_file, false);
+	request.send(null)
+	var my_JSON_object = JSON.parse(request.responseText);
+
+	// moznost vstupu dvema mody
+	// RYBI OKO
+	if (my_JSON_object.fisheye) 
+	{
+		if (my_JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
+		{
+			SETTINGS.input.video = createVideo(my_JSON_object.fisheye.video.src);
+		}
+		else if (my_JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
+		{
+
+		}
+	}
+	// Equirectangular INPUT
+	else if (my_JSON_object.equirectangular) 
+	{
+		if (my_JSON_object.equirectangular.video && SETTINGS.mode.equirectangular.video.active) 
+		{
+
+		}
+		else if (my_JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
+		{
+
+		}
+	}
+
+
+
+	for(obj in my_JSON_object.fisheye) {
+		d(obj);
+	}
+
+
+	d (my_JSON_object );
+
+
+ 
+}
 
 
 
@@ -413,7 +456,7 @@ function updateObjectVariables() {
 		SETTINGS.panorama_controlls.canvas_position_x, 
 		SETTINGS.panorama_controlls.canvas_position_y,
 	);
-	
+
 	// videostatus bar
 	SETTINGS.video_status_bar.object = createVideoStatusBar(
 		SETTINGS.video_status_bar.width,
@@ -498,6 +541,8 @@ function initProgram() {
 	// aktualizace obj. promennaych
 	updateObjectVariables();
 
+
+	checkJSONfile();
 	return true;
 }
 
@@ -621,6 +666,8 @@ function setupProgram()
 			SETTINGS.input.video.addEventListener("timeupdate", function() {
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
+		 		SETTINGS.video_status_bar.object.text.innerHTML = '<div>'+Math.round(SETTINGS.input.video.currentTime/SETTINGS.input.video.duration*100)+' %</div>';
+		 		SETTINGS.video_status_bar.object.box.setAttribute('value', ''+SETTINGS.input.video.currentTime/SETTINGS.input.video.duration+'');
 		 	});
 
 			SETTINGS.input.video.addEventListener("ended", function() {
@@ -675,6 +722,10 @@ function setupProgram()
 					SETTINGS.video_controlls.object.btn.volume.setAttribute('class', 'volume_off_icon'); 
 				}
 			});
+
+
+
+
 	}
 	/// ======================= OVLADANI VIDEA, KONEC ===========================================
 

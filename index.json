@@ -1,9 +1,10 @@
 {
-    "video": {
-        "fisheye": {
-            "src" : "video1.mp4",
-            "compass" : {
-                "angle" : 215,
+    "fisheye": {
+        "video": {
+            "src": "theta/data/new/R0010087.MP4",
+            "active": true,
+            "compass": {
+                "north": 215
             },
             "titles": [
                 {
@@ -20,75 +21,117 @@
                     "time": 15,
                     "duration": 3,
                     "text": "This is Jordan Pond, located in Acadia National Park."
-                }
+                },
                 {
                     "time": 20,
                     "duration": 3,
                     "text": "This is Jordan Pond, located in Acadia National Park."
                 }
-
             ]
+        },
 
 
 
-
-
-
-
-
-
-
-
-
-
-            "pondCube": {
-                "title": "Jordan Pond (Cube)",
-                "type": "cubemap",
-                "cubeMap": [
-                    "./examplepanocube0.jpg",
-                    "./examplepanocube1.jpg",
-                    "./examplepanocube2.jpg",
-                    "./examplepanocube3.jpg",
-                    "./examplepanocube4.jpg",
-                    "./examplepanocube5.jpg"
-                ],
-                "hotSpots": [
-                    {
-                        "pitch": -12,
-                        "yaw": 170,
-                        "type": "info",
-                        "text": "This is Jordan Pond, located in Acadia National Park."
-                    },
-                    {
-                        "pitch": -10,
-                        "yaw": -50,
-                        "type": "info",
-                        "text": "This is a link.",
-                        "URL": "https://github.com/mpetroff/pannellum"
-                    },
-                    {
-                        "pitch": 0,
-                        "yaw": -60,
-                        "type": "scene",
-                        "text": "Pond",
-                        "sceneId": "pond"
-                    }
-                ]
+        "panorama": {
+            "src": "theta/data/new/R0010085.JPG",
+            "active": false,
+            "compass": {
+                "north": 215
             },
-
-            "pond": {
-                "title": "Jordan Pond",
-                "panorama": "./examplepano.jpg",
-                "hotSpots": [
-                    {
-                        "pitch": 0,
-                        "yaw": 100,
-                        "type": "scene",
-                        "text": "Pond (cube)",
-                        "sceneId": "pondCube"
-                    }
-                ]
-            }
+            "titles": [
+                {
+                    "time": 5,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 10,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 15,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 20,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                }
+            ]
         }
-    }
+
+    },
+
+
+
+    "equirectangular": {
+        "video": {
+            "src": "theta/data/new/R0010087.MP4",
+            "active": true,
+            "compass": {
+                "north": 215
+            },
+            "titles": [
+                {
+                    "time": 5,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 10,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 15,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 20,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                }
+            ]
+        },
+
+
+
+        "panorama": {
+            "src": "theta/data/new/R0010085.JPG",
+            "active": false,
+            "compass": {
+                "north": 215
+            },
+            "titles": [
+                {
+                    "time": 5,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 10,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 15,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                },
+                {
+                    "time": 20,
+                    "duration": 3,
+                    "text": "This is Jordan Pond, located in Acadia National Park."
+                }
+            ]
+        }
+
+    } 
 }
+
+
+
+
