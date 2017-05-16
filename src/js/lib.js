@@ -1044,7 +1044,7 @@ function createFieldVision(width, height, position_x, position_y, wheel_angle, m
   		//nastaveni SVG path
 		var vision = document.getElementById("svg_path");
 		vision.setAttribute("stroke-width", field_vision_stroke);
-		vision.setAttribute('stroke', '#F69');
+		vision.setAttribute('stroke', '#069');
 		vision.setAttribute('fill', 'none');
 		vision.style.opacity = 0.7;
 		vision.style.backgroundColor = 'transparent';
