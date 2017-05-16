@@ -1527,6 +1527,23 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	panorama_controlls_window_settings.style.position = 'absolute';
 	panorama_controlls_window_settings.style.overflow = 'hidden';
 
+
+	// settings 
+	var panorama_controlls_window_settings_btn_subtit = document.getElementById("panorama_controlls_window_settings_btn_subtit");
+	if (!panorama_controlls_window_settings_btn_subtit) {
+		panorama_controlls_window_settings_btn_subtit = document.createElement('div');
+		panorama_controlls_window_settings_btn_subtit.setAttribute('id', "panorama_controlls_window_settings_btn_subtit");
+ 		panorama_controlls_window_settings.appendChild(panorama_controlls_window_settings_btn_subtit);;
+	}
+
+	panorama_controlls_window_settings_btn_subtit.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings_btn_subtit.style.height = '20px';
+	panorama_controlls_window_settings_btn_subtit.setAttribute('class', "btn_inactive");
+	panorama_controlls_window_settings_btn_subtit.style.textAlign = 'center';
+	panorama_controlls_window_settings_btn_subtit.style.color = 'white';
+	panorama_controlls_window_settings_btn_subtit.style.cursor = 'pointer';
+	panorama_controlls_window_settings_btn_subtit.innerHTML = 'Subtitles On/Off';
+
 	if (active) {
 		panorama_controlls_window_settings.style.display = 'block'; 
 	}
@@ -1535,7 +1552,12 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	}
 
 
-	return panorama_controlls_window_settings;
+	return {
+		settings: panorama_controlls_window_settings,
+		btn: {
+			subtit: panorama_controlls_window_settings_btn_subtit
+		}
+	};
 }
 
 function createSubtitlesBox(width, height, position_x, position_y, active, text) {

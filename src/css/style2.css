@@ -258,3 +258,16 @@ input[type=range]::-moz-range-progress {
         .zoom_minus_icon {
             width: 50px !important;
         }
+
+        .btn_inactive {
+            background-color: #f00;
+             opacity: 0.75;
+        }
+        .btn_active {
+            background-color: #0f0;
+             opacity: 0.75;
+        }
+
+        .btn_inactive:hover, .btn_active:hover {
+            opacity: 1;
+        }

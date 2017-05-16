@@ -4,7 +4,29 @@
             "src": "theta/data/new/R0010087.MP4",
             "active": true,
             "compass": {
-                "north": 340
+                "north": 340,
+                "correction": [
+                    {
+                        "time": 5,
+                        "angle": 3
+                    },
+                    {
+                        "time": 10,
+                        "angle": 3
+                    },
+                    {
+                        "time": 15,
+                        "angle": 3
+                    },
+                    {
+                        "time": 20,
+                        "angle": 3
+                    },
+                    {
+                        "time": 25,
+                        "angle": 3
+                    }
+                ]
             },
             "titles": [
                 {
@@ -30,7 +52,7 @@
                 {
                     "time": 25,
                     "duration": 3,
-                    "text": "a patyy sweeeett located in Acadia National Park."
+                    "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
                 }
             ]
         },
@@ -68,7 +90,6 @@
         }
 
     },
-
 
 
     "equirectangular": {

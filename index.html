@@ -182,21 +182,30 @@ var SETTINGS = {
 		canvas_position_x:  1.0,
 		canvas_position_y:  1.0,
 		btn: {
-			settings: {
+			settings: {// jde o okno nastaveni
 				object: null,
 				show_window: false,
 				width: 150,
 				height:  300,
 				canvas_position_x:  1.0,
-				canvas_position_y:  0.2,
+				canvas_position_y:  0.2
 			}
-		}
- 	} ,
+		},
+		// jedna se box s titulky
+		subtitles_box : {
+			object: null,
+			width: 250,
+			height:  50,
+			canvas_position_x:  0.2,
+			canvas_position_y:  0.85,
+			active: false
+	 	},
+ 	},
+
 	info_screen : {
 		width: 300,
 		height:  150,
  	} ,
-
 };
 
 
@@ -248,7 +257,8 @@ var PROG = {
 	sampler: null,
 	program: null,
 	canvas: null,
-	time: null
+	time: null,
+	startTime: null
 };
 
 
@@ -261,7 +271,7 @@ var CACHE = {
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 
- SETTINGS.input.video =  createVideo("theta/data/new/new2/R0010093.mp4");
+ SETTINGS.input.video =  createVideo("theta/data/new/new2/knihovna.mp4");
 //SETTINGS.input.video =  createVideo("data/R0010014_20161217101030_er.mp4");
 
 
@@ -276,10 +286,10 @@ if (getParamByKey("video"))
 SETTINGS.mode.fisheye.panorama.active 			= false;
 SETTINGS.mode.fisheye.video.active 				= false;
 
-SETTINGS.mode.equirectangular.panorama.active 	= true;
+SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
 
-
+SETTINGS.mode.fisheye.video.active = true;
 
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
@@ -486,6 +496,8 @@ function initProgram() {
 	// aktualizace obj. promennaych
 	updateObjectVariables();
 
+	// definovani startovniho casu programu
+	PROG.startTime = (new Date()).getTime();
 
 	loadJSONfile();
 	return true;
@@ -506,6 +518,21 @@ function settings_window(active) {
 		SETTINGS.panorama_controlls.btn.settings.canvas_position_x, 
 		SETTINGS.panorama_controlls.btn.settings.canvas_position_y, 
 		SETTINGS.panorama_controlls.btn.settings.show_window
+	);
+}
+
+
+// funkce pro zobrazeni nastrojoveho okna
+function subtitles_window(active, text) {
+	// volani a aktualizace objektove promenne
+	SETTINGS.panorama_controlls.subtitles_box.active = active;
+	SETTINGS.panorama_controlls.subtitles_box.object = createSubtitlesBox(
+		SETTINGS.panorama_controlls.subtitles_box.width,
+		SETTINGS.panorama_controlls.subtitles_box.height,
+		SETTINGS.panorama_controlls.subtitles_box.canvas_position_x,
+		SETTINGS.panorama_controlls.subtitles_box.canvas_position_y,
+		SETTINGS.panorama_controlls.subtitles_box.active, 
+		text
 	);
 }
 
@@ -611,21 +638,21 @@ function setupProgram()
 			SETTINGS.input.video.addEventListener("timeupdate", function() {
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
 		 		var timeLine = SETTINGS.input.video.currentTime;
-
-				for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) {
-					var tit = CACHE.json_object.fisheye.video.titles[i];
-					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) {
-						createSubtitlesBox(250,50,0.20,0.85, 1.0, tit.text);
-					}
-
-					
-				};
-
-
-		
-
-
-
+				
+				// pokud jsou titulky aktivni
+				if (SETTINGS.panorama_controlls.subtitles_box.active) 
+				{
+					//titulky ve scene
+					for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) 
+					{
+						var tit = CACHE.json_object.fisheye.video.titles[i];
+						if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) 
+						{
+							// aktualizace objektu titulku
+							subtitles_window(true, tit.text);
+						}
+					};
+				}
 
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
 		 		SETTINGS.video_status_bar.object.text.innerHTML = '<div>'+Math.round(SETTINGS.input.video.currentTime/SETTINGS.input.video.duration*100)+' %</div>';
@@ -687,7 +714,6 @@ function setupProgram()
 
 
 
-
 	}
 	/// ======================= OVLADANI VIDEA, KONEC ===========================================
 
@@ -729,10 +755,26 @@ function setupProgram()
 		// settings
 		SETTINGS.panorama_controlls.object.btn.settings.addEventListener('click', function() {
  			// nastaveni nastrojoveho okna 
-			if (SETTINGS.panorama_controlls.btn.settings.show_window) settings_window(0);
-			else  settings_window(1);
+			if (SETTINGS.panorama_controlls.btn.settings.show_window) {
+				settings_window(0);
+			}
+			else {
+				settings_window(1);
+			}
 		});
 
+		// kliknuti na tlacitko nastaveni vyp/zap titulku
+		SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.addEventListener("click", function() {
+			if (SETTINGS.panorama_controlls.subtitles_box.active) {
+				subtitles_window(false, '');
+				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'btn_inactive');
+			}
+
+			else {
+				subtitles_window(true, '');
+				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'btn_active');
+			}
+		});
 
 
 	/// ======================= OVLADANI PANORAMATU, KONEC ===========================================
@@ -1028,14 +1070,13 @@ function playVideoWhenInactive() {
 	}
 }
 
-
 /**
  * Vykreslovací funkce volána pomocí requestAnimationFrame(), čímž vytváří animační smyčku
  *
  * 1.) nahrava data matic do paměti
  * 2.) renderuje pomoci drawArray/drawElement podle vstupniho modu
  */
-function render() {
+function render(time) {
 	// METADATa PRO VIDEO VIDEO
 	// status bar a cas
 	if (SETTINGS.mode.fisheye.video.active  || SETTINGS.mode.equirectangular.video.active) {
@@ -1073,6 +1114,24 @@ function render() {
 				MOUSE.amort =  MOUSE.amort - 0.001;
 			}
 		}
+
+		// scena je rozlisena i o titulky ve scene v panoramatech
+		if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active)  
+		{
+	 		if (SETTINGS.panorama_controlls.subtitles_box.active) 
+	 		{
+		 		//titulky ve scene
+				for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) {
+					var tit = CACHE.json_object.fisheye.video.titles[i];
+					var timeLine =  parseInt(((new Date()).getTime() - PROG.startTime)/1000);
+
+					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) {
+						subtitles_window(true, tit.text);
+					}
+				};
+	 		}
+		}
+
 
 		// zmena pozice zobrazeni
 		updateCameraPosition();
@@ -1425,7 +1484,7 @@ function main()
 		return false;
 	}
 
-	render();
+	render(0);
  
 
 /*
