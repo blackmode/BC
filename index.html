@@ -236,7 +236,7 @@ var SETTINGS = {
 		height:  180,
 		canvas_position_x:  0.6,
 		canvas_position_y:  1.0,
-		north: 315, // umisteni severu v kompasu
+		north: 180, // umisteni severu v kompasu
 		angle: 0.0,
 		object: null,
 	} ,
@@ -331,6 +331,12 @@ var PROG = {
 	canvas: null,
 };
 
+
+/// ------ CACHE PROGRAMU
+var CACHE = {
+	json_object: null,
+};
+
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 
@@ -363,51 +369,65 @@ SETTINGS.mode.equirectangular.video.active 		= false;
 
 
 function checkJSONfile() {
-	var current_file_name = getCurrentProgramFilename().split('.')[0];
-	var dest_json_file = current_file_name+'.json';
+
+	// pokud neni JSON v cache, tak nejrpve ulozim 
+	if (CACHE.json_object == null) {
+		var current_file_name = getCurrentProgramFilename().split('.')[0];
+		var dest_json_file = current_file_name+'.json';
+		var request = new XMLHttpRequest();
+		request.open("GET", dest_json_file, false);
+		request.send(null)
+		var JSON_object = JSON.parse(request.responseText);
+		CACHE.json_object = JSON_object;
+	}
+	else {
+		// v opacnem rpipade nactu z cache
+		var JSON_object = CACHE.json_object;
+	}
 
 
-	var request = new XMLHttpRequest();
-	request.open("GET", dest_json_file, false);
-	request.send(null)
-	var my_JSON_object = JSON.parse(request.responseText);
 
 	// moznost vstupu dvema mody
 	// RYBI OKO
-	if (my_JSON_object.fisheye) 
+	if (JSON_object.fisheye) 
 	{
-		if (my_JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
+		if (JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
 		{
-			SETTINGS.input.video = createVideo(my_JSON_object.fisheye.video.src);
+			var fishEye = JSON_object.fisheye.video;
+			
+			// nastaveni zdroje videa
+			if (fishEye.src)	SETTINGS.input.video = createVideo(fishEye.src);
+			
+			// nastaveni kompasu ze souboru
+			if (fishEye.compass) 
+			{
+				// prenastavuju jen pokud se hodnoty nerovnaji
+				if (fishEye.compass.north!=null && !isNaN(fishEye.compass.north) && fishEye.compass.north!=SETTINGS.compass.north) {
+					SETTINGS.compass.north = fishEye.compass.north;
+					log('Compass: uspesne prenastaveno');
+				}
+			}
 		}
-		else if (my_JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
+		else if (JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
 		{
 
 		}
 	}
 	// Equirectangular INPUT
-	else if (my_JSON_object.equirectangular) 
+	else if (JSON_object.equirectangular) 
 	{
-		if (my_JSON_object.equirectangular.video && SETTINGS.mode.equirectangular.video.active) 
+		if (JSON_object.equirectangular.video && SETTINGS.mode.equirectangular.video.active) 
 		{
 
 		}
-		else if (my_JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
+		else if (JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
 		{
 
 		}
 	}
 
 
-
-	for(obj in my_JSON_object.fisheye) {
-		d(obj);
-	}
-
-
-	d (my_JSON_object );
-
-
+ 
  
 }
 
