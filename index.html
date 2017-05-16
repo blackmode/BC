@@ -360,7 +360,6 @@ SETTINGS.mode.equirectangular.video.active 		= false;
 
 
 
-
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("theta/data/p6.jpg"); // p7.jpg / t1.jpg
@@ -368,7 +367,7 @@ SETTINGS.mode.equirectangular.video.active 		= false;
 
 
 
-function checkJSONfile() {
+function loadJSONfile() {
 
 	// pokud neni JSON v cache, tak nejrpve ulozim 
 	if (CACHE.json_object == null) {
@@ -384,7 +383,6 @@ function checkJSONfile() {
 		// v opacnem rpipade nactu z cache
 		var JSON_object = CACHE.json_object;
 	}
-
 
 
 	// moznost vstupu dvema mody
@@ -407,6 +405,11 @@ function checkJSONfile() {
 					log('Compass: uspesne prenastaveno');
 				}
 			}
+
+
+
+ 
+			log(fishEye.titles);
 		}
 		else if (JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
 		{
@@ -426,9 +429,6 @@ function checkJSONfile() {
 		}
 	}
 
-
- 
- 
 }
 
 
@@ -562,7 +562,7 @@ function initProgram() {
 	updateObjectVariables();
 
 
-	checkJSONfile();
+	loadJSONfile();
 	return true;
 }
 
@@ -685,6 +685,23 @@ function setupProgram()
 			//////// =============== primo nad videem =====================
 			SETTINGS.input.video.addEventListener("timeupdate", function() {
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
+		 		var timeLine = SETTINGS.input.video.currentTime;
+
+				for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) {
+					var tit = CACHE.json_object.fisheye.video.titles[i];
+					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) {
+						createSubtitlesBox(250,50,0.20,0.85, 1.0, tit.text);
+					}
+
+					
+				};
+
+
+		
+
+
+
+
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
 		 		SETTINGS.video_status_bar.object.text.innerHTML = '<div>'+Math.round(SETTINGS.input.video.currentTime/SETTINGS.input.video.duration*100)+' %</div>';
 		 		SETTINGS.video_status_bar.object.box.setAttribute('value', ''+SETTINGS.input.video.currentTime/SETTINGS.input.video.duration+'');

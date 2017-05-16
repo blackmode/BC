@@ -1488,9 +1488,6 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 
 function createWindowSettings(width, height, position_x, position_y, active) {
 
-	// ID
-	var panorama_controlls_id  = "panorama_controlls";
-
 	// overeni existence potrebnych divu kostry
 	var viewer = document.getElementById("viewer");
 	if (!viewer) {
@@ -1504,13 +1501,6 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 		return false;
 	}
 
-	var panorama_controlls = document.getElementById(panorama_controlls_id);
-	if (!panorama_controlls) {
-		e('DIV s ID: panorama_controlls NEEXISTUJE!');
-		return false;
-	}
-
-
 	var panorama_controlls_width = width;
 	var panorama_controlls_height = height;
 
@@ -1518,7 +1508,7 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	panorama_controlls_left = (canvas_dom.width - panorama_controlls_width)*position_x;
 	panorama_controlls_top = (canvas_dom.height - panorama_controlls_height)*position_y;
 
-	// fulstreen
+	// settings 
 	var panorama_controlls_window_settings = document.getElementById("panorama_controlls_window_settings");
 	if (!panorama_controlls_window_settings) {
 		panorama_controlls_window_settings = document.createElement('div');
@@ -1531,8 +1521,8 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	panorama_controlls_window_settings.style.height = panorama_controlls_height+'px';
 	panorama_controlls_window_settings.style.left = panorama_controlls_left+'px';
 	panorama_controlls_window_settings.style.top = panorama_controlls_top+'px';
-	panorama_controlls_window_settings.style.backgroundColor  = 'red'; // transparent
-	panorama_controlls_window_settings.style.opacity  = 1.0;
+	panorama_controlls_window_settings.style.backgroundColor  = 'black'; // transparent
+	panorama_controlls_window_settings.style.opacity  = 0.65
 	//panorama_controlls_window_settings.style.border  = '1px solid black';
 	panorama_controlls_window_settings.style.position = 'absolute';
 	panorama_controlls_window_settings.style.overflow = 'hidden';
@@ -1546,6 +1536,63 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 
 
 	return panorama_controlls_window_settings;
+}
+
+function createSubtitlesBox(width, height, position_x, position_y, active, text) {
+
+	// overeni existence potrebnych divu kostry
+	var viewer = document.getElementById("viewer");
+	if (!viewer) {
+		e('DIV s ID: viewer NEEXISTUJE!');
+		return false
+	}
+
+	var canvas_dom = document.getElementsByTagName("canvas")[0];
+	if (!canvas_dom) {
+		e('Neexistuje TAG <canvas>!');
+		return false;
+	}
+	var padding = 10;
+	var panorama_controlls_width = width-padding;
+	var panorama_controlls_height = height-padding;
+
+	// dynamicke umisteni zadane parametrem
+	panorama_controlls_left = (canvas_dom.width - panorama_controlls_width)*position_x;
+	panorama_controlls_top = (canvas_dom.height - panorama_controlls_height)*position_y;
+
+	// fulstreen
+	var subtitles_box = document.getElementById("subtitles_box");
+	if (!subtitles_box) {
+		subtitles_box = document.createElement('div');
+		subtitles_box.setAttribute('id', "subtitles_box");
+ 		viewer.appendChild(subtitles_box);;
+	}
 
 
+
+	// nastylovani a umsiteni boxu
+	subtitles_box.style.width = panorama_controlls_width+'px';
+	subtitles_box.style.height = 'auto';
+	subtitles_box.style.padding = padding+'px'; 
+	subtitles_box.style.left = panorama_controlls_left+'px';
+	subtitles_box.style.top = panorama_controlls_top+'px';
+	subtitles_box.style.backgroundColor  = 'rgba(0,0,0,0.6)'; // transparent
+	subtitles_box.style.color  = 'white'; // transparent
+	subtitles_box.style.textAlign  = 'center'; // transparent
+
+	//subtitles_box.style.border  = '1px solid black';
+	subtitles_box.style.position = 'absolute';
+	subtitles_box.style.overflow = 'hidden';
+	subtitles_box.innerHTML = text;
+
+
+	if (active) {
+		subtitles_box.style.display = 'block'; 
+	}
+	else {
+		subtitles_box.style.display = 'none';
+	}
+
+
+	return subtitles_box;
 }

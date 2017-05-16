@@ -4,28 +4,33 @@
             "src": "theta/data/new/R0010087.MP4",
             "active": true,
             "compass": {
-                "north": 215
+                "north": 90
             },
             "titles": [
                 {
                     "time": 5,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "prvni title"
                 },
                 {
                     "time": 10,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "druhy title"
                 },
                 {
                     "time": 15,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "treti title"
                 },
                 {
                     "time": 20,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "ctvrty title"
+                },
+                {
+                    "time": 25,
+                    "duration": 3,
+                    "text": "a patyy sweeeett located in Acadia National Park."
                 }
             ]
         },
@@ -42,22 +47,22 @@
                 {
                     "time": 5,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "fwe fe"
                 },
                 {
                     "time": 10,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "fwe fe"
                 },
                 {
                     "time": 15,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "fwe fe"
                 },
                 {
                     "time": 20,
                     "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
+                    "text": "fwe fe"
                 }
             ]
         }
