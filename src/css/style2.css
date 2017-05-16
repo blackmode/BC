@@ -259,15 +259,44 @@ input[type=range]::-moz-range-progress {
             width: 50px !important;
         }
 
-        .btn_inactive {
+
+        .window_settings_btn_inactive {
             background-color: #f00;
              opacity: 0.75;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            float: left;
+            clear: both;
+            height: 20px !important;
         }
-        .btn_active {
-            background-color: #0f0;
-             opacity: 0.75;
+        .window_settings_btn_active {
+            background-color: #0d0;
+            opacity: 0.75;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            float: left;
+            clear: both;
+            height: 20px !important;
         }
 
-        .btn_inactive:hover, .btn_active:hover {
+        .window_settings_btn_inactive:hover, .window_settings_btn_active:hover {
+            opacity: 1;
+        }
+
+        /**/
+         .window_settings_btn_mode {
+            background-color: #aaa;
+             opacity: 0.75;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            float: left;
+            clear: both;
+            height: 20px !important;
+        }
+
+        .window_settings_btn_mode:hover {
             opacity: 1;
         }

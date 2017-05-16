@@ -1521,9 +1521,7 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	panorama_controlls_window_settings.style.height = panorama_controlls_height+'px';
 	panorama_controlls_window_settings.style.left = panorama_controlls_left+'px';
 	panorama_controlls_window_settings.style.top = panorama_controlls_top+'px';
-	panorama_controlls_window_settings.style.backgroundColor  = 'black'; // transparent
-	panorama_controlls_window_settings.style.opacity  = 0.65
-	//panorama_controlls_window_settings.style.border  = '1px solid black';
+	panorama_controlls_window_settings.style.backgroundColor  = 'rgba(0,0,0,0.2)'; // transparent
 	panorama_controlls_window_settings.style.position = 'absolute';
 	panorama_controlls_window_settings.style.overflow = 'hidden';
 
@@ -1537,12 +1535,104 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	}
 
 	panorama_controlls_window_settings_btn_subtit.style.width = panorama_controlls_width+'px';
-	panorama_controlls_window_settings_btn_subtit.style.height = '20px';
-	panorama_controlls_window_settings_btn_subtit.setAttribute('class', "btn_inactive");
-	panorama_controlls_window_settings_btn_subtit.style.textAlign = 'center';
-	panorama_controlls_window_settings_btn_subtit.style.color = 'white';
-	panorama_controlls_window_settings_btn_subtit.style.cursor = 'pointer';
+	panorama_controlls_window_settings_btn_subtit.setAttribute('class', "window_settings_btn_inactive");
 	panorama_controlls_window_settings_btn_subtit.innerHTML = 'Subtitles On/Off';
+
+
+	//´========== tlycitka rezimu
+/*
+var mode_ids = [
+	"panorama_controlls_window_settings_btn_mode_equi_vid", 
+	"panorama_controlls_window_settings_btn_mode_fish_vid", 
+	"panorama_controlls_window_settings_btn_mode_equi_pan", 
+	"panorama_controlls_window_settings_btn_mode_fish_pan"
+];
+var mode_hrefs = [
+	"?equiVM=true", 
+	"?fishVM=true", 
+	"?equiPM=true", 
+	"?fishPM=true"
+];
+var mode_anchors = [
+	'Equi video mode', 
+	'Fish video mode', 
+	'Equi pano mode', 
+	'Fish pano mode'
+];
+var buttons = [];
+var newButton;
+for (var i = 0; i < mode_ids.length; i++) 
+{
+	newButton = document.getElementById(mode_ids[i]);
+	if (!newButton) 
+	{
+		newButton = document.createElement('a');;
+		newButton.setAttribute('id',mode_ids[i]);
+		newButton.setAttribute('href',mode_hrefs[i]);
+		
+		buttons.push(newButton);
+	}
+	newButton.setAttribute('class','window_settings_btn_mode');
+	newButton.style.width = panorama_controlls_width+'px';
+	newButton.innerHTML(mode_anchors[i]);
+
+};
+*/
+
+
+	// equirectangular video mode
+	var panorama_controlls_window_settings_btn_mode_equi_vid = document.getElementById("panorama_controlls_window_settings_btn_mode_equi_vid");
+	if (!panorama_controlls_window_settings_btn_mode_equi_vid) {
+		panorama_controlls_window_settings_btn_mode_equi_vid = document.createElement('a');
+		panorama_controlls_window_settings_btn_mode_equi_vid.setAttribute('href', "?equiVM=true");
+		panorama_controlls_window_settings_btn_mode_equi_vid.setAttribute('id', "panorama_controlls_window_settings_btn_mode_equi_vid");
+ 		panorama_controlls_window_settings.appendChild(panorama_controlls_window_settings_btn_mode_equi_vid);
+	}
+
+	panorama_controlls_window_settings_btn_mode_equi_vid.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings_btn_mode_equi_vid.setAttribute('class', "window_settings_btn_mode");
+	panorama_controlls_window_settings_btn_mode_equi_vid.innerHTML = 'Equi video mode';
+	
+	// fish video mode
+	var panorama_controlls_window_settings_btn_mode_fish_vid = document.getElementById("panorama_controlls_window_settings_btn_mode_fish_vid");
+	if (!panorama_controlls_window_settings_btn_mode_fish_vid) {
+		panorama_controlls_window_settings_btn_mode_fish_vid = document.createElement('a');
+		panorama_controlls_window_settings_btn_mode_fish_vid.setAttribute('href', "?fishVM=true");
+		panorama_controlls_window_settings_btn_mode_fish_vid.setAttribute('id', "panorama_controlls_window_settings_btn_mode_fish_vid");
+ 		panorama_controlls_window_settings.appendChild(panorama_controlls_window_settings_btn_mode_fish_vid);
+	}
+
+	panorama_controlls_window_settings_btn_mode_fish_vid.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings_btn_mode_fish_vid.setAttribute('class', "window_settings_btn_mode");
+	panorama_controlls_window_settings_btn_mode_fish_vid.innerHTML = 'Fish video mode';
+	////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// equirectangular pano mode
+	var panorama_controlls_window_settings_btn_mode_equi_pan = document.getElementById("panorama_controlls_window_settings_btn_mode_equi_pan");
+	if (!panorama_controlls_window_settings_btn_mode_equi_pan) {
+		panorama_controlls_window_settings_btn_mode_equi_pan = document.createElement('a');
+		panorama_controlls_window_settings_btn_mode_equi_pan.setAttribute('href', "?equiPM=true");
+		panorama_controlls_window_settings_btn_mode_equi_pan.setAttribute('id', "panorama_controlls_window_settings_btn_mode_equi_pan");
+ 		panorama_controlls_window_settings.appendChild(panorama_controlls_window_settings_btn_mode_equi_pan);
+	}
+
+	panorama_controlls_window_settings_btn_mode_equi_pan.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings_btn_mode_equi_pan.setAttribute('class', "window_settings_btn_mode");
+	panorama_controlls_window_settings_btn_mode_equi_pan.innerHTML = 'Equi pano mode';
+
+
+	// fish pano mode
+	var panorama_controlls_window_settings_btn_mode_fish_pan = document.getElementById("panorama_controlls_window_settings_btn_mode_fish_pan");
+	if (!panorama_controlls_window_settings_btn_mode_fish_pan) {
+		panorama_controlls_window_settings_btn_mode_fish_pan = document.createElement('a');
+		panorama_controlls_window_settings_btn_mode_fish_pan.setAttribute('href', "?fishPM=true");
+		panorama_controlls_window_settings_btn_mode_fish_pan.setAttribute('id', "panorama_controlls_window_settings_btn_mode_fish_pan");
+ 		panorama_controlls_window_settings.appendChild(panorama_controlls_window_settings_btn_mode_fish_pan);
+	}
+
+	panorama_controlls_window_settings_btn_mode_fish_pan.style.width = panorama_controlls_width+'px';
+	panorama_controlls_window_settings_btn_mode_fish_pan.setAttribute('class', "window_settings_btn_mode");
+	panorama_controlls_window_settings_btn_mode_fish_pan.innerHTML = 'Fish pano mode';
 
 	if (active) {
 		panorama_controlls_window_settings.style.display = 'block'; 
@@ -1555,7 +1645,18 @@ function createWindowSettings(width, height, position_x, position_y, active) {
 	return {
 		settings: panorama_controlls_window_settings,
 		btn: {
-			subtit: panorama_controlls_window_settings_btn_subtit
+			subtit: panorama_controlls_window_settings_btn_subtit,
+/*			mode_equi_vid: buttons [0], //panorama_controlls_window_settings_btn_mode_equi_vid,
+			mode_fish_vid: buttons [1], //panorama_controlls_window_settings_btn_mode_fish_vid,
+			mode_equi_pan: buttons [2], //panorama_controlls_window_settings_btn_mode_equi_pan,
+			mode_fish_pan: buttons [3] //panorama_controlls_window_settings_btn_mode_fish_pan,
+*/
+			mode_equi_vid: panorama_controlls_window_settings_btn_mode_equi_vid,// buttons [0], //panorama_controlls_window_settings_btn_mode_equi_vid,
+			mode_fish_vid: panorama_controlls_window_settings_btn_mode_fish_vid,//buttons [1], //panorama_controlls_window_settings_btn_mode_fish_vid,
+			mode_equi_pan: panorama_controlls_window_settings_btn_mode_equi_pan,//buttons [2], //panorama_controlls_window_settings_btn_mode_equi_pan,
+			mode_fish_pan: panorama_controlls_window_settings_btn_mode_fish_pan,//buttons [3] //panorama_controlls_window_settings_btn_mode_fish_pan,
+
+
 		}
 	};
 }

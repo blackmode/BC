@@ -198,7 +198,8 @@ var SETTINGS = {
 			height:  50,
 			canvas_position_x:  0.2,
 			canvas_position_y:  0.85,
-			active: false
+			active: false,
+			current_subtitle: '...'
 	 	},
  	},
 
@@ -299,6 +300,43 @@ SETTINGS.input.image = createImage("theta/data/p7.jpg"); // p7.jpg / t1.jpg
 SETTINGS.input.image = createImage("data/images/equirectangular/R0010090.JPG"); // p7.jpg / t1.jpg
 
 
+
+
+function setFishVideoMode() {
+	SETTINGS.mode.fisheye.video.active 				= true;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
+function setEquiVideoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= true;
+}
+
+function setFishPanoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= true;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
+function setEquiPanoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= true;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
+
+/**
+ *	Nacteme JSON se soubory videi a panoramat
+ *
+ *  v pripade že JSON nebude true, tak se nastavi deafaultni hodnot. Naddefaultnimi hodnotami 
+ *	jeste stoji vstup pomoci adresni parametr
+ */
 function loadJSONfile() {
 
 	// pokud neni JSON v cache, tak nejrpve ulozim 
@@ -361,6 +399,8 @@ function loadJSONfile() {
 		}
 	}
 
+
+	return false;
 }
 
 
@@ -368,7 +408,7 @@ function loadJSONfile() {
 /**
  *	Nastavuje a aktualizuje potřebné objektoveo proměnné programu,
  *
- *  v případě , že se vše povede vrací true a program pokračuje
+ *  
  *
  */
 function updateObjectVariables() {
@@ -420,6 +460,9 @@ function updateObjectVariables() {
 
 	// nastaveni nastrojoveho okna 
 	settings_window(SETTINGS.panorama_controlls.btn.settings.show_window);
+
+	// nastaveni okna titulku
+	subtitles_window(SETTINGS.panorama_controlls.subtitles_box.active, '');
 }
 
 
@@ -493,13 +536,33 @@ function initProgram() {
 	// ovladaci prvky
 	SETTINGS.video_controlls.width = PROG.canvas.width/2;
 
-	// aktualizace obj. promennaych
-	updateObjectVariables();
+
 
 	// definovani startovniho casu programu
 	PROG.startTime = (new Date()).getTime();
 
 	loadJSONfile();
+
+	//aktivae pomoci argumentu ma prednost
+	if (getParamByKey("fishVM")) {
+		setFishVideoMode();
+	} 
+
+	if (getParamByKey("equiVM")) {
+		setEquiVideoMode();
+	}
+
+	if (getParamByKey("fishPM")) {
+		setFishPanoMode();
+	}
+
+	if (getParamByKey("equiPM")) {
+		setEquiPanoMode();
+	}
+
+	// aktualizace obj. promennaych
+	updateObjectVariables();
+
 	return true;
 }
 
@@ -650,6 +713,7 @@ function setupProgram()
 						{
 							// aktualizace objektu titulku
 							subtitles_window(true, tit.text);
+							SETTINGS.panorama_controlls.subtitles_box.current_subtitle = tit.text;
 						}
 					};
 				}
@@ -766,13 +830,13 @@ function setupProgram()
 		// kliknuti na tlacitko nastaveni vyp/zap titulku
 		SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.addEventListener("click", function() {
 			if (SETTINGS.panorama_controlls.subtitles_box.active) {
-				subtitles_window(false, '');
-				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'btn_inactive');
+				subtitles_window(false, SETTINGS.panorama_controlls.subtitles_box.current_subtitle);
+				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'window_settings_btn_inactive');
 			}
 
 			else {
-				subtitles_window(true, '');
-				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'btn_active');
+				subtitles_window(true, SETTINGS.panorama_controlls.subtitles_box.current_subtitle);
+				SETTINGS.panorama_controlls.btn.settings.object.btn.subtit.setAttribute('class', 'window_settings_btn_active');
 			}
 		});
 
@@ -1127,6 +1191,7 @@ function render(time) {
 
 					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) {
 						subtitles_window(true, tit.text);
+						SETTINGS.panorama_controlls.subtitles_box.current_subtitle = tit.text;
 					}
 				};
 	 		}
@@ -1502,13 +1567,13 @@ SETTINGS.input.video.oncanplaythrough = function() {
 		}
 	});
 */
- 
+ /*
 	 
 	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
 		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 8.4) ;
 	},false);
  
-
+*/
 
 
 }
