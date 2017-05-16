@@ -432,21 +432,24 @@ function initProgram() {
 	PROG.canvas = document.querySelector("canvas");
 	gl =  PROG.canvas.getContext("webgl") || PROG.canvas.getContext("experimental-webgl");
 	if (!gl) {
-		e('Webgl se nepodarilo inicializovat...');
-		createInfoScreen("Webgl se nepodarilo inicializovat...", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
+		var notice = 'Webgl se nepodařilo inicializovat. Není podporováno. ';
+		e(notice);
+		createInfoScreen(notice, SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 
 	// kontrola vstupnic dat
 	if ((SETTINGS.mode.equirectangular.video.active || SETTINGS.mode.fisheye.video.active) && !SETTINGS.input.video) {
-		e('video se nepdarilo nacist!');
-		createInfoScreen("video se nepdarilo nacist!", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
+		var notice = 'Video se nepodařilo načíst!';
+		e(notice);
+		createInfoScreen(notice, SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 	
 	if ((SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.fisheye.panorama.active) && !SETTINGS.input.image) {
-		e('panorama se nepdarilo nacist!');
-		createInfoScreen("panorama se nepdarilo nacist!", SETTINGS.info_screen.width,SETTINGS.info_screen.height);
+		var notice = 'Panorama se nepdařilo načíst!';
+		e(notice);
+		createInfoScreen(notice, SETTINGS.info_screen.width,SETTINGS.info_screen.height);
 		return false;
 	}
 
@@ -1432,6 +1435,6 @@ SETTINGS.input.video.oncanplaythrough = function() {
 }
 
 
-	
+
 	</script>
 </html>
