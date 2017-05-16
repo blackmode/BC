@@ -8,126 +8,46 @@
 		<link rel="shortcut icon" href="src/img/favicon.ico" type="image/x-icon" />
 		<script type="text/javascript" src="src/js/lib.js"></script>
 		<script type="text/javascript" src="src/js/Externallib.js"></script>
-	</head>
 
-	<script id="vs" type="x-shader/x-vertex">
-		attribute vec3 pos;
-		attribute vec2 texture;
+		<script id="vs" type="x-shader/x-vertex">
+			attribute vec3 pos;
+			attribute vec2 texture;
 
-		uniform mat4 M_Matrix;
-		uniform mat4 V_Matrix;
-		uniform mat4 P_Matrix;
+			uniform mat4 M_Matrix;
+			uniform mat4 V_Matrix;
+			uniform mat4 P_Matrix;
 
-		varying vec2 varyingTexture;
+			varying vec2 varyingTexture;
 
-		attribute vec3 fragPos;
-		varying vec3 varyingFragPosNormal;
-			
-		void main(void) {
-			gl_Position = P_Matrix * V_Matrix * M_Matrix * vec4(pos, 1.0);
-			varyingTexture = texture;
-			varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
- 
-
-		}
-	</script>
-
-	<script id="fs" type="x-shader/x-fragment">
-		precision mediump float;
-
-		varying vec3 varyingFragPosNormal;
-		varying vec2 varyingTexture;
-		uniform sampler2D sampler;  
-		#define PI 3.14159265359
-		#define KERNEL_LENGTH 30
-
-		float offset[KERNEL_LENGTH];
-		float weight[KERNEL_LENGTH];
-
-
-		// clamp(u,v) => vraci stredni hodnotu mezi dvema vstupnimi hodnotami 
-
-		void main(void) {
-			 gl_FragColor =  texture2D(sampler, varyingTexture);
-
-		 /*
-
-					 if (
-						varyingTexture.x  >0.12 &&
-						varyingTexture.x  <0.37 && 
-						varyingTexture.y >0.30	&& 
-						varyingTexture.y <0.57  
-						); else if (varyingTexture.x <0.5){
-						gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
-						gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
-						gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
-					 }
-		*/
-
-			//(( (1.0/cos( z2 )) / sqrt( x2 * x2 + y2 * y2 ) ) * ( 2.0 / 3.14159265359 ))
-
-			float x2=varyingFragPosNormal.x ;
-			float y2=varyingFragPosNormal.y  ;
-			float z2=varyingFragPosNormal.z  ;
-  
-
-			// souradnice stredu
-			float Sx = 0.0;
-			float Sy = 0.0;
-
-			float a = abs(Sx - x2);
-			float b = abs(Sy - y2);
-			float c = sqrt(a*a + b*b) ;
-			// DEBUG===========================================
-
-
-
-			if (c > 0.998       ) { 	// JE TAM DANA "&&c==0.0" ABY TO NEBYLO PLATNY! PAK ODDELAT!
-				/*
-				gl_FragColor.r =  (gl_FragColor.r * 0.1) ;
-				gl_FragColor.g =  (gl_FragColor.g * 0.1) ;
-				gl_FragColor.b =  (gl_FragColor.b * 0.1) ;
-				*/
-				//gl_FragColor = texture2D(sampler, vec2(varyingTexture)/1024.0) * 0.2270270270;
-				offset[0] =  0.0;
-				offset[1] =  1.0;
-				offset[2] =  2.0;
-				offset[3] =  3.0;
-				offset[4] =  4.0;
-
-				weight[0] =  0.2270270270;
-				weight[1] =  0.1945945946;
-				weight[2] =  0.1216216216;
-				weight[3] =   0.0540540541;
-				weight[4] =   0.0162162162;
-
-				for (int i=1; i<5; i++) {
- 
-					//gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)+vec2(0.0,offset[i]))/1024.0) * weight[i];
-					//gl_FragColor+= texture2D(sampler, (vec2(varyingTexture)-vec2(0.0,offset[i]))/1024.0) * weight[i];
- 
-				}
-
-
-				 //gl_FragColor  =    texture2D(sampler, vec2(mix( varyingTexture.x,varyingTexture.y,   0.50) ));
- 			}
-
-
-			// korekce barvy
-			if (varyingTexture.x< 0.5      ) {
-				 // gl_FragColor.a =   0.988;
+			attribute vec3 fragPos;
+			varying vec3 varyingFragPosNormal;
+				
+			void main(void) {
+				gl_Position = P_Matrix * V_Matrix * M_Matrix * vec4(pos, 1.0);
+				varyingTexture = texture;
+				varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
 			}
- 		}
-	</script>
+		</script>
 
+		<script id="fs" type="x-shader/x-fragment">
+			precision mediump float;
 
+			varying vec3 varyingFragPosNormal;
+			varying vec2 varyingTexture;
+			uniform sampler2D sampler;  
+			#define PI 3.14159265359
+			#define KERNEL_LENGTH 30
+
+			float offset[KERNEL_LENGTH];
+			float weight[KERNEL_LENGTH];
+
+			void main(void) {
+				 gl_FragColor =  texture2D(sampler, varyingTexture);
+	 		}
+		</script>
+		
+	</head>
 	<body onload="main()" id="body">
-		<!--
-			<video preload="auto" id="video" loop="false"  style="display: none " controls  >
-				<source src="data/new/new2/R0010095.mp4" type="video/mp4">
-			</video>  
-		-->
- 
 		<div id="viewer" style="position:relative ">
 			<canvas id="glcanvas" width="1000" height="700"></canvas>
 			<div id="compass-box"></div>
@@ -144,9 +64,7 @@
 		</div>
 		<div id="data"></div>
 	</body>
-
-
-<script>
+	<script>
 var gl;
 var GEOMETRY;
  
@@ -475,7 +393,7 @@ function updateObjectVariables() {
 		SETTINGS.panorama_controlls.width, 
 		SETTINGS.panorama_controlls.height, 
 		SETTINGS.panorama_controlls.canvas_position_x, 
-		SETTINGS.panorama_controlls.canvas_position_y,
+		SETTINGS.panorama_controlls.canvas_position_y
 	);
 
 	// videostatus bar
@@ -581,7 +499,7 @@ function settings_window(active) {
 		SETTINGS.panorama_controlls.btn.settings.height, 
 		SETTINGS.panorama_controlls.btn.settings.canvas_position_x, 
 		SETTINGS.panorama_controlls.btn.settings.canvas_position_y, 
-		SETTINGS.panorama_controlls.btn.settings.show_window,
+		SETTINGS.panorama_controlls.btn.settings.show_window
 	);
 }
 
@@ -1514,6 +1432,6 @@ SETTINGS.input.video.oncanplaythrough = function() {
 }
 
 
-</script>
-
+	
+	</script>
 </html>
