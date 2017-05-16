@@ -92,6 +92,7 @@ var MOUSE = {
 
 	active : false,
 	interrupt: false,
+	amort: 0.0
 };
 
 
@@ -247,7 +248,9 @@ var PROG = {
 	sampler: null,
 	program: null,
 	canvas: null,
+	time: null
 };
+
 
 
 /// ------ CACHE PROGRAMU
@@ -1059,7 +1062,19 @@ function render() {
 		// inicializace zobrazovaci matice
 		initViewMatrix();
 
-			// zmena pozice zobrazeni
+ 		// vylepseni mysi, TO DO
+		var delay = 700;
+		if ((new Date()).getTime() < PROG.time+delay) {
+	 		
+			//MOUSE.move.angle.y *= MOUSE.amort;
+
+			//MOUSE.move.angle.x *= MOUSE.amort;
+			if (MOUSE.amort >= 1.001) {
+				//MOUSE.amort =  MOUSE.amort - 0.001;
+			}
+		}
+
+		// zmena pozice zobrazeni
 		updateCameraPosition();
 
 		// nahrani matic do programu
@@ -1188,6 +1203,9 @@ function onDocumentMouseOver( event ) {
 
 function onDocumentMouseUp( event ) {
 	MOUSE.active = false;
+	var date = new Date();
+	PROG.time = date.getTime();
+	MOUSE.amort = 1.02;
 }
 
 
@@ -1230,7 +1248,6 @@ function onDocumentMouseMove( event ) {
 		MOUSE.move.angle.y+= MOUSE.move.x;
 		MOUSE.move.angle.x+=MOUSE.move.y;
 
-
 		MOUSE.move.angle.y = MOUSE.move.angle.y % (Math.PI*2);
 		MOUSE.move.angle.x	= MOUSE.move.angle.x % (Math.PI*2);
 
@@ -1241,6 +1258,9 @@ function onDocumentMouseMove( event ) {
 		else if (MOUSE.move.angle.x  <= -Math.PI/2) {
 			MOUSE.move.angle.x = -Math.PI/2 + MOUSE.move.x;
 		}
+
+
+
 
 		MOUSE.down.x = event.pageX; 
 		MOUSE.down.y = event.pageY;
