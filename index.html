@@ -155,7 +155,7 @@ var SETTINGS = {
 		height:  180,
 		canvas_position_x:  0.6,
 		canvas_position_y:  1.0,
-		north: 280, // umisteni severu v kompasu
+		north: 20, // umisteni severu v kompasu
 		angle: 0.0,
 		object: null,
 	} ,
@@ -816,7 +816,7 @@ function setupProgram()
 	if (SETTINGS.mode.equirectangular.panorama.active || SETTINGS.mode.equirectangular.video.active) {
 		rotateZ(PROG.matrices.model.data,   Math.PI/2);
 		rotateX(PROG.matrices.model.data,   3/2*Math.PI);
-		rotateY(PROG.matrices.model.data,   Math.PI/2 );
+		rotateY(PROG.matrices.model.data,   Math.PI );
 	}
 	// PRO fisheye
 	else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.fisheye.video.active){
@@ -1070,7 +1070,7 @@ function render() {
 
 			//MOUSE.move.angle.x *= MOUSE.amort;
 			if (MOUSE.amort >= 1.001) {
-				//MOUSE.amort =  MOUSE.amort - 0.001;
+				MOUSE.amort =  MOUSE.amort - 0.001;
 			}
 		}
 
