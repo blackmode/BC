@@ -174,7 +174,7 @@
                     {
                         "time": 35,
                         "duration": 3,
-                        "text": "slide 1"
+                        "text": "slide 6"
                     }
 
                 ]
@@ -184,27 +184,27 @@
                 "src": "data/videos/fisheye/fit_vstup_a_d105.mp4",
                 "active": true,
                 "compass": {
-                    "north": 220,
+                    "north": 270,
                     "correction": [
                         {
-                            "time": 5,
-                            "angle": 3
+                            "time": 41,
+                            "angle": 360
                         },
                         {
-                            "time": 10,
-                            "angle": 3
+                            "time": 46,
+                            "angle": 90
                         },
                         {
-                            "time": 15,
-                            "angle": 3
+                            "time": 51,
+                            "angle": 360
                         },
                         {
-                            "time": 20,
-                            "angle": 3
+                            "time": 53,
+                            "angle": 360
                         },
                         {
-                            "time": 25,
-                            "angle": 3
+                            "time": 55,
+                            "angle": 360
                         }
                     ]
                 },
@@ -232,10 +232,20 @@
                     {
                         "time": 25,
                         "duration": 3,
-                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
+                        "text": ""
                     }
                 ]
+            },
+
+            {
+                "src": "data/videos/fisheye/spilberk.mp4",
+                "active": true,
+                "compass": {
+                    "north": 180
+                }
             }
+
+
         ],
         "panorama": [
             {
@@ -247,28 +257,23 @@
                 "titles": [
                     {
                         "time": 5,
-                        "duration": 3,
                         "text": "prvni title"
                     },
                     {
                         "time": 10,
-                        "duration": 3,
                         "text": "druhy title"
                     },
                     {
                         "time": 15,
-                        "duration": 3,
                         "text": "treti title"
                     },
                     {
                         "time": 20,
-                        "duration": 3,
                         "text": "ctvrty title"
                     },
                     {
                         "time": 25,
-                        "duration": 3,
-                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
+                        "text": "paty title"
                     }
                 ]
             }
@@ -287,27 +292,22 @@
                 "titles": [
                     {
                         "time": 5,
-                        "duration": 3,
                         "text": "prvni title"
                     },
                     {
                         "time": 10,
-                        "duration": 3,
                         "text": "druhy title"
                     },
                     {
                         "time": 15,
-                        "duration": 3,
                         "text": "treti title"
                     },
                     {
                         "time": 20,
-                        "duration": 3,
                         "text": "ctvrty title"
                     },
                     {
                         "time": 25,
-                        "duration": 3,
                         "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
                     }
                 ]

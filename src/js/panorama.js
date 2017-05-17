@@ -7,7 +7,26 @@
  * of the BSD license.  See the LICENSE file for details.
  */
 
- var gl;
+/*
+	GET PARAMS:
+
+	JSON_file = src JSON path
+	fishVM = virwers mode
+	equiVM = virwers mode
+	fishPM = virwers mode
+	equiPM = virwers mode
+	notJSON = not JSON file with the same name, but file inserted via GET params
+	video_src = src of video
+	image_src = src of image
+
+	// timto se rika, ktera data z jakeho videa se maji pouzit, jedna pouze o index, pokujich bude pet tak index 0-4
+	equiVM_json_key
+	equiVM_json_key
+	equiPM_json_key
+	equiPM_json_key
+*/
+
+var gl;
 var GEOMETRY;
  
 /// ------ VSECHNY PROMENNE PRO MYS
@@ -269,30 +288,70 @@ if (getParamByKey("equiPM")) {
 }
 
 
-var JSON = loadJSONfile();
 
-if (JSON===false) {
-	PROG.fatal_error = true;
-}
-
-if (  SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) {
-	if (JSON && JSON.video && JSON.video) {
-		SETTINGS.input.video = createVideo(JSON.video); 
+// jestli pouzijeme vstupni argumenty
+if (getParamByKey("notJSON")) 
+{
+	if (getParamByKey("video_src")) {
+		SETTINGS.input.video = createVideo(getParamByKey("video_src")); 
+	}
+	else if (getParamByKey("image_src")) {
+		SETTINGS.input.image =  createImage(getParamByKey("image_src")); // p7.jpg / t1.jpg
 	}
 	else {
-		w('v souboru JSON neni video, nebo jeho zdroj');
+		w('ERROR: Byl ocekavan vstup pomoci parametru, ktery ale nebyl zadan!');
+		createInfoScreen(
+			"ERROR: Byl ocekavan vstup pomoci parametru, ktery ale nebyl zadan!", 
+			SETTINGS.info_screen.width,
+			SETTINGS.info_screen.height
+		);
+		PROG.fatal_error = true;
 	}
+
+	// pridani jsounu pokd je zadan parametrem
+	if (getParamByKey("JSON_file")) {
+		loadJSONfile();
+	}
+
 }
-else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.equirectangular.panorama.active ) {
 
-	if (JSON && JSON.image && JSON.image) {
-			SETTINGS.input.image =  createImage(JSON.image); // p7.jpg / t1.jpg
+// druha moznost je pouzit JSON, je vyhodnejsi v priapde, ze bychom potrebovali menit pozici kompasu k videu aj.
+else {
+	var JSON = loadJSONfile();
+
+	if (JSON===false) {
+		PROG.fatal_error = true;
+	}
+
+	if (  SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) {
+		if (JSON && JSON.video && JSON.video) {
+			SETTINGS.input.video = createVideo(JSON.video); 
+		}
+		else {
+			w('v souboru JSON neni video, nebo jeho zdroj');
+			createInfoScreen(
+				"v souboru JSON neni video, nebo jeho zdroj", 
+				SETTINGS.info_screen.width,
+				SETTINGS.info_screen.height
+			);
+		}
+	}
+	else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.equirectangular.panorama.active ) {
+
+		if (JSON && JSON.image && JSON.image) {
+				SETTINGS.input.image =  createImage(JSON.image); // p7.jpg / t1.jpg
+
+		}
+		else {
+			w('v souboru JSON neni obrazek, nebo jeho zdroj');
+			createInfoScreen(
+				"v souboru JSON neni obrazek, nebo jeho zdroj", 
+				SETTINGS.info_screen.width,
+				SETTINGS.info_screen.height
+			);
+		}
 
 	}
-	else {
-		w('v souboru JSON neni obrazek, nebo jeho zdroj');
-	}
-
 }
 
 /**
@@ -307,6 +366,11 @@ function loadJSONfile() {
 	if (CACHE.json_object == null) {
 		var current_file_name = getCurrentProgramFilename().split('.')[0];
 		var dest_json_file = current_file_name+'.json';
+		// jeste primda moznost zadat externi JSON parametrem
+		if (getParamByKey("JSON_file") && isFileExists(getParamByKey("JSON_file"))) {
+			dest_json_file = getParamByKey("JSON_file");
+		}
+
 		var request = new XMLHttpRequest();
 		request.open("GET", dest_json_file, false);
 		request.send(null);
@@ -328,13 +392,13 @@ function loadJSONfile() {
 	var JSON_video_src = false;
 	var JSON_image_src = false;
 
+	// aktualizace objektu zadanym parametrem
 	var objUpdateValues = function(current_obj, settings_obj) {
 		if (current_obj.width!=null  && !isNaN(current_obj.width)) 				settings_obj.width = current_obj.width;
 		if (current_obj.height!=null && !isNaN(current_obj.height)) 			settings_obj.height = current_obj.height;
 		if (current_obj.canvas_position_x!=null && !isNaN(current_obj.canvas_position_x)) settings_obj.canvas_position_x = current_obj.canvas_position_x;
 		if (current_obj.canvas_position_y!=null && !isNaN(current_obj.canvas_position_y)) {
-			d('jsem zde');
-			settings_obj.canvas_position_y = current_obj.canvas_position_y;
+ 			settings_obj.canvas_position_y = current_obj.canvas_position_y;
 		}
 	};
 
@@ -429,11 +493,19 @@ function loadJSONfile() {
 			// nastaveni kompasu ze souboru
 			if (equirectVideo.compass) 
 			{
+				// aktualizace hodnot z JSON souboru
+				objUpdateValues(equirectVideo.compass, SETTINGS.compass);
+
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (equirectVideo.compass.north!=null && !isNaN(equirectVideo.compass.north) && equirectVideo.compass.north!=SETTINGS.compass.north) {
 					SETTINGS.compass.north = equirectVideo.compass.north;
 					log('Compass: uspesne prenastaveno');
 				}
+			}
+
+			// aktualizace hodnot z JSON souboru
+			if (equirectVideo.field_vision) {
+				objUpdateValues(equirectVideo.field_vision, SETTINGS.field_vision);
 			}
 
 		}
@@ -452,12 +524,21 @@ function loadJSONfile() {
 			// nastaveni kompasu ze souboru
 			if (equirectPano.compass) 
 			{
+				// aktualizace hodnot z JSON souboru
+				objUpdateValues(equirectPano.compass, SETTINGS.compass);
+
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (equirectPano.compass.north!=null && !isNaN(equirectPano.compass.north) && equirectPano.compass.north!=SETTINGS.compass.north) {
 					SETTINGS.compass.north = equirectPano.compass.north;
 					log('Compass: uspesne prenastaveno');
 				}
 			}
+
+			// aktualizace hodnot z JSON souboru
+			if (equirectPano.field_vision) {
+				objUpdateValues(equirectPano.field_vision, SETTINGS.field_vision);
+			}
+
 		}
 	}
 
@@ -754,63 +835,71 @@ function setupProgram()
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
 		 		var timeLine = SETTINGS.input.video.currentTime;
 				
+				// korekce komapsu a tisk titulku se deje pouze pokud je prilozen JSON soubor
+		 		if (CACHE.json_object) {
 
-				// nejdriv je potreba vybrat pro jaky rezim videa se jedna
-				var whichVideo = 0;
-				var whichMode = 0;
+					// nejdriv je potreba vybrat pro jaky rezim videa se jedna
+					var whichVideo = 0;
+					var whichMode = 0;
 
-				if (SETTINGS.mode.equirectangular.video.active) {
-					whichVideo = getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0;
-					whichMode =  CACHE.json_object.equirectangular.video[whichVideo];
-				}
-
-				if (SETTINGS.mode.fisheye.video.active) { 
-					whichVideo = getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0;
-					whichMode =  CACHE.json_object.fisheye.video[whichVideo];
-				}
-
-				// pokud jsou titulky aktivni
-				if (SETTINGS.panorama_controlls.subtitles_box.active) 
-				{
-
-					//titulky ve scene
-					for (var i = 0; i < whichMode.titles.length; i++) 
-					{
-
-						var tit = whichMode.titles[i];
-						if (timeLine>= tit.time/* && timeLine<= tit.time+tit.duration*/) 
-						{
-							// aktualizace objektu titulku
-							subtitles_window(true, tit.text);
-							SETTINGS.panorama_controlls.subtitles_box.current_subtitle = tit.text;
-						}
-					};
-				}
-
-				//zmena kompasu ve scene
-				for (var i = 0; i < whichMode.compass.correction.length; i++) 
-				{
-
-					var com_angle = whichMode.compass.correction[i];
-					if (timeLine>= com_angle.time ) 
-					{
-						//d(com_angle.time);
-						//d(com_angle.angle);
-						
-						// aktualizace objektu compasu
-						SETTINGS.compass.north = com_angle.angle;
-						SETTINGS.compass.object = createCompass(
-							SETTINGS.compass.width, 
-							SETTINGS.compass.height, 
-							SETTINGS.compass.canvas_position_x, 
-							SETTINGS.compass.canvas_position_y, 
-							SETTINGS.compass.north, 
-							SETTINGS.compass.angle
-						);
-
+					if (SETTINGS.mode.equirectangular.video.active) {
+						whichVideo = getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0;
+						whichMode =  CACHE.json_object.equirectangular.video[whichVideo];
 					}
-				};
 
+					if (SETTINGS.mode.fisheye.video.active) { 
+						whichVideo = getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0;
+						whichMode =  CACHE.json_object.fisheye.video[whichVideo];
+					}
+
+					// pokud jsou titulky aktivni
+					if (SETTINGS.panorama_controlls.subtitles_box.active) 
+					{
+
+						//titulky ve scene
+						if (whichMode && whichMode.titles) 
+						{
+							for (var i = 0; i < whichMode.titles.length; i++) 
+							{
+
+								var tit = whichMode.titles[i];
+								if (timeLine>= tit.time/* && timeLine<= tit.time+tit.duration*/) 
+								{
+									// aktualizace objektu titulku
+									subtitles_window(true, tit.text);
+									SETTINGS.panorama_controlls.subtitles_box.current_subtitle = tit.text;
+								}
+							};
+						}
+					}
+
+					//zmena kompasu ve scene
+					if (whichMode.compass && whichMode.compass.correction) 
+					{
+						for (var i = 0; i < whichMode.compass.correction.length; i++) 
+						{
+
+							var com_angle = whichMode.compass.correction[i];
+							if (timeLine>= com_angle.time ) 
+							{
+								//d(com_angle.time);
+								//d(com_angle.angle);
+								
+								// aktualizace objektu compasu
+								SETTINGS.compass.north = com_angle.angle;
+								SETTINGS.compass.object = createCompass(
+									SETTINGS.compass.width, 
+									SETTINGS.compass.height, 
+									SETTINGS.compass.canvas_position_x, 
+									SETTINGS.compass.canvas_position_y, 
+									SETTINGS.compass.north, 
+									SETTINGS.compass.angle
+								);
+
+							}
+						};
+					}
+				}
 
 
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
@@ -1698,15 +1787,12 @@ function main()
 	render(0);
  
 
-	/*
-	SETTINGS.input.video.oncanplaythrough = function() {
-		render();
-		//video.play();
-	};
-	*/
 
-	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
-		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 0) ;
-	},false);
+	if (SETTINGS.input.video) {
+		SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
+			this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 0) ;
+		},false);
+	}
 }
+
 
