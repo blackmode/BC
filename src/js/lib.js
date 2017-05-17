@@ -14,7 +14,12 @@
 /**
  *	Vytvari všechny potřebné body geometrie
  *
- * @param {integer} latitudes
+ *	Na základě vstupních hodnot se bude odvíjet přesnost aproximace koule
+ * 
+ * @param {integer} latitudes - počet rovnoběžek
+ * @param {integer} longitudes - počet polednníků
+ * @param {integer} radius - poloměr
+ * @param {integer} noIndices - přiznak, který určuje zdali použít indexování či nikoliv
  */
 function createSphereGeometry (latitudes, longitudes, radius, noIndices) 
 {
@@ -567,7 +572,13 @@ function checkIfFileExists(url)
     }
 }
 
-
+/**
+ *	Zjištuje, zdali existuje soubor zadany cestou
+ *
+ * 
+ * @param {integer} url - absolutni cesta k souboru
+ * @return {bool} 
+ */
 function isFileExists(url)
 {
     var http = new XMLHttpRequest();
@@ -908,7 +919,18 @@ function makeIdentityFrom(matrix) {
 //////////////////////////////////////  TVORBA GUI PRVKU   ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ *	Funkce pro vytvoření kompasu
+ *
+ * 
+ * @param {integer} width - šířka
+ * @param {integer} height - výška prvku
+ * @param {integer} position_x - umsiteni v canvasu <0-1>
+ * @param {integer} position_y - umsiteni v canvasu <0-1>
+ * @param {integer} north_position - pozice severu
+ * @param {integer} angle - uhel o ktery se strelka otoci
+ * @return {object} - vraci box kompasu
+ */
 function createCompass(width, height, position_x, position_y, north_position, angle) {
 	// ID divu
 	var compass_box_id = "compass-box"; // ID kontejneru pro umisteni kompasu
@@ -1189,7 +1211,7 @@ function createVideoStatusBar(width, height, position_x, position_y) {
 	};
 }
 
-
+// zkazuje prubejh nacitani 
 function createLoader(width, height, position_x, position_y, active, delay) 
 {
 	var canvas_dom = document.getElementsByTagName("canvas")[0];
@@ -1214,7 +1236,7 @@ function createLoader(width, height, position_x, position_y, active, delay)
 	}
 }
 
-
+// 
 function createInfoScreen(log, width, height) 
 {
 	var viewer = document.getElementById("viewer");
@@ -1258,7 +1280,16 @@ function createInfoScreen(log, width, height)
 	info_screen.innerHTML = log;
 }
 
-
+/**
+ *	Funkce pro vytvoření ovladani videa
+ *
+ * 
+ * @param {integer} width - šířka
+ * @param {integer} height - výška prvku
+ * @param {integer} position_x - umsiteni v canvasu <0-1>
+ * @param {integer} position_y - umsiteni v canvasu <0-1>
+ * @return {object} - referenci na objekt a na tlacitka
+ */
 function createVideoControlls(width, height, position_x, position_y) {
 
 	// ID
@@ -1390,7 +1421,16 @@ function createVideoControlls(width, height, position_x, position_y) {
 
 }
 
-
+/**
+ *	Funkce pro vytvoření ovladani panoramatu - plati pro obrazkyi videa
+ *
+ * 
+ * @param {integer} width - šířka
+ * @param {integer} height - výška prvku
+ * @param {integer} position_x - umsiteni v canvasu <0-1>
+ * @param {integer} position_y - umsiteni v canvasu <0-1>
+ * @return {object} - referenci na objekt 
+ */
 function createPanoramaControlls(width, height, position_x, position_y) {
 
 	// ID
@@ -1499,7 +1539,17 @@ function createPanoramaControlls(width, height, position_x, position_y) {
 
 }
 
-
+/**
+ *	Funkce pro vytvoření okna nastaveni
+ *
+ * 
+ * @param {integer} width - šířka
+ * @param {integer} height - výška prvku
+ * @param {integer} position_x - umsiteni v canvasu <0-1>
+ * @param {integer} position_y - umsiteni v canvasu <0-1>
+ * @param {integer} active - 0/1, zdai bude prvek zobrazen
+ * @return {object} - referenci na objekt 
+ */
 function createWindowSettings(width, height, position_x, position_y, active) {
 
 	// overeni existence potrebnych divu kostry
@@ -1675,6 +1725,18 @@ for (var i = 0; i < mode_ids.length; i++)
 	};
 }
 
+/**
+ *	Funkce pro vytvoření boxu titulku
+ *
+ * 
+ * @param {integer} width - šířka
+ * @param {integer} height - výška prvku
+ * @param {integer} position_x - umsiteni v canvasu <0-1>
+ * @param {integer} position_y - umsiteni v canvasu <0-1>
+ * @param {integer} active - 0/1, zdai bude prvek zobrazen
+ * @param {integer} text - zneni titulku
+ * @return {object} - referenci na objekt 
+ */
 function createSubtitlesBox(width, height, position_x, position_y, active, text) {
 
 	// overeni existence potrebnych divu kostry
