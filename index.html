@@ -283,7 +283,7 @@ var CACHE = {
 if (getParamByKey("video"))
 	SETTINGS.input.video =  createVideo(getParamByKey("video"));
 
-setFishVideoMode();
+setEquiVideoMode();
 /*
 SETTINGS.mode.fisheye.panorama.active 			= false;
 SETTINGS.mode.fisheye.video.active 				= false;
@@ -760,25 +760,24 @@ function setupProgram()
 		 		var value = (100 / SETTINGS.input.video.duration) * SETTINGS.input.video.currentTime;
 		 		var timeLine = SETTINGS.input.video.currentTime;
 				
+
+				// nejdriv je potreba vybrat pro jaky rezim videa se jedna
+				var whichVideo = 0;
+				var whichMode = 0;
+
+				if (SETTINGS.mode.equirectangular.video.active) {
+					whichVideo = getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0;
+					whichMode =  CACHE.json_object.equirectangular.video[whichVideo];
+				}
+
+				if (SETTINGS.mode.fisheye.video.active) { 
+					whichVideo = getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0;
+					whichMode =  CACHE.json_object.fisheye.video[whichVideo];
+				}
+
 				// pokud jsou titulky aktivni
 				if (SETTINGS.panorama_controlls.subtitles_box.active) 
 				{
-
-					// nejdriv je potreba vybrat pro jaky rezim videa se jedna
-					var whichVideo = 0;
-					var whichMode = 0;
-
-					if (SETTINGS.mode.equirectangular.video.active) {
-						whichVideo = getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0;
-						whichMode =  CACHE.json_object.equirectangular.video[whichVideo];
-					}
-
-					if (SETTINGS.mode.fisheye.video.active) { 
-						whichVideo = getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0;
-						whichMode =  CACHE.json_object.fisheye.video[whichVideo];
-					}
-
-
 
 					//titulky ve scene
 					for (var i = 0; i < whichMode.titles.length; i++) 
@@ -793,6 +792,32 @@ function setupProgram()
 						}
 					};
 				}
+
+				//zmena kompasu ve scene
+				for (var i = 0; i < whichMode.compass.correction.length; i++) 
+				{
+
+					var com_angle = whichMode.compass.correction[i];
+					if (timeLine>= com_angle.time ) 
+					{
+						//d(com_angle.time);
+						//d(com_angle.angle);
+						
+						// aktualizace objektu compasu
+						SETTINGS.compass.north = com_angle.angle;
+						SETTINGS.compass.object = createCompass(
+							SETTINGS.compass.width, 
+							SETTINGS.compass.height, 
+							SETTINGS.compass.canvas_position_x, 
+							SETTINGS.compass.canvas_position_y, 
+							SETTINGS.compass.north, 
+							SETTINGS.compass.angle
+						);
+
+					}
+				};
+
+
 
 		 		SETTINGS.video_controlls.object.btn.slider.value = value;
 		 		SETTINGS.video_status_bar.object.text.innerHTML = '<div>'+Math.round(SETTINGS.input.video.currentTime/SETTINGS.input.video.duration*100)+' %</div>';

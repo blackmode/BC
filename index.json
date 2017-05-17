@@ -8,24 +8,24 @@
                     "north": 220,
                     "correction": [
                         {
-                            "time": 5,
-                            "angle": 3
+                            "time": 7,
+                            "angle": 130
                         },
                         {
-                            "time": 10,
-                            "angle": 3
+                            "time": 11,
+                            "angle": 80
                         },
                         {
-                            "time": 15,
-                            "angle": 3
+                            "time": 14,
+                            "angle": 40
                         },
                         {
                             "time": 20,
-                            "angle": 3
+                            "angle": 220
                         },
                         {
                             "time": 25,
-                            "angle": 3
+                            "angle": 260
                         }
                     ]
                 },
@@ -66,19 +66,19 @@
                     "correction": [
                         {
                             "time": 5,
-                            "angle": 3
+                            "angle": 180
                         },
                         {
                             "time": 10,
-                            "angle": 3
+                            "angle": 250
                         },
                         {
                             "time": 15,
-                            "angle": 3
+                            "angle": 340
                         },
                         {
                             "time": 20,
-                            "angle": 3
+                            "angle": 90
                         },
                         {
                             "time": 25,
