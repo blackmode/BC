@@ -13,7 +13,7 @@ POŽADAVKY
 
 BĚH APLIKACE
 
-	- Soubory dodané na DVD překopírovat na server, kde běží Apache (mimo složky /doc/, která obsahuje tech. zprávu)
+	- Soubory dodané na DVD překopírovat na server, popř. lokální server  (mimo složky /doc/, která obsahuje tech. zprávu)
 	- Najetím do souboru  programu by se měl již načíst automaticky soubor index.html se základními režimy -> přepínání režimu se provádí ozubeným kolečkem
 	- Další testovací soubory jsou označeny jako: demo<1-3>.html
 
