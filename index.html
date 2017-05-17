@@ -310,11 +310,11 @@ setEquiPanoMode();
 
 
 //aktivae pomoci argumentu ma prednost
-if (getParamByKey("fishVM")) {
+if (getParamByKey("fishVM")) {	//fishVM_json_key
 	setFishVideoMode();
 } 
 
-if (getParamByKey("equiVM")) {
+if (getParamByKey("equiVM")) {	//equiVM_json_key
 	setEquiVideoMode();
 }
 
@@ -342,7 +342,15 @@ if (  SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.
 	}
 }
 else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.equirectangular.panorama.active ) {
-	SETTINGS.input.image =  createImage(JSON.image); // p7.jpg / t1.jpg
+
+	if (JSON && JSON.image && JSON.image) {
+			SETTINGS.input.image =  createImage(JSON.image); // p7.jpg / t1.jpg
+
+	}
+	else {
+		w('v souboru JSON neni obrazek, nebo jeho zdroj');
+		d(JSON);
+	}
 
 }
 
@@ -375,7 +383,7 @@ function loadJSONfile() {
 		var JSON_object = CACHE.json_object;
 	}
 
-
+d(JSON_object);
 
 	var JSON_video_src = false;
 	var JSON_image_src = false;
@@ -386,7 +394,8 @@ function loadJSONfile() {
 	{
 		if (JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
 		{
-			var indexOfSrc = (getParamByKey("video_json_key") ? getParamByKey("video_json_key") : 0);
+			var indexOfSrc = (getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0);
+			d(indexOfSrc);
 			var fishEye = JSON_object.fisheye.video[indexOfSrc];
 			
 			// nastaveni zdroje videa
@@ -402,15 +411,24 @@ function loadJSONfile() {
 				}
 			}
 
-			log(fishEye.titles);
 		}
 		else if (JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
 		{
-			var fishPano = JSON_object.fisheye.panorama;
+			var indexOfSrc = (getParamByKey("fishPM_json_key") ? getParamByKey("fishPM_json_key") : 0);
+			var fishPano = JSON_object.fisheye.panorama[indexOfSrc];
 
 			// nastaveni zdroje panoramatu
 			if (fishPano.src)	JSON_image_src = fishPano.src;
 
+			// nastaveni kompasu ze souboru
+			if (fishPano.compass) 
+			{
+				// prenastavuju jen pokud se hodnoty nerovnaji
+				if (fishPano.compass.north!=null && !isNaN(fishPano.compass.north) && fishPano.compass.north!=SETTINGS.compass.north) {
+					SETTINGS.compass.north = fishPano.compass.north;
+					log('Compass: uspesne prenastaveno');
+				}
+			}
 		}
 	}
 	// Equirectangular INPUT
@@ -418,27 +436,41 @@ function loadJSONfile() {
 	{
 		if (JSON_object.equirectangular.video && SETTINGS.mode.equirectangular.video.active) 
 		{
-			var equirectVideo = JSON_object.equirectangular.video;
+
+			var indexOfSrc = (getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0);
+			var equirectVideo = JSON_object.equirectangular.video[indexOfSrc];
 
 			// nastaveni zdroje videa
 			if (equirectVideo.src)	JSON_video_src = equirectVideo.src;
 
-			if (equirectVideo.compass) {
-				SETTINGS.compass.north = equirectVideo.compass.north;
+			// nastaveni kompasu ze souboru
+			if (equirectVideo.compass) 
+			{
+				// prenastavuju jen pokud se hodnoty nerovnaji
+				if (equirectVideo.compass.north!=null && !isNaN(equirectVideo.compass.north) && equirectVideo.compass.north!=SETTINGS.compass.north) {
+					SETTINGS.compass.north = equirectVideo.compass.north;
+					log('Compass: uspesne prenastaveno');
+				}
 			}
-
 
 		}
 		else if (JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
 		{
-
-			var equirectPano = JSON_object.equirectangular.panorama;
+			log('jsem zdeeee');
+			var indexOfSrc = (getParamByKey("equiPM_json_key") ? getParamByKey("equiPM_json_key") : 0);
+			var equirectPano = JSON_object.equirectangular.panorama[indexOfSrc];
 
 			// nastaveni zdroje videa
 			if (equirectPano.src)	JSON_image_src = equirectPano.src;
 
-			if (equirectPano.compass) {
-				SETTINGS.compass.north = equirectPano.compass.north;
+			// nastaveni kompasu ze souboru
+			if (equirectPano.compass) 
+			{
+				// prenastavuju jen pokud se hodnoty nerovnaji
+				if (equirectPano.compass.north!=null && !isNaN(equirectPano.compass.north) && equirectPano.compass.north!=SETTINGS.compass.north) {
+					SETTINGS.compass.north = equirectPano.compass.north;
+					log('Compass: uspesne prenastaveno');
+				}
 			}
 		}
 	}
@@ -734,10 +766,28 @@ function setupProgram()
 				// pokud jsou titulky aktivni
 				if (SETTINGS.panorama_controlls.subtitles_box.active) 
 				{
+
+
+					var whichVideo = 0;
+					var whichMode = 0;
+
+					if (SETTINGS.mode.equirectangular.video.active) {
+						whichVideo = getParamByKey("equiVM_json_key") ? getParamByKey("equiVM_json_key") : 0;
+						whichMode =  CACHE.json_object.equirectangular.video[whichVideo];
+					}
+
+					if (SETTINGS.mode.fisheye.video.active) { 
+						whichVideo = getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0;
+						whichMode =  CACHE.json_object.fisheye.video[whichVideo];
+					}
+
+
+
 					//titulky ve scene
-					for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) 
+					for (var i = 0; i < whichMode.titles.length; i++) 
 					{
-						var tit = CACHE.json_object.fisheye.video.titles[i];
+
+						var tit = whichMode.titles[i];
 						if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) 
 						{
 							// aktualizace objektu titulku
@@ -1213,12 +1263,28 @@ function render(time) {
 		{
 	 		if (SETTINGS.panorama_controlls.subtitles_box.active) 
 	 		{
-		 		//titulky ve scene
-				for (var i = 0; i < CACHE.json_object.fisheye.video.titles.length; i++) {
-					var tit = CACHE.json_object.fisheye.video.titles[i];
-					var timeLine =  parseInt(((new Date()).getTime() - PROG.startTime)/1000);
+				var whichVideo = 0;
+				var whichMode = 0;
 
-					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) {
+				if (SETTINGS.mode.equirectangular.panorama.active) {
+					whichVideo = getParamByKey("equiPM_json_key") ? getParamByKey("equiPM_json_key") : 0;
+					whichMode =  CACHE.json_object.equirectangular.panorama[whichVideo];
+				}
+
+				if (SETTINGS.mode.fisheye.panorama.active) { 
+					whichVideo = getParamByKey("fishPM_json_key") ? getParamByKey("fishPM_json_key") : 0;
+					whichMode =  CACHE.json_object.fisheye.panorama[whichVideo];
+				}
+
+
+				//titulky ve scene
+				for (var i = 0; i < whichMode.titles.length; i++) 
+				{
+					var tit = whichMode.titles[i];
+					var timeLine =  parseInt(((new Date()).getTime() - PROG.startTime)/1000);
+					if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) 
+					{
+						// aktualizace objektu titulku
 						subtitles_window(true, tit.text);
 						SETTINGS.panorama_controlls.subtitles_box.current_subtitle = tit.text;
 					}
