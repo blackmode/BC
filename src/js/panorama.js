@@ -328,6 +328,17 @@ function loadJSONfile() {
 	var JSON_video_src = false;
 	var JSON_image_src = false;
 
+	var objUpdateValues = function(current_obj, settings_obj) {
+		if (current_obj.width!=null  && !isNaN(current_obj.width)) 				settings_obj.width = current_obj.width;
+		if (current_obj.height!=null && !isNaN(current_obj.height)) 			settings_obj.height = current_obj.height;
+		if (current_obj.canvas_position_x!=null && !isNaN(current_obj.canvas_position_x)) settings_obj.canvas_position_x = current_obj.canvas_position_x;
+		if (current_obj.canvas_position_y!=null && !isNaN(current_obj.canvas_position_y)) {
+			d('udpate probehl');
+			updateObjectVariables();
+			settings_obj.canvas_position_y = current_obj.canvas_position_y;
+		}
+	};
+
 	// moznost vstupu dvema mody
 	// RYBI OKO
 	if (JSON_object.fisheye) 
@@ -347,12 +358,25 @@ function loadJSONfile() {
 			// nastaveni kompasu ze souboru
 			if (fishEye.compass) 
 			{
+				// aktualizace hodnot z JSON souboru
+				objUpdateValues(fishEye.compass, SETTINGS.compass);
+
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (fishEye.compass.north!=null && !isNaN(fishEye.compass.north) && fishEye.compass.north!=SETTINGS.compass.north) {
 					SETTINGS.compass.north = fishEye.compass.north;
+					if (fishEye.compass.width)				SETTINGS.compass.width = fishEye.compass.width;
+					if (fishEye.compass.height) 			SETTINGS.compass.height = fishEye.compass.height;
+					if (fishEye.compass.canvas_position_x)	SETTINGS.compass.canvas_position_x = fishEye.compass.canvas_position_x;
+					if (fishEye.compass.canvas_position_y)	SETTINGS.compass.canvas_position_y = fishEye.compass.canvas_position_y;
 					log('Compass: uspesne prenastaveno');
 				}
 			}
+
+			// aktualizace hodnot z JSON souboru
+			if (fishEye.field_vision) {
+				objUpdateValues(fishEye.field_vision, SETTINGS.field_vision);
+			}
+
 
 		}
 		else if (JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
@@ -370,12 +394,21 @@ function loadJSONfile() {
 			// nastaveni kompasu ze souboru
 			if (fishPano.compass) 
 			{
+				// aktualizace hodnot z JSON souboru
+				objUpdateValues(fishPano.compass, SETTINGS.compass);
+				
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (fishPano.compass.north!=null && !isNaN(fishPano.compass.north) && fishPano.compass.north!=SETTINGS.compass.north) {
 					SETTINGS.compass.north = fishPano.compass.north;
 					log('Compass: uspesne prenastaveno');
 				}
 			}
+
+			// aktualizace hodnot z JSON souboru
+			if (fishPano.field_vision) {
+				objUpdateValues(fishPano.field_vision, SETTINGS.field_vision);
+			}
+
 		}
 	}
 	// Equirectangular INPUT
@@ -1666,29 +1699,15 @@ function main()
 	render(0);
  
 
-/*
-SETTINGS.input.video.oncanplaythrough = function() {
-	render();
-	//video.play();
-};
-*/
+	/*
+	SETTINGS.input.video.oncanplaythrough = function() {
+		render();
+		//video.play();
+	};
+	*/
 
-
-/*
-	video.addEventListener("timeupdate", function(){
-		if(this.currentTime >= 8){
-			this.pause();
-		}
-	});
-*/
- 
-	 
 	SETTINGS.input.video.addEventListener("loadedmetadata",function() { 
 		this.currentTime = (getParamByKey("time") ? getParamByKey("time") : 0) ;
 	},false);
- 
- 
-
-
 }
 
