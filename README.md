@@ -9,6 +9,6 @@ POŽADAVKY
 
 BĚH APLIKACE
 
-1.) Soubory dodané na DVD překopírovat na server, kde běží Apache (mimo složky /doc/, která obsahuje tech. zprávu)
-2.) Najetím do repozitáře se SW by se měl již načíst soubor index.html se základními režimy
-3.) Další testovací soubory jsou označeny jako: demo<1-3>.html
+- Soubory dodané na DVD překopírovat na server, kde běží Apache (mimo složky /doc/, která obsahuje tech. zprávu)
+- Najetím do repozitáře se SW by se měl již načíst soubor index.html se základními režimy
+- Další testovací soubory jsou označeny jako: demo<1-3>.html
