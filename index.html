@@ -393,12 +393,15 @@ function loadJSONfile() {
 		if (JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
 		{
 			var indexOfSrc = (getParamByKey("fishVM_json_key") ? getParamByKey("fishVM_json_key") : 0);
-			d(indexOfSrc);
 			var fishEye = JSON_object.fisheye.video[indexOfSrc];
 			
 			// nastaveni zdroje videa
-			if (fishEye.src)	JSON_video_src = fishEye.src;
-			
+			if (fishEye && fishEye.src)	JSON_video_src = fishEye.src;
+			else {
+				w('nepodarilo se nacist data ze souboru JSON');
+				return false;
+			}
+
 			// nastaveni kompasu ze souboru
 			if (fishEye.compass) 
 			{
@@ -416,7 +419,11 @@ function loadJSONfile() {
 			var fishPano = JSON_object.fisheye.panorama[indexOfSrc];
 
 			// nastaveni zdroje panoramatu
-			if (fishPano.src)	JSON_image_src = fishPano.src;
+			if (fishPano && fishPano.src)	JSON_image_src = fishPano.src;
+			else {
+				w('nepodarilo se nacist data ze souboru JSON');
+				return false;
+			}
 
 			// nastaveni kompasu ze souboru
 			if (fishPano.compass) 
@@ -439,7 +446,11 @@ function loadJSONfile() {
 			var equirectVideo = JSON_object.equirectangular.video[indexOfSrc];
 
 			// nastaveni zdroje videa
-			if (equirectVideo.src)	JSON_video_src = equirectVideo.src;
+			if (equirectVideo && equirectVideo.src)	JSON_video_src = equirectVideo.src;
+			else {
+				w('nepodarilo se nacist data ze souboru JSON');
+				return false;
+			}
 
 			// nastaveni kompasu ze souboru
 			if (equirectVideo.compass) 
@@ -458,7 +469,11 @@ function loadJSONfile() {
 			var equirectPano = JSON_object.equirectangular.panorama[indexOfSrc];
 
 			// nastaveni zdroje videa
-			if (equirectPano.src)	JSON_image_src = equirectPano.src;
+			if (equirectPano && equirectPano.src)	JSON_image_src = equirectPano.src;
+			else {
+				w('nepodarilo se nacist data ze souboru JSON');
+				return false;
+			}
 
 			// nastaveni kompasu ze souboru
 			if (equirectPano.compass) 
@@ -712,11 +727,16 @@ function setupProgram()
 		onDocumentMouseUp
 	];
 
-	// pridani vyjimek
+	// pridani vyjimek - aby se mys nesnimala po najeti na prvek pri posouvani v canvasu
 	for (var i = 0; i < actions.length; i++) {
+		// compass
 		SETTINGS.compass.object.addEventListener( actions[i], action_functions[i], false );
+		// zorne pole
 		SETTINGS.field_vision.object.addEventListener( actions[i], action_functions[i], false );
+		// panel ovladani panaromatu
 		SETTINGS.panorama_controlls.object.controlls.addEventListener( actions[i], action_functions[i], false );
+		// okno nastaveni
+		SETTINGS.panorama_controlls.btn.settings.object.settings.addEventListener( actions[i], action_functions[i], false );
 	};
 
 	/*

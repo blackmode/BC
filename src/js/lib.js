@@ -1,8 +1,22 @@
-
+/* lib.js  
+ *
+ * Copyright (C) 2016-2017 Tomáš Slunský
+ * All rights reserved.
+ *
+ * This software may be modified and distributed under the terms
+ * of the BSD license.  See the LICENSE file for details.
+ */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  TVORBA GEOMETRIE    ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices) 
+
+
+/**
+ *	Vytvari všechny potřebné body geometrie
+ *
+ * @param {integer} latitudes
+ */
+function createSphereGeometry (latitudes, longitudes, radius, noIndices) 
 {
 	var vertices = [];
 	var textures = [];
@@ -35,18 +49,18 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 	var fisheye_2_y_begin = 133;
 	var fisheye_2_y_end = 1063;
 
-	var latitude_width = resolution_height/latitudeBands ;
-	var longitude_width = resolution_width/longitudeBands;
+	var latitude_width = resolution_height/latitudes ;
+	var longitude_width = resolution_width/longitudes;
 
-	var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
-	var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
+	var latitudeAngle =  Math.PI / latitudes;         // 0°-180°
+	var longitudeAngle =  2 * Math.PI / longitudes;  //  0°-360°
 
-	for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {	// zde ukazuje na ktere jsme rovnobezce
+	for (var latNumber = 0; latNumber <= latitudes; ++latNumber) {	// zde ukazuje na ktere jsme rovnobezce
 		var theta = latNumber * latitudeAngle;
 
 
 
-		for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {// zde ukazuje na kterym jsme poledniku
+		for (var longNumber = 0; longNumber <= longitudes; ++ longNumber) {// zde ukazuje na kterym jsme poledniku
 
 			var phi = longNumber * longitudeAngle;
 
@@ -64,8 +78,8 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 			var normals_z = z/radius;
 
 			// textury
-			u= 1-longNumber/longitudeBands;
-			v=  latNumber/latitudeBands;
+			u= 1-longNumber/longitudes;
+			v=  latNumber/latitudes;
 
 			// pomocna prepona
 			hypotenuse.push(K);
@@ -91,11 +105,11 @@ function createSphereGeometry (latitudeBands, longitudeBands, radius, noIndices)
 
  
 
-    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {// zde ukazuje na ktere jsme rovnobezce
-      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {// zde ukazuje na kterym jsme poledniku
+    for (var latNumber = 0; latNumber < latitudes; latNumber++) {// zde ukazuje na ktere jsme rovnobezce
+      for (var longNumber = 0; longNumber < longitudes; longNumber++) {// zde ukazuje na kterym jsme poledniku
 
-        var firstHorizontLine = (latNumber * (longitudeBands + 1)) + longNumber;
-        var secondHorizontLine = firstHorizontLine + longitudeBands + 1;
+        var firstHorizontLine = (latNumber * (longitudes + 1)) + longNumber;
+        var secondHorizontLine = firstHorizontLine + longitudes + 1;
 
         // A--------B
         // | \      |
