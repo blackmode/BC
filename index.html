@@ -349,7 +349,6 @@ else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.equirectangular.
 	}
 	else {
 		w('v souboru JSON neni obrazek, nebo jeho zdroj');
-		d(JSON);
 	}
 
 }
@@ -383,7 +382,6 @@ function loadJSONfile() {
 		var JSON_object = CACHE.json_object;
 	}
 
-d(JSON_object);
 
 	var JSON_video_src = false;
 	var JSON_image_src = false;
@@ -456,7 +454,6 @@ d(JSON_object);
 		}
 		else if (JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
 		{
-			log('jsem zdeeee');
 			var indexOfSrc = (getParamByKey("equiPM_json_key") ? getParamByKey("equiPM_json_key") : 0);
 			var equirectPano = JSON_object.equirectangular.panorama[indexOfSrc];
 
