@@ -33,22 +33,33 @@
                     {
                         "time": 5,
                         "duration": 3,
-                        "text": "prvni title"
+                        "text": "Nádvoří FIT"
                     },
+                    {
+                        "time": 5,
+                        "duration": 3,
+                        "text": "Prosklená budova je blok D"
+                    },
+                    {
+                        "time": 7,
+                        "duration": 3,
+                        "text": "Nachází se zde přednášková místnost s kapacitou až 300 míst"
+                    },
+
                     {
                         "time": 10,
                         "duration": 3,
-                        "text": "druhy title"
+                        "text": "Dále je tu knovna v bloku C"
                     },
                     {
-                        "time": 15,
+                        "time": 12,
                         "duration": 3,
                         "text": "treti title"
                     },
                     {
                         "time": 20,
                         "duration": 3,
-                        "text": "ctvrty title"
+                        "text": "Prosklená budova "
                     },
                     {
                         "time": 25,

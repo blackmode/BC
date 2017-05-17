@@ -804,7 +804,7 @@ function setupProgram()
 					{
 
 						var tit = whichMode.titles[i];
-						if (timeLine>= tit.time && timeLine<= tit.time+tit.duration) 
+						if (timeLine>= tit.time/* && timeLine<= tit.time+tit.duration*/) 
 						{
 							// aktualizace objektu titulku
 							subtitles_window(true, tit.text);
@@ -1185,6 +1185,7 @@ function setupProgram()
 // aktualizace textury v pripade videa
 function updateTexture() 
 {
+	// plati pouze pro video
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) 
 	{
 		if (SETTINGS.input.video.readyState >= SETTINGS.input.video.HAVE_CURRENT_DATA) 
@@ -1220,6 +1221,7 @@ function initViewMatrix() {
 	translate(PROG.matrices.view.data,0, 0, atr);
 }
 
+// otoci kamerou ve scene
 function updateCameraPosition() {
 	/// ROTACe MATICE pomoci MYSi a klavesnice
 	translate(PROG.matrices.view.data,0, 0, MOUSE.wheel.delta);
