@@ -254,7 +254,29 @@
                 "src": "data/videos/equirectangular/cadik_lyze_eq.MP4",
                 "active": true,
                 "compass": {
-                    "north": 220
+                    "north": 220,
+                    "correction": [
+                        {
+                            "time": 5,
+                            "angle": 3
+                        },
+                        {
+                            "time": 10,
+                            "angle": 3
+                        },
+                        {
+                            "time": 15,
+                            "angle": 3
+                        },
+                        {
+                            "time": 20,
+                            "angle": 3
+                        },
+                        {
+                            "time": 25,
+                            "angle": 3
+                        }
+                    ]
                 },
                 "titles": [
                     {
