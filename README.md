@@ -14,7 +14,7 @@ BĚH APLIKACE
 
 	- Soubory dodané na DVD překopírovat na server, kde běží Apache (mimo složky /doc/, která obsahuje tech. zprávu)
 	- Najetím do repozitáře se SW by se měl již načíst soubor index.html se základními režimy -> prepinani rezimu se provadi ozubenym koleckem
-	- Další testovací soubory jsou označeny jako: demo<1-3>.html
+	- Další testovací soubory jsou označeny jako: demo<1-2>.html
 
 
 OVLÁDÁNÍ
