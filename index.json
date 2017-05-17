@@ -1,161 +1,183 @@
 {
     "fisheye": {
-        "video": {
-            "src": "theta/data/new/R0010087.MP4",
-            "active": true,
-            "compass": {
-                "north": 220,
-                "correction": [
+        "video": [
+            {
+                "src": "data/videos/fisheye/fit_knihovna.mp4",
+                "active": true,
+                "compass": {
+                    "north": 220,
+                    "correction": [
+                        {
+                            "time": 5,
+                            "angle": 3
+                        },
+                        {
+                            "time": 10,
+                            "angle": 3
+                        },
+                        {
+                            "time": 15,
+                            "angle": 3
+                        },
+                        {
+                            "time": 20,
+                            "angle": 3
+                        },
+                        {
+                            "time": 25,
+                            "angle": 3
+                        }
+                    ]
+                },
+                "titles": [
                     {
                         "time": 5,
-                        "angle": 3
+                        "duration": 3,
+                        "text": "prvni title"
                     },
                     {
                         "time": 10,
-                        "angle": 3
+                        "duration": 3,
+                        "text": "druhy title"
                     },
                     {
                         "time": 15,
-                        "angle": 3
+                        "duration": 3,
+                        "text": "treti title"
                     },
                     {
                         "time": 20,
-                        "angle": 3
+                        "duration": 3,
+                        "text": "ctvrty title"
                     },
                     {
                         "time": 25,
-                        "angle": 3
+                        "duration": 3,
+                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
                     }
                 ]
             },
-            "titles": [
-                {
-                    "time": 5,
-                    "duration": 3,
-                    "text": "prvni title"
+            
+            {
+                "src": "data/videos/fisheye/fit_knihovna.mp4",
+                "active": true,
+                "compass": {
+                    "north": 220,
+                    "correction": [
+                        {
+                            "time": 5,
+                            "angle": 3
+                        },
+                        {
+                            "time": 10,
+                            "angle": 3
+                        },
+                        {
+                            "time": 15,
+                            "angle": 3
+                        },
+                        {
+                            "time": 20,
+                            "angle": 3
+                        },
+                        {
+                            "time": 25,
+                            "angle": 3
+                        }
+                    ]
                 },
-                {
-                    "time": 10,
-                    "duration": 3,
-                    "text": "druhy title"
-                },
-                {
-                    "time": 15,
-                    "duration": 3,
-                    "text": "treti title"
-                },
-                {
-                    "time": 20,
-                    "duration": 3,
-                    "text": "ctvrty title"
-                },
-                {
-                    "time": 25,
-                    "duration": 3,
-                    "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
-                }
-            ]
-        },
-
-
-
-        "panorama": {
-            "src": "theta/data/new/R0010085.JPG",
-            "active": false,
-            "compass": {
-                "north": 215
+                "titles": [
+                    {
+                        "time": 5,
+                        "duration": 3,
+                        "text": "prvni title"
+                    },
+                    {
+                        "time": 10,
+                        "duration": 3,
+                        "text": "druhy title"
+                    },
+                    {
+                        "time": 15,
+                        "duration": 3,
+                        "text": "treti title"
+                    },
+                    {
+                        "time": 20,
+                        "duration": 3,
+                        "text": "ctvrty title"
+                    },
+                    {
+                        "time": 25,
+                        "duration": 3,
+                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
+                    }
+                ]
             },
-            "titles": [
-                {
-                    "time": 5,
-                    "duration": 3,
-                    "text": "fwe fe"
-                },
-                {
-                    "time": 10,
-                    "duration": 3,
-                    "text": "fwe fe"
-                },
-                {
-                    "time": 15,
-                    "duration": 3,
-                    "text": "fwe fe"
-                },
-                {
-                    "time": 20,
-                    "duration": 3,
-                    "text": "fwe fe"
-                }
-            ]
-        }
 
-    },
+            {
+                "src": "data/videos/fisheye/fit_knihovna.mp4",
+                "active": true,
+                "compass": {
+                    "north": 220,
+                    "correction": [
+                        {
+                            "time": 5,
+                            "angle": 3
+                        },
+                        {
+                            "time": 10,
+                            "angle": 3
+                        },
+                        {
+                            "time": 15,
+                            "angle": 3
+                        },
+                        {
+                            "time": 20,
+                            "angle": 3
+                        },
+                        {
+                            "time": 25,
+                            "angle": 3
+                        }
+                    ]
+                },
+                "titles": [
+                    {
+                        "time": 5,
+                        "duration": 3,
+                        "text": "prvni title"
+                    },
+                    {
+                        "time": 10,
+                        "duration": 3,
+                        "text": "druhy title"
+                    },
+                    {
+                        "time": 15,
+                        "duration": 3,
+                        "text": "treti title"
+                    },
+                    {
+                        "time": 20,
+                        "duration": 3,
+                        "text": "ctvrty title"
+                    },
+                    {
+                        "time": 25,
+                        "duration": 3,
+                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
+                    }
+                ]
+            }
+        ]
 
 
-    "equirectangular": {
-        "video": {
-            "src": "theta/data/new/R0010087.MP4",
-            "active": true,
-            "compass": {
-                "north": 215
-            },
-            "titles": [
-                {
-                    "time": 5,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 10,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 15,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 20,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                }
-            ]
-        },
+ 
 
 
-
-        "panorama": {
-            "src": "theta/data/new/R0010085.JPG",
-            "active": false,
-            "compass": {
-                "north": 215
-            },
-            "titles": [
-                {
-                    "time": 5,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 10,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 15,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                },
-                {
-                    "time": 20,
-                    "duration": 3,
-                    "text": "This is Jordan Pond, located in Acadia National Park."
-                }
-            ]
-        }
-
-    } 
+    }
 }
 
 

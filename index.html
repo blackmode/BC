@@ -259,7 +259,8 @@ var PROG = {
 	program: null,
 	canvas: null,
 	time: null,
-	startTime: null
+	startTime: null,
+	fatal_error: false
 };
 
 
@@ -272,7 +273,7 @@ var CACHE = {
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 //SETTINGS.input.video =  createVideo("data/R0010082.mp4"); // R0010014_20161217101030_er / R0010081
 
- SETTINGS.input.video =  createVideo("theta/data/new/new2/knihovna.mp4");
+ //SETTINGS.input.video =  createVideo("theta/data/new/new2/knihovna.mp4");
 //SETTINGS.input.video =  createVideo("data/R0010014_20161217101030_er.mp4");
 
 
@@ -282,8 +283,8 @@ var CACHE = {
 if (getParamByKey("video"))
 	SETTINGS.input.video =  createVideo(getParamByKey("video"));
 
-
-
+setFishVideoMode();
+/*
 SETTINGS.mode.fisheye.panorama.active 			= false;
 SETTINGS.mode.fisheye.video.active 				= false;
 
@@ -291,45 +292,59 @@ SETTINGS.mode.equirectangular.panorama.active 	= false;
 SETTINGS.mode.equirectangular.video.active 		= false;
 
 SETTINGS.mode.fisheye.video.active = true;
-
+*/
+/*
+setEquiVideoMode();
+setFishPanoMode();
+setEquiPanoMode();
+*/
  //SETTINGS.input.video = document.getElementById('video');
 //SETTINGS.input.image = createImage("theta/data/t1.jpg"); // p7.jpg / t1.jpg
 //SETTINGS.input.image = createImage("theta/data/p6.jpg"); // p7.jpg / t1.jpg
-SETTINGS.input.image = createImage("theta/data/p7.jpg"); // p7.jpg / t1.jpg
+//SETTINGS.input.image = createImage("theta/data/p7.jpg"); // p7.jpg / t1.jpg
 
-SETTINGS.input.image = createImage("data/images/equirectangular/R0010090.JPG"); // p7.jpg / t1.jpg
-
-
+//SETTINGS.input.image = createImage("data/images/equirectangular/R0010090.JPG"); // p7.jpg / t1.jpg
 
 
-function setFishVideoMode() {
-	SETTINGS.mode.fisheye.video.active 				= true;
-	SETTINGS.mode.fisheye.panorama.active 			= false;
-	SETTINGS.mode.equirectangular.panorama.active 	= false;
-	SETTINGS.mode.equirectangular.video.active 		= false;
+ 
+
+
+//aktivae pomoci argumentu ma prednost
+if (getParamByKey("fishVM")) {
+	setFishVideoMode();
+} 
+
+if (getParamByKey("equiVM")) {
+	setEquiVideoMode();
 }
 
-function setEquiVideoMode() {
-	SETTINGS.mode.fisheye.video.active 				= false;
-	SETTINGS.mode.fisheye.panorama.active 			= false;
-	SETTINGS.mode.equirectangular.panorama.active 	= false;
-	SETTINGS.mode.equirectangular.video.active 		= true;
+if (getParamByKey("fishPM")) {
+	setFishPanoMode();
 }
 
-function setFishPanoMode() {
-	SETTINGS.mode.fisheye.video.active 				= false;
-	SETTINGS.mode.fisheye.panorama.active 			= true;
-	SETTINGS.mode.equirectangular.panorama.active 	= false;
-	SETTINGS.mode.equirectangular.video.active 		= false;
+if (getParamByKey("equiPM")) {
+	setEquiPanoMode();
 }
 
-function setEquiPanoMode() {
-	SETTINGS.mode.fisheye.video.active 				= false;
-	SETTINGS.mode.fisheye.panorama.active 			= false;
-	SETTINGS.mode.equirectangular.panorama.active 	= true;
-	SETTINGS.mode.equirectangular.video.active 		= false;
+
+var JSON = loadJSONfile();
+
+if (JSON===false) {
+	PROG.fatal_error = true;
 }
 
+if (  SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active) {
+	if (JSON && JSON.video && JSON.video) {
+		SETTINGS.input.video = createVideo(JSON.video); 
+	}
+	else {
+		w('v souboru JSON neni video, nebo jeho zdroj');
+	}
+}
+else if (SETTINGS.mode.fisheye.panorama.active || SETTINGS.mode.equirectangular.panorama.active ) {
+	SETTINGS.input.image =  createImage(JSON.image); // p7.jpg / t1.jpg
+
+}
 
 /**
  *	Nacteme JSON se soubory videi a panoramat
@@ -345,9 +360,15 @@ function loadJSONfile() {
 		var dest_json_file = current_file_name+'.json';
 		var request = new XMLHttpRequest();
 		request.open("GET", dest_json_file, false);
-		request.send(null)
-		var JSON_object = JSON.parse(request.responseText);
-		CACHE.json_object = JSON_object;
+		request.send(null);
+		if (request.status==200   && request.statusText === 'OK') {
+			var JSON_object = JSON.parse(request.responseText);
+			CACHE.json_object = JSON_object;
+		} 
+		else {
+			w('nepogedlo se nacist soubor JSON!');
+			return false;
+		}
 	}
 	else {
 		// v opacnem rpipade nactu z cache
@@ -355,52 +376,78 @@ function loadJSONfile() {
 	}
 
 
+
+	var JSON_video_src = false;
+	var JSON_image_src = false;
+
 	// moznost vstupu dvema mody
 	// RYBI OKO
 	if (JSON_object.fisheye) 
 	{
 		if (JSON_object.fisheye.video && SETTINGS.mode.fisheye.video.active) 
 		{
-			var fishEye = JSON_object.fisheye.video;
+			var indexOfSrc = (getParamByKey("video_json_key") ? getParamByKey("video_json_key") : 0);
+			var fishEye = JSON_object.fisheye.video[indexOfSrc];
 			
 			// nastaveni zdroje videa
-			//if (fishEye.src)	SETTINGS.input.video = createVideo(fishEye.src);
+			if (fishEye.src)	JSON_video_src = fishEye.src;
 			
 			// nastaveni kompasu ze souboru
 			if (fishEye.compass) 
 			{
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (fishEye.compass.north!=null && !isNaN(fishEye.compass.north) && fishEye.compass.north!=SETTINGS.compass.north) {
-					//SETTINGS.compass.north = fishEye.compass.north;
+					SETTINGS.compass.north = fishEye.compass.north;
 					log('Compass: uspesne prenastaveno');
 				}
 			}
 
-
-
- 
 			log(fishEye.titles);
 		}
 		else if (JSON_object.fisheye.panorama && SETTINGS.mode.fisheye.panorama.active) 
 		{
+			var fishPano = JSON_object.fisheye.panorama;
+
+			// nastaveni zdroje panoramatu
+			if (fishPano.src)	JSON_image_src = fishPano.src;
 
 		}
 	}
 	// Equirectangular INPUT
-	else if (JSON_object.equirectangular) 
+	if (JSON_object.equirectangular) 
 	{
 		if (JSON_object.equirectangular.video && SETTINGS.mode.equirectangular.video.active) 
 		{
+			var equirectVideo = JSON_object.equirectangular.video;
+
+			// nastaveni zdroje videa
+			if (equirectVideo.src)	JSON_video_src = equirectVideo.src;
+
+			if (equirectVideo.compass) {
+				SETTINGS.compass.north = equirectVideo.compass.north;
+			}
+
 
 		}
 		else if (JSON_object.equirectangular.panorama && SETTINGS.mode.equirectangular.panorama.active) 
 		{
 
+			var equirectPano = JSON_object.equirectangular.panorama;
+
+			// nastaveni zdroje videa
+			if (equirectPano.src)	JSON_image_src = equirectPano.src;
+
+			if (equirectPano.compass) {
+				SETTINGS.compass.north = equirectPano.compass.north;
+			}
 		}
 	}
 
 
-	return false;
+	return {
+		video: JSON_video_src,
+		image: JSON_image_src
+	};
 }
 
 
@@ -537,28 +584,10 @@ function initProgram() {
 	SETTINGS.video_controlls.width = PROG.canvas.width/2;
 
 
-
 	// definovani startovniho casu programu
 	PROG.startTime = (new Date()).getTime();
 
 	loadJSONfile();
-
-	//aktivae pomoci argumentu ma prednost
-	if (getParamByKey("fishVM")) {
-		setFishVideoMode();
-	} 
-
-	if (getParamByKey("equiVM")) {
-		setEquiVideoMode();
-	}
-
-	if (getParamByKey("fishPM")) {
-		setFishPanoMode();
-	}
-
-	if (getParamByKey("equiPM")) {
-		setEquiPanoMode();
-	}
 
 	// aktualizace obj. promennaych
 	updateObjectVariables();
@@ -1511,6 +1540,34 @@ function onDocumentKeyPress( event ) {
 	}
 }
 
+function setFishVideoMode() {
+	SETTINGS.mode.fisheye.video.active 				= true;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
+function setEquiVideoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= true;
+}
+
+function setFishPanoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= true;
+	SETTINGS.mode.equirectangular.panorama.active 	= false;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
+function setEquiPanoMode() {
+	SETTINGS.mode.fisheye.video.active 				= false;
+	SETTINGS.mode.fisheye.panorama.active 			= false;
+	SETTINGS.mode.equirectangular.panorama.active 	= true;
+	SETTINGS.mode.equirectangular.video.active 		= false;
+}
+
 function onWindowResize( event ) {
 
 	var element_canvas = document.querySelector("canvas");
@@ -1539,7 +1596,12 @@ function resize() {
  */
 function main() 
 {
-	if (!SETTINGS.input.video)  return false;
+
+	if (PROG.fatal_error) {
+		e('Doslo k chybe... PROGRAM se ukonci ');
+		return false;
+	}
+	//if (!SETTINGS.input.video)  return false;
 
 	if (!initProgram()) {
 		return false;
