@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #000000;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #0000ff;
+			}
+
+
+
+
+		</style>
+	</head>
+	<body>
+<script src="build/three.js"></script>
+<script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
+
+
+		<canvas id="container"></canvas>
+
+
+		<script>
+
+			var camera, scene, renderer;
+
+			var isUserInteracting = false,
+			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+			lon = 0, onMouseDownLon = 0,
+			lat = 0, onMouseDownLat = 0,
+			phi = 0, theta = 0,
+			distance = 500;
+
+			initWebgl();
+			animate();
+
+			var gl; // GL context
+			var canvas; // GL canvas
+			var video; // GL video
+			var texture; // GL video
+
+
+	      // Function called by onload handler
+	      function initWebgl()
+	      {
+	          // Gets canvas from the HTML page
+	          canvas = document.getElementById('container');
+	          // nastaveni canvasu na fullscreen
+				canvas.style.position = "absolute";
+				canvas.style.left = 0;
+				canvas.style.top = 0;
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+
+	          // Creates GL context
+	          try {
+	          	gl = canvas.getContext('experimental-webgl', {alpha: false, depth: false});
+	          }
+	          catch(e) {
+	          	alert('Chyba vytvoreni GL: '+e.toString());
+	          	return false;
+	          }
+
+ 
+
+	          // Sets clear color to non-transparent dark blue and clears context
+	          gl.clearColor(0.0, 0.0, 0.5, 1.0);
+	          gl.clear(gl.COLOR_BUFFER_BIT);
+	          gl.viewport(0, 0, canvas.width, canvas.height); ////////////////////////////////
+
+	          //---------------- end of part 1 -----------------
+
+	          // Creates fragment shader (returns white color for any position) -------------------------------------
+	          var fshader = gl.createShader(gl.FRAGMENT_SHADER);
+	          var fragmentProgram = fragmentSharderProgram2();
+	          gl.shaderSource(fshader, fragmentProgram);
+	          gl.compileShader(fshader);
+	          if (!gl.getShaderParameter(fshader, gl.COMPILE_STATUS)) 
+	          {
+	          	alert('Error during fragment shader compilation:\n' + gl.getShaderInfoLog(fshader)); 
+	          	return false;
+	          }
+
+
+	          // Creates vertex shader (converts 2D point position to coordinates) -------------------------------------
+	          var vshader = gl.createShader(gl.VERTEX_SHADER);
+	          var vertexProgram = vertexSharderProgram2();
+	          gl.shaderSource(vshader, vertexProgram);
+	          gl.compileShader(vshader);
+	          if (!gl.getShaderParameter(vshader, gl.COMPILE_STATUS)) 
+	          {
+	          	alert('Error during vertex shader compilation:\n' + gl.getShaderInfoLog(vshader)); 
+	          	return false;
+	          }
+
+
+	          // Creates program and links shaders to it -------------------------------------
+	          var program = gl.createProgram();
+	          gl.attachShader(program, fshader);
+	          gl.attachShader(program, vshader);
+	          gl.linkProgram(program);
+	          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) 
+	          {
+	          	alert('Error during program linking:\n' + gl.getProgramInfoLog(program));
+	          	return false;
+	          }
+
+
+	          // Validates and uses program in the GL context -------------------------------------
+	          gl.validateProgram(program);
+	          if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) 
+	          {
+	          	alert('Error during program validation:\n' + gl.getProgramInfoLog(program));
+	          	return false;
+	          }
+	          gl.useProgram(program);
+
+
+
+	          // Gets address of the input 'attribute' of the vertex shader
+	          var vattrib = gl.getAttribLocation(program, 'a_texCoord');
+	          if(vattrib == -1)
+	          {
+	          	alert('Error during attribute address retrieval');
+	          	return false;
+	          }
+	          gl.enableVertexAttribArray(vattrib);
+
+/////////////////////
+			// VERTEX BUFFER---------------
+	          // Initializes the vertex buffer and sets it as current one
+	          var vbuffer = gl.createBuffer();
+	          gl.bindBuffer(gl.ARRAY_BUFFER, vbuffer);
+
+	          // Puts vertices to buffer and links it to attribute variable 'a_texCoord'
+	          var vertices = new Float32Array([-1,1,1,1,1,-1,-1,1,1,-1,-1,-1]); // new Float32Array([0.0,0.5,-0.5,-0.5,0.5,-0.5]);
+	          gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+	          gl.vertexAttribPointer(vattrib, 2, gl.FLOAT, false, 0, 0);
+
+
+	      // FRAGMENT BUFFER---------------
+            // Pass aspect ratio
+            var aspect_ratio = gl.getUniformLocation(program, 'u_aspectRatio');
+            gl.uniform1f(aspect_ratio, canvas.width / canvas.height);
+            
+            // Locate psi, theta, focal length, horizontal extent, vertical extent, and vertical offset
+            var psi = gl.getUniformLocation(program, 'u_psi');
+            var theta = gl.getUniformLocation(program, 'u_theta');
+            var f = gl.getUniformLocation(program, 'u_f');
+            var h = gl.getUniformLocation(program, 'u_h');
+            var v = gl.getUniformLocation(program, 'u_v');
+            var vo = gl.getUniformLocation(program, 'u_vo');
+            
+            // Pass horizontal extent, vertical extent, and vertical offset
+            gl.uniform1f(h, 360*(Math.PI / 180) / (Math.PI * 2.0));
+            gl.uniform1f(v, 180 *(Math.PI / 180)/ Math.PI);
+            gl.uniform1f(vo, 1 *(Math.PI / 180)/ Math.PI);
+
+            // Create texture
+            texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            texture.image = new Image();
+            texture.image.src = "data/p7.jpg";
+ 				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, texture.image);
+  	            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+ 	        	gl.generateMipmap(gl.TEXTURE_2D);
+	        gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+	var samplerLoc = gl.getUniformLocation(program, "u_image");
+	gl.uniform1i(samplerLoc, 0); // nula odpovídá gl.TEXTURE0
+
+ /*
+				video = document.createElement( 'video' );
+				video.width = 1920;
+				video.height = 1080;
+				video.loop = true;
+				video.muted = true;
+				video.src = getParamByKey('video') ? getParamByKey('video') : "data/R0010014_20161217101030_er.mp4";
+				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+				//video.play();
+
+				var img = "data/p7.jpg";
+
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+*/
+
+
+
+
+ 
+
+
+
+
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+				document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+
+	       }
+
+
+		    function vertexSharderProgram2() 
+		    {
+		        // Main: 2 steps: nastaveni pozice a predani dat do fragment shaderu
+		        return "\
+		            attribute vec3 a_vertCoord;\
+		            attribute vec2 a_texCoord;\
+		            uniform mat4 u_cubeMatrix;\
+		            uniform mat4 u_perspMatrix;\
+		            varying mediump vec2 v_texCoord;\
+		            void main() {\
+		                 gl_Position = u_perspMatrix * u_cubeMatrix * vec4(a_vertCoord, 1.0);\
+		                 v_texCoord = a_texCoord;\
+		            }\
+		        ";
+		    }
+
+		    
+		    function fragmentSharderProgram2() 
+		    {
+		        // Main: najit barvy z textury
+		        return "\
+		            varying mediump vec2 v_texCoord;\
+		            uniform sampler2D u_sampler;\
+		            void main() {\
+		                 gl_FragColor = texture2D(u_sampler, v_texCoord);\
+		            }\
+		        ";
+		    }
+
+			function init() {
+/*
+				var container, mesh;
+
+				container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 2000 );
+
+				scene = new THREE.Scene();
+
+				var geometry = new THREE.SphereBufferGeometry( 500, 60, 40 ).toNonIndexed();
+				geometry.scale( - 1, 1, 1 );
+
+				// Remap UVs
+
+				var normals = geometry.attributes.normal.array;
+				var uvs = geometry.attributes.uv.array;
+				console.log(normals);
+				console.log(uvs);
+
+				if (getParamByKey('fish')=='true') 
+				{
+					for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+
+						var x = normals[ i * 3 + 0 ];
+						var y = normals[ i * 3 + 1 ];
+						var z = normals[ i * 3 + 2 ];
+
+						if ( i < l / 2 ) {
+
+							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+							uvs[ i * 2 + 0 ] = x * ( 404 / 1920 ) * correction + ( 447 / 1920 );
+							uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+
+						} else {
+
+							var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+							uvs[ i * 2 + 0 ] = - x * ( 404 / 1920 ) * correction + ( 1460 / 1920 );
+							uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+
+						}
+
+					}
+				}
+
+				geometry.rotateZ( - Math.PI / 2 );
+
+				//
+
+
+				var video = document.createElement( 'video' );
+				video.width = 1920;
+				video.height = 1080;
+				video.loop = true;
+				video.muted = true;
+				video.src = getParamByKey('video') ? getParamByKey('video') : "data/theta2.mp4";
+				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+				video.play();
+
+
+
+				var texture = new THREE.VideoTexture( video );
+				texture.minFilter = THREE.LinearFilter;
+				texture.format = THREE.RGBFormat;
+
+				///var texture = new THREE.TextureLoader().load( 'data/ricoh_theta_s.jpg' );
+				//texture.format = THREE.RGBFormat;
+
+				var material   = new THREE.MeshBasicMaterial( { 
+					map: texture 
+				} );
+
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+				document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+*/
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseDown( event ) {
+
+				event.preventDefault();
+
+				isUserInteracting = true;
+
+				onPointerDownPointerX = event.clientX;
+				onPointerDownPointerY = event.clientY;
+
+				onPointerDownLon = lon;
+				onPointerDownLat = lat;
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				if ( isUserInteracting === true ) {
+
+					lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
+					lat = ( onPointerDownPointerY - event.clientY ) * 0.1 + onPointerDownLat;
+
+				}
+
+			}
+
+			function onDocumentMouseUp( event ) {
+
+				isUserInteracting = false;
+
+			}
+
+			function onDocumentMouseWheel( event ) {
+
+				distance += event.deltaY * 0.05;
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				update();
+
+			}
+
+			function update() {
+
+				if ( isUserInteracting === false ) {
+
+					lon += 0.1;
+
+				}
+
+				lat = Math.max( - 85, Math.min( 85, lat ) );
+				phi = THREE.Math.degToRad( 90 - lat );
+				theta = THREE.Math.degToRad( lon - 180 );
+
+				var x = distance * Math.sin( phi ) * Math.cos( theta );
+				var y = distance * Math.cos( phi );
+				var z = distance * Math.sin( phi ) * Math.sin( theta );
+
+				//camera.lookAt( scene.position );
+
+				render( );
+
+			}
+
+			function render() {
+ 
+ 
+	                // Update texture if video
+ 	                   // gl.bindTexture(gl.TEXTURE_2D, texture);
+	                    //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+ 	        
+	            
+	            // Draw using current buffer
+	            gl.drawArrays(gl.TRIANGLES, 0, 6);
+			}
+
+
+		    function degToRad(degrees) {
+		    	var rad = Math.PI / 180;
+		        return degrees * rad;
+		    }
+
+			function parseSearch(search) {
+			  // Fails if a key exists twice (e.g., ?a=foo&a=bar would return {a:"bar"}
+			  search = search.substring(search.indexOf("?")+1).split("&");
+			  var params = {}, pair;
+			  for (var i = 0; i < search.length; i++) {
+			    pair = search[i].split("=");
+			    if (pair[0] && !pair[1])
+			        pair[1] = "";
+			    if (!params[decodeURIComponent(pair[0])] && decodeURIComponent(pair[1]) === "undefined") {
+			        continue;
+			    } else {
+			        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+			    }
+			  }
+			  return params;
+			}
+
+
+			// vrat hodnotu parametru v adrese, napr: index.html?get_key=value
+			// vraci 'value'
+			function getParamByKey(get_key) {
+			  var address = window.location.href ;
+			  var pair = [];
+			  address = address.substring(address.indexOf("?")+1).split("&");
+			  for (var i =0; i < address.length; i++) 
+			  {
+			  	pair = address[i].split("=");
+			  	if (get_key == pair[0]) 
+			  	{
+			  		return pair[1];
+			  	}
+			  }
+			  return false;
+			 }
+
+		    // debug method
+		    function d(object) {
+		        console.log("------------------- DEBUG STARTS-------------------");
+		        console.log(object);
+		        console.log("___________________ DEBUG ENDS ____________________");
+		    }
+
+		    // checking if file exists by JS and XHR
+		    // OK
+		    function checkIfFileExists(url)
+		    {
+		        var http = new XMLHttpRequest();
+		        var img = new Image();
+		        http.open('HEAD', url, false);
+		        http.send();
+		        img.src = url;
+
+		        if (http.status!=404 || img.height != 0) {
+		            return true;
+		        }
+		        else {
+		            return false;
+		        }
+		    }
+
+
+			// Vertex shader for equirectangular and cube
+			function vertProgram() {
+			var vertexEquirectangular = [
+			'attribute vec2 a_texCoord;',
+			'varying vec2 v_texCoord;',
+
+			'void main() {',
+			    // Set position
+			    'gl_Position = vec4(a_texCoord, 0.0, 1.0);',
+			    
+			    // Pass the coordinates to the fragment shader
+			    'v_texCoord = a_texCoord;',
+			'}'
+			].join('');
+			return vertexEquirectangular;
+			}
+
+			 
+
+			 
+
+			// Fragment shader
+			function fragProgram() {
+
+
+				var fragEquirectangular = [
+				'precision mediump float;',
+
+				'uniform float u_aspectRatio;',
+				'uniform float u_psi;',
+				'uniform float u_theta;',
+				'uniform float u_f;',
+				'uniform float u_h;',
+				'uniform float u_v;',
+				'uniform float u_vo;',
+
+				'const float PI = 3.14159265358979323846264;',
+
+				// Texture
+				'uniform sampler2D u_image;',
+
+				// Coordinates passed in from vertex shader
+				'varying vec2 v_texCoord;',
+
+				'void main() {',
+				    // Map canvas/camera to sphere
+				    'float x = v_texCoord.x * u_aspectRatio;',
+				    'float y = v_texCoord.y;',
+				    'float sintheta = sin(u_theta);',
+				    'float costheta = cos(u_theta);',
+				    'float a = u_f * costheta - y * sintheta;',
+				    'float root = sqrt(x * x + a * a);',
+				    'float lambda = atan(x / root, a / root) + u_psi;',
+				    'float phi = atan((y * costheta + u_f * sintheta) / root);',
+
+				    // Wrap image
+				    'if(lambda > PI)',
+				        'lambda = lambda - PI * 2.0;',
+				    'if(lambda < -PI)',
+				       'lambda = lambda + PI * 2.0;',
+				    
+				    // Map texture to sphere
+				    'vec2 coord = vec2(lambda / PI, phi / (PI / 2.0));',
+				    
+				    // Look up color from texture
+				    // Map from [-1,1] to [0,1] and flip y-axis
+				    'if(coord.x < -u_h || coord.x > u_h || coord.y < -u_v + u_vo || coord.y > u_v + u_vo)',
+				        'gl_FragColor = vec4(0, 0, 0, 1.0);',
+				    'else',
+				        'gl_FragColor = texture2D(u_image, vec2((coord.x + u_h) / (u_h * 2.0), (-coord.y + u_v + u_vo) / (u_v * 2.0)));',
+				'}'
+				].join('\n');
+				return fragEquirectangular;
+			}
+
+
+
+		    function vertexSharderProgram() 
+		    {
+		        // Main: 2 steps: nastaveni pozice a predani dat do fragment shaderu
+		        return "\
+		            attribute vec3 a_vertCoord;\
+		            attribute vec2 a_texCoord;\
+		            uniform mat4 u_cubeMatrix;\
+		            uniform mat4 u_perspMatrix;\
+		            varying mediump vec2 v_texCoord;\
+		            void main() {\
+		                 gl_Position = u_perspMatrix * u_cubeMatrix * vec4(a_vertCoord, 1.0);\
+		                 v_texCoord = a_texCoord;\
+		            }\
+		        ";
+		    }
+
+		    
+		    function fragmentSharderProgram() 
+		    {
+		        // Main: najit barvy z textury
+		        return "\
+		            varying mediump vec2 v_texCoord;\
+		            uniform sampler2D u_sampler;\
+		            void main() {\
+		                 gl_FragColor = texture2D(u_sampler, v_texCoord);\
+		            }\
+		        ";
+		    }
+
+		    function getShader(gl, id) {
+		        var shaderScript = document.getElementById(id);
+		        if (!shaderScript) {
+		            return null;
+		        }
+
+		        var str = "";
+		        var k = shaderScript.firstChild;
+		        while (k) {
+		            if (k.nodeType == 3) {
+		                str += k.textContent;
+		            }
+		            k = k.nextSibling;
+		        }
+
+		        var shader;
+		        if (shaderScript.type == "x-shader/x-fragment") {
+		            shader = gl.createShader(gl.FRAGMENT_SHADER);
+		        } else if (shaderScript.type == "x-shader/x-vertex") {
+		            shader = gl.createShader(gl.VERTEX_SHADER);
+		        } else {
+		            return null;
+		        }
+
+		        gl.shaderSource(shader, str);
+		        gl.compileShader(shader);
+
+		        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+		            alert(gl.getShaderInfoLog(shader));
+		            return null;
+		        }
+
+		        return shader;
+		    }
+
+
+
+		</script>
+	</body>
+</html>

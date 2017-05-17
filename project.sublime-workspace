@@ -1,0 +1,2078 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"init",
+				"initProgram"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"tit",
+				"titles"
+			],
+			[
+				"pa",
+				"padding"
+			],
+			[
+				"e",
+				"equirectangular"
+			],
+			[
+				"panorama",
+				"panorama_controlls"
+			],
+			[
+				"con",
+				"controlls"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"rad",
+				"radToDeg"
+			],
+			[
+				"is",
+				"isNaN"
+			],
+			[
+				"play",
+				"playVideo"
+			],
+			[
+				"fu",
+				"fullscreen_icon"
+			],
+			[
+				"int",
+				"interrupt"
+			],
+			[
+				"app",
+				"appendChild"
+			],
+			[
+				"com",
+				"compass"
+			],
+			[
+				"co",
+				"content"
+			],
+			[
+				"on",
+				"onload"
+			],
+			[
+				"ca",
+				"canvas_dom"
+			],
+			[
+				"allo",
+				"allow_delete"
+			],
+			[
+				"ver",
+				"vertexBuffer"
+			],
+			[
+				"CON",
+				"console"
+			],
+			[
+				"fo",
+				"for	for (…) {…}"
+			],
+			[
+				"active",
+				"active_eshops"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"lat",
+				"latitudeBands"
+			],
+			[
+				"c",
+				"canvas"
+			],
+			[
+				"class",
+				"class_exists"
+			],
+			[
+				"va",
+				"validation"
+			],
+			[
+				"Z",
+				"z"
+			],
+			[
+				"VIDEO",
+				"video"
+			],
+			[
+				"get",
+				"get_key"
+			],
+			[
+				"is_f",
+				"is_float"
+			],
+			[
+				"Exe",
+				"ExecuteS"
+			],
+			[
+				"contr",
+				"controller"
+			],
+			[
+				"id",
+				"id_form"
+			],
+			[
+				"pro",
+				"program"
+			],
+			[
+				"Svo",
+				"Svoz_odpadu"
+			],
+			[
+				"fil",
+				"file_id"
+			],
+			[
+				"login",
+				"login_controller"
+			],
+			[
+				"puri",
+				"purifyHTML"
+			],
+			[
+				"metho",
+				"method_exists"
+			],
+			[
+				"sender",
+				"sender_email"
+			],
+			[
+				"opt",
+				"option	Tag"
+			],
+			[
+				"is_s",
+				"is_string"
+			],
+			[
+				"ma",
+				"margin-right"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"name",
+				"name_form"
+			],
+			[
+				"josn",
+				"json_encode"
+			],
+			[
+				"loca",
+				"location"
+			],
+			[
+				"ac",
+				"action	Attr"
+			],
+			[
+				"val",
+				"value"
+			],
+			[
+				"over",
+				"override_file"
+			],
+			[
+				"mo",
+				"module"
+			],
+			[
+				"acti",
+				"activation"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"me",
+				"method_exists"
+			],
+			[
+				"setcookie",
+				"setcookie"
+			],
+			[
+				"border-bo",
+				"border-bottom-style"
+			],
+			[
+				"mari",
+				"margin-top"
+			],
+			[
+				"str_rep",
+				"str_replace"
+			],
+			[
+				"prepro",
+				"preprocessing"
+			],
+			[
+				"identi",
+				"identifier"
+			],
+			[
+				"array_",
+				"array_keys"
+			],
+			[
+				"favicon",
+				"favicon_file"
+			],
+			[
+				"camel",
+				"camelToUnderScore"
+			],
+			[
+				"is_a",
+				"is_array"
+			],
+			[
+				"jso",
+				"json_encode"
+			],
+			[
+				"ajax",
+				"ajax_method"
+			],
+			[
+				"post",
+				"postProcess"
+			],
+			[
+				"TH",
+				"throw"
+			],
+			[
+				"se",
+				"select_options"
+			],
+			[
+				"fi",
+				"fields_form"
+			],
+			[
+				"cen",
+				"cena_produktu"
+			],
+			[
+				"upda",
+				"updateValue"
+			],
+			[
+				"els",
+				"else"
+			],
+			[
+				"fade",
+				"fadeOut"
+			],
+			[
+				"poklad",
+				"pokladna_tlacitko"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"ELSE",
+				"elseif"
+			],
+			[
+				"table",
+				"table_creation"
+			],
+			[
+				"this",
+				"this_file"
+			],
+			[
+				"css",
+				"css_files"
+			],
+			[
+				"var",
+				"var_dump"
+			],
+			[
+				"p",
+				"product"
+			],
+			[
+				"array_m",
+				"array_merge"
+			],
+			[
+				"defi",
+				"defined"
+			],
+			[
+				"DELETE",
+				"delete"
+			],
+			[
+				"PREFI",
+				"PREFIX_METHOD"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"tem",
+				"template_pointer"
+			],
+			[
+				"conte",
+				"Context"
+			],
+			[
+				"module",
+				"module_name"
+			],
+			[
+				"Co",
+				"Context"
+			],
+			[
+				"tho",
+				"throw	Throw Exception"
+			],
+			[
+				"array_di",
+				"array_diff"
+			],
+			[
+				"_",
+				"__construct"
+			],
+			[
+				"unse",
+				"unset"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"confi",
+				"Configuration"
+			],
+			[
+				"debu",
+				"debug_print_backtrace"
+			],
+			[
+				"tex",
+				"text-decoration"
+			],
+			[
+				"preg",
+				"preg_match_all"
+			],
+			[
+				"DI",
+				"DIRECTORY_SEPARATOR"
+			],
+			[
+				"ignore",
+				"ignoreFiles"
+			],
+			[
+				"diff",
+				"diff_file"
+			],
+			[
+				"session_de",
+				"session_destroy"
+			],
+			[
+				"preg_mat",
+				"preg_match"
+			],
+			[
+				"vers",
+				"versionFile"
+			],
+			[
+				"updat",
+				"updateValues"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"dele",
+				"deleteByName"
+			],
+			[
+				"ti",
+				"time_limit"
+			],
+			[
+				"time",
+				"time_start"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"cont",
+				"controller"
+			],
+			[
+				"pos",
+				"positions"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"Aktualiz",
+				"aktualizace"
+			],
+			[
+				"id_",
+				"id_product"
+			],
+			[
+				"strs",
+				"strstr"
+			],
+			[
+				"rgb",
+				"rgba()"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"pad",
+				"padding-top"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"bor",
+				"border-right"
+			],
+			[
+				"session",
+				"session_start"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/xampp/htdocs/BC/src/css/style2.css",
+			"settings":
+			{
+				"buffer_size": 7734,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/index.json",
+			"settings":
+			{
+				"buffer_size": 10046,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/index.html",
+			"settings":
+			{
+				"buffer_size": 50553,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/README.md",
+			"settings":
+			{
+				"buffer_size": 22,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/src/js/lib.js",
+			"settings":
+			{
+				"buffer_size": 53156,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/src/js/panorama.js",
+			"settings":
+			{
+				"buffer_size": 39624,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/src/js/Externallib.js",
+			"settings":
+			{
+				"buffer_size": 800,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/doc/tools/txt/PSANI.txt",
+			"settings":
+			{
+				"buffer_size": 296,
+				"line_ending": "Windows",
+				"name": "PRAVIDLA PSANI"
+			}
+		},
+		{
+			"contents": "function polarToCartesian(x, y, radius, angleInDegrees) {\n  var angleShift = 180;\n  var angleInRadians = (angleInDegrees-angleShift) * (Math.PI / 180.0);\n\n  return {\n    x: x + (radius * Math.cos(angleInRadians)),\n    y: y + (radius * Math.sin(angleInRadians))\n  };\n}\n\nfunction describeArc(x, y, radius, startAngle, endAngle){\n\n\n  var angleShift = 180;\n  var angleInRadians = (angleInDegrees-angleShift) * (Math.PI / 180.0);\n\n \n    var start.x = x + (radius * Math.cos(endAngle)),\n    var start.y =  y + (radius * Math.sin(endAngle)),\n\n    var end.x = x + (radius * Math.cos(startAngle)),\n    var end.y = y + (radius * Math.sin(startAngle))\n \n\n\n\n\n    var start = polarToCartesian(x, y, radius, endAngle);\n    var end = polarToCartesian(x, y, radius, startAngle);\n\n    var largeArcFlag = endAngle - startAngle <= 180 ? \"0\" : \"1\";\n\n    var d = [\n        \"M\", start.x, start.y, \n        \"A\", radius, radius, 0, largeArcFlag, 0, end.x, end.y\n    ].join(\" \");\n\n    return d;       \n}\n\nwindow.onload = function() {\n  document.getElementById(\"arc1\").setAttribute(\"d\", describeArc(150, 150, 80, 0, 180));\n};",
+			"settings":
+			{
+				"buffer_size": 1099,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "zdroje.txt",
+			"settings":
+			{
+				"buffer_size": 1750,
+				"line_ending": "Windows",
+				"name": "ZDROJE:"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/pannellum/examples/example-cube.json",
+			"settings":
+			{
+				"buffer_size": 1127,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "TO_DO.txt",
+			"settings":
+			{
+				"buffer_size": 1592,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "    \"fisheye\": {\n        \"video\": {\n            \"src\" : \"video1.mp4\",\n            \"active\" : true,\n            \"compass\" : {\n                \"angle\" : 215,\n            },\n\n\n            \"titles\": [\n                {\n                    \"time\": 5,\n                    \"duration\": 3,\n                    \"text\": \"This is Jordan Pond, located in Acadia National Park.\"\n                },\n                {\n                    \"time\": 10,\n                    \"duration\": 3,\n                    \"text\": \"This is Jordan Pond, located in Acadia National Park.\"\n                },\n                {\n                    \"time\": 15,\n                    \"duration\": 3,\n                    \"text\": \"This is Jordan Pond, located in Acadia National Park.\"\n                },\n                {\n                    \"time\": 20,\n                    \"duration\": 3,\n                    \"text\": \"This is Jordan Pond, located in Acadia National Park.\"\n                }\n\n            ]\n\n \n\n\n\n\n\n\n\n\n\n \n        }\n    },",
+			"settings":
+			{
+				"buffer_size": 992,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/pannellum/examples/example-tour.json",
+			"settings":
+			{
+				"buffer_size": 1653,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "u = Math.sqrt(1/2)*Math.sign(u*v)/v*Math.sqrt(u*u+v*v-Math.sqrt(u*u+v*v) * Math.sqrt(u*u+v*v-4*u*u*v*v))\nv = Math.sqrt(1/2)*Math.sign(u*v)/u*Math.sqrt(u*u+v*v-Math.sqrt(u*u+v*v) * Math.sqrt(u*u+v*v-4*u*u*v*v))",
+			"settings":
+			{
+				"buffer_size": 209,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": " uniform sampler2D sampler;\nuniform vec2 iResolution;\nuniform vec2 iMouse;\n\n#define EPSILON 0.000011\n\nvoid main(void)//Drag mouse over rendering area\n{\n  iResolution.x = 1920;\n  iResolution.y = 1080;\n\n  iMouse.x = 500;\n  iMouse.y = 305;\n\n  //normalized coords with some cheat \n  vec2 p = gl_FragCoord.xy / iResolution.x;\n\n  //screen proportion                                         \n  float prop = iResolution.x / iResolution.y;\n  //center coords\n  vec2 m = vec2(0.5, 0.5 / prop);\n  //vector from center to current fragment\n  vec2 d = p - m;\n  // distance of pixel from center\n  float r = sqrt(dot(d, d)); \n  //amount of effect\n  float power = ( 2.0 * 3.141592 / (2.0 * sqrt(dot(m, m))) ) *\n		(iMouse.x / iResolution.x - 0.5);\n  //radius of 1:1 effect\n  float bind;\n  if (power > 0.0) bind = sqrt(dot(m, m));//stick to corners\n  else {if (prop < 1.0) bind = m.x; else bind = m.y;}//stick to borders\n\n  //Weird formulas\n  vec2 uv;\n  if (power > 0.0)//fisheye\n    uv = m + normalize(d) * tan(r * power) * bind / tan( bind * power);\n  else if (power < 0.0)//antifisheye\n   uv = m + normalize(d) * atan(r * -power * 10.0) * bind / atan(-power * bind * 10.0);\n  else \n    uv = p;//no effect for power = 1.0\n  \n  //Second part of cheat\n  //for round effect, not elliptical\n  vec3 col = texture2D(sampler, vec2(uv.x, -uv.y * prop)).xyz;\n                                               \n  gl_FragColor = vec4(col, 1.0);\n}",
+			"settings":
+			{
+				"buffer_size": 1414,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/shaders/vertext/equirectangular.vert",
+			"settings":
+			{
+				"buffer_size": 313,
+				"line_ending": "Windows",
+				"name": "#version 150"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/BC/shaders/fragment/equirectangular.frag",
+			"settings":
+			{
+				"buffer_size": 6461,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/index.html",
+			"settings":
+			{
+				"buffer_size": 15258,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/panorama.js",
+			"settings":
+			{
+				"buffer_size": 58818,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/theta/gl-matrix-2.2.1.js",
+			"settings":
+			{
+				"buffer_size": 110331,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson14/index.html",
+			"settings":
+			{
+				"buffer_size": 18292,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/webgl-demo.js",
+			"settings":
+			{
+				"buffer_size": 13207,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "build/three.js",
+			"settings":
+			{
+				"buffer_size": 1026130,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<html>\n\n<head>\n<title>Learning WebGL &mdash; lesson 11</title>\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">\n\n<script type=\"text/javascript\" src=\"../js/gl-matrix-2.2.1.js\"></script>\n<script type=\"text/javascript\" src=\"../js/webgl-utils.js\"></script>\n\n<script id=\"shader-fs\" type=\"x-shader/x-fragment\">\n    precision mediump float;\n\n    varying vec2 vTextureCoord;\n    varying vec3 vLightWeighting;\n\n    uniform sampler2D uSampler;\n\n    void main(void) {\n        vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);\n    }\n</script>\n\n<script id=\"shader-vs\" type=\"x-shader/x-vertex\">\n    attribute vec3 aVertexPosition;\n    attribute vec2 aTextureCoord;\n\n    uniform mat4 uMVMatrix;\n    uniform mat4 uPMatrix;\n    uniform mat3 uNMatrix;\n\n    uniform vec3 uAmbientColor;\n\n    uniform vec3 uLightingDirection;\n    uniform vec3 uDirectionalColor;\n\n    uniform bool uUseLighting;\n\n    varying vec2 vTextureCoord;\n    varying vec3 vLightWeighting;\n\n    void main(void) {\n        gl_Position =    uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n        vTextureCoord = aTextureCoord;\n\n             vLightWeighting = vec3(1.0, 1.0, 1.0);\n     }\n</script>\n\n\n<script type=\"text/javascript\">\n\n    var gl;\n\n    function initGL(canvas) {\n        try {\n            gl = canvas.getContext(\"webgl\");\n            gl.viewportWidth = canvas.width;\n            gl.viewportHeight = canvas.height;\n        } catch (e) {\n        }\n        if (!gl) {\n            alert(\"Could not initialise WebGL, sorry :-(\");\n        }\n    }\n\n\n    function getShader(gl, id) {\n        var shaderScript = document.getElementById(id);\n        if (!shaderScript) {\n            return null;\n        }\n\n        var str = \"\";\n        var k = shaderScript.firstChild;\n        while (k) {\n            if (k.nodeType == 3) {\n                str += k.textContent;\n            }\n            k = k.nextSibling;\n        }\n\n        var shader;\n        if (shaderScript.type == \"x-shader/x-fragment\") {\n            shader = gl.createShader(gl.FRAGMENT_SHADER);\n        } else if (shaderScript.type == \"x-shader/x-vertex\") {\n            shader = gl.createShader(gl.VERTEX_SHADER);\n        } else {\n            return null;\n        }\n\n        gl.shaderSource(shader, str);\n        gl.compileShader(shader);\n\n        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {\n            alert(gl.getShaderInfoLog(shader));\n            return null;\n        }\n\n        return shader;\n    }\n\n\n    var shaderProgram;\n\n    function initShaders() {\n        var fragmentShader = getShader(gl, \"shader-fs\");\n        var vertexShader = getShader(gl, \"shader-vs\");\n\n        shaderProgram = gl.createProgram();\n        gl.attachShader(shaderProgram, vertexShader);\n        gl.attachShader(shaderProgram, fragmentShader);\n        gl.linkProgram(shaderProgram);\n\n        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {\n            alert(\"Could not initialise shaders\");\n        }\n\n        gl.useProgram(shaderProgram);\n\n        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, \"aVertexPosition\");\n        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);\n\n        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, \"aTextureCoord\");\n        gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);\n\n \n\n        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, \"uPMatrix\");\n        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, \"uMVMatrix\");\n        shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, \"uNMatrix\");\n        \n        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, \"uSampler\");\n        shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, \"uUseLighting\");\n        shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, \"uAmbientColor\");\n        shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, \"uLightingDirection\");\n        shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, \"uDirectionalColor\");\n    }\n\n\n    function handleLoadedTexture(texture) {\n        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);\n        gl.bindTexture(gl.TEXTURE_2D, texture);\n        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);\n        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);\n        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);\n        gl.generateMipmap(gl.TEXTURE_2D);\n\n     }\n\n\n    var moonTexture;\n\n    function initTexture() {\n        moonTexture = gl.createTexture();\n        moonTexture.image = new Image();\n        moonTexture.image.onload = function () {\n            handleLoadedTexture(moonTexture)\n        };\n\n        moonTexture.image.src = \"p7.jpg\";\n    }\n\n\n    var mvMatrix = mat4.create();\n    var mvMatrixStack = [];\n    var pMatrix = mat4.create();\n\n    function mvPushMatrix() {\n        var copy = mat4.create();\n        // Update: mat4.set(mvMatrix, copy); mat4.set() was removed from gl-matrix, use mat4.copy().\n        mat4.copy(copy, mvMatrix);\n        mvMatrixStack.push(copy);\n    }\n\n    function mvPopMatrix() {\n        if (mvMatrixStack.length == 0) {\n            throw \"Invalid popMatrix!\";\n        }\n        mvMatrix = mvMatrixStack.pop();\n    }\n\n    function setMatrixUniforms() {\n        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);\n        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);\n\n        var normalMatrix = mat3.create();\n        // Update:\n        //   mat4.toInverseMat3(mvMatrix, normalMatrix);\n        //   mat3.transpose(normalMatrix);\n        // These two methods have been combined into a single method in the mat3 class, mat3.normalFromMat4().\n        mat3.normalFromMat4(normalMatrix, mvMatrix);\n        gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);\n    }\n\n\n    function degToRad(degrees) {\n        return degrees * Math.PI / 180;\n    }\n\n\n    var mouseDown = false;\n    var lastMouseX = null;\n    var lastMouseY = null;\n\n    var moonRotationMatrix = mat4.create();\n    mat4.identity(moonRotationMatrix);\n\n    function handleMouseDown(event) {\n        mouseDown = true;\n        lastMouseX = event.clientX;\n        lastMouseY = event.clientY;\n    }\n\n\n    function handleMouseUp(event) {\n        mouseDown = false;\n    }\n\n\n    function handleMouseMove(event) {\n        if (!mouseDown) {\n            return;\n        }\n        var newX = event.clientX;\n        var newY = event.clientY;\n\n        var deltaX = newX - lastMouseX;\n        var newRotationMatrix = mat4.create();\n        mat4.identity(newRotationMatrix);\n        // Update: mat4.rotate(newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)\n        // where out is the receiving matrix and a is the matrix to rotate.\n        mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]);\n\n        var deltaY = newY - lastMouseY;\n        mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);\n\n        // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.\n        mat4.multiply(moonRotationMatrix, newRotationMatrix, moonRotationMatrix);\n\n        lastMouseX = newX;\n        lastMouseY = newY;\n    }\n\n\n\n    var moonVertexPositionBuffer;\n    var moonVertexNormalBuffer;\n    var moonVertexTextureCoordBuffer;\n    var moonVertexIndexBuffer;\n\n    function initBuffers() {\n        var latitudeBands = 30;\n        var longitudeBands = 30;\n        var radius = 2;\n\n        var vertexPositionData = [];\n        var normalData = [];\n        var textureCoordData = [];\n        for (var latNumber=0; latNumber <= latitudeBands; latNumber++) {\n            var theta = latNumber * Math.PI / latitudeBands;\n            var sinTheta = Math.sin(theta);\n            var cosTheta = Math.cos(theta);\n\n            for (var longNumber=0; longNumber <= longitudeBands; longNumber++) {\n                var phi = longNumber * 2 * Math.PI / longitudeBands;\n                var sinPhi = Math.sin(phi);\n                var cosPhi = Math.cos(phi);\n\n                var x = cosPhi * sinTheta;\n                var y = cosTheta;\n                var z = sinPhi * sinTheta;\n                var u = 1 - (longNumber / longitudeBands);\n                var v = 1 - (latNumber / latitudeBands);\n\n                normalData.push(x);\n                normalData.push(y);\n                normalData.push(z);\n                textureCoordData.push(u);\n                textureCoordData.push(v);\n                vertexPositionData.push(radius * x);\n                vertexPositionData.push(radius * y);\n                vertexPositionData.push(radius * z);\n            }\n        }\n\n        var indexData = [];\n        for (var latNumber=0; latNumber < latitudeBands; latNumber++) {\n            for (var longNumber=0; longNumber < longitudeBands; longNumber++) {\n                var first = (latNumber * (longitudeBands + 1)) + longNumber;\n                var second = first + longitudeBands + 1;\n                indexData.push(first);\n                indexData.push(second);\n                indexData.push(first + 1);\n\n                indexData.push(second);\n                indexData.push(second + 1);\n                indexData.push(first + 1);\n            }\n        }\nconsole.log(normalData);\nconsole.log(indexData);\nconsole.log(textureCoordData);\nconsole.log(vertexPositionData);\n\n        moonVertexNormalBuffer = gl.createBuffer();\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexNormalBuffer);\n        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalData), gl.STATIC_DRAW);\n        moonVertexNormalBuffer.itemSize = 3;\n        moonVertexNormalBuffer.numItems = normalData.length / 3;\n\n        moonVertexTextureCoordBuffer = gl.createBuffer();\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexTextureCoordBuffer);\n        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordData), gl.STATIC_DRAW);\n        moonVertexTextureCoordBuffer.itemSize = 2;\n        moonVertexTextureCoordBuffer.numItems = textureCoordData.length / 2;\n\n        moonVertexPositionBuffer = gl.createBuffer();\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexPositionBuffer);\n        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionData), gl.STATIC_DRAW);\n        moonVertexPositionBuffer.itemSize = 3;\n        moonVertexPositionBuffer.numItems = vertexPositionData.length / 3;\n\n        moonVertexIndexBuffer = gl.createBuffer();\n        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, moonVertexIndexBuffer);\n        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), gl.STATIC_DRAW);\n        moonVertexIndexBuffer.itemSize = 1;\n        moonVertexIndexBuffer.numItems = indexData.length;\n    }\n\n\n    function drawScene() {\n        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);\n        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);\n\n        // Update: mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix); mat4.perspective() API has changed.\n        mat4.perspective (pMatrix, 0.75, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);\n\n        var lighting = document.getElementById(\"lighting\").checked;\n        gl.uniform1i(shaderProgram.useLightingUniform, lighting);\n        if (lighting) {\n            gl.uniform3f(\n                shaderProgram.ambientColorUniform,\n                parseFloat(document.getElementById(\"ambientR\").value),\n                parseFloat(document.getElementById(\"ambientG\").value),\n                parseFloat(document.getElementById(\"ambientB\").value)\n            );\n\n            var lightingDirection = [\n                parseFloat(document.getElementById(\"lightDirectionX\").value),\n                parseFloat(document.getElementById(\"lightDirectionY\").value),\n                parseFloat(document.getElementById(\"lightDirectionZ\").value)\n            ];\n            var adjustedLD = vec3.create();\n            // Update: vec3.normalize(lightingDirection, adjustedLD); vec3.normalize() API has reversed the parameters.\n            vec3.normalize(adjustedLD, lightingDirection);\n            // Update: vec3.scale(adjustedLD, -1); vec3.scale() API has changed to vec3.scale(out, a, b)\n            // where out is the receiving vector and a is the vector to scale.\n            vec3.scale(adjustedLD, adjustedLD, -1);\n            gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);\n\n            gl.uniform3f(\n                shaderProgram.directionalColorUniform,\n                parseFloat(document.getElementById(\"directionalR\").value),\n                parseFloat(document.getElementById(\"directionalG\").value),\n                parseFloat(document.getElementById(\"directionalB\").value)\n            );\n        }\n\n        mat4.identity(mvMatrix);\n\n        // Update: mat4.translate(mvMatrix, [0, 0, -6]); mat4.translate() API has changed to mat4.translate(out, a, v)\n        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by. z altered to\n        // approximate original scene.\n        mat4.translate(mvMatrix, mvMatrix, [0, 0, 0.0]);\n\n        mat4.multiply(mvMatrix, mvMatrix, moonRotationMatrix);\n\n        gl.activeTexture(gl.TEXTURE0);\n        gl.bindTexture(gl.TEXTURE_2D, moonTexture);\n        gl.uniform1i(shaderProgram.samplerUniform, 0);\n\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexPositionBuffer);\n        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, moonVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);\n\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexTextureCoordBuffer);\n        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, moonVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);\n\n        gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexNormalBuffer);\n        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, moonVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);\n\n        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, moonVertexIndexBuffer);\n        setMatrixUniforms();\n        gl.drawElements(gl.TRIANGLES, moonVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);\n    }\n\n\n    function tick() {\n        requestAnimFrame(tick);\n        drawScene();\n    }\n\n\n    function webGLStart() {\n        var canvas = document.getElementById(\"lesson11-canvas\");\n        initGL(canvas);\n        initShaders();\n        initBuffers();\n        initTexture();\n\n        gl.clearColor(0.0, 0.0, 0.0, 1.0);\n        gl.enable(gl.DEPTH_TEST);\n\n        canvas.onmousedown = handleMouseDown;\n        document.onmouseup = handleMouseUp;\n        document.onmousemove = handleMouseMove;\n\n        tick();\n    }\n\n</script>\n\n\n</head>\n\n\n<body onload=\"webGLStart();\">\n    <a href=\"http://learningwebgl.com/blog/?p=1253\">&lt;&lt; Back to Lesson 11</a><br />\n\n    <canvas id=\"lesson11-canvas\" style=\"border: none;\" width=\"840\" height=\"840\"></canvas>\n    <br/>\n\n    <input type=\"checkbox\" id=\"lighting\" checked /> Use lighting<br/>\n    Spin the moon by dragging it with the mouse.\n    <br/>\n\n    <h2>Directional light:</h2>\n\n    <table style=\"border: 0; padding: 10px;\">\n        <tr>\n            <td><b>Direction:</b>\n            <td>X: <input type=\"text\" id=\"lightDirectionX\" value=\"-1.0\" />\n            <td>Y: <input type=\"text\" id=\"lightDirectionY\" value=\"-1.0\" />\n            <td>Z: <input type=\"text\" id=\"lightDirectionZ\" value=\"-1.0\" />\n        </tr>\n        <tr>\n            <td><b>Colour:</b>\n            <td>R: <input type=\"text\" id=\"directionalR\" value=\"0.8\" />\n            <td>G: <input type=\"text\" id=\"directionalG\" value=\"0.8\" />\n            <td>B: <input type=\"text\" id=\"directionalB\" value=\"0.8\" />\n        </tr>\n    </table>\n\n\n    <h2>Ambient light:</h2>\n\n    <table style=\"border: 0; padding: 10px;\">\n        <tr>\n            <td><b>Colour:</b>\n            <td>R: <input type=\"text\" id=\"ambientR\" value=\"0.2\" />\n            <td>G: <input type=\"text\" id=\"ambientG\" value=\"0.2\" />\n            <td>B: <input type=\"text\" id=\"ambientB\" value=\"0.2\" />\n        </tr>\n    </table>\n    <br/>\n\n    Moon texture courtesy of <a href=\"http://maps.jpl.nasa.gov/\">the Jet Propulsion Laboratory</a>.\n    <br/>\n    <br/>\n\n </body>\n\n</html>\n",
+			"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson11/index.html",
+			"file_size": 16413,
+			"file_write_time": 131337369402255095,
+			"settings":
+			{
+				"buffer_size": 16422,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/compass.js",
+			"settings":
+			{
+				"buffer_size": 1958,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/pannellum/src/js/pannellum.js",
+			"settings":
+			{
+				"buffer_size": 56782,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "======== VERTEX ========================================================================================================\n\n- hlavním úkolem vertex shaderu je naplnit pro každý vstupní bod vestavěnou proměnnou \n	gl_Position, která odpovídá výslednému umístění bodu\n- vertex shader je vykonáván pro každý vrchol zadané geometrie\n- gl_Position je čtyřrozměrné pole [x,y,z,1.0 = homogenni souradnice]\n- gl_PointSize = zvetsi bod na vice nez jeden pixel napr. 5.0 ho zvetsi 5x apod.\n\n- promenná: 'varying': automaticky interpolovaná hodnota, do které přiřazujeme ve vertex shaderu a ze které čteme ve fragment shaderu, vyuziva toho, ze se vertex a fragment dela pro kazdej pozicni pixel/barvu pixelu\n\n- proměnná: 'attribute' = jejichž hodnota se mění pro každý vrchol geometrie\n- proměnná: 'uniform' =   označujeme takto data, jejichž hodnoty se během jednoho vykreslení scény nemění (např: trans.matice)\n\n	attribute vec2 pos;\n	attribute vec3 color;\n	varying vec3 varyingColor;\n\n	void main(void) {\n	    gl_Position = vec4(pos, 0.0, 1.0);\n	    gl_PointSize = 5.0;\n	}\n\n======== FRAGMENT ========================================================================================================\n\n- fragment shader bude spuštěn pro každý vyrenderovaný pixel\n- do proměnné gl_FragColor přiřadí RGB barvu bodu. Barvy se zapisují též jako čtyřrozměrné vektory; čtvrtá složka je průhlednost (1 = žádná průhlednost). Všechny složky jsou hodnoty mezi nulou a jedničkou\n\n	precision mediump float;  // s jakou přesností mají být výpočty (interpolace) prováděny\n\n	varying vec3 varyingColor;\n\n	void main(void) {\n	    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n	}\n\n======== PROGRAM ========================================================================================================\n\n- po vytvoření shaderu se musi vytvorit program a aktivovat + nastavit atributy\n\n	var program = gl.createProgram();\n	gl.attachShader(program, vertexShader);\n	gl.attachShader(program, fragmentShader);\n	gl.linkProgram(program);\n	gl.useProgram(program);\n\n\n- takto si „sáhneme“ na vstupní hodnotu vertex shaderu (pos) a řekneme, že \njejí hodnotu budeme definovat pomocí JS pole (gl.enableVertexAttribArray)\n\n- takto predame typ promenne 'atribut' do programu, tj.vertex/fragment shaderu:\n\n	var posLoc = gl.getAttribLocation(program, \"pos\");\n	gl.enableVertexAttribArray(posLoc);\n\n- takto predame typ promenne 'uniform' do programu, tj.vertex/fragment shaderu:\n\n	var mmLoc = gl.getUniformLocation(program, \"MMatrix\");\n	gl.uniformMatrix4fv(mmLoc, false, mmatrix);\n\n\n======== BUFFERY ========================================================================================================\n\n- Veškerá data, předávaná do GPU, jsou uložena  bufferech – kusech paměti, rychle přístupných z grafické karty. Práce s buffery může vypadat podivně, protože připomíná stavový automat: nejprve nastavíme buffer jako aktivní (bindBuffer) a tím říkáme, že všechny následné operace budou prováděny právě nad ním. Žádné předávání bufferů jako parametrů.\n\n	var posBuffer = gl.createBuffer();\n	gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);\n	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.5, 0.5]), gl.STATIC_DRAW);\n\n- gl.ARRAY_BUFFER = Konstanta, kterou  specifikujeme, že chceme pracovat s obecným polem\n- gl.ELEMENT_ARRAY_BUFFER = = Konstanta, kterou  specifikujeme \n- gl.STATIC_DRAW = treti parametr nám říká, jak máme v plánu tato data využívat a měnit: v našem případě říkáme, že je nechceme měnit vůbec\n\n- new Uint8Array[] : pole integeru, celych cisel v bufferech\n- new Float32Array: pole desetinnych cisel, necekane\n\nTímto voláním provážeme právě aktivní buffer (ten, kde jsou souřadnice našeho bodu) s vstupem vertex shaderu.\n\n- gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);\n\nParametry vertexAttribPointer():\n	- 1.) posLoc = provážeme právě aktivní buffers vstupem vertex shaderu\n	- 2.) 2 = z bufferu bude číst po dvou hodnotách\n	- 3.) gl.FLOAT = že to jsou destinná čísla\n	- 4.) false = že je nechceme normalizovat\n	- 5.) 0 = že nechceme žádné hodnoty přeskakovat\n	- 6.) 0 = že budeme číst od začátku bufferu\n\n\n- gl.clearColor(0.0, 0.0, 0.0, 1.0) : nastavujeme barvu, kterou se má canvas vymazat (černou). \n- gl.clear(gl.COLOR_BUFFER_BIT) : Voláním clear plátno vymažeme\n- gl.drawArrays(gl.POINTS, 0, 1): vposled dáme pokyn k vykreslení. Naši geometrii chceme vykreslovat jako prosté body (gl.POINTS), začneme na prvním a vykreslíme jeden\n\n- gl.drawArrays() : opakovaně volá vertex shader pro všechny nachystané hodnoty vstupních atributů\n- gl.drawElements() : vstupem je tzv. ELEMENT_ARRAY_BUFFER -  pole obsahující indexy do bufferu s definicí vrcholů, \n	Tím lze snadno vyřešit potíž s opakováním vrcholů: každý vrchol definujeme jen jednou, ale v bufferu s indexy jej zmíníme několikrát\n- gl.drawElements(gl.LINES, 6, gl.UNSIGNED_BYTE, 0):\n	- Druhý parametr je počet hodnot v index bufferu, které chceme zpracovat\n	-  třetí parametr popisuje velikost jednoho indexu;\n	- poslední parametr je offset (kreslíme od prvního prvku)\n- gl.lineWidth(3) : nastavujeme šířku renderované čáry\n- gl.enable(gl.DEPTH_TEST) : testování hloubky - bufferu (depth buffer) si ukládá hloubku (souřadnici Z) jednotlivých bodů; porovnáním s již vykreslenými pixely pak rozhodne o zahození těch, které by měly zůstat neviditelné „vzadu“, proto musí být tato možnost zapnuta\n\n- gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT) : pri renderovani je taky potreba premazat scenu\n\n======== DODATEK K GEOMETRII ============================================================================================ \n\n- Naše geometrie a její vrcholy jsou zadávány v obecných prostorových souřadnicích, na které \nnení kladeno žádné omezení. Jedná se o desetinná čísla, kladná i záporná.\n\n- Tato obecná geometrie je ve vertex shaderu transformována do souřadnic v tzv. clipspace, prostoru \nomezeném hodnotami 1 a -1 na všech osách. Tento prostor již koresponduje s plochou canvasu: osa X roste \ndoprava, osa Y nahoru, osa Z směrem z obrazovky k uživateli. Hodnoty, které po výstupu z vertex shaderu \npřetečou rozpětí -1 až 1 jsou zahozeny a nebudou vykresleny.\n\n- Poslední krok před vykreslením je převod do NDC (Normalized Device Coordinates): hodnoty X a Y v clipspace \nse vydělí čtvrtou složkou vektoru a vynásobí polovinou pixelové velikosti canvasu. Tím získáváme body na obrazovce monitoru\n\n\n======== TRANSFORMACE ============================================================================================\n\n- Tradičně pro tento účel používáme tři matice se standardním označením. Model matrix je transformace, kterou držíme pro každý vykreslovaný objekt a ten s její pomocí transformujeme. Např.: Náš čtyřstěn tak může být definován jako v první ukázce (jedničkové rozměry, umístěný kolem počátku souřadné soustavy) a následně jej podle potřeby díky model matrix natočíme, zmenšíme či posuneme tam, kde jej potřebujeme.\n\n- View matrix je druhá transformace, kterou na renderované prvky aplikujeme. V OpenGL neexistuje žádný koncept „kamery“; vzájemný vztah scény a jejího pozorovatele realizujeme právě násobením touto maticí. Pokud máme tedy rozmístěno mnoho objektů a chceme je všechny od pozorovatele oddálit, násobíme jejich vrcholy view matrix, která koresponduje s posunem ve směru osy Z.\n\n- Poslední tradiční maticí je Projection matrix; transformace, která provádí nějakou formu perspektivního zkreslení. Požadované zkreslení definovat jako třetí matici.\n\n\n- Pokud si některou ze tří uvedených transformací nepřejeme provádět, použijeme jednotkovou matici – ta odpovídá násobení jedničkou, tj. no-op.\n\n\n\n\n======== TEXTURA ============================================================================================\n\n- Nejprve se však pojďme podívat, jak je realizováno mapování textury na jednotlivé trojúhelníky modelu: pro každý vrchol potřebujeme dvojici souřadnic, které popisují jeden bod textury. Každému trojúhelníku tělesa tak odpovídá trojúhelník na obrázku s texturou. WebGL pak automaticky provede interpolaci hodnot textury na všechny pixely. Pro nás to znamená nutnost dodat tyto texturové souřadnice;\n\n- Tyto souřadnice jsou vždy dvojice desetinných čísel mezi nulou a jedničkou (textura má tedy v těchto souřadnicích velikost 1×1). Předáme je do vertex shaderu:\n\n	attribute vec2 texture;\n	varying vec2 varyingTexture;\n\n- vektor 'texture' pak normalne pridame jako atribut do webgl programu, viz nize:\n\n	var textureLoc = gl.getAttribLocation(program, \"texture\");\n	gl.enableVertexAttribArray(textureLoc);\n\n	var textureCoordsBuffer = gl.createBuffer();\n	gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordsBuffer);\n	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(________DATA MAPOVANI TEXTURY________), gl.STATIC_DRAW);\n	gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);\n\n- Do fragment shaderu pak texturu předáme jako speciální datový typ 'sampler2D', který předáme do texturovací funkce texture2D:\n\n	varying vec2 varyingTexture;\n	uniform sampler2D sampler;	\n\n	void main(void) {\n	    gl_FragColor = texture2D(sampler, varyingTexture);\n	}\n\n- WEBGL kod obrazku - příklad:\n\n	var image = document.createElement(\"img\");\n	image.crossOrigin = \"anonymous\";\n	image.src = \"http://bespin.cz/~ondras/webgl/metal.jpg\";\n	image.onload = function() {\n	    texture = gl.createTexture();\n	    gl.bindTexture(gl.TEXTURE_2D, texture);\n	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);\n	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);\n	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);\n	    gl.generateMipmap(gl.TEXTURE_2D);\n	}\n\n	- Popis funkci a parametru:\n		- gl.createTexture() : pro vytvoření WebGL textury;\n		- gl.bindTexture() : pro označení této textury jako aktivní (stejně jako u bufferů);\n		- gl.texImage2D() : pro nahrání obrazových dat z obrázku do textury. \n			-- Druhý parametr (nula) říká, že chceme plnou velikost. \n			-- Další dvě konstanty určují zdrojový a cílový formát obrazových dat; \n			-- gl.UNSIGNED_BYTE říká, že obrazová data mají jeden bajt na barevný kanál.\n		- gl.texParameteri() : používáme k nastavení toho, jak se budou texturová data při interpolaci zvětšovat  (TEXTURE_MAG_FILTER) či zmenšovat (TEXTURE_MIN_FILTER).\n		- gl.generateMipmap() : celkem přímočaře nakonec vygeneruje sadu mipmap.\n\n\n- FINAL: Naposled musíme ještě texturu předat do fragment shaderu. To pro nás znamená jen spárování uniform hodnoty 'sampler' s texturovací jednotkou (těch je k dispozici celá řada, my použijeme jen tu první – gl.TEXTURE0):\n\n	gl.activeTexture(gl.TEXTURE0);\n	gl.bindTexture(gl.TEXTURE_2D, texture);\n\n	var samplerLoc = gl.getUniformLocation(program, \"sampler\");\n	gl.uniform1i(samplerLoc, 0); // nula odpovídá gl.TEXTURE0\n\n======== POSTUP ============================================================================================\n\n- zeměpisná šířka = poledníky = latitude\n- zeměpisná delka = rovnoběžky = longtitude\n\nALE V TOM NASEM RESENI TO JE:\n\n- poledníky = longtitude\n- rovnoběžky = latitude \n\n\nJe potreba mit v bufferu:\n	1.) Pole souradnic vrcholu\n	2.) pole indexu vrcholů pro dany souradnice vrcholů\n\n",
+			"file": "/C/xampp/htdocs/BC/doc/MicrosoftWord/howto_webgl.txt",
+			"file_size": 11836,
+			"file_write_time": 131342663821883445,
+			"settings":
+			{
+				"buffer_size": 11059,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/bakalarka/webgl/README.md",
+			"settings":
+			{
+				"buffer_size": 76,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/xampp/htdocs/BC/indexSH_BACKUP.html",
+		"/C/xampp/htdocs/bakalarka/pannellum/examples/example.htm",
+		"/C/xampp/htdocs/BC/demo2.html",
+		"/C/xampp/htdocs/BC/theta/theta.html",
+		"/C/xampp/htdocs/BC/src/js/lib.js",
+		"/C/xampp/htdocs/BC/theta/theta6m.html",
+		"/C/xampp/htdocs/bakalarka/pannellum/examples/example-multires.htm",
+		"/C/xampp/htdocs/BC/theta6m.html",
+		"/C/xampp/htdocs/BC/src/glsl/vertexShader.vert",
+		"/C/xampp/htdocs/bakalarka/pannellum-min/src/standalone/pannellum.htm",
+		"/C/xampp/htdocs/bakalarka/pannellum-min/src/standalone/standalone.js",
+		"/C/xampp/htdocs/BC/theta/mouse2.html",
+		"/C/xampp/htdocs/BC/theta/theta62.html",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/index.html",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/style.css",
+		"/C/Users/HPCZ/Downloads/treehouse-custom-video-controls (1)/treehouse-custom-video-controls/script.js",
+		"/C/xampp/htdocs/BC/src/js/Externallib.js",
+		"/C/xampp/htdocs/HexaShop-New/themes/default-bootstrap/css/product.css",
+		"/C/xampp/htdocs/BC/theta/text.html",
+		"/C/xampp/htdocs/FashionMalls/themes/theme1/css/layout.css",
+		"/C/xampp/htdocs/BC/theta/GEOM-texture.html",
+		"/C/xampp/htdocs/BC/theta/GEOM.html",
+		"/C/xampp/htdocs/BC/theta/theta52.html",
+		"/C/xampp/htdocs/BC/theta/theta-sim.html",
+		"/C/xampp/htdocs/HexaShop-Manager/config/config.php",
+		"/C/xampp/htdocs/HexaShop-Manager/index.php",
+		"/C/xampp/htdocs/BC/theta/koule-aprox.html",
+		"/C/xampp/htdocs/FashionMalls/themes/theme1/js/semantic-turn-on.js",
+		"/C/xampp/htdocs/FashionMalls/classes/Tools.php",
+		"/C/xampp/htdocs/BC/doc/tools/php/tikz.php",
+		"/C/xampp/htdocs/BC/theta/theta61.html",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/module_controller.html",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/js/semantic-turn-on.js",
+		"/C/xampp/htdocs/HexaShop-New/modules/dashactivity/dashactivity.php",
+		"/C/xampp/htdocs/FashionMalls/classes/Cache.php",
+		"/C/xampp/htdocs/HexaShop-New/classes/cache/Cache.php",
+		"/C/xampp/htdocs/HexaShop-New/classes/cache/CacheXcache.php",
+		"/C/xampp/htdocs/HexaShop-New/classes/cache/CacheMemcache.php",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/header.html",
+		"/C/xampp/htdocs/FashionMalls/modules/blocktopmenu/blocktopmenu.php",
+		"/C/xampp/htdocs/BC/theta/theta7.html",
+		"/C/xampp/htdocs/BC/theta/theta-sim-cube.html",
+		"/C/xampp/htdocs/BC/theta/mouse.html",
+		"/C/xampp/htdocs/BC/theta/theta3.html",
+		"/C/xampp/htdocs/BC/theta/theta4.html",
+		"/C/xampp/htdocs/BC/theta/theta2.html",
+		"/C/xampp/htdocs/BC/theta/T1/PointLightedSphere_perFragment.html",
+		"/C/xampp/htdocs/BC/theta/T1/PointLightedSphere_perFragment.js",
+		"/C/xampp/htdocs/BC/theta/theta6.html",
+		"/C/xampp/htdocs/BC/theta/theta5.html",
+		"/C/xampp/htdocs/FashionMalls/classes/helper/HelperListSemantic.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminFormBuilderController.php",
+		"/C/xampp/htdocs/FashionMalls/themes/theme1/helper/list/helper_list.tpl",
+		"/C/xampp/htdocs/BC/theta/GEOM-Three.html",
+		"/C/xampp/htdocs/BC/theta/build/three.js",
+		"/C/xampp/htdocs/bakalarka/webgl-lessons/js/webgl-utils.js",
+		"/C/xampp/htdocs/bakalarka/pannellum/src/js/pannellum.js",
+		"/C/xampp/htdocs/bakalarka/pannellum/src/js/libpannellum.js",
+		"/C/xampp/htdocs/bakalarka/threepano/in2sg_office_panorama.html",
+		"/C/xampp/htdocs/bakalarka/panoramaview/sanegl.js",
+		"/C/xampp/htdocs/bakalarka/THETA_GL-master/js/theta_gl.js",
+		"/C/xampp/htdocs/bakalarka/panoramaview/glass.js",
+		"/C/xampp/htdocs/bakalarka/panoramaview/pano.js",
+		"/C/xampp/htdocs/bakalarka/mozvr-pano/js/lib/fetch.js",
+		"/C/xampp/htdocs/bakalarka/webgl-lessons/lesson16/index.html",
+		"/C/xampp/htdocs/HexaShop-Manager/mouse.html",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/logger_controller.html",
+		"/C/xampp/htdocs/FashionMalls/classes/helper/HelperFormSemantic.php",
+		"/C/xampp/htdocs/FashionMalls/classes/helper/HelperListSemanticModal.php",
+		"/C/xampp/htdocs/BC/src/js/oldLIb.js",
+		"/C/xampp/htdocs/HexaShop-Manager/js/index.js",
+		"/C/xampp/htdocs/HexaShop-Manager/req.php",
+		"/C/xampp/htdocs/BC/theta/theta8.html",
+		"/C/xampp/htdocs/BC/theta/thetaX7.html",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminTabController.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/front/LoginController.php",
+		"/C/xampp/htdocs/FashionMalls/classes/controller/AdminController.php",
+		"/C/xampp/htdocs/BC/theta/data/p7.jpg",
+		"/C/xampp/htdocs/BC/src/Externallib.js",
+		"/C/xampp/htdocs/BC/src/lib.js",
+		"/C/Users/thomas/Desktop/Živnost/Danové přiznání 2016/DPFDP5-9301183771-20170321-164543-pracovni.xml",
+		"/C/Users/HPCZ/Downloads/WebGLMovieTexture (1).unitypackage",
+		"/C/xampp/htdocs/bakalarka/theta/theta4.html",
+		"/C/xampp/htdocs/bakalarka/theta/theta.html",
+		"/C/xampp/htdocs/bakalarka/theta/theta5.html",
+		"/C/xampp/htdocs/bakalarka/theta/theta6.html",
+		"/C/xampp/htdocs/bakalarka/theta/base/index.html",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/content.html",
+		"/C/xampp/htdocs/bakalarka/theta/pattern-014.jpg",
+		"/C/xampp/htdocs/bakalarka/theta/pattern.jpg",
+		"/C/xampp/htdocs/bakalarka/pannellum-min2/src/main/main.js",
+		"/C/Users/HPCZ/Downloads/student.h",
+		"/C/xampp/htdocs/FashionMalls/classes/Form.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminConfigurationController.php",
+		"/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/index.html",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/js/admintopmenu.js",
+		"/C/xampp/htdocs/bakalarka/THETA_GL-master/movie_360.html",
+		"/C/xampp/htdocs/BC/shaders/fragment/equirectangular.frag",
+		"/C/xampp/htdocs/FashionMalls/classes/template/TemplateViaFiles.php",
+		"/C/xampp/htdocs/FashionMalls/classes/adapter/template/TemplateAdapter.php",
+		"/C/xampp/htdocs/FashionMalls/classes/Tab.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminAccessController.php",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/css/admin_layout.css",
+		"/C/xampp/htdocs/FashionMalls/modules/blocktopmenu/views/templates/hook/blocktopmenu.tpl",
+		"/C/xampp/htdocs/FashionMalls/modules/blocklogo/views/templates/hook/blocklogo.tpl",
+		"/C/xampp/htdocs/FashionMalls/themes/theme1/header.html",
+		"/C/xampp/htdocs/BC/shaders/fragment/equirectangular.frag.c",
+		"/C/xampp/htdocs/FashionMalls/classes/VirtualModel.php",
+		"/C/xampp/htdocs/FashionMalls/classes/Validate.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/front/IndexController.php",
+		"/C/xampp/htdocs/FashionMalls/classes/controller/Controller.php",
+		"/C/xampp/htdocs/FashionMalls/index.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/front/pagenotfoundController.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/front/TestovaciController.php",
+		"/C/xampp/htdocs/FashionMalls/classes/AutoLoad.php",
+		"/C/xampp/htdocs/FashionMalls/classes/Context.php",
+		"/C/xampp/htdocs/FashionMalls/classes/ActiveRecord.php",
+		"/C/xampp/htdocs/bakalarka/panoramaview/vmath.js",
+		"/C/xampp/htdocs/bakalarka/theta/T1/PointLightedSphere_perFragment.html",
+		"/C/xampp/htdocs/bakalarka/theta/T1/PointLightedSphere_perFragment.js",
+		"/C/Users/HPCZ/Downloads/HTML5pano/HTML5pano/html5pano.js",
+		"/C/xampp/htdocs/FashionMalls/classes/Access.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminHooksController.php",
+		"/C/xampp/htdocs/FashionMalls/admin/themes/theme1/breadcrumb.html",
+		"/C/xampp/htdocs/FashionMalls/classes/Link.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminLogoutController.php",
+		"/C/xampp/htdocs/FashionMalls/classes/Configuration.php",
+		"/C/xampp/htdocs/FashionMalls/controllers/admin/AdminLoginController.php"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"CACHE.json_object.fisheye.video[whichVideo]",
+			"equirectVideo",
+			"equiVM_",
+			"fishPano",
+			"fishEye",
+			"fishVM_",
+			"panorama_controlls_window_settings",
+			"loadJSONfile",
+			"SETTINGS.input.image",
+			"setEquiVideoMode",
+			"equirectVideo",
+			"Panorama se nepdařilo načíst!",
+			"loadJSONfile",
+			"SETTINGS.input.video",
+			"loadJSONfile",
+			"subtitles_window",
+			"subtitles_box.active",
+			"SETTINGS.video_controlls.object",
+			"createVideoControlls",
+			"updateObjectVariables",
+			"settings_window",
+			"SETTINGS.video_controlls.object",
+			"createVideoControlls",
+			"setFishVideoMode",
+			"window_settings_btn_inactive",
+			"window_settings_btn_active",
+			"window_settings_btn_inactive",
+			"settings_window",
+			"SETTINGS.panorama_controlls.btn.settings.object",
+			"createWindowSettings",
+			"panorama_controlls_window_settings_btn_mode_fish_vid",
+			"panorama_controlls_window_settings_btn_mode_equi_vid",
+			"panorama_controlls_window_settings_btn_mode_equi_vide",
+			"panorama_controlls_window_settings_btn_mode_equi",
+			"VM",
+			") {",
+			"function",
+			"panorama_controlls_window_settings_btn_subtit",
+			"settings_window",
+			"createSubtitlesBox",
+			"subtitles_window",
+			"createSubtitlesBox",
+			"SETTINGS.panorama_controlls.btn.settings.object",
+			"SETTINGS.panorama_controlls.subtitles_box.active",
+			"SETTINGS.subtitles_box.active",
+			"subtitles_box",
+			"SETTINGS.panorama_controlls.btn.settings.object",
+			"createWindowSettings",
+			"panorama_controlls_window_settings",
+			"amort",
+			"time",
+			"loadJSONfile",
+			"checkJSONfile",
+			"This is Jordan Pond, located in Acadia National Park.",
+			"title_box",
+			"panorama_controlls_window_settings",
+			"panorama_controlls",
+			"panorama_controlls_id",
+			"my_JSON_object",
+			"my_JSON_object.fisheye.video",
+			"video.",
+			"progress_bar_",
+			"createVideoStatusBar",
+			"= false",
+			"checkIfFileExists",
+			"video_status_bar",
+			"info_screen",
+			"createVideoStatusBar",
+			"video_controlls",
+			"panorama_controlls.",
+			"panorama_controlls",
+			"panorama_controlls_btn_fullstreen",
+			"panorama_controlls",
+			"panorama_controlls_btn_settings_id",
+			"panorama_controlls_btn_zoom_minus",
+			"panorama_controlls_btn_zoom_minus_id",
+			"panorama_controlls_btn_settings",
+			"textures",
+			"normals",
+			"GEOMETRY",
+			"onDocumentMouseOut",
+			"fieldVisionCoord",
+			"polarToCartesian",
+			"posun_koleckem_tmp",
+			"polarToCartesian",
+			"fieldVisionCoord",
+			"		MOUSE.move.angle.y+= MOUSE.move.x;\n		MOUSE.move.angle.x+=MOUSE.move.y;\n\n\n		MOUSE.move.angle.y = MOUSE.move.angle.y % (Math.PI*2);\n		MOUSE.move.angle.x	= MOUSE.move.angle.x % (Math.PI*2);",
+			"compas_skeleton_bg",
+			"../",
+			"..",
+			"setAttribute",
+			"field_vision_angle",
+			"field_vision_width",
+			"field_vision_width+",
+			"field_vision.",
+			"field_vision",
+			"createVideoControlls",
+			"panorama_controlls",
+			"field_vision",
+			"panorama_controlls",
+			"15%",
+			"input",
+			"MOUSE.wheel.delta",
+			"createVideoControlls",
+			"video",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider_volume_id",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider_volume",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_slider",
+			"video_controlls_btn_slider_volume_id",
+			"video_controlls_btn_volume_on",
+			"video_controlls_btn_volume_on_id",
+			"video_controlls_btn_volume_off",
+			"video_controlls_btn_fullstreen",
+			"(SETTINGS.mode.fisheye.video.radius-2*MOUSE.wheel.sensitivity)/reduction",
+			"minus",
+			"fullscreen",
+			"panorama_controlls",
+			"video_controlls",
+			"0.8",
+			"opacity",
+			"plus",
+			"panorama_controlls_btn_zoom_plus",
+			"panorama_controlls_btn_minus",
+			"panorama_controlls_btn_plus",
+			"panorama_controlls_btn_fullstreen"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/xampp/htdocs/BC/src/css/style2.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7734,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7443,
+								7443
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1831.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/htdocs/BC/index.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10046,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2636,
+								2636
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 504.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/xampp/htdocs/BC/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 50553,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								19583,
+								19583
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8217.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/xampp/htdocs/BC/README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								21,
+								21
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/xampp/htdocs/BC/src/js/lib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 53156,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								53018,
+								53018
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1891.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/xampp/htdocs/BC/src/js/panorama.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 39624,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								39571,
+								39550
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 18450.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/xampp/htdocs/BC/src/js/Externallib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								460,
+								460
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/xampp/htdocs/BC/doc/tools/txt/PSANI.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 296,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								294,
+								294
+							]
+						],
+						"settings":
+						{
+							"auto_name": "PRAVIDLA PSANI",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								646,
+								646
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "zdroje.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1750,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1423,
+								1423
+							]
+						],
+						"settings":
+						{
+							"auto_name": "ZDROJE:",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/C/xampp/htdocs/bakalarka/pannellum/examples/example-cube.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1127,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								381,
+								381
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "TO_DO.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1592,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 13,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 992,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								961,
+								173
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "/C/xampp/htdocs/bakalarka/pannellum/examples/example-tour.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								560,
+								560
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 209,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								209,
+								209
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								95,
+								95
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "/C/xampp/htdocs/BC/shaders/vertext/equirectangular.vert",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 313,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								313,
+								312
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#version 150",
+							"syntax": "Packages/C++/C.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "/C/xampp/htdocs/BC/shaders/fragment/equirectangular.frag",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6461,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6461,
+								6461
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 921.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15258,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14863,
+								14863
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 156.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/panorama.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 58818,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								55280,
+								55251
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 18821.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "/C/xampp/htdocs/bakalarka/theta/gl-matrix-2.2.1.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 110331,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								79926,
+								79926
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 43101.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson14/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18292,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								373,
+								373
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "/C/xampp/htdocs/bakalarka/webgl/tutorial/sample8/webgl-demo.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6330,
+								6330
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5352.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "build/three.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1026130,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								67017,
+								67017
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 49989.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "/C/xampp/htdocs/bakalarka/webgl-lessons/lesson11/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6884,
+								6884
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 71.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "/C/xampp/htdocs/bakalarka/pannellum-min2/src/js/compass.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1958,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1753,
+								1796
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 3.0,
+						"translation.y": 378.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "/C/xampp/htdocs/bakalarka/pannellum/src/js/pannellum.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 56782,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3058,
+								3069
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 604.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "/C/xampp/htdocs/BC/doc/MicrosoftWord/howto_webgl.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9596,
+								9597
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "/C/xampp/htdocs/bakalarka/webgl/README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 76,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16,
+								16
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.795417722188,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 94.0
+	},
+	"pinned_build_system": "",
+	"project": "project.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\thomas\\Downloads\\formbuilder-gh-pages\\formbuilder-gh-pages\\formbuilder.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 2
+	}
+}

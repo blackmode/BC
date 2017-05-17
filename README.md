@@ -1,2 +1,2 @@
 # BC
-Bakalářka
+Bakalářská práce

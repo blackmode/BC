@@ -1,0 +1,318 @@
+<body style="padding: 0px; margin: 0px"><canvas width="1920" height="1080" ></canvas></body>
+
+
+
+<script>
+var canvas = document.querySelector("canvas");
+var gl = document.querySelector("canvas").getContext("experimental-webgl");
+ 		var resolution_width = 1920;
+		var resolution_height = 1080;
+
+		var fisheye_1_x_begin = 17;
+		var fisheye_1_x_end = 921;
+		var fisheye_1_y_begin = 134;
+		var fisheye_1_y_end = 1053;
+
+		var fisheye_2_x_begin = 960;
+		var fisheye_2_x_end = 1861;
+		var fisheye_2_y_begin = 133;
+		var fisheye_2_y_end = 1063;
+
+
+    var latitudeBands = 101;
+    var longitudeBands = 101;
+    var radius = 7.5;
+    var vertexPositionData = [];
+    var normalData = [];
+    var textureCoordData = [];
+    var textureCoordData_2d = [];
+    var prumer = 0.23541666666666666666666666666667;
+    var aktualni_rovnobezka = 0;
+
+        // obe oka
+        function BasicCorrection(u,v) {
+          var min_u = fisheye_1_x_begin/resolution_width;
+          var max_u = fisheye_2_x_end/resolution_width;
+          var d_u = max_u-min_u;
+
+          var min_v = (resolution_height-fisheye_2_y_end)/resolution_height;
+          var max_v = (resolution_height-fisheye_1_y_begin) /resolution_height;
+          var d_v = max_v-min_v;
+
+
+          return {
+            u: d_u*u+min_u,
+            v:  (d_v*v+min_v),
+          }
+
+        }
+
+
+        // pouze jedno oko
+        function BasicCorrectionFirst(u,v) {
+          var min_u = fisheye_1_x_begin/resolution_width;
+          var max_u = fisheye_1_x_end/resolution_width;
+          var d_u = max_u-min_u;
+
+          var min_v = (resolution_height-fisheye_1_y_end)/resolution_height;
+          var max_v = (resolution_height-fisheye_1_y_begin) /resolution_height;
+          var d_v = max_v-min_v;
+
+
+          return {
+            u: d_u*(u )+min_u,
+            v:    (d_v*v+min_v),
+          }
+
+        }
+
+
+    var koef = 0;
+    var R1 = ((fisheye_1_x_end-fisheye_1_x_begin) / resolution_width)/2;
+
+    for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) { //v
+      var theta = latNumber * Math.PI / latitudeBands;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
+
+      var v_tmp =  (latNumber/latitudeBands) ;
+      if (v_tmp<=R1)
+        var tmp = (R1*R1-((R1-v_tmp)*(R1-v_tmp)));
+      else {
+          var ttmp = Math.abs(R1-v_tmp);
+         var tmp = (R1*R1-((ttmp)*(ttmp)));
+      }
+ 
+        koef =  2*Math.sqrt(tmp );
+        console.log(R1-v_tmp);
+
+      for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {//u
+        var phi = longNumber * 2 * Math.PI / longitudeBands;
+        var sinPhi = Math.sin(phi);
+        var cosPhi = Math.cos(phi);
+
+        var x = cosPhi * sinTheta;
+        var z = cosTheta;
+        var y = sinPhi * sinTheta;
+
+
+
+ 
+var u = (longNumber / longitudeBands);
+ var v =   (latNumber / latitudeBands);
+ 
+textureCoordData_2d.push( cosPhi*v, sinPhi*v);
+
+
+if (longNumber < longitudeBands/2)
+{
+  u =   BasicCorrectionFirst(u,v).u*koef+0.2;
+  v =  v+0.2 ;
+}
+else {
+  var u = (longNumber / longitudeBands);
+ var v =   (latNumber / latitudeBands);
+}
+
+
+var r = 452/1920;
+var dopocet = 0;
+
+
+
+
+/*
+			var diff = (prumer - (Math.sin(theta)*r));
+			var d = (Math.sin(theta)*r)*2;
+			u =  u+ diff  ;*/
+
+
+ 
+
+ /*
+	if (longNumber <= longitudeBands / 2) {
+
+u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+
+ 
+ 
+u = u/5;
+v = v/3;
+u = u + 0.6;
+v = v+ 0.5 ;
+
+}
+
+else 
+{ 
+	u = y* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	v = z* Math.sqrt((x*x+y*y - x*x*y*y)) / Math.sqrt(x*x+y*y);
+	u = u/10;
+	v = v/6;
+	u = u + 0.2;
+	v = v+ 0.5 ;
+ }*/
+
+
+ 
+ 
+
+/*
+
+ if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
+ 
+		var diff = (prumer - (Math.sin(theta)*r));
+		var d = (Math.sin(theta)*r)*2;
+		u = u+ diff+d ;
+	 }
+*/
+
+// korekce
+
+
+/*
+if (v <=  0.01574074074074074074074074074074) v = 0.01574074074074074074074074074074;
+else {
+  aktualni_rovnobezka = latNumber;
+}
+if (u <= 0.00885416666666666666666666666667) u =   0.00885416666666666666666666666667; // jeste upravit
+
+var r = 452/1920;
+var dopocet = 0;
+
+if (longNumber <= longitudeBands / 4) {
+  if (aktualni_rovnobezka>0) {
+
+    var diff = (prumer - (Math.sin(theta)*r));
+    var d = (Math.sin(theta)*r)*2;
+    u = u+ diff;
+  }
+}
+
+
+if (longNumber > longitudeBands / 4 && longNumber <= longitudeBands /2) {
+  if (aktualni_rovnobezka>0) {
+
+    var diff = (prumer - (Math.sin(theta)*r));
+    var d = (Math.sin(theta)*r)*2;
+    u = u+ diff+d ;
+  }
+}
+
+ */
+
+        normalData.push(x);
+        normalData.push(y);
+        normalData.push(z);
+        textureCoordData.push(u,v);
+        vertexPositionData.push(radius * x);
+        vertexPositionData.push(radius * y);
+        vertexPositionData.push(radius * z);
+      }
+    }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       
+        // Zde se provadi korekce
+        // http://localhost/BC/theta/theta61.html?time=14.85&angleX=1.0&camera=-4.0&correction=true&angleZ=0.0
+        for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
+          var x = normalData[ i * 3 + 0 ];
+          var z = normalData[ i * 3 + 1 ];
+          var y = normalData[ i * 3 + 2 ];
+
+          if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
+            // nasobenim / delenim se to zvetsuje/zmensuje
+            //var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+            var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+             textureCoordData[ i * 2 + 0 ]  = x*( 270.6 / 1920 ) *correction + ( 475.8 / 1920 )  ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+            textureCoordData[ i * 2 + 1 ] = z  * ( 270.6  / 1080 ) *correction  + ( 480.04 / 1080 ) ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+          correction =  Math.acos( y )/Math.sqrt( x * x + z * z);//Math.acos( y )/Math.sqrt( x * x + z * z);
+ 
+          if (0) {
+          textureCoordData[ i * 2 + 0 ]  =0;
+          textureCoordData[ i * 2 + 1 ]  = 0;
+          }
+          } else { // PRAVA HEMISFERA angleX=0
+            var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) ;
+ 
+            // NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+            // pohyb po vertikalni ose: Y |
+            textureCoordData[ i * 2 + 0 ] =   -x * ( 270.1496004 / 1920 ) *2      + ( 1441.2 / 1920 );
+            // pohyb po horizontalni ose: X -----------
+            textureCoordData[ i * 2 + 1 ] =   z * ( 266.2343888 / 1080 ) *2    + ( 480.296 / 1080 )  ;
+ 
+          }
+        }
+ 
+
+ // 2D - neni to pro obe polokoule
+for ( var i = 0, l = textureCoordData_2d.length / 2; i < l; i ++ ) {
+  var x = textureCoordData_2d[i * 2 + 0]*( 270 / 1920 );
+  var y = textureCoordData_2d[i * 2 + 1]*( 270 / 1080 );
+
+  if (i < l/2) {
+    textureCoordData[ i * 2 + 0 ] = x + ( 475.8 / 1920 ) ;
+    textureCoordData[ i * 2 + 1] = y+ ( 480.04 / 1080 );
+  }
+  else {
+    textureCoordData[ i * 2 + 0 ] = -x+ ( 1441.2 / 1920 );
+    textureCoordData[ i * 2 + 1] = y+ ( 480.296 / 1080 ) ;
+  }
+
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+ //var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4(vec2(pos.x*(2.0)-1.0, pos.y*(2.0)-1.0), 0.0, 1.0); gl_PointSize = 3.0;}';
+
+ //var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4( pos , 0.0, 1.0); gl_PointSize = 2.0;}';
+ var fra = 'attribute vec2 pos; attribute vec3 colour;varying vec3 v_color; void main(void) { gl_Position = vec4(vec2(pos.x*-1.0, pos.y*1.0), 0.0, 1.0); gl_PointSize = 2.0;}';
+
+gl.shaderSource(vertexShader, fra);
+gl.compileShader(vertexShader);
+
+var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, 'void main(void) {gl_FragColor = vec4(1.0, 0.4, 1.0, 1.0);}');
+gl.compileShader(fragmentShader);
+
+var program = gl.createProgram();
+gl.attachShader(program, vertexShader);
+gl.attachShader(program, fragmentShader);
+gl.linkProgram(program);
+gl.useProgram(program);
+
+ 
+console.log(textureCoordData);
+
+var posLoc = gl.getAttribLocation(program, "pos");
+gl.enableVertexAttribArray(posLoc);
+
+var posBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordData), gl.STATIC_DRAW);
+gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+gl.viewport(0, 0, canvas.width, canvas.height);
+gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+gl.clear(gl.COLOR_BUFFER_BIT);
+
+if (textureCoordData.length!=((latitudeBands+1) * (longitudeBands+1)*2)) {
+	console.warn('nerovna se pocet hodnot textur: '+textureCoordData.length+' != ' + ((latitudeBands+1) * (longitudeBands+1)*2));
+
+}
+else {
+	console.log('pocet HODNOT textur OKKK!!!');
+}
+
+gl.drawArrays(gl.POINTS, 0, textureCoordData.length/2);
+
+</script>

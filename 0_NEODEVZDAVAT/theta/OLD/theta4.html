@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+	<body>
+		<script>
+            function createSphereGeometry (latitudeBands, longitudeBands, radius, textureCoordU, textureCoordV) {
+              var vertices = [];
+              var textures = [];
+              var normals = [];
+              var indices = [];
+
+              var rad = 180/Math.PI;
+
+              function sin(angle) {
+                return Math.sin(angle);  
+              }
+
+              function cos(angle) {
+                return Math.cos(angle);  
+              }
+
+              var latitudeAngle =  Math.PI / latitudeBands;         // 0°-180°
+              var longitudeAngle =  2 * Math.PI / longitudeBands;  //  0°-360°
+
+              for (var latNumber = 0; latNumber <= latitudeBands; ++latNumber) {
+                var theta = latNumber * latitudeAngle;
+
+                for (var longNumber = 0; longNumber <= longitudeBands; ++ longNumber) {
+
+                  var phi = longNumber * longitudeAngle;
+
+                  // vrcholy
+                  var x = sin(theta) * cos(phi) * radius;
+                  var y = sin(phi) * sin(theta) * radius;
+                  var z = cos(theta) * radius;
+
+                  // normaly
+                  var normals_x = x/radius;
+                  var normals_y = y/radius;
+                  var normals_z = z/radius;
+
+                  // textury
+                  var u =       textureCoordU + (longNumber / longitudeBands);
+                  var v =       textureCoordV + (latNumber / latitudeBands);
+
+                  // pridame vrcholy
+                  vertices.push(x);
+                  vertices.push(y);
+                  vertices.push(z);
+
+                  // pridame normaly (vektory)
+                  normals.push(normals_x);
+                  normals.push(normals_y);
+                  normals.push(normals_z);
+
+                  // koordiunace textury
+                  textures.push(u);
+                  textures.push(v);
+
+                  // zde zpracovavam index data
+                  if (latNumber  < latitudeBands && longNumber <  longitudeBands) 
+                  {
+                    var first = (latNumber * (longitudeBands + 1)) + longNumber;
+                    var second = first + longitudeBands + 1;
+                    indices.push(first);
+                    indices.push(second);
+                    indices.push(first + 1);
+
+                    indices.push(second);
+                    indices.push(second + 1);
+                    indices.push(first + 1);
+                  }
+
+                }
+
+              }
+
+              return {
+                vertices: new Float32Array(vertices),
+                textures: new Float32Array(textures),
+                normals: new Float32Array(normals),
+                indices: new Uint16Array(indices),
+              };
+            };
+            console.log(createSphereGeometry (40, 40, 7.5, 0, 1 ).indices);
+		</script>
+	</body>
+</html>

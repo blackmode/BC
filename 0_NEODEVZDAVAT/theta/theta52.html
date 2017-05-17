@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		 <script type="text/javascript" src="gl-matrix-2.2.1.js"></script>
+		 <script type="text/javascript" src="../src/js/lib.js"></script>
+		 <script type="text/javascript" src="../src/js/Externallib.js"></script>
+
+	</head>
+
+	<style type="text/css">
+		body {
+			margin: 0px;
+			padding: 0px;
+			border: 0px solid blue;
+			width: auto;
+			height: auto;
+		}
+ 
+
+	</style>
+
+	<script id="vs" type="x-shader/x-vertex">
+		attribute vec3 pos;
+		attribute vec2 texture;
+		attribute vec2 texture2;
+
+		uniform mat4 MMatrix;
+		uniform mat4 VMatrix;
+		uniform mat4 PMatrix;
+
+		varying vec2 varyingTexture;
+		varying vec2 varyingTexture2;
+
+		attribute vec3 fragPos;
+		varying vec3 varyingFragPosNormal;
+			
+		void main(void) {
+			gl_Position = PMatrix * VMatrix * MMatrix * vec4(pos, 1.0);
+			varyingTexture = texture;
+			varyingTexture2 = texture2;
+			varyingFragPosNormal = fragPos;// musim predat normaly, abych nemusel predavati radius
+ 
+
+		}
+	</script>
+
+	<script id="fs" type="x-shader/x-fragment">
+		precision mediump float;
+
+		varying vec3 varyingFragPosNormal;
+		varying vec2 varyingTexture;
+		varying vec2 varyingTexture2;
+		uniform sampler2D sampler;  
+		uniform sampler2D sampler2;  
+		#define PI 3.14159265359
+		#define KERNEL_LENGTH 30
+
+		float offset[KERNEL_LENGTH];
+		float weight[KERNEL_LENGTH];
+
+
+		// clamp(u,v) => vraci stredni hodnotu mezi dvema vstupnimi hodnotami 
+
+		void main(void) {
+   vec4 color0 = texture2D(sampler, varyingTexture);
+   vec4 color1 = texture2D(sampler2, varyingTexture2);
+color0.a = 0.8;
+			gl_FragColor = color1  * color0 ;
+
+ 
+
+		}
+	</script>
+
+
+
+	<body onload="main()">
+	<!--
+ 	  <video preload="auto" id="video" loop="false" webkit-playsinline crossOrigin="anonymous" style="    width: 800px; height: 600px " controls muted autoplay>
+		 <source src="data/firefox.ogv" type="video/mp4"> 
+		<source src="data/theta2.mp4" type="video/mp4">
+	  </video> -->
+
+		<canvas id="glcanvas" width="800" height="600"></canvas>
+		<div id="data"></div>
+	</body>
+
+
+
+	<script>
+
+ 
+var mmatrix = createIdentityMatrix4();
+var vmatrix = createIdentityMatrix4();
+var pmatrix = createIdentityMatrix4();
+
+ 
+var GEOMETRY = createSphereGeometry(100,100,7.0,getParamByKey("indices")=='false' ? 1 : 0) ;
+var vertexPositionData = GEOMETRY.vertices;
+var normalData = GEOMETRY.normals;
+var textureCoordData =GEOMETRY.textures;
+var textureCoordData2 =GEOMETRY.textures;
+var indexData = GEOMETRY.indices;
+
+// DEBUG===========================================
+				// Zde se provadi korekce
+				// http://localhost/BC/theta/theta61.html?time=14.85&angleX=1.0&camera=-4.0&correction=true&angleZ=0.0
+				for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
+					var x = normalData[ i * 3 + 0 ];
+					var z = normalData[ i * 3 + 1 ];
+					var y = normalData[ i * 3 + 2 ];
+					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
+						// nasobenim / delenim se to zvetsuje/zmensuje
+						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						textureCoordData[ i * 2 + 0 ]  = x*( 448 / 1920 )*(0.7) * (0.95) * correction+ ( 482.52 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData[ i * 2 + 1 ]  = z*( 463 / 1080 )*(0.7) * (0.95) *correction + ( 480.04 / 1080 )  ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+					
+						if (0) {
+						textureCoordData[ i * 2 + 0 ]  =0;
+						textureCoordData[ i * 2 + 1 ]  = 0;
+						}
+					} else { // PRAVA HEMISFERA angleX=0
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textureCoordData[ i * 2 + 0 ] =   -x * ( 446 / 1920 )*(1.10) * (1.0) *correction      + ( 1418.00 / 1920 ) /* SNIZOVALO SE */ ;
+						// pohyb po horizontalni ose: X -----------
+						textureCoordData[ i * 2 + 1 ] =    z * ( 465 / 1080 )*(1.10) * (1.0) *correction      + ( 470.296 / 1080 ) /* SNIZOVALO SE */ ; 
+ 
+					}
+				}
+
+
+				for ( var i = 0, l = normalData.length / 3; i < l; i ++ ) {
+					var x = normalData[ i * 3 + 0 ];
+					var z = normalData[ i * 3 + 1 ];
+					var y = normalData[ i * 3 + 2 ];
+					if ( i < l / 2 ) { // LEVA HEMISFERA  v angleX=0
+						// nasobenim / delenim se to zvetsuje/zmensuje
+						//var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) )  ;
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===============
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						textureCoordData2[ i * 2 + 0 ]  = x*( 448 / 1920 )  * (0.95) * correction+ ( 482.52 / 1920 ) ;   //  x * ( 404 / 1920 )*correction  + ( 447 / 1920 ) ;
+						textureCoordData2[ i * 2 + 1 ]  = z*( 463 / 1080 )  * (0.95) *correction + ( 480.04 / 1080 )  ; // z * ( 404 / 1080 )*correction   + ( 582 / 1080 ) ; // posun po X sove ose, tedy : --------- x
+					
+						if (0) {
+						textureCoordData2[ i * 2 + 0 ]  =0;
+						textureCoordData2[ i * 2 + 1 ]  = 0;
+						}
+					} else { // PRAVA HEMISFERA angleX=0
+						var correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+						if (getParamByKey("correction") == 'false')   correction = 1.0;// DEBUG===================
+
+						// NASOBENI: cim mensi koef, tim je obraz vetsi a bliz
+						// pohyb po vertikalni ose: Y |
+						textureCoordData2[ i * 2 + 0 ] =   -x * ( 446 / 1920 )  * (1.0) *correction       /* SNIZOVALO SE */ ;
+						// pohyb po horizontalni ose: X -----------
+						textureCoordData2[ i * 2 + 1 ] =    z * ( 465 / 1080 )  * (1.0) *correction        /* SNIZOVALO SE */ ; 
+ 
+					}
+				}
+
+
+
+ 
+var mouse = {
+	position : {
+		x: 0.0,
+		y: 0.0,
+	} ,
+	down : {
+		x: 0.0,
+		y: 0.0,
+	} ,
+	up : {
+		x: 0.0,
+		y: 0.0,
+	} ,
+	move : {
+		x: 0.0,
+		y: 0.0,
+	} ,
+
+	lat : 0.0,
+	lon : 0.0,
+	active : false,
+};
+
+ 
+
+var normalBuffer;
+var indexBuffer;
+var program ;
+var samplerLoc ;
+var samplerLoc2 ;
+var vertexBuffer;
+var mmLoc;
+var texture;
+var textures = [];
+var canvas = document.querySelector("canvas");
+var gl =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+if (!gl) {
+	w('Webgl se nepodarilo inicializovat...');
+}
+
+var video = createImage("data/debug-model.jpg");
+
+
+var videos = [];
+videos[0] = createImage("data/debug-model.jpg");
+videos[1] = createImage("data/t11.jpg");
+
+videos[0].onLoad = function() {
+	videos[1].onLoad = function() {
+			render();
+
+	};
+};
+
+ 
+ 
+
+	function initProgram() {
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+			document.addEventListener("keypress", onDocumentKeyPress, false);
+
+			// nacteni, zkompilovani a overeni vertext shaderu
+			var str = document.querySelector("#vs").textContent;
+			var vs = gl.createShader(gl.VERTEX_SHADER);
+			gl.shaderSource(vs, str);
+			gl.compileShader(vs);
+			var vertextSucces = gl.getShaderParameter(vs, gl.COMPILE_STATUS);
+			if (!vertextSucces) {
+				w('nepodařilo se zkompilovat VERTEX_SHADER');
+				return false;
+			}
+			
+			// nacteni, zkompilovani a overeni fragment shaderu
+			var str = document.querySelector("#fs").textContent;
+			var fs = gl.createShader(gl.FRAGMENT_SHADER);
+			gl.shaderSource(fs, str);
+			gl.compileShader(fs);
+			var fragmentSucces = gl.getShaderParameter(fs, gl.COMPILE_STATUS);
+			if (!fragmentSucces) {
+				w('nepodařilo se zkompilovat FRAGMENT_SHADER');
+				return false;
+			}
+
+			// vytvoreni programu, pridani vertex a fragment shaderu a overeni
+			program = gl.createProgram();
+			gl.attachShader(program, vs);
+			gl.attachShader(program, fs);
+			gl.linkProgram(program);
+			gl.useProgram(program);
+			var programSuccess = gl.getProgramParameter( program, gl.LINK_STATUS);
+			if ( ! programSuccess) {
+			  var info = gl.getProgramInfoLog(program);
+			  w ('nepodařilo se zkompilovat WebGL program. \n\n' + info);
+			  return false;
+			}
+			
+			// -------- ZOBRAZOVACI matice
+			mat4.scale(mmatrix, mmatrix, vec3.fromValues(0.3, 0.3, 0.3));
+			mmLoc = gl.getUniformLocation(program, "MMatrix");
+
+			// DEBUG===========================================
+			if (getParamByKey("camera")) {
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, getParamByKey("camera")));
+			}
+			else
+				mat4.translate(vmatrix, vmatrix, vec3.fromValues(0, 0, 0));
+
+
+
+			var vmLoc = gl.getUniformLocation(program, "VMatrix");
+			gl.uniformMatrix4fv(vmLoc, false, vmatrix);
+
+			
+			mat4.perspective(pmatrix, Math.PI/2.5, 1.3, 0.1, 100);
+			var pmLoc = gl.getUniformLocation(program, "PMatrix");
+			gl.uniformMatrix4fv(pmLoc, false, pmatrix);
+
+			samplerLoc = gl.getUniformLocation(program, "sampler");
+			gl.uniform1i(samplerLoc, 0);
+
+			samplerLoc2 = gl.getUniformLocation(program, "sampler2");
+			gl.uniform1i(samplerLoc2, 1);
+
+			// -------- atributy
+			var posLoc = gl.getAttribLocation(program, "pos");
+			if (posLoc===-1) w('Nebyl nalezen atribut "pos" ve vertex shaderu');
+			gl.enableVertexAttribArray(posLoc);
+
+			var fragPos = gl.getAttribLocation(program, "fragPos");
+			if (fragPos==-1) w('Nebyl nalezen atribut "fragPos" ve vertex shaderu');
+			gl.enableVertexAttribArray(fragPos);
+
+			var textureLoc = gl.getAttribLocation(program, "texture");
+			if (textureLoc==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
+			gl.enableVertexAttribArray(textureLoc);
+
+
+			var textureLoc2 = gl.getAttribLocation(program, "texture2");
+			if (textureLoc2==-1) w('Nebyl nalezen atribut "texture" ve vertex shaderu');
+			gl.enableVertexAttribArray(textureLoc2);
+
+			// -------- BUFFERY
+			vertexBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, (vertexPositionData), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+			
+			normalBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, (normalData), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(fragPos, 3, gl.FLOAT, false, 0, 0);
+
+			var textureBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(textureLoc, 2, gl.FLOAT, false, 0, 0);
+
+			var textureBuffer2 = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer2);
+			gl.bufferData(gl.ARRAY_BUFFER, (textureCoordData2), gl.STATIC_DRAW);
+			gl.vertexAttribPointer(textureLoc2, 2, gl.FLOAT, false, 0, 0);
+
+			indexBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, (indexData), gl.STATIC_DRAW);
+
+			// ---- NASTAVENI
+			//gl.disable(gl.DEPTH_TEST);
+			gl.enable(gl.DEPTH_TEST);
+			//gl.clearColor(0, 0, 0, 1);
+
+			 //gl.enable(gl.BLEND);
+			//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+			gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+
+
+			// ---- otoceni kamery do pocatecni pozice
+			mat4.rotateZ(mmatrix, mmatrix,  - Math.PI/2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			mat4.rotateX(mmatrix, mmatrix, -Math.PI/2);
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			mat4.rotateX(mmatrix, mmatrix,    Math.PI  /2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			mat4.rotateX(mmatrix, mmatrix,    Math.PI/2 );
+			gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			if (getParamByKey("angleX")) {
+				mat4.rotateX(mmatrix, mmatrix,    Math.PI * getParamByKey("angleX") );
+				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			}
+			if (getParamByKey("angleZ")) {
+				mat4.rotateZ(mmatrix, mmatrix,    Math.PI * getParamByKey("angleZ") );
+				gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			}
+
+			// ----- VYTVORENI TEXTURY
+			for (var i = 0; i < 2; i++) {
+				texture = gl.createTexture();
+				gl.bindTexture(gl.TEXTURE_2D, texture);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videos[i]);
+
+				gl.bindTexture(gl.TEXTURE_2D, null);
+				textures.push(texture);
+			};
+	return true;
+	}
+
+ 
+	function updateTexture() {
+
+  		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+		  // the next line fails in Safari if the video is coming from another domain or subdomain
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, videos[0]);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+
+  		  gl.activeTexture(gl.TEXTURE0);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+			gl.uniform1i(samplerLoc, 0);
+
+
+
+   		  gl.activeTexture(gl.TEXTURE1);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+		  //gl.pixelStorei(gl.UNPACK_FLIP_X_WEBGL, true);
+		  // the next line fails in Safari if the video is coming from another domain or subdomain
+		  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, videos[1]);
+		  gl.bindTexture(gl.TEXTURE_2D, null);
+
+   		  gl.activeTexture(gl.TEXTURE1);
+		  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+			gl.uniform1i(samplerLoc2, 1);
+	}
+
+
+		function render() {
+			var elem = document.getElementById("data").innerHTML = 'Čas: '+video.currentTime ;
+			 updateTexture();
+			 
+			  // mat4.rotateX(mmatrix, mmatrix, rotation);
+			  //gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			/// ROTACNI MATICE
+ 
+
+
+
+
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+			// zde prepinanim renderovani
+			if (!GEOMETRY.noIndices) {
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+				gl.drawElements(gl.TRIANGLES, indexData.length, gl.UNSIGNED_SHORT, 0);
+			}
+			else {
+
+				gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);// HAZI TO VIC CHYB, nevim  jeste proc
+				gl.drawArrays(gl.TRIANGLES,0, normalData.length/3);
+			}
+			requestAnimationFrame(render);
+		}
+
+		window.requestAnimationFrame = window.requestAnimationFrame 
+			|| window.mozRequestAnimationFrame
+			|| window.webkitRequestAnimationFrame
+			|| function(cb) { setTimeout(cb, 1000/60); };
+
+
+
+		function onDocumentMouseDown( event ) {
+			mouse.active = true;
+			mouse.down.x = event.clientX;
+			mouse.down.y = event.clientY;
+		}
+
+		function onDocumentMouseMove( event ) {
+  
+			if (mouse.active) {
+				if (mouse.up.x!=event.clientX) {
+					mouse.lon = (mouse.down.x - event.clientX) * 0.01 + mouse.lon;
+					mouse.lon = mouse.lon / 80;
+
+					//mat4.rotateX(mmatrix, mmatrix,    mouse.lon );
+					//gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+				}
+
+				if (mouse.up.y!=event.clientY) {
+					mouse.lat = (mouse.down.y - event.clientY) * 0.01 + mouse.lat;
+					mouse.lat = (mouse.lat / 80) *-1;
+
+	 				mat4.rotateZ(mmatrix, mmatrix,    mouse.lat );
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+				}
+			}
+
+		}
+
+		function onDocumentMouseUp( event ) {
+			mouse.up.x = event.clientX;
+			mouse.up.y = event.clientY;
+			mouse.active = false;
+		}
+
+		function onDocumentKeyPress( event ) {
+ 			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
+				video.play();
+ 			}
+			if (event.keyCode == 101 || event.keyCode == 69  ) { // q/Q
+				video.pause();
+			}
+ 
+			if (event.keyCode == 97    ) { 
+					mouse.active = false; 
+					var tmp = mouse.lon - 0.06;
+					mat4.rotateX(mmatrix, mmatrix,    tmp );
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			}
+			if (event.keyCode == 100   ) {  
+				mouse.active = false;
+				var tmp = mouse.lon + 0.06;
+					mat4.rotateX(mmatrix, mmatrix,    tmp );
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+			}
+  
+			if (event.keyCode == 119    ) { 
+					mouse.active = false; 
+					var tmp = mouse.lon - 0.06;
+	 				mat4.rotateZ(mmatrix, mmatrix,    tmp);
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			}
+			if (event.keyCode == 115   ) {  
+				mouse.active = false;
+				var tmp = mouse.lon + 0.06;
+	 				mat4.rotateZ(mmatrix, mmatrix,    tmp );
+					gl.uniformMatrix4fv(mmLoc, false, mmatrix);
+
+			}
+
+
+		}
+
+
+
+		function main() {
+			DebugThreeStat();
+			if (!initProgram()) 
+				return w('nemuzeme dal pokracovat v provadeni programu, fatal error');
+			render();
+		}
+ 
+
+	</script>
+
+
+
+</html>
