@@ -333,8 +333,7 @@ function loadJSONfile() {
 		if (current_obj.height!=null && !isNaN(current_obj.height)) 			settings_obj.height = current_obj.height;
 		if (current_obj.canvas_position_x!=null && !isNaN(current_obj.canvas_position_x)) settings_obj.canvas_position_x = current_obj.canvas_position_x;
 		if (current_obj.canvas_position_y!=null && !isNaN(current_obj.canvas_position_y)) {
-			d('udpate probehl');
-			updateObjectVariables();
+			d('jsem zde');
 			settings_obj.canvas_position_y = current_obj.canvas_position_y;
 		}
 	};
@@ -396,7 +395,7 @@ function loadJSONfile() {
 			{
 				// aktualizace hodnot z JSON souboru
 				objUpdateValues(fishPano.compass, SETTINGS.compass);
-				
+
 				// prenastavuju jen pokud se hodnoty nerovnaji
 				if (fishPano.compass.north!=null && !isNaN(fishPano.compass.north) && fishPano.compass.north!=SETTINGS.compass.north) {
 					SETTINGS.compass.north = fishPano.compass.north;
@@ -606,7 +605,7 @@ function initProgram() {
 	// definovani startovniho casu programu
 	PROG.startTime = (new Date()).getTime();
 
-	loadJSONfile();
+	//loadJSONfile();
 
 	// aktualizace obj. promennaych
 	updateObjectVariables();
