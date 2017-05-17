@@ -8,64 +8,116 @@
                     "north": 220,
                     "correction": [
                         {
+                            "time": 3,
+                            "angle": 270
+                        },
+                        {
                             "time": 7,
-                            "angle": 130
+                            "angle": 340
+                        },
+                        {
+                            "time": 8,
+                            "angle": 360
                         },
                         {
                             "time": 11,
-                            "angle": 80
+                            "angle": 75
                         },
                         {
-                            "time": 14,
-                            "angle": 40
+                            "time": 15,
+                            "angle": 210
                         },
                         {
-                            "time": 20,
-                            "angle": 220
+                            "time": 23,
+                            "angle": 275
                         },
+
                         {
                             "time": 25,
                             "angle": 260
+                        },
+                        {
+                            "time": 46,
+                            "angle": 360
+                        },
+                        {
+                            "time": 49,
+                            "angle": 90
+                        },
+                        {
+                            "time": 53,
+                            "angle": 180
+                        },
+                        {
+                            "time": 113,
+                            "angle": 360
+                        },
+
+                        {
+                            "time": 120,
+                            "angle": 180
+                        },
+                        {
+                            "time": 127,
+                            "angle": 360
+                        },
+                        {
+                            "time": 133,
+                            "angle": 270
+                        },
+                        {
+                            "time": 144,
+                            "angle": 90
+                        },
+                        {
+                            "time": 148,
+                            "angle": 180
                         }
+
                     ]
                 },
                 "titles": [
                     {
-                        "time": 5,
-                        "duration": 3,
+                        "time": 3,
                         "text": "Nádvoří FIT"
                     },
                     {
-                        "time": 5,
-                        "duration": 3,
+                        "time": 7,
                         "text": "Prosklená budova je blok D"
                     },
                     {
-                        "time": 7,
-                        "duration": 3,
+                        "time": 10,
                         "text": "Nachází se zde přednášková místnost s kapacitou až 300 míst"
                     },
 
                     {
-                        "time": 10,
-                        "duration": 3,
-                        "text": "Dále je tu knovna v bloku C"
+                        "time": 13,
+                        "text": "Dále je tu knihovna v bloku C"
                     },
                     {
-                        "time": 12,
-                        "duration": 3,
-                        "text": "treti title"
+                        "time": 26,
+                        "text": "Po vchodu do bloku C je knihovna hned vlevo"
                     },
                     {
-                        "time": 20,
-                        "duration": 3,
-                        "text": "Prosklená budova "
+                        "time": 40,
+                        "text": "Vpravo se nachází studijní oddělení a shodiště do druhého podlaží "
                     },
                     {
-                        "time": 25,
-                        "duration": 3,
-                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
-                    }
+                        "time": 75,
+                        "text": "V zadná části je více míst a také stolní PC"
+                    },
+                    {
+                        "time": 98,
+                        "text": "Tato místnost je věnovaná tisku  "
+                    },
+                    {
+                        "time": 105,
+                        "text": "Vlevo je chodba s PC"
+                    },
+                    {
+                        "time": 134,
+                        "text": "Mistnost vdodná pro práci s vlastním notebookem, popř. ke čtení"
+                    }     
                 ]
             },
 
@@ -101,28 +153,30 @@
                     {
                         "time": 5,
                         "duration": 3,
-                        "text": "prvni title"
+                        "text": "slide 1"
                     },
                     {
                         "time": 10,
-                        "duration": 3,
-                        "text": "druhy title"
+                         "text": "slide 2"
                     },
                     {
                         "time": 15,
-                        "duration": 3,
-                        "text": "treti title"
+                        "text": "slide 3"
                     },
                     {
                         "time": 20,
-                        "duration": 3,
-                        "text": "ctvrty title"
+                        "text": "slide 4"
                     },
                     {
                         "time": 25,
+                        "text": "slide 5"
+                    },
+                    {
+                        "time": 35,
                         "duration": 3,
-                        "text": "a patyy sweeeett located in Acadia National Park. <a href='?mouseX=2.1&mouseY=1.1'>Odkaz</a>"
+                        "text": "slide 1"
                     }
+
                 ]
             },
 
