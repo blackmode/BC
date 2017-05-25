@@ -1,6 +1,6 @@
 /* panorama.js  
  *
- * Copyright (C) <year> <copyright holder>
+ * Copyright (C) 2017 Tomáš Slunský
  * All rights reserved.
  *
  * This software may be modified and distributed under the terms
@@ -1030,8 +1030,8 @@ function setupProgram()
 
 
 	// detekce aktivniho/nekativniho oka
-	window.addEventListener('focus', playVideoWhenInactive);
-	window.addEventListener('blur', pauseVideoWhenInactive);
+	window.addEventListener('focus', playVideoWhenInactive);// play video when user is now active
+	window.addEventListener('blur', pauseVideoWhenInactive);// pause video when user is inactive
 
 	// kolecko a klavesnice
 	// osetreni nepodporujici udalosti ze strany firefoxu
@@ -1298,6 +1298,7 @@ function getCameraPosition() {
 }
 
 // prehravani/zastaveni videoa pri aktivnim/neaktivnim okne
+
 function pauseVideoWhenInactive() {
 	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
 		if (SETTINGS.input.video.paused == false) {
@@ -1317,6 +1318,22 @@ function playVideoWhenInactive() {
 			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
 			SETTINGS.video_controlls.user_inactive == false
 		}
+	}
+}
+
+function pauseVideo() {
+	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
+		if (SETTINGS.input.video.paused == false) {
+			SETTINGS.input.video.pause();
+			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+		} 
+	}
+}
+
+function playVideo() {
+	if (SETTINGS.mode.fisheye.video.active || SETTINGS.mode.equirectangular.video.active)  {
+			SETTINGS.input.video.play();
+			SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
 	}
 }
 
@@ -1467,8 +1484,25 @@ function onDocumentMouseWheel( event ) {
 		zoom_minus();
 	}
 
+	//aktualizace zorneho uhlu
+	updateFieldVisionAngle();
+
+	// aktualizace zorneho pole
+ 	createFieldVision(
+ 		SETTINGS.field_vision.width, 
+ 		SETTINGS.field_vision.height, 
+ 		SETTINGS.field_vision.canvas_position_x, 
+ 		SETTINGS.field_vision.canvas_position_y,  
+ 		SETTINGS.field_vision.angle, 
+ 		SETTINGS.field_vision.shift
+ 	);
 
 
+}
+
+
+// funkce pro aktualizaci zornmeho uhlu
+function updateFieldVisionAngle() {
   	/*
 	*	RESENI zorneho uhlu:
 	*
@@ -1485,25 +1519,12 @@ function onDocumentMouseWheel( event ) {
 	var maxAngleNotInView = perspAngle * 2;	// pocita se ze stredu
 
 
-	var radiusDistance = 2*SETTINGS.mode.fisheye.video.radius; radiusDistance
+	var radiusDistance = 2*SETTINGS.mode.fisheye.video.radius; 
  	var delta = (radiusDistance - ((radiusDistance)/MOUSE.wheel.reduction))/2;
 	 
 
  	var mouse_move = (1-(MOUSE.wheel.delta + MOUSE.wheel.deltaMax)/(MOUSE.wheel.deltaMax * 2));
   	SETTINGS.field_vision.angle =  (delta/10*maxAngleNotInView) + maxAngleNotInView*mouse_move*(1-delta/10);
-
-
-	// aktualizace zorneho pole
- 	createFieldVision(
- 		SETTINGS.field_vision.width, 
- 		SETTINGS.field_vision.height, 
- 		SETTINGS.field_vision.canvas_position_x, 
- 		SETTINGS.field_vision.canvas_position_y,  
- 		SETTINGS.field_vision.angle, 
- 		SETTINGS.field_vision.shift
- 	);
-
-
 }
 
 
@@ -1617,7 +1638,10 @@ function zoom_plus() {
 			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 		}
 	}
-}
+	// aktualizace prvku
+	updateFieldVisionAngle();
+	updateObjectVariables();
+ }
 
 /**
  * Oddálení scény
@@ -1642,7 +1666,10 @@ function zoom_minus() {
 			MOUSE.wheel.delta+=MOUSE.wheel.sensitivity;
 		}
 	}
-}
+	// aktualizace prvku
+	updateFieldVisionAngle();	
+	updateObjectVariables();
+ }
 
 
 
@@ -1660,29 +1687,26 @@ function onDocumentKeyPress( event ) {
 			// sputeni videa
 			if (event.keyCode == 113 || event.keyCode == 81) { // q/Q
 				log('video: play');
-	 			SETTINGS.input.video.play();
+	 			playVideo();
 			}
 
 			// zastaveni videa
 			if (event.keyCode == 101 || event.keyCode == 69) { // e/E
 				log('video: pause');
-				SETTINGS.input.video.pause();
+				pauseVideo();
 	 		}
 
 			// start/stop pomoci mezerniku
 			if (event.keyCode === 0 || event.keyCode === 32) {
 				if (SETTINGS.input.video.paused == true) {
 					log('video: play');
-					SETTINGS.input.video.play();
-					SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'pause_icon'); 
+					playVideo();
 				} else {
 					log('video: pause');
-					SETTINGS.input.video.pause();
-					SETTINGS.video_controlls.object.btn.play.setAttribute('class', 'play_icon'); 
+					pauseVideo();
 				}
 			}
 		}
-
 
 		// pohyb pozorovatele
 		if (event.keyCode == 97  ||  event.keyCode==97-32 ) { // a/A
@@ -1700,16 +1724,15 @@ function onDocumentKeyPress( event ) {
 		}
 
 
-
 		// osetreni mezi kolecka
 		var reduction = (MOUSE.wheel.reduction > 1.0) ? MOUSE.wheel.reduction : 1.0;
  		if (event.keyCode == 43 ) {//	+
- 			zoom_plus()
+ 			zoom_plus();
 		}
 		
 		if (event.keyCode == 45  ) {//	-
-			zoom_minus()
-		}
+			zoom_minus();
+ 		}
 	}
 }
 
@@ -1794,5 +1817,3 @@ function main()
 		},false);
 	}
 }
-
-
